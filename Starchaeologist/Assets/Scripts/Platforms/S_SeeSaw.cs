@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,7 +25,7 @@ public class S_SeeSaw : MonoBehaviour
     private void Update()
     {
         balanceBuffer += Time.deltaTime;
-        if(balanceBuffer > 0.5f)
+        if (balanceBuffer > 0.5f)
         {
             if (transform.localRotation != Quaternion.Euler(0, 0, 0))
             {
@@ -41,13 +41,17 @@ public class S_SeeSaw : MonoBehaviour
     // Update is called once per frame
     void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.CompareTag("Player"))
+        Debug.Log("I sense something");
+
+        if (other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("I should be tilting");
+
             balanceBuffer = 0f;
             turnRatio = Mathf.Clamp(turnRatio, 0f, 1f);
             float distance = Vector3.Distance(transform.position, other.transform.position);
             tiltSpeed = (distance / halfLength) * 0.5f;
-            if(transform.InverseTransformPoint(other.transform.position).x > 0 && distance > 1.5f)
+            if (transform.InverseTransformPoint(other.transform.position).x > 0 && distance > 1.5f)
             {
                 turnRatio = turnRatio + Time.deltaTime * tiltSpeed;
                 transform.localRotation = Quaternion.Slerp(backTilt, forthTilt, turnRatio);
@@ -57,10 +61,10 @@ public class S_SeeSaw : MonoBehaviour
                 turnRatio = turnRatio - Time.deltaTime * tiltSpeed;
                 transform.localRotation = Quaternion.Slerp(backTilt, forthTilt, turnRatio);
             }
-            else if(transform.localRotation != Quaternion.Euler(0,0,0))
+            else if (transform.localRotation != Quaternion.Euler(0, 0, 0))
             {
                 Balance();
-            }        
+            }
         }
     }
     public void Balance()
