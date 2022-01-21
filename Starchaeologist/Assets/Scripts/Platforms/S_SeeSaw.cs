@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SeeSaw : MonoBehaviour
+public class S_SeeSaw : MonoBehaviour
 {
     Quaternion backTilt;
     Quaternion forthTilt;
 
-    public float tiltRange = 30f;
+    public float tiltRange = 10f;
     public float tiltSpeed = 1.0f;
     public float halfLength = 10f;
 
