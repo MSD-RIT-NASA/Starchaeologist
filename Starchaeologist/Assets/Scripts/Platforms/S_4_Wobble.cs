@@ -43,7 +43,7 @@ public class S_4_Wobble : MonoBehaviour
     public void FourWay()
     {
         //check if the new rotation has been reach
-        if (transform.rotation == newTilt)
+        if (transform.localRotation == newTilt)
         {
             //find the next rotation
             if (flip)
@@ -58,7 +58,7 @@ public class S_4_Wobble : MonoBehaviour
                 secondaryZ *= -1f;
                 newTilt = Quaternion.Euler(secondaryX, 0, secondaryZ);
             }
-            oldTilt = transform.rotation;
+            oldTilt = transform.localRotation;
             tiltRatio = 0.0f;
 
 

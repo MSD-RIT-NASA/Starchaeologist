@@ -29,11 +29,11 @@ public class S_Raft : MonoBehaviour
     public void Raft()
     {
         //check if the new rotation has been reached
-        if (transform.rotation == newTilt)
+        if (transform.localRotation == newTilt)
         {
             //choose a rotation to lerp to
             newTilt = Quaternion.Euler(Random.Range(-tiltRange, tiltRange), 0, Random.Range(-tiltRange, tiltRange));
-            oldTilt = transform.rotation;
+            oldTilt = transform.localRotation;
 
             //choose a random speed to lerp at and reset the timer
             //tiltSpeed = Random.Range(0.75f, 2.0f);

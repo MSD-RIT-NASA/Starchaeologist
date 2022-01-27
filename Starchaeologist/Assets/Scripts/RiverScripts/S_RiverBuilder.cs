@@ -15,13 +15,14 @@ public class S_RiverBuilder : MonoBehaviour
     public List<GameObject> treasurePrefabs = new List<GameObject>();
     public List<GameObject> artifactPrefabs = new List<GameObject>();
     
-
+    
     List<Vector3> obstacleSpawns = new List<Vector3>();
 
     // Start is called before the first frame update
     void Start()
     {
         //spawn the amount of river segemnts requested
+        GetComponent<S_RiverGame>().riverCheckpoints.Add(spawnPosition);
         int i = 0;
         while (i < segmentCount)
         {
@@ -29,6 +30,8 @@ public class S_RiverBuilder : MonoBehaviour
             newSpawn = Instantiate(segmentPrefabs[Random.Range(0, segmentPrefabs.Count)]);
             newSpawn.transform.position = spawnPosition;
             spawnPosition = newSpawn.transform.GetChild(1).transform.position;
+
+            GetComponent<S_RiverGame>().riverCheckpoints.Add(spawnPosition);
 
             //record the positions available for spawning obstacles and artifacts
             int j = 2;
