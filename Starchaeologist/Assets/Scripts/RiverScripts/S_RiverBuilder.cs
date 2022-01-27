@@ -44,6 +44,9 @@ public class S_RiverBuilder : MonoBehaviour
             i++;
         }
 
+        //place the end of the river at the end of the river
+        GameObject.Find("RiverEnd").transform.position = spawnPosition;
+
         //spawn artifact pieces, treasure, and obstacles along the river
         i = 0;
         while(i < segmentCount)
@@ -71,22 +74,6 @@ public class S_RiverBuilder : MonoBehaviour
     void Update()
     {
         
-    }
-
-    //choose a location from the list to place the item
-    private Vector3 PlaceThings()
-    {
-        //if there are no locations to spawn along the river place it elsewhere
-        Vector3 givePosition = new Vector3(0, -100, 0);
-
-        if (obstacleSpawns.Count != 0)
-        {
-            int spawnIndex = Random.Range(0, obstacleSpawns.Count);
-            givePosition = obstacleSpawns[spawnIndex];
-            obstacleSpawns.RemoveAt(spawnIndex);
-        }
-        
-        return givePosition;
     }
 
     //choose a location from the list to place the item

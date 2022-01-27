@@ -21,7 +21,7 @@ public class S_RiverGame : MonoBehaviour
         playerReference = GameObject.Find("Player_Rig");
         raftReference = GameObject.Find("Raft_Fake");
 
-        playerReference.transform.parent = raftReference.transform;
+        //playerReference.transform.parent = raftReference.transform;
     }
 
     // Update is called once per frame
@@ -47,14 +47,14 @@ public class S_RiverGame : MonoBehaviour
         }
 
         raftReference.transform.position += currentDirection * Time.deltaTime * raftSpeed;
-        if(currentDirection.x < 0)
-        {
-            raftReference.transform.rotation = Quaternion.Euler(0, -Vector3.Angle(Vector3.forward, currentDirection), 0);
-        }
-        else
-        {
-            raftReference.transform.rotation = Quaternion.Euler(0, Vector3.Angle(Vector3.forward, currentDirection), 0);
-        }
+        //if(currentDirection.x < 0)
+        //{
+        //    raftReference.transform.rotation = Quaternion.Euler(0, -Vector3.Angle(Vector3.forward, currentDirection), 0);
+        //}
+        //else
+        //{
+        //    raftReference.transform.rotation = Quaternion.Euler(0, Vector3.Angle(Vector3.forward, currentDirection), 0);
+        //}
         
 
         if (Vector3.Distance(raftReference.transform.position, riverCheckpoints[checkpointIndex]) < 1f)
