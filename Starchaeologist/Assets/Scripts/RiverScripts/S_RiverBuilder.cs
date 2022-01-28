@@ -45,7 +45,9 @@ public class S_RiverBuilder : MonoBehaviour
         }
 
         //place the end of the river at the end of the river
-        GameObject.Find("RiverEnd").transform.position = spawnPosition;
+        GameObject endReference = GameObject.Find("RiverEnd");
+        endReference.transform.position = spawnPosition;
+        GetComponent<S_RiverGame>().riverCheckpoints.Add(endReference.transform.GetChild(0).transform.position);
 
         //spawn artifact pieces, treasure, and obstacles along the river
         i = 0;
