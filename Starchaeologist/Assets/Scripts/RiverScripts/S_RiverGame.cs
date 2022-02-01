@@ -8,7 +8,8 @@ public class S_RiverGame : MonoBehaviour
     GameObject playerReference;
     GameObject raftReference;
 
-    public List<Vector3> riverCheckpoints = new List<Vector3>(); //populated with positions while the river is being built from the S_RiverBuilder script
+    public List<GameObject> riverReferences = new List<GameObject>(); //populated with positions while the river is being built from the S_RiverBuilder script
+    Vector3 nextDestination = new Vector3(0, 0, 0);
     Vector3 currentDirection = new Vector3(0, 0, 1);
     public float raftAcceleration = 0.1f;
     public float raftSpeed = 3.0f;
@@ -49,15 +50,21 @@ public class S_RiverGame : MonoBehaviour
         if(currentSpeed != raftSpeed && !slowDown)
         {
             currentSpeed = currentSpeed + (raftAcceleration * Time.deltaTime * raftSpeed * 5f);
+            /* 
+            TO DO: Make this also affect the wobbling of the raft so it increases as the speed increases
+            */
         }
         else if(slowDown)
         {
             currentSpeed = currentSpeed - (raftAcceleration * Time.deltaTime * raftSpeed);
+            /* 
+            TO DO: Make this also affect the wobbling of the raft so it decreases as the speed decreases
+            */
         }
         currentSpeed = Mathf.Clamp(currentSpeed, 0.25f, raftSpeed);
 
-        //turn the raft on the direction of the next checkpoint
-        Vector3 desiredDirection = Vector3.Normalize(riverCheckpoints[checkpointIndex] - raftReference.transform.position);
+        //turn the raft in the direction of the next checkpoint
+        Vector3 desiredDirection = Vector3.Normalize(nextDestination - raftReference.transform.position);
         if (Mathf.Abs(Vector3.Angle(desiredDirection, currentDirection)) < 1f)
         {
             currentDirection = desiredDirection;
@@ -81,21 +88,42 @@ public class S_RiverGame : MonoBehaviour
         //}
         
         //check if the raft has reach the checkpoint then go to the next one
-        if (Vector3.Distance(raftReference.transform.position, riverCheckpoints[checkpointIndex]) < 1f)
+        if (Vector3.Distance(raftReference.transform.position, nextDestination) < 1f)
         {
-            //riverCheckpoints.RemoveAt(0);
             checkpointIndex++;
-            if (checkpointIndex == riverCheckpoints.Count - 1)
+            
+            if (checkpointIndex == riverReferences.Count - 1)//if this is the last checkpoint to go to, start slowing down the raft
             {
                 slowDown = true;
+                nextDestination = riverReferences[checkpointIndex].transform.GetChild(1).transform.position;
             }
-            if (checkpointIndex == riverCheckpoints.Count)
+            else if (checkpointIndex == riverReferences.Count)//if the raft has reached the last checkpoint, stop
             {
                 slowDown = false;
                 timeToMove = false;
                 playerAttached = false;
                 playerReference.transform.parent = null;
             }
+            else//otherwise set the new destination tot he next checkpoint
+            {
+                nextDestination = riverReferences[checkpointIndex].transform.GetChild(1).transform.position;
+            }
+
+            //optimization
+            if(checkpointIndex - 5 >= 0)//disable river segments that are far behind the player
+            {
+                riverReferences[checkpointIndex - 5].SetActive(false);
+            }
+            if (checkpointIndex + 5 < riverReferences.Count)//enable segments that are getting close to the player
+            {
+                riverReferences[checkpointIndex + 5].SetActive(true);
+            }
         }
+    }
+
+    //a method called by obstacles when the player hits them which will increment points
+    public void ObstacleHit()
+    {
+        Debug.Log("The player hit me!");
     }
 }

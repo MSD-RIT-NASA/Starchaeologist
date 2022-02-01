@@ -6,6 +6,7 @@ public class S_Raft : MonoBehaviour
 {
     public float tiltRange = 10f;
     public float tiltSpeed = 1.0f;
+    public bool tilting = false;
 
     Quaternion newTilt;
     Quaternion oldTilt;

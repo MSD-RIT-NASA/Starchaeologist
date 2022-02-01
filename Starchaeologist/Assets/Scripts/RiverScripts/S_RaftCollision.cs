@@ -5,21 +5,11 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class S_RaftCollision : MonoBehaviour
 {
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     void OnTriggerEnter(Collider other)
     {
         //when the player first comes into contact with the raft, tell the game to start playing then remove this script to save space
         if (other.gameObject.CompareTag("Player"))
         {
-            //tell the platform to start moving
-            
-
             //stop the player from teleporting back to land once the ride starts
             GameObject startReference = GameObject.Find("RiverStart");
             for (int i = 0; i < startReference.transform.childCount; i++)
@@ -30,7 +20,8 @@ public class S_RaftCollision : MonoBehaviour
                     //startReference.transform.GetChild(i).GetComponent<TeleportationArea>().enabled = false;
                 }
             }
-            
+
+            //tell the platform to start moving
             GameObject.Find("Game Manager").GetComponent<S_RiverGame>().timeToMove = true;
 
             //stop the player from teleporting back onto the raft
@@ -39,10 +30,5 @@ public class S_RaftCollision : MonoBehaviour
             //remove this script
             Destroy(this);
         }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-
     }
 }
