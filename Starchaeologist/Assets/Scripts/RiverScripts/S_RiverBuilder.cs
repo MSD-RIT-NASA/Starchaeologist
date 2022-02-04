@@ -11,27 +11,56 @@ public class S_RiverBuilder : MonoBehaviour
     List<GameObject> spawnedSegments = new List<GameObject>();
     //GameObject newSpawn;
 
-    public List<GameObject> segmentPrefabs = new List<GameObject>();
+    public List<GameObject> segmentPrefabs_1M = new List<GameObject>();
+    public List<GameObject> segmentPrefabs_2M = new List<GameObject>();
+    public List<GameObject> transitionPrefabs_to_1M = new List<GameObject>();
+    public List<GameObject> transitionPrefabs_to_2M = new List<GameObject>();
     public List<GameObject> obstaclePrefabs = new List<GameObject>();
     public List<GameObject> treasurePrefabs = new List<GameObject>();
     public List<GameObject> artifactPrefabs = new List<GameObject>();
-    
-    
+
+    List<GameObject>[] segmentArray;
+    List<GameObject>[] transitionArray;
+
     List<Vector3>[] obstacleSpawns;
 
     // Start is called before the first frame update
     void Start()
     {
-        //spawn the amount of river segemnts requested
-        //GetComponent<S_RiverGame>().riverReferences.Add(GameObject.Find("RiverStart"));
-        spawnedSegments.Add(GameObject.Find("RiverStart"));
+        DataSetup();
+
+        SegmentSetup();
+
+        //give the game script the list of river pieces
+        GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
+
+        //remove this script
+        Destroy(this);
+    }
+
+    private void DataSetup()
+    {
         obstacleSpawns = new List<Vector3>[segmentCount];
 
+        segmentArray = new List<GameObject>[2];
+        segmentArray[0] = segmentPrefabs_1M;
+        segmentArray[1] = segmentPrefabs_2M;
+
+        transitionArray = new List<GameObject>[2];
+        transitionArray[0] = transitionPrefabs_to_1M;
+        transitionArray[1] = transitionPrefabs_to_2M;
+    }
+
+    private void SegmentSetup()
+    {
+        //spawn the amount of river segemnts requested
+        spawnedSegments.Add(GameObject.Find("RiverStart"));
+        
         int i = 0;
         while (i < segmentCount)
         {
             //choose one of the available segment prefabs and place it at the end of the last placed piece
-            GameObject newSpawn = Instantiate(segmentPrefabs[Random.Range(0, segmentPrefabs.Count)]);
+            GameObject newSpawn = Instantiate(segmentPrefabs_1M[Random.Range(0, segmentPrefabs_1M.Count)]);
             newSpawn.transform.position = spawnPosition;
             if(i >= 5)
             {
@@ -81,12 +110,67 @@ public class S_RiverBuilder : MonoBehaviour
 
             i++;
         }
+    }
 
-        //give the game script the list of river pieces
-        GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
+    private void SegmentSetupTwo()
+    {
+        //spawn the amount of river segemnts requested
+        spawnedSegments.Add(GameObject.Find("RiverStart"));
 
-        //remove this script
-        Destroy(this);
+        int i = 0;
+        while (i < segmentCount)
+        {
+            //choose one of the available segment prefabs and place it at the end of the last placed piece
+            GameObject newSpawn = Instantiate(segmentPrefabs_1M[Random.Range(0, segmentPrefabs_1M.Count)]);
+            newSpawn.transform.position = spawnPosition;
+            if (i >= 5)
+            {
+                newSpawn.SetActive(false);
+            }
+            spawnPosition = newSpawn.transform.GetChild(1).transform.position;
+
+            spawnedSegments.Add(newSpawn);
+
+
+            //record the positions available for spawning obstacles and artifacts
+            obstacleSpawns[i] = new List<Vector3>();
+            int j = 2;
+            while (j < newSpawn.transform.childCount)
+            {
+                obstacleSpawns[i].Add(newSpawn.transform.GetChild(j).transform.position);
+                j++;
+            }
+
+            i++;
+        }
+
+        //place the end of the river at the end of the river
+        GameObject endReference = GameObject.Find("RiverEnd");
+        endReference.transform.position = spawnPosition;
+        endReference.SetActive(false);
+        spawnedSegments.Add(endReference);
+
+        //spawn artifact pieces, treasure, and obstacles along the river
+        i = 0;
+        while (i < segmentCount)
+        {
+            //artifacts spawner
+            if (i < artifactPieces)
+            {
+                //do this once there are actual pieces. depending on the artifact, this will change based on the amount of pieces
+                //newSpawn = Instantiate(artifactPrefabs[i]);
+                PlaceThings(artifactPrefabs[0]);
+            }
+
+            //treasure spawner
+            PlaceThings(treasurePrefabs[Random.Range(0, treasurePrefabs.Count)]);
+
+            //obstacle spawner
+            PlaceThings(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Count)]);
+
+
+            i++;
+        }
     }
 
     //choose a location from the list to place the item
