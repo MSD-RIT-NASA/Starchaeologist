@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1874701178370944472}
   - component: {fileID: 6729938155070504386}
   - component: {fileID: 6726431382006797162}
+  - component: {fileID: 1702062947538337333}
   m_Layer: 0
   m_Name: Obstacle
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4103852579617868974}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
   m_LocalScale: {x: 1, y: 8, z: 1}
   m_Children: []
   m_Father: {fileID: 8013306434495371920}
@@ -96,6 +97,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &1702062947538337333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4103852579617868974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575dcc14403891c4599a0bd48c729a85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8729715428549575470
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8013306434495371920}
   m_Layer: 0
-  m_Name: Obstacle_Fallen_Tree
+  m_Name: Obstacle_Fallen_Tree_Flat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
