@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerWhip : MonoBehaviour
+public class VelocityEstimator : MonoBehaviour
 {
     /*TODO:
      * Only update hand velocity if holding button? Move velocity calculation to a new script independent of whip?
@@ -10,8 +10,8 @@ public class PlayerWhip : MonoBehaviour
      * Make extended whip detect if it hit a yoinkable thing, and engage the yoink if so
     */
 
-    [Tooltip("The max number of elements allowed in the velocity bank. " +
-        "The bank will very exceed the capacity by one for ~1 line of code before it can be pruned down.")]
+    [Tooltip("The max number of elements allowed in the velocity bank. The oldest element will be removed if an " +
+        "addition would exceed the capacity.")]
     [SerializeField] private int velBankCapacity = 10;
 
     private Vector3 previousPos;
@@ -40,11 +40,11 @@ public class PlayerWhip : MonoBehaviour
         if (Mathf.Approximately(Time.fixedDeltaTime, 0))
         {
             Vector3 vel = (transform.position - previousPos) / Time.fixedDeltaTime;
-            estVelocityBank.AddFirst(vel);
-            if (estVelocityBank.Count > velBankCapacity)
+            if (estVelocityBank.Count >= velBankCapacity)
             {
                 estVelocityBank.RemoveLast();
             }
+            estVelocityBank.AddFirst(vel);
         }
     }
 
