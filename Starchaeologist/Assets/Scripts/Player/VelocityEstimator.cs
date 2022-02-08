@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class VelocityEstimator : MonoBehaviour
 {
-    /*TODO:
-     * Only update hand velocity if holding button? Move velocity calculation to a new script independent of whip?
-     * While holding button, if velocity matches or exceeds minimum swing speed, extend whip
-     * Make extended whip detect if it hit a yoinkable thing, and engage the yoink if so
-    */
-
     [Tooltip("The max number of elements allowed in the velocity bank. The oldest element will be removed if an " +
         "addition would exceed the capacity.")]
     [SerializeField] private int velBankCapacity = 10;
+    [Tooltip("Whether this estimator is actually estimating right now, or not. Basically, an on/off switch.")]
+    [SerializeField] private bool estimating = true;
 
     private Vector3 previousPos;
     private LinkedList<Vector3> estVelocityBank;
@@ -24,10 +20,29 @@ public class VelocityEstimator : MonoBehaviour
         previousPos = transform.position;
     }
 
+    /// <summary>
+    /// Turn estimation on/off.<br/>
+    /// If switching from on to off or vice-versa, clears <see cref="estVelocityBank"/> to avoid polluting averages 
+    /// with old samples.
+    /// </summary>
+    /// <param name="shouldEstimate">If true, turn estimation on. If false, turn estimation off.</param>
+    public void SetEstimationActve(bool shouldEstimate)
+    {
+        if (estimating != shouldEstimate)
+        {
+            estimating = shouldEstimate;
+            estVelocityBank.Clear();
+            Debug.Log($"Turned {(shouldEstimate ? "on" : "off")} {gameObject.name}'s VelocityEstimator.");
+        }
+    }
+
     private void FixedUpdate()
     {
-        UpdateVelocityBank();
-        CurrentAvgVelocity = GetAverageFromBank();
+        if (estimating)
+        {
+            UpdateVelocityBank();
+            CurrentAvgVelocity = GetAverageFromBank();
+        }
     }
 
     /// <summary>
