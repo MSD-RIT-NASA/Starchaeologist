@@ -19,12 +19,22 @@ public class S_RiverGame : MonoBehaviour
     bool playerAttached = false;
     int checkpointIndex = 0;
 
+    //python variables
+    private HelloRequester pythonCommunicator;
+    public float rotationX = 0f;
+    public float rotationZ = 0f;
+    public bool rotationChanged = false;
+    int pythonBuffer = 0;
+
 
     // Start is called before the first frame update
     void Start()
     {
         playerReference = GameObject.Find("Player_Rig");
         raftReference = GameObject.Find("Raft_Fake");
+
+        pythonCommunicator = new HelloRequester();
+        //pythonCommunicator.Start();
     }
 
     // Update is called once per frame
@@ -40,6 +50,23 @@ public class S_RiverGame : MonoBehaviour
                 playerReference.transform.parent = raftReference.transform;
             }
             MoveRaft();
+        }
+
+        //python communication
+        if(pythonBuffer < 10)
+        {
+            string getMessage = pythonCommunicator.pythonMessage;
+            if(!pythonCommunicator.Running)
+            {
+                pythonCommunicator.pythonMessage = "Hello";
+                pythonCommunicator.Start();
+            }
+            else if(getMessage != null)
+            {
+                pythonBuffer++;
+                Debug.Log("Received " + getMessage);
+                pythonCommunicator.FinishedRunning();
+            }
         }
     }
 
@@ -125,5 +152,11 @@ public class S_RiverGame : MonoBehaviour
     public void ObstacleHit()
     {
         Debug.Log("The player hit me!");
+    }
+
+
+    private void OnDestroy()
+    {
+        pythonCommunicator.Stop();
     }
 }
