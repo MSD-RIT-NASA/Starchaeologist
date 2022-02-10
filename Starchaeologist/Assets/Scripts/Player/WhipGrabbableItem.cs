@@ -1,0 +1,45 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class WhipGrabbableItem : MonoBehaviour
+{
+    [Tooltip("How long it will take for this grabbable object to fly towards the player, when grabbed.")]
+    [SerializeField] private float flyDuration;
+    [Tooltip("This object will fly toward a supplied transform's position, plus this vector.")]
+    [SerializeField] private Vector3 destinationOffset;
+
+    private Coroutine flyToPlayerCorout;
+
+    public void FlyToPlayer(Transform playerTform)
+    {
+        //If this is called when the coroutine is not null, that means the coroutine is already running. No
+        //need to run it a second time.
+        if (flyToPlayerCorout == null)
+        {
+            //"lerp" over to the player in flyDuration seconds.
+            flyToPlayerCorout = Coroutilities.DoForSeconds
+            (
+                this,
+                () => transform.position = Vector3.MoveTowards
+                (
+                    transform.position,
+                    playerTform.position + destinationOffset,
+                    flyDuration * Time.deltaTime
+                ),
+                flyDuration
+            );
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log($"Object ${gameObject.name} was just collected!");
+            Coroutilities.TryStopCoroutine(this, ref flyToPlayerCorout);
+            //TODO: Give player their well deserved points
+            Destroy(gameObject);
+        }
+    }
+}
