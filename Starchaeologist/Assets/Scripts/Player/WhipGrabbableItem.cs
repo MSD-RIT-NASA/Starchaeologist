@@ -11,13 +11,13 @@ public class WhipGrabbableItem : MonoBehaviour
 
     private Coroutine flyToPlayerCorout;
 
-    public void FlyToPlayer(Transform playerTform)
+    public void FlyToGrabber(Transform grabberTform)
     {
         //If this is called when the coroutine is not null, that means the coroutine is already running. No
         //need to run it a second time.
         if (flyToPlayerCorout == null)
         {
-            //"lerp" over to the player in flyDuration seconds.
+            //"lerp" over to the thing that grabbed this object in flyDuration seconds.
             float progress = 0;
             flyToPlayerCorout = Coroutilities.DoUntil
             (
@@ -25,7 +25,7 @@ public class WhipGrabbableItem : MonoBehaviour
                 () =>
                 {
                     progress += Time.deltaTime / flyDuration;
-                    transform.position = Vector3.Lerp(transform.position, playerTform.position + destinationOffset, progress);
+                    transform.position = Vector3.Lerp(transform.position, grabberTform.position + destinationOffset, progress);
                 },
                 () => progress >= 1
             );

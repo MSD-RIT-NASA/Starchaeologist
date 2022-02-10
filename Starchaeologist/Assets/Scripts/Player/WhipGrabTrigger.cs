@@ -19,7 +19,7 @@ public class WhipGrabTrigger : MonoBehaviour
         if (other.CompareTag("WhipGrabbable"))
         {
             Debug.Log($"Grabbed {other.gameObject.name} with the whip!");
-            other.gameObject.GetComponent<WhipGrabbableItem>().FlyToPlayer(grabPullDestination);
+            other.gameObject.GetComponent<WhipGrabbableItem>().FlyToGrabber(grabPullDestination);
         }
     }
 }
