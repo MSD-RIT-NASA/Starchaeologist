@@ -18,16 +18,16 @@ public class WhipGrabbableItem : MonoBehaviour
         if (flyToPlayerCorout == null)
         {
             //"lerp" over to the player in flyDuration seconds.
-            flyToPlayerCorout = Coroutilities.DoForSeconds
+            float progress = 0;
+            flyToPlayerCorout = Coroutilities.DoUntil
             (
                 this,
-                () => transform.position = Vector3.MoveTowards
-                (
-                    transform.position,
-                    playerTform.position + destinationOffset,
-                    flyDuration * Time.deltaTime
-                ),
-                flyDuration
+                () =>
+                {
+                    progress += Time.deltaTime / flyDuration;
+                    transform.position = Vector3.Lerp(transform.position, playerTform.position + destinationOffset, progress);
+                },
+                () => progress >= 1
             );
         }
     }
