@@ -19,7 +19,7 @@ public class S_RightAction : MonoBehaviour
         teleportRay = GetComponent<XRRayInteractor>();
         teleportLine = GetComponent<XRInteractorLineVisual>();
         teleportReticle = gameObject.transform.GetChild(0).gameObject;
-
+        teleportReticle.SetActive(false);
 
         controller.selectActionValue.action.performed += Action_Selec_Value;
     }
@@ -43,7 +43,10 @@ public class S_RightAction : MonoBehaviour
         {
             teleportLine.enabled = isActive;
             teleportRay.enabled = isActive;
-            teleportReticle.SetActive(isActive);
+            if (!isActive)
+            {
+                teleportReticle.SetActive(isActive);
+            }
         }
     }
 }

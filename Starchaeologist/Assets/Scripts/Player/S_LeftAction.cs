@@ -9,7 +9,7 @@ public class S_LeftAction : MonoBehaviour
     XRRayInteractor teleportRay;
     XRInteractorLineVisual teleportLine;
     GameObject teleportReticle;
-    float activationThreshold = 0.1f;
+    float activationThreshold = 0.2f;
     bool isActive = false;
 
     // Start is called before the first frame update
@@ -19,7 +19,7 @@ public class S_LeftAction : MonoBehaviour
         teleportRay = GetComponent<XRRayInteractor>();
         teleportLine = GetComponent<XRInteractorLineVisual>();
         teleportReticle = gameObject.transform.GetChild(0).gameObject;
-
+        teleportReticle.SetActive(false);
 
         controller.selectActionValue.action.performed += Action_Selec_Value;
     }
@@ -43,7 +43,11 @@ public class S_LeftAction : MonoBehaviour
         {
             teleportLine.enabled = isActive;
             teleportRay.enabled = isActive;
-            teleportReticle.SetActive(isActive);
+            if(!isActive)
+            {
+                teleportReticle.SetActive(isActive);
+            }
+            //teleportReticle.SetActive(isActive);
         }
     }
 }
