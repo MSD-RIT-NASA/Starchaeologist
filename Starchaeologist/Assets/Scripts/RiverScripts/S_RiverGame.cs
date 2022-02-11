@@ -7,6 +7,7 @@ public class S_RiverGame : MonoBehaviour
 {
     GameObject playerReference;
     GameObject raftReference;
+    GameObject riverWater;
 
     public List<GameObject> riverReferences = new List<GameObject>(); //populated with positions while the river is being built from the S_RiverBuilder script
     Vector3 nextDestination = new Vector3(0, 0, 0);
@@ -32,6 +33,7 @@ public class S_RiverGame : MonoBehaviour
     {
         playerReference = GameObject.Find("Player_Rig");
         raftReference = GameObject.Find("Raft_Fake");
+        riverWater = GameObject.Find("RiverWater");
 
         pythonCommunicator = new HelloRequester();
         //pythonCommunicator.Start();
@@ -103,6 +105,7 @@ public class S_RiverGame : MonoBehaviour
 
         //move the raft
         raftReference.transform.position += currentDirection * Time.deltaTime * currentSpeed;
+        riverWater.transform.position = new Vector3(0,0, raftReference.transform.position.z);
 
         //rotate the raft
         //if(currentDirection.x < 0)
@@ -113,7 +116,7 @@ public class S_RiverGame : MonoBehaviour
         //{
         //    raftReference.transform.rotation = Quaternion.Euler(0, Vector3.Angle(Vector3.forward, currentDirection), 0);
         //}
-        
+
         //check if the raft has reach the checkpoint then go to the next one
         if (Vector3.Distance(raftReference.transform.position, nextDestination) < 1f)
         {
