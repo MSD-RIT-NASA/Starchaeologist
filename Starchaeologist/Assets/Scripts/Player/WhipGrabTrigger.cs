@@ -14,6 +14,15 @@ public class WhipGrabTrigger : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        Debug.Log($"WhipGrabTrigger on {gameObject.name} is now on.");
+    }
+    private void OnDisable()
+    {
+        Debug.Log($"WhipGrabTrigger on {gameObject.name} is now off.");
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("WhipGrabbable"))
