@@ -12,7 +12,7 @@ public class WhipControl : MonoBehaviour
     [SerializeField] private ActionBasedController controller;
     [SerializeField] private WhipGrabTrigger grabTrigger;
     [Tooltip("To swing the whip, the velocity of the player's hand should have a magnitude greater than this.")]
-    [SerializeField] private float minSwingSpeed;
+    [SerializeField] [Min(0)] private float minSwingSpeed;
 
 
     private void Start()

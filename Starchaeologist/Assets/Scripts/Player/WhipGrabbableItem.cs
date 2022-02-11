@@ -5,7 +5,7 @@ using UnityEngine;
 public class WhipGrabbableItem : MonoBehaviour
 {
     [Tooltip("How long it will take for this grabbable object to fly towards the player, when grabbed.")]
-    [SerializeField] private float flyDuration;
+    [SerializeField] [Min(0)] private float flyDuration;
     [Tooltip("This object will fly toward a supplied transform's position, plus this vector.")]
     [SerializeField] private Vector3 destinationOffset;
 
