@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 
@@ -7,6 +8,7 @@ public class S_RiverGame : MonoBehaviour
 {
     GameObject playerReference;
     GameObject raftReference;
+    GameObject riverWater;
 
     public List<GameObject> riverReferences = new List<GameObject>(); //populated with positions while the river is being built from the S_RiverBuilder script
     Vector3 nextDestination = new Vector3(0, 0, 0);
@@ -32,6 +34,7 @@ public class S_RiverGame : MonoBehaviour
     {
         playerReference = GameObject.Find("Player_Rig");
         raftReference = GameObject.Find("Raft_Fake");
+        riverWater = GameObject.Find("RiverWater");
 
         pythonCommunicator = new HelloRequester();
         //pythonCommunicator.Start();
@@ -58,13 +61,22 @@ public class S_RiverGame : MonoBehaviour
             string getMessage = pythonCommunicator.pythonMessage;
             if(!pythonCommunicator.Running)
             {
-                pythonCommunicator.pythonMessage = "Hello";
-                pythonCommunicator.Start();
+                float giveRotationX = Random.Range(-10f, 10f);
+                float giveRotationZ = Random.Range(-10f, 10f);
+                string giveMessage = giveRotationX + " " + giveRotationZ;
+                pythonCommunicator.pythonMessage = giveMessage;
+                pythonCommunicator.StartThread();
             }
-            else if(getMessage != null)
+            else if(pythonCommunicator.receiveMessage && getMessage != null)
             {
                 pythonBuffer++;
-                Debug.Log("Received " + getMessage);
+
+                string[] getValues = getMessage.Split(' ');
+
+                float xRotation = float.Parse(getValues[0], CultureInfo.InvariantCulture.NumberFormat);
+                float zRotation = float.Parse(getValues[1], CultureInfo.InvariantCulture.NumberFormat);
+
+                Debug.Log("Received: " + "xRotation(" + xRotation + "), zRotation(" + zRotation +")");
                 pythonCommunicator.FinishedRunning();
             }
         }
@@ -103,6 +115,7 @@ public class S_RiverGame : MonoBehaviour
 
         //move the raft
         raftReference.transform.position += currentDirection * Time.deltaTime * currentSpeed;
+        riverWater.transform.position = new Vector3(0,0, raftReference.transform.position.z);
 
         //rotate the raft
         //if(currentDirection.x < 0)
@@ -113,7 +126,7 @@ public class S_RiverGame : MonoBehaviour
         //{
         //    raftReference.transform.rotation = Quaternion.Euler(0, Vector3.Angle(Vector3.forward, currentDirection), 0);
         //}
-        
+
         //check if the raft has reach the checkpoint then go to the next one
         if (Vector3.Distance(raftReference.transform.position, nextDestination) < 1f)
         {
