@@ -10,10 +10,12 @@ public class WhipControl : MonoBehaviour
         "may not be on this particular game object.")]
     [SerializeField] private VelocityEstimator vEstimator = null;
     [SerializeField] private ActionBasedController controller;
-    [SerializeField] private WhipGrabTrigger grabTrigger;
+    [SerializeField] private GameObject whipCurledRef;
+    [SerializeField] private GameObject whipUncurledRef;
     [Tooltip("To swing the whip, the velocity of the player's hand should have a magnitude greater than this.")]
     [SerializeField] [Min(0)] private float minSwingSpeed;
 
+    private Coroutine uncurlCorout = null;
 
     private void Start()
     {
@@ -25,16 +27,12 @@ public class WhipControl : MonoBehaviour
                     $"failed! Give {gameObject.name}'s WhipControl a VelocityEstimator reference, or attach one.");
             }
         }
-        if (!grabTrigger)
+        if (!whipCurledRef || whipUncurledRef)
         {
-            if (!TryGetComponent(out grabTrigger))
-            {
-                Debug.LogError($"{gameObject.name}'s WhipControl was not given a WhipGrabTrigger to use when swinging, and GetComponent " +
-                    $"failed! Give {gameObject.name}'s WhipControl a WhipGrabTrigger reference, or attach one.");
-            }
+            Debug.LogError($"{gameObject.name}'s WhipControl is missing a curled/uncurled whip reference. Double check the inspector.");
         }
         vEstimator.SetEstimationActve(false);
-        grabTrigger.enabled = false;
+        ToggleWhipCurled(true);
     }
 
     private void OnEnable()
@@ -48,15 +46,19 @@ public class WhipControl : MonoBehaviour
 
     private void OnControllerPerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        if (ctx.action.WasPressedThisFrame())
+        //Only prepare for whip swings if the whip isn't currently being swung, i.e., if it's not uncurled
+        if (uncurlCorout == null)
         {
-            vEstimator.SetEstimationActve(true);
-            //vfx to show you're preparing a swing?
-        }
-        else if (ctx.action.WasReleasedThisFrame())
-        {
-            TryDoSwing();
-            vEstimator.SetEstimationActve(false);
+            if (ctx.action.WasPressedThisFrame())
+            {
+                vEstimator.SetEstimationActve(true);
+                //vfx to show you're preparing a swing?
+            }
+            else if (ctx.action.WasReleasedThisFrame())
+            {
+                TryDoSwing();
+                vEstimator.SetEstimationActve(false);
+            }
         }
     }
 
@@ -64,8 +66,21 @@ public class WhipControl : MonoBehaviour
     {
         if (vEstimator.CurrentAvgVelocity.sqrMagnitude >= minSwingSpeed * minSwingSpeed)
         {
-            grabTrigger.enabled = true;
-            Coroutilities.DoAfterDelay(this, () => grabTrigger.enabled = false, 3);
+            ToggleWhipCurled(false);
+            whipUncurledRef.transform.forward = vEstimator.CurrentAvgVelocity.normalized;
+
+            uncurlCorout = Coroutilities.DoAfterDelay(this, () =>
+            {
+                ToggleWhipCurled(true);
+                uncurlCorout = null;
+            },
+            3);
         }
+    }
+
+    private void ToggleWhipCurled(bool curled)
+    {
+        whipCurledRef.SetActive(curled);
+        whipUncurledRef.SetActive(!curled);
     }
 }
