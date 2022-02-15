@@ -181,15 +181,15 @@ public class S_RiverBuilder : MonoBehaviour
 
         //spawn artifact pieces, treasure, and obstacles along the river
         i = 0;
-        while (i < segmentCount)
+        while (i < segmentCount*2)
         {
-            //artifacts spawner
-            if (i < artifactPieces)
-            {
-                //do this once there are actual pieces. depending on the artifact, this will change based on the amount of pieces
-                //newSpawn = Instantiate(artifactPrefabs[i]);
-                PlaceThings(artifactPrefabs[0]);
-            }
+            ////artifacts spawner
+            //if (i < artifactPieces)
+            //{
+            //    //do this once there are actual pieces. depending on the artifact, this will change based on the amount of pieces
+            //    //newSpawn = Instantiate(artifactPrefabs[i]);
+            //    PlaceThings(artifactPrefabs[0]);
+            //}
 
             //treasure spawner
             PlaceThings(treasurePrefabs[Random.Range(0, treasurePrefabs.Count)]);

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 
@@ -60,13 +61,22 @@ public class S_RiverGame : MonoBehaviour
             string getMessage = pythonCommunicator.pythonMessage;
             if(!pythonCommunicator.Running)
             {
-                pythonCommunicator.pythonMessage = "Hello";
-                pythonCommunicator.Start();
+                float giveRotationX = Random.Range(-10f, 10f);
+                float giveRotationZ = Random.Range(-10f, 10f);
+                string giveMessage = giveRotationX + " " + giveRotationZ;
+                pythonCommunicator.pythonMessage = giveMessage;
+                pythonCommunicator.StartThread();
             }
-            else if(getMessage != null)
+            else if(pythonCommunicator.receiveMessage && getMessage != null)
             {
                 pythonBuffer++;
-                Debug.Log("Received " + getMessage);
+
+                string[] getValues = getMessage.Split(' ');
+
+                float xRotation = float.Parse(getValues[0], CultureInfo.InvariantCulture.NumberFormat);
+                float zRotation = float.Parse(getValues[1], CultureInfo.InvariantCulture.NumberFormat);
+
+                Debug.Log("Received: " + "xRotation(" + xRotation + "), zRotation(" + zRotation +")");
                 pythonCommunicator.FinishedRunning();
             }
         }
