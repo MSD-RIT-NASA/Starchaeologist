@@ -6,7 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 [RequireComponent(typeof(VelocityEstimator))]
 public class WhipControl : MonoBehaviour
 {
-    [Tooltip("The estimator we'll be referencing when determining if the player's swining fast enough. It may or " +
+    [Tooltip("The estimator we'll be referencing when determining if the player's swinging fast enough. It may or " +
         "may not be on this particular game object.")]
     [SerializeField] private VelocityEstimator vEstimator = null;
     [SerializeField] private ActionBasedController controller;
@@ -27,7 +27,7 @@ public class WhipControl : MonoBehaviour
                     $"failed! Give {gameObject.name}'s WhipControl a VelocityEstimator reference, or attach one.");
             }
         }
-        if (!whipCurledRef || whipUncurledRef)
+        if (!whipCurledRef || !whipUncurledRef)
         {
             Debug.LogError($"{gameObject.name}'s WhipControl is missing a curled/uncurled whip reference. Double check the inspector.");
         }
@@ -46,6 +46,8 @@ public class WhipControl : MonoBehaviour
 
     private void OnControllerPerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
+        Debug.Log($"Input performed! Was pressed is {ctx.action.WasPressedThisFrame()}, was released is {ctx.action.WasReleasedThisFrame()}");
+
         //Only prepare for whip swings if the whip isn't currently being swung, i.e., if it's not uncurled
         if (uncurlCorout == null)
         {
