@@ -32,8 +32,11 @@ class Server:
 if __name__ == "__main__":
     s = Server()
     while(True):
-        pos1, pos2 = s.unityRead()
-        print("Position 1: " + pos1)
-        print("Position 2: " + pos1)
-        comb = str(pos1) + " " + str(pos1) 
+        angle1, angle2 = s.unityRead()
+        print("Position 1: " + angle1)
+        print("Position 2: " + angle1)
+        # TODO: Set Motion Floor Platform to these angles
+
+        # Send angles back to Unity Game as confirmation
+        comb = str(angle1) + " " + str(angle1) 
         s.unityWrite(comb.encode())
