@@ -7,15 +7,17 @@
 public abstract class RunAbleThread
 {
     private Thread _runnerThread;
-    public string pythonMessage;
+    public string getRotation;
+    public string giveRotation;
     public bool receiveMessage = false;
 
     protected RunAbleThread()
     {
         // we need to create a thread instead of calling Run() directly because it would block unity
         // from doing other tasks like drawing game scenes
-        pythonMessage = null;
-        
+        getRotation = null;
+        giveRotation = null;
+
     }
 
     public bool Running { get; private set; }
@@ -46,7 +48,8 @@ public abstract class RunAbleThread
     public void FinishedRunning()
     {
         Running = false;
-        pythonMessage = null;
+        giveRotation = null;
+        getRotation = null;
         receiveMessage = false;
     }
 }

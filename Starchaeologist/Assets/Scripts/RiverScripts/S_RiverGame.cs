@@ -58,16 +58,19 @@ public class S_RiverGame : MonoBehaviour
         //python communication
         if(pythonBuffer < 10)
         {
-            string getMessage = pythonCommunicator.pythonMessage;
-            if(!pythonCommunicator.Running)
+            //grab the rotation string
+            string getMessage = pythonCommunicator.getRotation;
+
+            if(!pythonCommunicator.Running)//check if the thread is currently running
             {
+                //if it isn't, start the thread and five a rotation
                 float giveRotationX = Random.Range(-10f, 10f);
                 float giveRotationZ = Random.Range(-10f, 10f);
                 string giveMessage = giveRotationX + " " + giveRotationZ;
-                pythonCommunicator.pythonMessage = giveMessage;
+                pythonCommunicator.giveRotation = giveMessage;
                 pythonCommunicator.StartThread();
             }
-            else if(pythonCommunicator.receiveMessage && getMessage != null)
+            else if(getMessage != null)//check if the rotation has been sent back
             {
                 pythonBuffer++;
 
