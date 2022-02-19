@@ -168,7 +168,7 @@ public class S_RiverBuilder : MonoBehaviour
                 obstacleSpawns[i].Add(newSpawn.transform.GetChild(j).transform.position);
                 j++;
             }
-            obstacleSpawns[i].Add(newSpawn.transform.GetChild(1).transform.position);
+            //obstacleSpawns[i].Add(newSpawn.transform.GetChild(1).transform.position);
 
             i++;
         }
