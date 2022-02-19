@@ -23,7 +23,7 @@ public class HelloRequester : RunAbleThread
 
             if (Running)
             {
-                Debug.Log("Sending Hello");
+                Debug.Log("Sending Rotation");
                 client.SendFrame(giveRotation);
                 giveRotation = null;
                 // ReceiveFrameString() blocks the thread until you receive the string, but TryReceiveFrameString()
@@ -41,9 +41,9 @@ public class HelloRequester : RunAbleThread
 
                 if (gotMessage)
                 {
-                    receiveMessage = true;
                     getRotation = message;
                 }
+                Running = false;
             }
         }
 

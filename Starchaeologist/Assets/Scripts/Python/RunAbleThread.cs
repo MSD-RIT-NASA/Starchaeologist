@@ -9,7 +9,6 @@ public abstract class RunAbleThread
     private Thread _runnerThread;
     public string getRotation;
     public string giveRotation;
-    public bool receiveMessage = false;
 
     protected RunAbleThread()
     {
@@ -20,7 +19,7 @@ public abstract class RunAbleThread
 
     }
 
-    public bool Running { get; private set; }
+    public bool Running { get; protected set; }
 
     /// <summary>
     /// This method will get called when you call Start(). Programmer must implement this method while making sure that
@@ -33,7 +32,6 @@ public abstract class RunAbleThread
     {
         _runnerThread = new Thread(Run);
         Running = true;
-        receiveMessage = false;
         _runnerThread.Start();
     }
 
@@ -43,13 +41,5 @@ public abstract class RunAbleThread
         // block main thread, wait for _runnerThread to finish its job first, so we can be sure that 
         // _runnerThread will end before main thread end
         _runnerThread.Join();
-    }
-
-    public void FinishedRunning()
-    {
-        Running = false;
-        giveRotation = null;
-        getRotation = null;
-        receiveMessage = false;
     }
 }

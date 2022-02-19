@@ -8,6 +8,7 @@ public class S_RiverGame : MonoBehaviour
 {
     GameObject playerReference;
     GameObject raftReference;
+    S_Raft raftScript;
     GameObject riverWater;
 
     public List<GameObject> riverReferences = new List<GameObject>(); //populated with positions while the river is being built from the S_RiverBuilder script
@@ -15,7 +16,7 @@ public class S_RiverGame : MonoBehaviour
     Vector3 currentDirection = new Vector3(0, 0, 1);
     public float raftAcceleration = 0.1f;
     public float raftSpeed = 3.0f;
-    float currentSpeed = 0f; 
+    float currentSpeed = 0f;
     public bool timeToMove = false; //turned true the first time the player teleports to the raft from the S_RaftCollision script
     bool slowDown = false;
     bool playerAttached = false;
@@ -27,6 +28,8 @@ public class S_RiverGame : MonoBehaviour
     public float rotationZ = 0f;
     public bool rotationChanged = false;
     int pythonBuffer = 0;
+    Vector3 pythonRotation = new Vector3(0, 0, 0);
+
 
 
     // Start is called before the first frame update
@@ -37,6 +40,7 @@ public class S_RiverGame : MonoBehaviour
         riverWater = GameObject.Find("RiverWater");
 
         pythonCommunicator = new HelloRequester();
+        raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
         //pythonCommunicator.Start();
     }
 
@@ -44,68 +48,76 @@ public class S_RiverGame : MonoBehaviour
     void Update()
     {
         //start the game by moving the raft
-        if(timeToMove)
+        if (timeToMove)
         {
             //stick the player under the raft gameobject to help with movement
-            if(!playerAttached)
+            if (!playerAttached)
             {
+                pythonRotation = new Vector3(0, 0, 0);
+                raftScript.tilting = true;
                 playerAttached = true;
                 playerReference.transform.parent = raftReference.transform;
             }
             MoveRaft();
-        }
-
-        //python communication
-        if(pythonBuffer < 10)
-        {
-            //grab the rotation string
-            string getMessage = pythonCommunicator.getRotation;
-
-            if(!pythonCommunicator.Running)//check if the thread is currently running
+            //get the expected rotation of the raft
+            Vector3 plannedRotation = raftScript.Raft();
+            //send that rotation to the python script
+            //pythonMessage = plannedRotation.x + " " + plannedRotation.z;
+            if (!pythonCommunicator.Running)//check if the thread is currently running
             {
-                //if it isn't, start the thread and five a rotation
-                float giveRotationX = Random.Range(-10f, 10f);
-                float giveRotationZ = Random.Range(-10f, 10f);
-                string giveMessage = giveRotationX + " " + giveRotationZ;
+                //if it isn't, start the thread and give a rotation
+                string giveMessage = plannedRotation.x + " " + plannedRotation.z;
                 pythonCommunicator.giveRotation = giveMessage;
                 pythonCommunicator.StartThread();
             }
-            else if(getMessage != null)//check if the rotation has been sent back
+            //set the local rotation of the raft to the new rotation
+            string getMessage = pythonCommunicator.getRotation;
+            if (getMessage != null)//check if the rotation has been sent back
             {
-                pythonBuffer++;
-
+                //split the string into two floats
                 string[] getValues = getMessage.Split(' ');
 
                 float xRotation = float.Parse(getValues[0], CultureInfo.InvariantCulture.NumberFormat);
                 float zRotation = float.Parse(getValues[1], CultureInfo.InvariantCulture.NumberFormat);
 
-                Debug.Log("Received: " + "xRotation(" + xRotation + "), zRotation(" + zRotation +")");
-                pythonCommunicator.FinishedRunning();
+                //set the rotation of the raft to the given rotation
+                raftScript.transform.localRotation = Quaternion.Euler(xRotation, 0, zRotation);
+                
+                Debug.Log("Received: " + "xRotation(" + xRotation + "), zRotation(" + zRotation + ")");
+                pythonCommunicator.getRotation = null;
             }
+            raftScript.transform.localRotation = Quaternion.Euler(pythonRotation);
         }
+
+        //python communication
+        
     }
 
 
     void MoveRaft()
     {
+
         //accelerate or decelerate the raft
-        if(currentSpeed != raftSpeed && !slowDown)
+        if (currentSpeed != raftSpeed && !slowDown)
         {
             currentSpeed = currentSpeed + (raftAcceleration * Time.deltaTime * raftSpeed * 5f);
             /* 
             TO DO: Make this also affect the wobbling of the raft so it increases as the speed increases
             */
+            raftScript.tiltRange = raftScript.tiltRange + (raftAcceleration * Time.deltaTime * raftScript.maxRange * 5f);
         }
-        else if(slowDown)
+        else if (slowDown)
         {
             currentSpeed = currentSpeed - (raftAcceleration * Time.deltaTime * raftSpeed);
             /* 
             TO DO: Make this also affect the wobbling of the raft so it decreases as the speed decreases
             */
+            raftScript.tiltRange = raftScript.tiltRange - (raftAcceleration * Time.deltaTime * raftScript.maxRange);
         }
         currentSpeed = Mathf.Clamp(currentSpeed, 0.25f, raftSpeed);
+        raftScript.tiltRange = Mathf.Clamp(raftScript.tiltRange, 0.25f, raftScript.maxRange);
 
-        //turn the raft in the direction of the next checkpoint
+        //Direct the raft to the next checkpoint
         Vector3 desiredDirection = Vector3.Normalize(nextDestination - raftReference.transform.position);
         if (Mathf.Abs(Vector3.Angle(desiredDirection, currentDirection)) < 1f)
         {
@@ -118,23 +130,13 @@ public class S_RiverGame : MonoBehaviour
 
         //move the raft
         raftReference.transform.position += currentDirection * Time.deltaTime * currentSpeed;
-        riverWater.transform.position = new Vector3(0,0, raftReference.transform.position.z);
-
-        //rotate the raft
-        //if(currentDirection.x < 0)
-        //{
-        //    raftReference.transform.rotation = Quaternion.Euler(0, -Vector3.Angle(Vector3.forward, currentDirection), 0);
-        //}
-        //else
-        //{
-        //    raftReference.transform.rotation = Quaternion.Euler(0, Vector3.Angle(Vector3.forward, currentDirection), 0);
-        //}
+        riverWater.transform.position = new Vector3(0, 0, raftReference.transform.position.z);
 
         //check if the raft has reach the checkpoint then go to the next one
         if (Vector3.Distance(raftReference.transform.position, nextDestination) < 1f)
         {
             checkpointIndex++;
-            
+
             if (checkpointIndex == riverReferences.Count - 1)//if this is the last checkpoint to go to, start slowing down the raft
             {
                 slowDown = true;
@@ -153,7 +155,7 @@ public class S_RiverGame : MonoBehaviour
             }
 
             //optimization
-            if(checkpointIndex - 5 >= 0)//disable river segments that are far behind the player
+            if (checkpointIndex - 5 >= 0)//disable river segments that are far behind the player
             {
                 riverReferences[checkpointIndex - 5].SetActive(false);
             }
@@ -176,3 +178,4 @@ public class S_RiverGame : MonoBehaviour
         pythonCommunicator.Stop();
     }
 }
+
