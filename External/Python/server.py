@@ -16,15 +16,25 @@ class Server():
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
         self.socket.bind(port)
-        # self.lock = Lock()
         self.score = None;
 
+    # TODO
     def calculateBalanceScore(self,sensorData):
         print("Determine sensorData" + sensorData)
     
+    # TODO
     def setMotionFloor(self, angle1, angle2):
         print("Angle1: " +angle1)
         print("Angle2: " +angle2)
+
+    def unityRead(self):
+        message = self.socket.recv()
+        decodedMessage = message.decode("utf-8")
+        return decodedMessage
+    
+    def unityWrite(self, message):
+        encodedMessage = message.encode()
+        self.socket.send(encodedMessage)
 
     # def arduinoRead(self):
     #    data = self.arduino.readline()
@@ -37,8 +47,7 @@ if __name__ == "__main__":
     score = None
     while True :
         # Recieve messages from the Unity Game
-        message = server.socket.recv()
-        decodedMessage = message.decode("utf-8")
+        decodedMessage = server.unityRead()
         if(decodedMessage == "endGame"):
             # TODO: Send game score to unity
             print("End of game reached")
@@ -61,6 +70,4 @@ if __name__ == "__main__":
 
             # Send angles back to Unity Game as confirmation
             unityAngles = str(posList[0]) + " " + str(posList[1]) 
-            encodedMessage = unityAngles.encode()
-            server.socket.send(encodedMessage)
-    
+            server.unityRead(unityAngles)
