@@ -70,4 +70,4 @@ if __name__ == "__main__":
 
             # Send angles back to Unity Game as confirmation
             unityAngles = str(posList[0]) + " " + str(posList[1]) 
-            server.unityRead(unityAngles)
+            server.unityWrite(unityAngles)

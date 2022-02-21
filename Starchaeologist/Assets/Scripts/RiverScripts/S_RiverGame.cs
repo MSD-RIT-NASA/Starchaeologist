@@ -80,13 +80,23 @@ public class S_RiverGame : MonoBehaviour
                 float xRotation = float.Parse(getValues[0], CultureInfo.InvariantCulture.NumberFormat);
                 float zRotation = float.Parse(getValues[1], CultureInfo.InvariantCulture.NumberFormat);
 
+                //The python sends negatives back as larger angles, this turns them back to negatives
+                if(xRotation > 180f)
+                {
+                    xRotation = xRotation - 360f;
+                }
+                if (zRotation > 180f)
+                {
+                    zRotation = zRotation - 360f;
+                }
+
                 //set the rotation of the raft to the given rotation
                 raftScript.transform.localRotation = Quaternion.Euler(xRotation, 0, zRotation);
                 
                 Debug.Log("Received: " + "xRotation(" + xRotation + "), zRotation(" + zRotation + ")");
                 pythonCommunicator.getRotation = null;
             }
-            raftScript.transform.localRotation = Quaternion.Euler(pythonRotation);
+            //raftScript.transform.localRotation = Quaternion.Euler(pythonRotation);
         }
 
         //python communication
