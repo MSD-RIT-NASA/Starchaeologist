@@ -15,6 +15,7 @@ public class WhipControl : MonoBehaviour
     [Tooltip("To swing the whip, the velocity of the player's hand should have a magnitude greater than this.")]
     [SerializeField] [Min(0)] private float minSwingSpeed;
 
+    private Quaternion defaultRot;
     private Coroutine uncurlCorout = null;
 
     private void Start()
@@ -31,6 +32,8 @@ public class WhipControl : MonoBehaviour
         {
             Debug.LogError($"{gameObject.name}'s WhipControl is missing a curled/uncurled whip reference. Double check the inspector.");
         }
+
+        defaultRot = transform.rotation;
         vEstimator.SetEstimationActve(false);
         ToggleWhipCurled(true);
     }
@@ -46,8 +49,6 @@ public class WhipControl : MonoBehaviour
 
     private void OnControllerPerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        Debug.Log($"Input performed! Was pressed is {ctx.action.WasPressedThisFrame()}, was released is {ctx.action.WasReleasedThisFrame()}");
-
         //Only prepare for whip swings if the whip isn't currently being swung, i.e., if it's not uncurled
         if (uncurlCorout == null)
         {
@@ -66,17 +67,18 @@ public class WhipControl : MonoBehaviour
 
     private void TryDoSwing()
     {
-        if (vEstimator.CurrentAvgVelocity.sqrMagnitude >= minSwingSpeed * minSwingSpeed)
+        if (vEstimator.CurrentAvgVelocity is Vector3 avgVel && avgVel.sqrMagnitude >= minSwingSpeed * minSwingSpeed)
         {
             ToggleWhipCurled(false);
-            whipUncurledRef.transform.forward = vEstimator.CurrentAvgVelocity.normalized;
+            //transform.forward = avgVel.normalized;
 
             uncurlCorout = Coroutilities.DoAfterDelay(this, () =>
             {
                 ToggleWhipCurled(true);
+                //transform.rotation = defaultRot;
                 uncurlCorout = null;
             },
-            3);
+            0.375f);
         }
     }
 

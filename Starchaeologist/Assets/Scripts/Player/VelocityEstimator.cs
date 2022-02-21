@@ -12,7 +12,12 @@ public class VelocityEstimator : MonoBehaviour
 
     private Vector3 previousPos;
     private LinkedList<Vector3> estVelocityBank;
-    public Vector3 CurrentAvgVelocity { get; private set; }
+    private Vector3? currentAvgVel = null;
+    public Vector3? CurrentAvgVelocity
+    {
+        get => currentAvgVel;
+        private set => currentAvgVel = value;
+    }
 
     private void Start()
     {
@@ -52,7 +57,7 @@ public class VelocityEstimator : MonoBehaviour
     /// </summary>
     private void UpdateVelocityBank()
     {
-        if (Mathf.Approximately(Time.fixedDeltaTime, 0))
+        if (!Mathf.Approximately(Time.fixedDeltaTime, 0))
         {
             Vector3 vel = (transform.position - previousPos) / Time.fixedDeltaTime;
             if (estVelocityBank.Count >= velBankCapacity)
@@ -67,8 +72,11 @@ public class VelocityEstimator : MonoBehaviour
     /// Loops through <see cref="estVelocityBank"/> to return the mean average of its elements.
     /// </summary>
     /// <returns>The mean average of <see cref="estVelocityBank"/>.</returns>
-    private Vector3 GetAverageFromBank()
+    private Vector3? GetAverageFromBank()
     {
+        if (estVelocityBank.Count < 1)
+            return null;
+
         Vector3 avg = Vector3.zero;
         foreach (Vector3 vel in estVelocityBank)
         {

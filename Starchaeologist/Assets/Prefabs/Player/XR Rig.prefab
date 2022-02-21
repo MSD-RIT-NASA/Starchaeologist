@@ -1095,7 +1095,15 @@ MonoBehaviour:
       m_Id: ed3be3cd-637e-48d6-ae4b-dd97305eaa40
       m_Processors: 
       m_Interactions: 
-      m_SingletonActionBindings: []
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 59967b94-e3db-45d7-af35-515796563bd8
+        m_Path: <XRController>{RightHand}/primaryButton
+        m_Interactions: Press(behavior=2)
+        m_Processors: 
+        m_Groups: 
+        m_Action: Activate
+        m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_ActivateActionValue:
