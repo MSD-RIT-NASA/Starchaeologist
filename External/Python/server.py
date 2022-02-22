@@ -4,15 +4,14 @@
 #
 
 from pip import main
-# import serial
-import time
+import serial
 from _thread import *;
 import logging
 import zmq
 
 class Server():
     def __init__(self, port):
-        # self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
+        self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
         self.socket.bind(port)
@@ -20,16 +19,18 @@ class Server():
 
     # TODO
     def gatherBalanceData(self):
-        print("Going to gather info from force platform")
+        # print("Going to gather info from force platform")
+        # data = self.arduino.readline()
+        return
 
     # TODO
     def calculateBalanceScore(self,sensorData):
-        print("Determine sensorData" + sensorData)
+        print("Determine Balance" + sensorData)
+        return
     
     # TODO
     def setMotionFloor(self, angle1, angle2):
-        print("Angle1: " +angle1)
-        print("Angle2: " +angle2)
+        return
 
     def unityRead(self):
         message = self.socket.recv()
@@ -56,7 +57,7 @@ if __name__ == "__main__":
         datefmt='%Y-%m-%d %H:%M:%S')
     logging.info("Starting Server")
     while True :
-        # Recieve messages from the Unity Game
+        logging.info("Waiting For Message From Unity")
         decodedMessage = server.unityRead()
         logging.info("Message Recieved From Unity: " +decodedMessage)
         if(decodedMessage == "endGame"):
@@ -84,7 +85,7 @@ if __name__ == "__main__":
             try:
                 posList = decodedMessage.split(" ")
                 # TODO: Set Motion Floor Platform to these angles
-
+                server.setMotionFloor(posList[0],posList[1])
                 # Send angles back to Unity Game as confirmation
                 unityAngles = str(posList[0]) + " " + str(posList[1]) 
                 server.unityWrite(unityAngles)
