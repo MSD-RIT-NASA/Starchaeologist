@@ -1,11 +1,11 @@
+// RingBufCPP - Version: Latest 
+#include <RingBufCPP.h>
+#include <RingBufHelpers.h>
+
 // HX711 - Version: Latest
 #include <HX711.h>
-//#include "forceplateLib.h"
 
 /*
-  THIS CODE IS FOR IMPLEMENTATION
-  TODO: MAKE A SKETCH FOR TESTING FOR SCALE CALIBRATION FACTORS
-  
   Designed to interface with Python, control four TAS501 sensors (https://www.sparkfun.com/products/14282),
   and communicate the data with a PC over serial connection
   
@@ -13,12 +13,19 @@
   and there are a couple command keys that are defined in forceplateLib.h
 */
 
+typedef struct{
+  long timestamp;
+  uint8_t sensorNum;
+  float measurement;
+} Datapoint;
+
+RingBufCPP<Datapoint, 60*15> buf;
+
 
 HX711 topLft;
 HX711 topRgt;
 HX711 botLft;
 HX711 botRgt;
-volatile float f;
 
 // Update pin numbers after wiring prototype
 // https://docs.arduino.cc/hacking/hardware/PinMapping2560
@@ -37,17 +44,19 @@ const uint8_t triggerMode = 1;
 const uint8_t start = 2;
 const uint8_t stop = 4;
 const uint8_t sendData = 8;
-const uint8_t restart = 10;
-// Add a constant for a hard reset
-// Add a constant for calibrate 
+const uint8_t restart = 128;
+const uint8_t hardReset = 255;
+const uint8_t calibrateMode = 16;
+
+int mode = 0;
+uint8_t pyComm = 0;
+
   // Maybe get rid of calibration in setup 
   // and create a seperate reset function if calling it multiple times (in setup)
-
 void setup() {
   topLft.begin(TLdata, TLclk);
   topRgt.begin(TRdata, TRclk);
-  botLft.begin(BLdata, BLclk);
-  botRgt.begin(BRdata, BRclk);
+  botLft.begin(BLdata, BLclk);botRgt.begin(BRdata, BRclk);
   
   // Sets the offset variables to be the average readings from the force sensors
   topLft.tare();
@@ -81,38 +90,46 @@ void setup() {
 }
 
 void loop() {
-  uint8_t pyComm = 0;
-  while (Serial.available() == 0);
-  if (Serial.available() > 0) {
-    pyComm = Serial.read();
-  }
-  
-  if (pyComm == constantMode)
+  switch(mode)
   {
-    measure(topLft);
+    default:
+      // blocking wait for a single byte communication from serial connection
+      while (Serial.available() == 0)
+      {};
+      if (Serial.available() > 0) {
+        pyComm = Serial.read();
+      }
+      break;
+    
+    case constantMode:
+      // Constantly records a programmable time frame (default: 90 sec) continously
+      // overwriting data in a circular buffer.
+      // After collecting data of one recording cycle (records all four sensors and
+      // the millisecond it was taken (from the time the arduino was turned on)),
+      // it checks serial for the command to send the data from the last time frame.
+      // When the command arrives, it should break loop and send data over serial 
+      // or go to a different mode of operation.
+      // If data is sent successfully, it will then go back to continously recording.
+      
+      // Uncomment and edit to add option for secondary command to set time frame in sec
+      // while (Serial.available() == 0)
+      // {};
+      // if (Serial.available() > 0) {
+      //   pyComm = Serial.read();
+      // }
+      
+      
+      
+      
+      
+      break;
+    case triggerMode:
+      
+      break;
+    
+    
+    
   }
-  else if (pyComm == triggerMode)
-  {
-    measure(topLft);
-  }
-  else
-  {
-    // serial send error?
-    measure(topLft);
-  }
-
-
-  // read all four sensors
-
-  // send all four sensors
-
-
-
-  // mode 1
-  // constantly measuring, only keeps last 1 min. or so until   comm.
-  // maybe makes another command for putting it in either mode
-  // options for length of time (30 s, 60 s)
-  //
 
 }
 
