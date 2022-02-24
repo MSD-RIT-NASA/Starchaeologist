@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'UNITY_INSTANCE_ID' with 'UNITY_VERTEX_INPUT_INSTANCE_ID'
+
 Shader "LowPolyWater/WaterShaded" {
 Properties { 
 
@@ -46,7 +48,7 @@ CGINCLUDE
 		//VR compatibility addtion; see below
 		//https://www.reddit.com/r/vive_vr/comments/p9jkyg/unity_a_gameobject_is_only_being_rendered_in_one/h9z7hbj/
 		//https://docs.unity3d.com/Manual/SinglePassInstancing.html
-		UNITY_INSTANCE_ID
+		UNITY_VERTEX_INPUT_INSTANCE_ID
 	};
  
 	
