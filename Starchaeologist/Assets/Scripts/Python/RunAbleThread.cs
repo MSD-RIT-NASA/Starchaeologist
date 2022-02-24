@@ -7,17 +7,19 @@
 public abstract class RunAbleThread
 {
     private Thread _runnerThread;
-    public string pythonMessage;
+    public string getRotation;
+    public string giveRotation;
 
     protected RunAbleThread()
     {
         // we need to create a thread instead of calling Run() directly because it would block unity
         // from doing other tasks like drawing game scenes
-        pythonMessage = null;
-        
+        getRotation = null;
+        giveRotation = null;
+
     }
 
-    public bool Running { get; private set; }
+    public bool Running { get; protected set; }
 
     /// <summary>
     /// This method will get called when you call Start(). Programmer must implement this method while making sure that
@@ -26,7 +28,7 @@ public abstract class RunAbleThread
     /// </summary>
     protected abstract void Run();
 
-    public void Start()
+    public void StartThread()
     {
         _runnerThread = new Thread(Run);
         Running = true;
@@ -39,11 +41,5 @@ public abstract class RunAbleThread
         // block main thread, wait for _runnerThread to finish its job first, so we can be sure that 
         // _runnerThread will end before main thread end
         _runnerThread.Join();
-    }
-
-    public void FinishedRunning()
-    {
-        Running = false;
-        pythonMessage = null;
     }
 }
