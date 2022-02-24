@@ -23,6 +23,21 @@ public class S_RiverGame : MonoBehaviour
     int checkpointIndex = 0;
 
     //python variables
+    /*
+    PYTHON COMMUNICATION FORMAT
+    Rotation
+    -Send: 'rotation rotation1(float) rotation2(float)'
+    -Receive: 'rotation rotation1(float) rotation2(float)'
+    Score Calibration 
+    -Send: 'calibrate gameScore(float)'
+    -Receive: 'calibrateStop balanceScore(float)'
+    Killswitch 
+    -Receive 'kill'
+    -Receive 'live'
+    Quit Game
+    -Send 'quit'
+    -Receive 'quit'
+    */
     private HelloRequester pythonCommunicator;
     public float rotationX = 0f;
     public float rotationZ = 0f;
