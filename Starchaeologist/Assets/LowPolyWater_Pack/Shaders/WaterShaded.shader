@@ -42,6 +42,11 @@ CGINCLUDE
 	{
 		float4 vertex : POSITION;
 		float3 normal : NORMAL;
+		
+		//VR compatibility addtion; see below
+		//https://www.reddit.com/r/vive_vr/comments/p9jkyg/unity_a_gameobject_is_only_being_rendered_in_one/h9z7hbj/
+		//https://docs.unity3d.com/Manual/SinglePassInstancing.html
+		UNITY_INSTANCE_ID
 	};
  
 	
@@ -58,6 +63,10 @@ CGINCLUDE
         float3 normalDir : TEXCOORD8;
 
 		UNITY_FOG_COORDS(5)
+		//VR compatibility addtion; see below
+		//https://www.reddit.com/r/vive_vr/comments/p9jkyg/unity_a_gameobject_is_only_being_rendered_in_one/h9z7hbj/
+		//https://docs.unity3d.com/Manual/SinglePassInstancing.html
+		UNITY_VERTEX_OUTPUT_STEREO
 	}; 
  
 	inline half4 Foam(sampler2D shoreTex, half4 coords) 
@@ -71,6 +80,11 @@ CGINCLUDE
 		v2f o;
 		UNITY_INITIALIZE_OUTPUT(v2f, o);
 
+		//VR compatibility addtion; see below
+		//https://www.reddit.com/r/vive_vr/comments/p9jkyg/unity_a_gameobject_is_only_being_rendered_in_one/h9z7hbj/
+		//https://docs.unity3d.com/Manual/SinglePassInstancing.html
+		UNITY_SETUP_INSTANCE_ID(v);
+		UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 		
 		half3 worldSpaceVertex = mul(unity_ObjectToWorld,(v.vertex)).xyz;
 		half3 vtxForAni = (worldSpaceVertex).xzz;
