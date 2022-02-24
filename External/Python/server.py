@@ -12,6 +12,10 @@ import time
 from itertools import count
 from multiprocessing import Process
 import matplotlib.pyplot as plt
+import numpy as np
+from scipy.spatial import ConvexHull
+from scipy.spatial.distance import cdist
+# from scipy.stats import ppf
 
 data = [
     [None, 1, 7.0],
@@ -49,6 +53,14 @@ data = [
 
 
 ]
+
+# def mean_confidence_interval(data, confidence=0.95):
+#     a = 1.0 * np.array(data)
+#     n = len(a)
+#     m, se = np.mean(a), sem(a)
+#     h = se * scipy.stats.t.ppf((1 + confidence) / 2., n-1)
+#     return m, m-h, m+h
+
 class Server():
     def __init__(self, port):
         # self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
@@ -81,6 +93,7 @@ class Server():
         return
     
     def plotSensorData(self,sensorData):
+        points = []
         xComponents = []
         yComponents = []
         xComponent = 0
@@ -98,6 +111,8 @@ class Server():
             elif sensorData[i][1] == 4:
                 xComponent += sensorData[i][2]
                 yComponent -= sensorData[i][2]
+                point = np.array([xComponent, yComponent])
+                points.append(point)
                 xComponents.append(xComponent)
                 yComponents.append(yComponent)
                 xComponent = 0
@@ -105,8 +120,21 @@ class Server():
             else:
                 logging.error("Error in reading data")
                 print(sensorData[i])
-        plt.plot(xComponents, yComponents, 'ro-')
+        plt.plot(xComponents,yComponents, 'ro-')
+        points = np.array(points)
+        hull = ConvexHull(points)
+        hullpoints = points[hull.vertices,:]
+        # Naive way of finding the best pair in O(H^2) time if H is number of points on
+        # hull
+        hdist = cdist(hullpoints, hullpoints, metric='euclidean')
+        print(hdist)
+        # Get the farthest apart points
+        bestpair = np.unravel_index(hdist.argmax(), hdist.shape)
+        print(bestpair)
+        #Print them
+        print([hullpoints[bestpair[0]],hullpoints[bestpair[1]]])
         plt.show()
+
 
     # TODO
     def setMotionFloor(self, angle1, angle2):
