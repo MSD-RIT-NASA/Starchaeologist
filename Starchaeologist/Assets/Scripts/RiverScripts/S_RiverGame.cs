@@ -27,8 +27,7 @@ public class S_RiverGame : MonoBehaviour
     public float rotationX = 0f;
     public float rotationZ = 0f;
     public bool rotationChanged = false;
-    int pythonBuffer = 0;
-    Vector3 pythonRotation = new Vector3(0, 0, 0);
+
 
 
 
@@ -53,7 +52,6 @@ public class S_RiverGame : MonoBehaviour
             //stick the player under the raft gameobject to help with movement
             if (!playerAttached)
             {
-                pythonRotation = new Vector3(0, 0, 0);
                 raftScript.tilting = true;
                 playerAttached = true;
                 playerReference.transform.parent = raftReference.transform;
