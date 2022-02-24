@@ -5,20 +5,20 @@
 #
 
 from pip import main
-import serial
+#import serial
 import time
 import zmq
 class Server:
     def __init__(self):
-        self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
+        #self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
         self.socket.bind("tcp://*:5555")
 
 
-    def arduinoRead(self):
-        data = self.arduino.readline()
-        return data
+    #def arduinoRead(self):
+    #    data = self.arduino.readline()
+    #    return data
         
     def unityRead(self):
         message = self.socket.recv()
@@ -34,6 +34,6 @@ if __name__ == "__main__":
     while(True):
         pos1, pos2 = s.unityRead()
         print("Position 1: " + pos1)
-        print("Position 2: " + pos1)
-        comb = str(pos1) + " " + str(pos1) 
+        print("Position 2: " + pos2)
+        comb = str(pos1) + " " + str(pos2) 
         s.unityWrite(comb.encode())

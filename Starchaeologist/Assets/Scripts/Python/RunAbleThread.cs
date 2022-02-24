@@ -8,6 +8,7 @@ public abstract class RunAbleThread
 {
     private Thread _runnerThread;
     public string pythonMessage;
+    public bool receiveMessage = false;
 
     protected RunAbleThread()
     {
@@ -26,10 +27,11 @@ public abstract class RunAbleThread
     /// </summary>
     protected abstract void Run();
 
-    public void Start()
+    public void StartThread()
     {
         _runnerThread = new Thread(Run);
         Running = true;
+        receiveMessage = false;
         _runnerThread.Start();
     }
 
@@ -45,5 +47,6 @@ public abstract class RunAbleThread
     {
         Running = false;
         pythonMessage = null;
+        receiveMessage = false;
     }
 }
