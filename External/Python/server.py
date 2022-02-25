@@ -63,7 +63,7 @@ data = [
 
 class Server():
     def __init__(self, port):
-        # self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
+        self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
         self.arduino = None
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
