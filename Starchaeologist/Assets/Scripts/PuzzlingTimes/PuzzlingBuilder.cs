@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PuzzlingBuilder : MonoBehaviour
 {
+    /*
+     TO DO:
+        -figure out what traps will go with what plates
+     */
+
     public GameObject tilePrefab;
     List<GameObject>[] tileArray;
     public List<bool>[] trapArray;
@@ -41,7 +46,7 @@ public class PuzzlingBuilder : MonoBehaviour
 
             //place trap platforms
             int k = 0;
-            while(k < roomLength * 1.5)
+            while(k < roomLength * 2)
             {
                 int kIndex = Random.Range(0, trapArray[i].Count);
                 if(trapArray[i][kIndex])
@@ -49,6 +54,11 @@ public class PuzzlingBuilder : MonoBehaviour
                     continue;
                 }
                 trapArray[i][kIndex] = true;
+                tileArray[i][kIndex].transform.GetChild(0).gameObject.AddComponent<PlateScript>();
+                PlateScript scriptReference = tileArray[i][kIndex].transform.GetChild(0).gameObject.GetComponent<PlateScript>();
+                scriptReference.xIndex = i;
+                scriptReference.zIndex = kIndex;
+
                 k++;
             }
         }
