@@ -1,7 +1,7 @@
 import wx
 from views import DefaultView, HubView, LoginView, StatisticsView
 from pubsub import pub
-from src.database.dbcalls import db, findUserID, addUser
+from database.dbcalls import db, findUserID, addUser
 
 class Controller:
     def __init__(self):
@@ -65,5 +65,4 @@ class Controller:
     def setUserStatistics(self):
         pass    
 
-    
    

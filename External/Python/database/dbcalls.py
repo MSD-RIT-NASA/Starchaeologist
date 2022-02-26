@@ -3,7 +3,7 @@ from sqlite3 import Error
 
 class db:
     def __init__(self):
-        self.conn = sqlite3.connect("./src/database/Training_System.db")
+        self.conn = sqlite3.connect("./External/Python/database/Training_System.db")
 
     def closeConnection(self):
         self.conn.close()
@@ -116,3 +116,5 @@ def addScore(db, USER_ID, SCORETYPE_ID, GAME_ID, VALUE):
     )
     db.execute_query(db.conn, query)
 
+if __name__ == '__main__':
+    database = db()
