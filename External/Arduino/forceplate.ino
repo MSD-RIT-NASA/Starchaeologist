@@ -1,6 +1,6 @@
  // HX711_ADC - Version: Latest 
 #include <HX711_ADC.h>
-
+// HX711_ADC library has been modified. pls use the zipped library
 // #include <EEPROM.h>
 
 // const int calVal_eepromAdress_1 = 0; // eeprom adress for calibration value load cell 1 (4 bytes)
