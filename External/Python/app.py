@@ -1,3 +1,8 @@
+#
+#  app.py
+#  Created by: William Johnson
+#
+
 from threading import Thread
 import wx
 import controller as Controller
