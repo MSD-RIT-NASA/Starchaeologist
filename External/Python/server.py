@@ -16,57 +16,60 @@ import numpy as np
 from scipy.spatial import ConvexHull
 from scipy.spatial.distance import cdist
 # from scipy.stats import ppf
-from threading import Thread
 
-class Server(Thread):
-    def __init__(self):
-        Thread.__init__(self)
+data = [
+    [None, 1, 7.0],
+    [None, 2, 5.0],
+    [None, 3, 3.0],
+    [None, 4, 1.0],
+    [None, 1, 4.0],
+    [None, 2, 4.0],
+    [None, 3, 4.0],
+    [None, 4, 4.0],
+    [None, 1, 2.0],
+    [None, 2, 4.0],
+    [None, 3, 6.0],
+    [None, 4, 8.0],
+    [None, 1, 3.0],
+    [None, 2, 5.0],
+    [None, 3, 8.0],
+    [None, 4, 7.0],
+    [None, 1, 2.0],
+    [None, 2, 3.0],
+    [None, 3, 3.0],
+    [None, 4, 9.0],
+    [None, 1, 5.0],
+    [None, 2, 7.0],
+    [None, 3, 4.0],
+    [None, 4, 3.0],
+    [None, 1, 3.0],
+    [None, 2, 2.0],
+    [None, 3, 1.0],
+    [None, 4, 4.0],
+    [None, 1, 6.0],
+    [None, 2, 7.0],
+    [None, 3, 4.0],
+    [None, 4, 1.0],
+
+
+]
+
+# def mean_confidence_interval(data, confidence=0.95):
+#     a = 1.0 * np.array(data)
+#     n = len(a)
+#     m, se = np.mean(a), sem(a)
+#     h = se * scipy.stats.t.ppf((1 + confidence) / 2., n-1)
+#     return m, m-h, m+h
+
+class Server():
+    def __init__(self, port):
         # self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
         self.arduino = None
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
-        self.socket.bind("tcp://*:5555")
+        self.socket.bind(port)
         self.score = None;
 
-    def run(self):
-        while True :
-            logging.info("Waiting For Message From Unity")
-            time.sleep(1)
-            # decodedMessage = server.unityRead()
-            # logging.info("Message Recieved From Unity: " +decodedMessage)
-            # if(decodedMessage == "endGame"):
-            #     logging.info("End of Mini-Game Reached")
-            #     # TODO: Send game score to unity
-            #     server.unityWrite(str(score))
-            #     logging.info("Score Sent To Unity: " + score)
-            #     score = None
-            # elif(decodedMessage == "closeApp"): 
-            #     # TODO: Used for ending script
-            #     print("End of application reached")
-            #     break
-            # elif(decodedMessage == "readScore"):
-            #     # TODO: Read values from database
-            #     logging.info("Going to Read Values From Force Plate")
-                
-                
-            #     balanceData = server.gatherBalanceData()
-            #     # Send message that data has been recieved so game can start again
-            #     server.unityWrite("ScoreGathered")
-
-            #     # Calculate Score algorithm 
-            #     score = server.calculateBalanceScore(balanceData)
-            # else:
-            #     try:
-            #         posList = decodedMessage.split(" ")
-            #         # TODO: Set Motion Floor Platform to these angles
-            #         server.setMotionFloor(posList[0],posList[1])
-            #         # Send angles back to Unity Game as confirmation
-            #         unityAngles = str(posList[0]) + " " + str(posList[1]) 
-            #         server.unityWrite(unityAngles)
-            #     except:
-            #         logging.error("Error occured while parsing data")
-            #         server.unityWrite(decodedMessage)
-    
     def confirmUnityConnection(self):
         self.unityWrite("Setup")
         self.unityRead()
@@ -157,7 +160,8 @@ class Server(Thread):
         self.arduinoWrite("STOP")
 
 if __name__ == "__main__":
-    server = Server()
+    port = "tcp://*:5555"
+    server = Server(port)
     score = None
     setupError = 0
     logging.basicConfig(
@@ -171,7 +175,7 @@ if __name__ == "__main__":
     logging.info("Confirming Unity Connection")
     # server.confirmUnityConnection()
     
-    # server.plotSensorData(data)
+    server.plotSensorData(data)
     if setupError == 0:
         logging.info("Starting Server")
         while True :
