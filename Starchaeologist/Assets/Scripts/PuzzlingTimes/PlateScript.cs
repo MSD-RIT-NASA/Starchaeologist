@@ -14,12 +14,22 @@ public class PlateScript : MonoBehaviour
         -give the game manager this platform's indexes so it know which one to listen to 
      */
 
-    public int xIndex;
-    public int zIndex;
+    //public int xIndex;
+    //public int zIndex;
+
+    public Vector2 myPosition;
 
     public bool trapped = false;
+
+    public List<Vector2> adjacentPlates;
+
     bool wobbling = false;
+    float wobbleTimer = 0f;
+
     bool trapping = false;
+    float trapTimer = 0f;
+
+    bool reactivate = false;
 
     PuzzlingGame managerReference;
 
@@ -36,17 +46,33 @@ public class PlateScript : MonoBehaviour
         {
             if (wobbling)//when the player enters the tile it will first wobble/lower
             {
-
+                /* TO DO
+                 figure out the wobbling
+                 */
+                Debug.Log("I'm wobbling");
 
                 wobbling = false;
                 trapping = true;
             }
             else if (trapping)//then the trap will go off
             {
+                /* TO DO
+                 figure out the trapping
+                 */
+                Debug.Log("I'm trapping");
+                trapTimer = trapTimer + Time.deltaTime;
 
-
-                trapping = false;
+                if(trapTimer > 3f)
+                {
+                    reactivate = true;
+                    trapping = false;
+                }
             }
+        }
+        if(reactivate)
+        {
+            reactivate = false;
+            managerReference.ActivatePlates(adjacentPlates);
         }
     }
 
@@ -56,7 +82,18 @@ public class PlateScript : MonoBehaviour
         //check of the collider is the player
         if (other.gameObject.CompareTag("Player"))
         {
-            wobbling = true;
+            //deactivate the platforms that are currently active
+            managerReference.DeactivatePlatforms(myPosition);
+
+            //if the platform is trapped starting wobbling, if not go straight to activating the adjacent tiles
+            if (trapped)
+            {
+                wobbling = true;
+            }
+            else
+            {
+                reactivate = true;
+            }
             /*
                 -disable teleportation for the duration of the trap
                 -Wobble the platform
