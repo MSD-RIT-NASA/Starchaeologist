@@ -23,7 +23,7 @@ class Controller:
 
         pub.subscribe(self.statisticsOpen, 'statistics.open')
 
-        pub.subscribe(self.serverStart, 'server.start')
+        pub.subscribe(self.gameStart, 'game.start')
 
         
         
@@ -73,11 +73,12 @@ class Controller:
     def setUserStatistics(self):
         pass
 
-    def serverStart(self):
+    def gameStart(self):
         # [SteamVR Directory]\bin\win64\vrstartup.exe
-        server = Server.Server(debug=debug)
-        server.start()
-        server.join()
-        logging.info("Closing Server")    
+        # server = Server.Server(debug=debug)
+        # server.start()
+        # server.join()
+        # logging.info("Closing Server")
+        pass
 
    

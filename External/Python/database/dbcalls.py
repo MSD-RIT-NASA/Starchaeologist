@@ -105,7 +105,6 @@ def findUserID(db, UserName):
     query = (
         "SELECT * FROM USERS WHERE USERNAME='"+UserName+"'"
     )
-    print(query)
     return db.search_query(db.conn, query)
     
 

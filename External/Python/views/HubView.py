@@ -42,4 +42,4 @@ class HubView(wx.Frame):
       pub.sendMessage('logout.open')
 
     def startGame(self, event):
-      pub.sendMessage('server.start')
+      pub.sendMessage('game.start')

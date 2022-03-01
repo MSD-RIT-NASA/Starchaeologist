@@ -13,10 +13,14 @@ import zmq
 import time
 from itertools import count
 from multiprocessing import Process
+from scipy.stats import norm, chi2
 import matplotlib.pyplot as plt
+from matplotlib.patches import Ellipse
 import numpy as np
 from scipy.spatial import ConvexHull
 from scipy.spatial.distance import cdist
+from scipy.stats import t
+
 # from scipy.stats import ppf
 
 data = [
@@ -31,6 +35,18 @@ data = [
     [None, 4.55177440659691,4.31705308534068,1.83755879515668,3.39807878453195],
     [None, 8.64012769173837,7.05287374185998,8.30119405933711,3.20412490712671]
 ]
+data2 = [
+    [None, 1.29759106333255,1.41730118422643,0.883845783715996,2.04727100536566],
+    [None, 0.683016567343388,2.21436281093134,2.80327027281899,2.65911087471019],
+    [None,1.86047466185897,1.55068611472411,4.50416328362383,4.46881027075872],
+    [None,3.27897346265566,2.9918062169998,0.499271904816512,2.08878341926671],
+    [None,1.81902880771972,4.18124504675215,2.09451893255791,1.60953734703806],
+    [None,2.03891879834184,0.735982816077761,2.35437806339673,1.8513676393085],
+    [None,0.893243843174187,4.27308916406384,1.61331337672347,1.72286500210076],
+    [None,1.82488548980322,3.81299511194834,1.54527430075466,4.59720880891998],
+    [None,1.42773845578904,4.70682336609197,4.2455909113612,1.19746566386775],
+    [None,3.6725038297812,4.78532591452139,2.17495555718194,4.35049065917288]
+]
 
 
 # def mean_confidence_interval(data, confidence=0.95):
@@ -44,9 +60,11 @@ class Server(Thread):
     def __init__(self, debug):
         Thread.__init__(self)
         if debug:
+            # self.arduino = serial.Serial(port='COM5', baudrate=115200, timeout=.1)
             self.arduino = None
         else:
-            self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
+            self.arduino = serial.Serial(port='COM5', baudrate=115200, timeout=.1)
+                
         self.debug = debug
         
         context = zmq.Context()
@@ -99,21 +117,97 @@ class Server(Thread):
             xComponents.append(xComponent)
             yComponents.append(yComponent)
             
-        plt.plot(xComponents,yComponents, 'ro-')
+        # plt.plot(xComponents,yComponents, 'ro-')
         points = np.array(points)
         hull = ConvexHull(points)
-        hullpoints = points[hull.vertices,:]
-        # Naive way of finding the best pair in O(H^2) time if H is number of points on
-        # hull
-        hdist = cdist(hullpoints, hullpoints, metric='euclidean')
-        print(hdist)
-        # Get the farthest apart points
-        bestpair = np.unravel_index(hdist.argmax(), hdist.shape)
-        print(bestpair)
-        #Print them
-        print([hullpoints[bestpair[0]],hullpoints[bestpair[1]]])
-        plt.show()
+        print(hull.area) # Can be used for equation
 
+        cov = np.cov(points, rowvar=False)
+
+        m = points.mean()
+        s = points.std() 
+        dof = len(points)-1    
+        confidence = 0.95
+
+        t_crit = np.abs(t.ppf((1-confidence)/2,dof))
+        lowerRange = m-s*t_crit/np.sqrt(len(points)) 
+        upperRange = m+s*t_crit/np.sqrt(len(points)) 
+        print(lowerRange)
+        print(upperRange)
+        print("Range: " + str(upperRange-lowerRange))
+        # np.percentile(values,[100*(1-confidence)/2,100*(1-(1-confidence)/2)]) 
+
+
+        # Location of the center of the ellipse.
+        # mean_pos = points.mean(axis=0)
+
+        # # METHOD 1
+        # width1, height1, theta1 = self.cov_ellipse(points, cov, 2)
+
+        # # METHOD 2
+        # width2, height2, theta2 = self.cov_ellipse2(points, cov, 2)
+        # ax = plt.gca()
+        # plt.plot(xComponents,yComponents, 'ro-')
+        # # plt.scatter(xComponents, yComponents, c='k', s=1, alpha=.5)
+        # # First ellipse
+        # ellipse1 = Ellipse(xy=mean_pos, width=width1, height=height1, angle=theta1,
+        #                 edgecolor='b', fc='None', lw=2, zorder=4)
+        # # ellipse1.area
+        # ax.add_patch(ellipse1)
+        # # Second ellipse
+        # ellipse2 = Ellipse(xy=mean_pos, width=width2, height=height2, angle=theta2,
+        #                 edgecolor='r', fc='None', lw=.8, zorder=4)
+        # ax.add_patch(ellipse2)
+        # plt.show()
+        # hullpoints = points[hull.vertices,:]
+        # # Naive way of finding the best pair in O(H^2) time if H is number of points on
+        # # hull
+        # hdist = cdist(hullpoints, hullpoints, metric='euclidean')
+        # print(hdist)
+        # # Get the farthest apart points
+        # bestpair = np.unravel_index(hdist.argmax(), hdist.shape)
+        # print(bestpair)
+        # #Print them
+        # print([hullpoints[bestpair[0]],hullpoints[bestpair[1]]])
+        # plt.show()
+
+    def eigsorted(self,cov):
+        '''
+        Eigenvalues and eigenvectors of the covariance matrix.
+        '''
+        vals, vecs = np.linalg.eigh(cov)
+        order = vals.argsort()[::-1]
+        return vals[order], vecs[:, order]
+
+    def cov_ellipse(self,points, cov, nstd):
+        """
+        Source: http://stackoverflow.com/a/12321306/1391441
+        """
+
+        vals, vecs = self.eigsorted(cov)
+        theta = np.degrees(np.arctan2(*vecs[:, 0][::-1]))
+
+        # Width and height are "full" widths, not radius
+        width, height = 2 * nstd * np.sqrt(vals)
+
+        return width, height, theta
+
+
+    def cov_ellipse2(self,points, cov, nstd):
+        """
+        Source: https://stackoverflow.com/a/39749274/1391441
+        """
+
+        vals, vecs = self.eigsorted(cov)
+        theta = np.degrees(np.arctan2(*vecs[::-1, 0]))
+
+        # Confidence level
+        q = 2 * norm.cdf(nstd) - 1
+        r2 = chi2.ppf(q, 2)
+
+        width, height = 2 * np.sqrt(vals * r2)
+
+        return width, height, theta
 
     # TODO
     def setMotionFloor(self, angle1, angle2):
@@ -212,6 +306,14 @@ if __name__ == "__main__":
     # server.confirmUnityConnection()
     
     server.plotSensorData(data)
+    server.plotSensorData(data2)
+    # server.arduinoWrite(port.encode())
+    # text = server.arduinoRead()
+    # print(text)
+    # logging.info(text)
+    # text = server.arduinoRead()
+    # print(text)
+    # logging.info(text)
     if setupError == 0:
         logging.info("Starting Server")
         while True :
