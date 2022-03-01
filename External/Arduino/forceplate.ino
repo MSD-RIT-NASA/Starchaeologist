@@ -1,10 +1,13 @@
- // HX711_ADC - Version: Latest 
+ // HX711_ADC - Version: Latest
 #include <HX711_ADC.h>
 // HX711_ADC library has been modified. pls use the zipped library
+
 // #include <EEPROM.h>
 
 // const int calVal_eepromAdress_1 = 0; // eeprom adress for calibration value load cell 1 (4 bytes)
 // const int calVal_eepromAdress_2 = 4; // eeprom adress for calibration value load cell 2 (4 bytes)
+// const int calVal_eepromAdress_3 = 4; // eeprom adress for calibration value load cell 2 (4 bytes)
+// const int calVal_eepromAdress_4 = 4; // eeprom adress for calibration value load cell 2 (4 bytes)
 
 /*
   Designed to interface with Python, control four TAS501 sensors (https://www.sparkfun.com/products/14282),
@@ -16,14 +19,8 @@
 
 typedef struct{
   long timestamp;
-  float measurements[4];
-  // float measurement1;
-  // float measurement2;
-  // float measurement3;
-  // float measurement4;
+  long measurements[4];
 } Datapoint;
-
-// Datapoint data[1200];
 
 // Update pin numbers after wiring prototype
 // https://docs.arduino.cc/hacking/hardware/PinMapping2560
@@ -45,18 +42,18 @@ HX711_ADC LoadCell_4(HX711_dout_4, HX711_sck_4); // Bot right
 const uint8_t wait = 0;
 const uint8_t triggerMode = 1;
 const uint8_t constantMode = 3;
-const uint8_t start = 2;
+const uint8_t startRead = 2;
 const uint8_t stop = 4;
 const uint8_t sendData = 8;
 const uint8_t restart = 128;
 const uint8_t hardReset = 255;
 const uint8_t calibrateMode = 16;
+const uint8_t endSend = 42;
 
 int mode = 0;
 uint8_t pyComm = 0;
 
 void setup() {
-  
   Serial.begin(115200);
   delay(10);
   Serial.println();
@@ -66,6 +63,12 @@ void setup() {
   float calibrationValue_2 = 696.0;
   float calibrationValue_3 = 696.0;
   float calibrationValue_4 = 696.0;
+
+  // Maybe I can make a #ifdef to make an initial value in eeprom
+//  float calibrationValue_1 = EEPROM.get(0, calibrationValue_1); // uncomment this if you want to fetch the value from eeprom
+//  float calibrationValue_1 = EEPROM.get(0, calibrationValue_2); // uncomment this if you want to fetch the value from eeprom
+//  float calibrationValue_1 = EEPROM.get(0, calibrationValue_3); // uncomment this if you want to fetch the value from eeprom
+//  float calibrationValue_1 = EEPROM.get(0, calibrationValue_4); // uncomment this if you want to fetch the value from eeprom
  
   uint8_t gain = 128; 
   LoadCell_1.begin(gain);
@@ -142,65 +145,145 @@ void loop() {
       // while (Serial.available() == 0)
       // {};
       // if (Serial.available() > 0) {
-      //   pyComm = Serial.read();
+      //   secsToRemember = Serial.read();
       // }
       int secsToRemember = 60;
-      int index = 0;
-      int maxIndex = secsToRemember*10;  // might get rid of this variable
-      unsigned long t = 0;
+      int index = 1200;
+      int timeIndex = 0;
       Datapoint data[1200];
       bool go = true;
+      static boolean newDataReady = false;
       Serial.println("Starting to record");
-      t = millis();
       while(go)
       {
-        static boolean newDataReady = 0;
-        
         // check for new data/start next conversion:
-        if (LoadCell_1.update()) newDataReady = true;
+        if (LoadCell_1.update()){ newDataReady = true;}
         LoadCell_2.update();
         LoadCell_3.update();
         LoadCell_4.update();
         
-        if ((newDataReady)) {
-          data[index].timestamp = millis();
-           data[index].measurements[0] = LoadCell_1.getData();
-           data[index].measurements[1] = LoadCell_2.getData();
-           data[index].measurements[2] = LoadCell_3.getData();
-           data[index].measurements[3] = LoadCell_4.getData();
-          
-          newDataReady = 0;
-          
+        // Add next datapoint
+        if (newDataReady) 
+        {
           index++;
-          
-          // Update index and maxIndex
-          if (millis() > t + secsToRemember*1000) {
-            t = millis();
+          if(index == 1200)
+          {
+            index = 0;
           }
           
+          data[index].timestamp = millis();
+          data[index].measurements[0] = LoadCell_1.getData();
+          data[index].measurements[1] = LoadCell_2.getData();
+          data[index].measurements[2] = LoadCell_3.getData();
+          data[index].measurements[3] = LoadCell_4.getData();
+          
+          newDataReady = 0;
         }
-      
-        // check serial to send data or to exit this mode
-        if (Serial.available() > 0) {
+        
+        // check serial to send data or to switch modes
+        if (Serial.available() > 0) 
+        {
           pyComm = Serial.read();
-          if (pyComm == sendData) {
-            for(int i = 0; i < maxIndex; i++)
+          
+          if (pyComm == sendData) 
+          {
+            // This is to find the index of where the data for the last x seconds of data starts
+            bool search = true;
+            timeIndex = index;
+            while(search)
             {
-              Serial.write(data[index].timestamp);
-              Serial.write(data[index].measurements, 16);
+              timeIndex--;
+              if(timeIndex < 0)
+              {
+                timeIndex = 1200;
+              }
+              
+              if (secsToRemember*1000 < data[index].timestamp - data[timeIndex].timestamp)
+              {
+                search = false;
+              }
+              // if(timeIndex == index)
+              // {
+                // Serial.println("Has not recorded selected amount of time yet. Pls let it run longer before reading");
+                // search = false;
+              // }
             }
+            
+            int dataLen = index - timeIndex;
+            if(dataLen < 0)
+            {
+              dataLen += 1200;
+            }
+            
+            for(int i = timeIndex; i != index+1; i++)
+            {
+              if(i == 1200)
+              {
+                i = 0;
+              }
+              Serial.write(data[index].timestamp);
+              Serial.write((byte*)data[index].measurements, sizeof(data[index].measurements)); // I think I can change sizeof to a fixed amount
+            }
+            // go = false; // uncomment if we should reset all the memory variables and restart this mode from the beginning
+            Serial.write(endSend);
           }
           else
           {
             mode = pyComm;
+            go = false;
           }
         }
       }
-      
     } break;
     case triggerMode:
     { 
+      int secsToRemember = 60;
+      int index = 0;
+      Datapoint data[1200];
+      bool go = false;
+      static boolean newDataReady = false;
       
+      while (!Serial.available());
+      pyComm = Serial.read();
+      
+      if (pyComm == startRead)
+      {
+        go = true;
+      }
+      unsigned long t = millis();
+      while(go)
+      {
+        // check for new data/start next conversion:
+        if (LoadCell_1.update()){ newDataReady = true;}
+        LoadCell_2.update();
+        LoadCell_3.update();
+        LoadCell_4.update();
+        
+        // Add next datapoint
+        if (newDataReady) 
+        {
+          data[index].timestamp = millis();
+          data[index].measurements[0] = LoadCell_1.getData();
+          data[index].measurements[1] = LoadCell_2.getData();
+          data[index].measurements[2] = LoadCell_3.getData();
+          data[index].measurements[3] = LoadCell_4.getData();
+          
+          index++;
+          newDataReady = 0;
+        }
+        
+        // check if time is up
+        if (secsToRemember*1000 > millis() - t)
+        {
+          for(int i = 0; i < index; i++)
+          {
+            Serial.write(data[index].timestamp);
+            Serial.write((byte*)data[index].measurements, sizeof(data[index].measurements));  // I think I can change sizeof to a fixed amount
+          }
+          Serial.write(endSend);
+        }
+        // Add an if to check for pyComm
+      }
     } break;
   }
 }
