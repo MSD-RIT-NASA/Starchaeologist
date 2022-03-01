@@ -26,6 +26,7 @@ class HubView(wx.Frame):
       fgs.AddSpacer(0)
       self.gameButton = wx.Button(panel, -1,"Game Button")
       fgs.Add(self.gameButton, 0, wx.EXPAND)
+      self.gameButton.Bind(wx.EVT_BUTTON, self.startGame)
 
 
       hbox.Add(fgs, proportion = 2, flag = wx.ALL|wx.EXPAND, border = 15) 
@@ -39,3 +40,6 @@ class HubView(wx.Frame):
        
     def logoutOpen(self, event):
       pub.sendMessage('logout.open')
+
+    def startGame(self, event):
+      pub.sendMessage('server.start')

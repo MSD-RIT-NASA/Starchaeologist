@@ -3,7 +3,9 @@
 #  Created by: William Johnson
 #
 
+from threading import Thread
 from pip import main
+from pubsub import pub
 import serial
 from _thread import *;
 import logging
@@ -61,36 +63,47 @@ data = [
 #     h = se * scipy.stats.t.ppf((1 + confidence) / 2., n-1)
 #     return m, m-h, m+h
 
-class Server():
-    def __init__(self, port):
-        # self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
-        self.arduino = None
+class Server(Thread):
+    def __init__(self, debug):
+        Thread.__init__(self)
+        if debug:
+            self.arduino = None
+        else:
+            self.arduino = serial.Serial(port='COM4', baudrate=115200, timeout=.1)    
+        self.debug = debug
+        
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
-        self.socket.bind(port)
+        self.socket.bind("tcp://*:5555")
         self.score = None;
+        pub.subscribe(self.killSwitch, "killSwitch.check")
 
-    def confirmUnityConnection(self):
-        self.unityWrite("Setup")
-        self.unityRead()
-        return True
     
-    def confirmArduinoConnection(self):
-        self.arduinoWrite("START")
-        self.arduinoRead()
-        return True
+    def killSwitch(self, message):
+        if message == "live":
+            if self.debug == False:
+                self.unityWrite("live")
+        else:
+            self.unityWrite("kill")
 
     # TODO
     def gatherBalanceData(self):
         print("Going to gather info from force platform")
         self.arduinoWrite("START")
-        # data = self.arduino.readline()
-        return
+        balanceData = []
+        while True:
+            data = self.arduino.readline()
+            if data.decode("utf-8") == "END":
+                break
+            # Edit the data, so easily readable later
+            balanceData.append(data)
+        return balanceData
 
     # TODO
     def calculateBalanceScore(self,sensorData):
         print("Determine Balance" + sensorData)
-        return
+        # Return array of different attributes, first value total, others are the attributes
+        return [0]
     
     def plotSensorData(self,sensorData):
         points = []
@@ -146,22 +159,79 @@ class Server():
         return decodedMessage
     
     def unityWrite(self, message):
-        encodedMessage = message.encode()
-        self.socket.send(encodedMessage)
+        if self.debug:
+            print(message)
+        else:
+            encodedMessage = message.encode()
+            self.socket.send(encodedMessage)
         
     def arduinoRead(self): 
         data = self.arduino.readline()
         return data
     
     def arduinoWrite(self, message): # START SEND STOP
-        self.arduino.write(bytes(message, 'utf-8'))
+        if self.debug:
+            print(message)
+        else:
+            self.arduino.write(bytes(message, 'utf-8'))
     
     def shutDown(self):
         self.arduinoWrite("STOP")
 
+    def run(self):
+        logging.info("Starting Server")
+        while True :     
+            if self.debug:
+                logging.info("Server in debug mode")
+                time.sleep(1)
+                break
+            logging.info("Waiting For Message From Unity")
+            decodedMessage = self.unityRead()
+            logging.info("Message Recieved From Unity: " + decodedMessage)
+            if(decodedMessage == "quit"): 
+                # TODO: Used for ending script
+                print("End of Unity Game reached")
+                pub.sendMessage("unityGameEnded")
+                break
+            elif(decodedMessage.startsWith("calibrate")):
+                try:
+                    gameScore = decodedMessage.split(" ")
+                    
+                    # Read values from forceplate
+                    logging.info("Read Values From Force Plate")
+                    balanceData = self.gatherBalanceData()
+                    
+                    # Calculate balance Score 
+                    balanceScore = self.calculateBalanceScore(balanceData)
+
+                    # Send message that data has been recieved so game can start again
+                    calibrationConfirmation = "calibrate " + balanceScore[0]  
+                    self.unityWrite(calibrationConfirmation)
+
+                    # Send scores to database
+                    pub.sendMessage('database.GameScore', score=gameScore[1])
+                    pub.sendMessage('database.BalanceScore', score=balanceScore)
+                except:
+                    logging.error("Error occured while parsing data")
+                    self.unityWrite("error " + decodedMessage)
+            elif(decodedMessage.startsWith("rotation")):
+                try:
+                    # Get rotation values
+                    rotationList = decodedMessage.split(" ")
+                   
+                    # Set Motion Floor Platform to these angles
+                    self.setMotionFloor(rotationList[1],rotationList[2])
+                    
+                    # Send angles back to Unity Game as confirmation
+                    rotationConfirmation = "rotation " + str(rotationList[1]) + " " + str(rotationList[1]) 
+                    self.unityWrite(rotationConfirmation)
+                except:
+                    logging.error("Error occured while parsing data")
+                    self.unityWrite("error " + decodedMessage)
+
 if __name__ == "__main__":
     port = "tcp://*:5555"
-    server = Server(port)
+    server = Server()
     score = None
     setupError = 0
     logging.basicConfig(

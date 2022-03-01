@@ -1,16 +1,20 @@
+from distutils.log import debug
+import logging
 import wx
 from views import DefaultView, HubView, LoginView, StatisticsView
 from pubsub import pub
+import server as Server
 from database.dbcalls import db, findUserID, addUser
 
 class Controller:
-    def __init__(self):
+    def __init__(self, debug):
         self.mainView = DefaultView.DefaultView(None, "Training System")
         self.hubView = HubView.HubView(None)
         self.loginView = LoginView.LoginView(None)
         self.statisticsView = StatisticsView.StatisticsView(None)
         self.db = db()
         self.currentUser = None
+        self.debug = debug
         # Pub subscriptions
         pub.subscribe(self.loginOpen, 'login.open')
         pub.subscribe(self.loginAttempt, 'login.attempt')
@@ -18,6 +22,10 @@ class Controller:
         pub.subscribe(self.logoutOpen, 'logout.open')
 
         pub.subscribe(self.statisticsOpen, 'statistics.open')
+
+        pub.subscribe(self.serverStart, 'server.start')
+
+        
         
     
         self.mainView.Show(True)
@@ -63,6 +71,12 @@ class Controller:
         self.statisticsView.ShowModal()
 
     def setUserStatistics(self):
-        pass    
+        pass
+
+    def serverStart(self):
+        server = Server.Server(debug=debug)
+        server.start()
+        server.join()
+        logging.info("Closing Server")    
 
    
