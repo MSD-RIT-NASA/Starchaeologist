@@ -74,6 +74,7 @@ class Controller:
         pass
 
     def serverStart(self):
+        # [SteamVR Directory]\bin\win64\vrstartup.exe
         server = Server.Server(debug=debug)
         server.start()
         server.join()
