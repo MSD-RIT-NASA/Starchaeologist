@@ -3,7 +3,6 @@
 #  Created by: William Johnson
 #
 
-from re import T
 from threading import Thread
 from pubsub import pub
 

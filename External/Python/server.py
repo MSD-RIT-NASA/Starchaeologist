@@ -20,41 +20,18 @@ from scipy.spatial.distance import cdist
 # from scipy.stats import ppf
 
 data = [
-    [None, 1, 7.0],
-    [None, 2, 5.0],
-    [None, 3, 3.0],
-    [None, 4, 1.0],
-    [None, 1, 4.0],
-    [None, 2, 4.0],
-    [None, 3, 4.0],
-    [None, 4, 4.0],
-    [None, 1, 2.0],
-    [None, 2, 4.0],
-    [None, 3, 6.0],
-    [None, 4, 8.0],
-    [None, 1, 3.0],
-    [None, 2, 5.0],
-    [None, 3, 8.0],
-    [None, 4, 7.0],
-    [None, 1, 2.0],
-    [None, 2, 3.0],
-    [None, 3, 3.0],
-    [None, 4, 9.0],
-    [None, 1, 5.0],
-    [None, 2, 7.0],
-    [None, 3, 4.0],
-    [None, 4, 3.0],
-    [None, 1, 3.0],
-    [None, 2, 2.0],
-    [None, 3, 1.0],
-    [None, 4, 4.0],
-    [None, 1, 6.0],
-    [None, 2, 7.0],
-    [None, 3, 4.0],
-    [None, 4, 1.0],
-
-
+    [None, 2.13465207868007,4.89956174599918,2.66060181598207,7.85470370475888],
+    [None, 4.28587711941725,3.87793918274247,9.30913868002088,5.61656090739023],
+    [None, 5.7841504070834,4.20312918219861,2.35600260801427,7.57694010975628],
+    [None, 9.54939253281308,3.75112311297614,9.99550894414797,9.71744358433292],
+    [None, 5.60526204137377,3.69543214267838,3.09467786787761,9.71541751255999],
+    [None, 4.15204880673068,5.39928982658279,3.79305433099766,7.38310103275958],
+    [None, 8.79014501571196,3.85258397034024,8.30697977184643,6.75868917245357],
+    [None, 4.82898640997195,9.63078790140841,3.9874571068154,9.37223417562071],
+    [None, 4.55177440659691,4.31705308534068,1.83755879515668,3.39807878453195],
+    [None, 8.64012769173837,7.05287374185998,8.30119405933711,3.20412490712671]
 ]
+
 
 # def mean_confidence_interval(data, confidence=0.95):
 #     a = 1.0 * np.array(data)
@@ -112,27 +89,16 @@ class Server(Thread):
         xComponent = 0
         yComponent = 0
         for i in range(0,len(sensorData),1):
-            if sensorData[i][1] == 1:
-                xComponent -= sensorData[i][2]
-                yComponent += sensorData[i][2]
-            elif sensorData[i][1] == 2:
-                xComponent += sensorData[i][2]
-                yComponent += sensorData[i][2]
-            elif sensorData[i][1] == 3:
-                xComponent -= sensorData[i][2]
-                yComponent -= sensorData[i][2]
-            elif sensorData[i][1] == 4:
-                xComponent += sensorData[i][2]
-                yComponent -= sensorData[i][2]
-                point = np.array([xComponent, yComponent])
-                points.append(point)
-                xComponents.append(xComponent)
-                yComponents.append(yComponent)
-                xComponent = 0
-                yComponent = 0
-            else:
-                logging.error("Error in reading data")
-                print(sensorData[i])
+            xComponent = 0
+            yComponent = 0
+            xComponent += sensorData[i][2] + sensorData[i][4] - (sensorData[i][1] + sensorData[i][3])
+            yComponent += sensorData[i][2] + sensorData[i][1] - (sensorData[i][4] + sensorData[i][3])
+            
+            point = np.array([xComponent, yComponent])
+            points.append(point)
+            xComponents.append(xComponent)
+            yComponents.append(yComponent)
+            
         plt.plot(xComponents,yComponents, 'ro-')
         points = np.array(points)
         hull = ConvexHull(points)
@@ -231,7 +197,7 @@ class Server(Thread):
 
 if __name__ == "__main__":
     port = "tcp://*:5555"
-    server = Server()
+    server = Server(debug=True)
     score = None
     setupError = 0
     logging.basicConfig(
