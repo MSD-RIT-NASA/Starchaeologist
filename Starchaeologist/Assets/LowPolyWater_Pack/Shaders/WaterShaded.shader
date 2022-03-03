@@ -25,7 +25,9 @@ CGINCLUDE
 
 
 	sampler2D _ShoreTex;
-	sampler2D_float _CameraDepthTexture;
+	//Changed at the suggestion of http://answers.unity.com/answers/1560010/view.html
+	//sampler2D_float _CameraDepthTexture;
+	UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
   
 	uniform float4 _BaseColor;  
     uniform float _Shininess;
