@@ -12,7 +12,7 @@ public class DebugEntryManager : MonoBehaviour
     /// <summary>
     /// A dictionary of spawned entries for the debug canvas to show, and their given names.
     /// </summary>
-    private Dictionary<string, TextMeshProUGUI> spawnedEntries;
+    private Dictionary<string, TextMeshProUGUI> spawnedEntries = new Dictionary<string, TextMeshProUGUI>(StringComparer.Ordinal);
 
     /// <summary>
     /// Updates an entry with a given name in the debug canvas, or adds one if no entry with the given name exists.<br/><br/>

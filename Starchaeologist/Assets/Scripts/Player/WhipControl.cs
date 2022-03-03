@@ -36,6 +36,8 @@ public class WhipControl : MonoBehaviour
         defaultRot = transform.rotation;
         vEstimator.SetEstimationActve(false);
         ToggleWhipCurled(true);
+
+        DebugEntryManager.updateEntry?.Invoke($"({name}) Test", $"<color=#FF0000>X</color>, <color=#00FF00>Y</color>, <color=#0000FF>Z</color>");
     }
 
     private void OnEnable()
