@@ -4,6 +4,8 @@ import wx
 from views import DefaultView, HubView, LoginView, StatisticsView
 from pubsub import pub
 import server as Server
+import time
+import killswitch as KillSwitch
 from database.dbcalls import db, findUserID, addUser
 
 class Controller:
@@ -13,8 +15,15 @@ class Controller:
         self.loginView = LoginView.LoginView(None)
         self.statisticsView = StatisticsView.StatisticsView(None)
         self.db = db()
+        
         self.currentUser = None
         self.debug = debug
+        # Threads
+        self.killSwitch = KillSwitch.KillSwitchMonitor()
+        self.killSwitch.start()
+        time.sleep(1)
+        self.server = Server.Server(debug=self.debug)
+        self.server.start()
         # Pub subscriptions
         pub.subscribe(self.loginOpen, 'login.open')
         pub.subscribe(self.loginAttempt, 'login.attempt')
@@ -25,11 +34,14 @@ class Controller:
 
         pub.subscribe(self.gameStart, 'game.start')
 
-        
+        pub.subscribe(self.closeApp, "app.end")
         
     
+        
+        
         self.mainView.Show(True)
-    
+        
+
     def loginOpen(self):
         self.loginView.ShowModal()
 
@@ -80,5 +92,20 @@ class Controller:
         # server.join()
         # logging.info("Closing Server")
         pass
+    
+    def closeApp(self):
+        self.mainView.Show(False)
+        self.hubView.Show(False)
+        self.loginView.Show(False)
+        self.statisticsView.Show(False)
+        logging.info("Closed all Views")
+        pub.sendMessage('killswitch.end')
+        self.killSwitch.join()
+        pub.sendMessage('server.end')
+        self.server.join()
+        exit(0)
+        # 
+        # pub.sendMessage('server.end')
+        # pub.sendMessage('app.end')
 
    

@@ -48,7 +48,17 @@ data2 = [
     [None,3.6725038297812,4.78532591452139,2.17495555718194,4.35049065917288]
 ]
 
-
+data3 = [
+    [None, 2.5,2.6,2.5,2.5],
+    [None, 2.5,2.5,2.6,2.5],
+    [None, 2.5,2.5,2.5,2.6],
+    [None, 2.6,2.5,2.5,2.5],
+    [None, 2.5,2.7,2.5,2.5],
+    [None, 2.5,2.5,2.7,2.5],
+    [None, 2.5,2.5,2.5,2.7],
+    [None, 2.7,2.5,2.5,2.5],
+    [None, 2.5,2.8,2.5,2.5],
+]
 # def mean_confidence_interval(data, confidence=0.95):
 #     a = 1.0 * np.array(data)
 #     n = len(a)
@@ -66,12 +76,13 @@ class Server(Thread):
             self.arduino = serial.Serial(port='COM5', baudrate=115200, timeout=.1)
                 
         self.debug = debug
-        
+        self.end = False
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
         self.socket.bind("tcp://*:5555")
         self.score = None;
         pub.subscribe(self.killSwitch, "killSwitch.check")
+        pub.subscribe(self.endThread, 'server.end')
 
     
     def killSwitch(self, message):
@@ -84,7 +95,7 @@ class Server(Thread):
     # TODO
     def gatherBalanceData(self):
         print("Going to gather info from force platform")
-        self.arduinoWrite("START")
+        self.arduinoWrite("3")
         balanceData = []
         while True:
             data = self.arduino.readline()
@@ -127,49 +138,49 @@ class Server(Thread):
         m = points.mean()
         s = points.std() 
         dof = len(points)-1    
-        confidence = 0.95
+        confidence = 0.75
 
         t_crit = np.abs(t.ppf((1-confidence)/2,dof))
         lowerRange = m-s*t_crit/np.sqrt(len(points)) 
         upperRange = m+s*t_crit/np.sqrt(len(points)) 
-        print(lowerRange)
-        print(upperRange)
+        # print(lowerRange)
+        # print(upperRange)
         print("Range: " + str(upperRange-lowerRange))
-        # np.percentile(values,[100*(1-confidence)/2,100*(1-(1-confidence)/2)]) 
+        # np.percentile(points,[100*(1-confidence)/2,100*(1-(1-confidence)/2)]) 
 
 
         # Location of the center of the ellipse.
-        # mean_pos = points.mean(axis=0)
+        mean_pos = points.mean(axis=0)
 
-        # # METHOD 1
-        # width1, height1, theta1 = self.cov_ellipse(points, cov, 2)
+        # METHOD 1
+        width1, height1, theta1 = self.cov_ellipse(points, cov, 2)
 
-        # # METHOD 2
-        # width2, height2, theta2 = self.cov_ellipse2(points, cov, 2)
-        # ax = plt.gca()
-        # plt.plot(xComponents,yComponents, 'ro-')
-        # # plt.scatter(xComponents, yComponents, c='k', s=1, alpha=.5)
-        # # First ellipse
-        # ellipse1 = Ellipse(xy=mean_pos, width=width1, height=height1, angle=theta1,
-        #                 edgecolor='b', fc='None', lw=2, zorder=4)
-        # # ellipse1.area
-        # ax.add_patch(ellipse1)
-        # # Second ellipse
-        # ellipse2 = Ellipse(xy=mean_pos, width=width2, height=height2, angle=theta2,
-        #                 edgecolor='r', fc='None', lw=.8, zorder=4)
-        # ax.add_patch(ellipse2)
-        # plt.show()
-        # hullpoints = points[hull.vertices,:]
-        # # Naive way of finding the best pair in O(H^2) time if H is number of points on
-        # # hull
-        # hdist = cdist(hullpoints, hullpoints, metric='euclidean')
+        # METHOD 2
+        width2, height2, theta2 = self.cov_ellipse2(points, cov, 2)
+        ax = plt.gca()
+        plt.plot(xComponents,yComponents, 'ro-')
+        # plt.scatter(xComponents, yComponents, c='k', s=1, alpha=.5)
+        # First ellipse
+        ellipse1 = Ellipse(xy=mean_pos, width=width1, height=height1, angle=theta1,
+                        edgecolor='b', fc='None', lw=2, zorder=4)
+        # ellipse1.area
+        ax.add_patch(ellipse1)
+        # Second ellipse
+        ellipse2 = Ellipse(xy=mean_pos, width=width2, height=height2, angle=theta2,
+                        edgecolor='r', fc='None', lw=.8, zorder=4)
+        ax.add_patch(ellipse2)
+        plt.show()
+        hullpoints = points[hull.vertices,:]
+        # Naive way of finding the best pair in O(H^2) time if H is number of points on
+        # hull
+        hdist = cdist(hullpoints, hullpoints, metric='euclidean')
         # print(hdist)
-        # # Get the farthest apart points
-        # bestpair = np.unravel_index(hdist.argmax(), hdist.shape)
+        # Get the farthest apart points
+        bestpair = np.unravel_index(hdist.argmax(), hdist.shape)
         # print(bestpair)
-        # #Print them
+        #Print them
         # print([hullpoints[bestpair[0]],hullpoints[bestpair[1]]])
-        # plt.show()
+        plt.show()
 
     def eigsorted(self,cov):
         '''
@@ -191,7 +202,6 @@ class Server(Thread):
         width, height = 2 * nstd * np.sqrt(vals)
 
         return width, height, theta
-
 
     def cov_ellipse2(self,points, cov, nstd):
         """
@@ -240,7 +250,7 @@ class Server(Thread):
 
     def run(self):
         logging.info("Starting Server")
-        while True :     
+        while True and not self.end:     
             if self.debug:
                 logging.info("Server in debug mode")
                 time.sleep(1)
@@ -288,6 +298,10 @@ class Server(Thread):
                 except:
                     logging.error("Error occured while parsing data")
                     self.unityWrite("error " + decodedMessage)
+    
+    def endThread(self):
+        logging.info("Ending Server Thread")
+        self.end = True
 
 if __name__ == "__main__":
     port = "tcp://*:5555"
@@ -307,6 +321,7 @@ if __name__ == "__main__":
     
     server.plotSensorData(data)
     server.plotSensorData(data2)
+    server.plotSensorData(data3)
     # server.arduinoWrite(port.encode())
     # text = server.arduinoRead()
     # print(text)
@@ -315,7 +330,7 @@ if __name__ == "__main__":
     # print(text)
     # logging.info(text)
     if setupError == 0:
-        logging.info("Starting Server")
+        # logging.info("Starting Server")
         while True :
             break
             logging.info("Waiting For Message From Unity")

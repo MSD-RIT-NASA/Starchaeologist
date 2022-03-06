@@ -28,7 +28,8 @@ class HubView(wx.Frame):
       fgs.Add(self.gameButton, 0, wx.EXPAND)
       self.gameButton.Bind(wx.EVT_BUTTON, self.startGame)
 
-
+      self.Bind(wx.EVT_CLOSE, self.onClose)
+      
       hbox.Add(fgs, proportion = 2, flag = wx.ALL|wx.EXPAND, border = 15) 
 
       panel.SetSizerAndFit(hbox)
@@ -43,3 +44,6 @@ class HubView(wx.Frame):
 
     def startGame(self, event):
       pub.sendMessage('game.start')
+
+    def onClose(self, event):
+      pub.sendMessage('app.end')

@@ -42,7 +42,8 @@ class DefaultView(wx.Frame):
       fgs.AddSpacer(0)
       fgs.Add(btn1, 0, wx.ALIGN_CENTER)
 
-
+      self.Bind(wx.EVT_CLOSE, self.onClose)
+      
       self.timer = wx.Timer(self)
       self.Bind(wx.EVT_TIMER, self.UpdateHeader, self.timer)
       # self.toggleBtn = wx.Button(panel, wx.ID_ANY, "Start")
@@ -101,3 +102,7 @@ class DefaultView(wx.Frame):
         self.header3.BackgroundColour = "blue"
       self.timer.Start(5000)
 		
+    def onClose(self, event):
+      pub.sendMessage('app.end')
+
+    
