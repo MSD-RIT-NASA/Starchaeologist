@@ -9,10 +9,12 @@ public class PuzzlingGame : MonoBehaviour
     public List<GameObject>[] tileArray;
     List<Vector2> activePlates = new List<Vector2>();
     Vector2 currentPosition;
+    PlateScript currentScript;
+    public bool activateTrap = false;
+    float trapTimer = 0f;
 
     public GameObject startPlatform;
     public GameObject endPlatform;
-
 
     // Start is called before the first frame update
     public void DataSetup()
@@ -21,18 +23,25 @@ public class PuzzlingGame : MonoBehaviour
         startPlatform = startPlatform.transform.GetChild(0).gameObject;
         endPlatform = endPlatform.transform.GetChild(0).gameObject;
 
+        //the player always starts on the starting platform
         currentPosition = new Vector2(0, -1);
+        currentScript = GameObject.Find("StartPlatform").transform.GetChild(0).GetComponent<PlateScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        Communication();
+        if(activateTrap)
+        {
+            TrapTime();
+        }
     }
 
     //called by the plate the player lands on to activate teleportation for adjacent plates
     public void ActivatePlates(List<Vector2> getAdjacent)
     {
+        //activate plates based on the given list
         for (int i = 0; i < getAdjacent.Count; i++)
         {
             int xIndex = (int)getAdjacent[i].x;
@@ -51,12 +60,14 @@ public class PuzzlingGame : MonoBehaviour
             tileArray[xIndex][yIndex].transform.GetChild(0).GetComponent<TeleportationAnchor>().enabled = true;
         }
 
+        //save the list of activated plates
         activePlates = getAdjacent;
     }
 
     //called by the plate the player lands on to deactivate teleportation for adjacent plates
     public void DeactivatePlatforms(Vector2 getCurrent)
     {
+        //deactivate the currently activated plates
         for (int i = 0; i < activePlates.Count; i++)
         {
             int xIndex = (int)activePlates[i].x;
@@ -75,6 +86,54 @@ public class PuzzlingGame : MonoBehaviour
             tileArray[xIndex][yIndex].transform.GetChild(0).GetComponent<TeleportationAnchor>().enabled = false;
         }
 
+        //set the global variables to the new position
         currentPosition = getCurrent;
+        if((int)getCurrent.y < 0)
+        {
+            currentScript = startPlatform.GetComponent<PlateScript>();
+        }
+        else if((int)getCurrent.y >= tileArray[0].Count)
+        {
+            currentScript = endPlatform.GetComponent<PlateScript>();
+        }
+        else
+        {
+            currentScript = tileArray[(int)getCurrent.x][(int)getCurrent.y].transform.GetChild(0).GetComponent<PlateScript>();
+        }
+    }
+
+    //python communication function
+    void Communication()
+    {
+        /*To DO
+        -This script is the link between the python script and the plate scripts
+        -get the desired rotation from the plate script
+        -send it to the python script
+        -grab the rotation of the real platform
+        -set the platform's rotation as such
+        -for now just send the desired rotation right into the platform's localRotation
+         */
+        if(currentScript.trapped)
+        {
+            currentScript.transform.localRotation = currentScript.desiredRotation;
+        }
+    }
+
+    void TrapTime()
+    {
+        /*TO DO
+         -This function will go through the process of setting off the trap once the
+            current plate tells it to
+        -set off the corresponding trap
+        -activate the adjacent platforms
+         */
+        Debug.Log("Trap Time");
+        trapTimer = trapTimer + Time.deltaTime;
+        if(trapTimer > 3f)
+        {
+            activateTrap = false;
+            currentScript.reactivate = true;
+            trapTimer = 0f;
+        }
     }
 }

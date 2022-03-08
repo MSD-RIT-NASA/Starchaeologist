@@ -44,6 +44,8 @@ GameObject:
   - component: {fileID: 3011020288044513961}
   - component: {fileID: 5414339128551031011}
   - component: {fileID: 8435418056453839060}
+  - component: {fileID: 5291962971469122581}
+  - component: {fileID: 7448299070965887884}
   m_Layer: 0
   m_Name: Plate
   m_TagString: Untagged
@@ -224,9 +226,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b20132c0d78814449bfc4032aa8b1734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xIndex: 0
-  zIndex: 0
+  myPosition: {x: 0, y: 0}
+  adjacentPlates: []
   trapped: 0
+  tiltRange: 5
+  tiltSpeed: 1
+  desiredRotation: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5291962971469122581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000587892724638360}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9799a307bd0c2764eb19301eedc7f6ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tiltRange: 5
+  tiltSpeed: 1
+  back2Zero: 0
+--- !u!114 &7448299070965887884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000587892724638360}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0572dbf960b216240aa6a761f578b4b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tiltRange: 5
+  tiltSpeed: 1
+  back2Zero: 0
 --- !u!1 &5576853343733318789
 GameObject:
   m_ObjectHideFlags: 0
