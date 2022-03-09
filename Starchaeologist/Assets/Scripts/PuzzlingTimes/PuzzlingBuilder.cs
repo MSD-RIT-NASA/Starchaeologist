@@ -11,9 +11,18 @@ public class PuzzlingBuilder : MonoBehaviour
             -place the traps
      */
 
+    //floor tile variables
     public GameObject tilePrefab;
     List<GameObject>[] tileArray;
     public List<bool>[] trapArray;
+
+    //trap variables
+    public GameObject ceilingPrefab;
+    public GameObject swingPrefab;
+    public GameObject wallPrefab;
+    List<GameObject>[] ceilingArray;
+    List<GameObject>[] wallArray;
+    List<GameObject> swingList;
 
     public GameObject perimeterPrefab;
     List<GameObject> perimeterList = new List<GameObject>();
@@ -21,9 +30,14 @@ public class PuzzlingBuilder : MonoBehaviour
     public int roomLength = 4;
 
     // Start is called before the first frame update
-    void Awake()
+    void DataSetup()
     {
-        
+        tileArray = new List<GameObject>[6];
+        trapArray = new List<bool>[6];
+
+        ceilingArray = new List<GameObject>[6];
+        wallArray = new List<GameObject>[roomLength * 3];
+        swingList = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -31,10 +45,8 @@ public class PuzzlingBuilder : MonoBehaviour
     {
         //set up the game script before continuing
         GetComponent<PuzzlingGame>().DataSetup();
+        DataSetup();
 
-        //instantiate the tile array
-        tileArray = new List<GameObject>[6];
-        trapArray = new List<bool>[6];
         int lengthValue = (roomLength * 3);
 
         //start and end adjacent tiles (includes themselves)
@@ -48,14 +60,22 @@ public class PuzzlingBuilder : MonoBehaviour
 
             tileArray[i] = new List<GameObject>();
             trapArray[i] = new List<bool>();
+            ceilingArray[i] = new List<GameObject>();
+            
+
             for (int j = 0; j < lengthValue; j++)
             {
                 //place the room tiles
                 tileArray[i].Add(null);
                 tileArray[i][j] = Instantiate(tilePrefab);
-                tileArray[i][j].transform.rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
+                //tileArray[i][j].transform.rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
                 tileArray[i][j].transform.position = new Vector3((i * 2) + 1, 0, (j * 2) + 1);
                 trapArray[i].Add(false);
+
+                //place the ceiling traps
+                ceilingArray[i].Add(null);
+                ceilingArray[i][j] = Instantiate(ceilingPrefab);
+                ceilingArray[i][j].transform.position = new Vector3((i * 2) + 1, 0, (j * 2) + 1);
 
                 PlateScript scriptReference = tileArray[i][j].transform.GetChild(0).GetComponent<PlateScript>();
                 scriptReference.GetComponent<TeleportationAnchor>().enabled = false;
@@ -95,6 +115,30 @@ public class PuzzlingBuilder : MonoBehaviour
                     }
                 }
                 scriptReference.adjacentPlates = giveAdjacent;
+
+                //place the ceiling swings and wall traps
+                if (i == 0)
+                {
+                    //swings
+                    swingList.Add(null);
+                    swingList[j] = Instantiate(swingPrefab);
+                    swingList[j].transform.position = new Vector3(6, 0, (j * 2) + 1);
+
+                    //walls
+                    wallArray[j] = new List<GameObject>();
+                    if (j % 3 != 1)//avoid the pillar
+                    {
+                        wallArray[j].Add(null);
+                        wallArray[j].Add(null);
+                        //0 = left wall
+                        wallArray[j][0] = Instantiate(wallPrefab);
+                        wallArray[j][0].transform.position = new Vector3(-2, 0, (j * 2) + 1);
+                        //1 = right wall
+                        wallArray[j][1] = Instantiate(wallPrefab);
+                        wallArray[j][1].transform.position = new Vector3(14, 0, (j * 2) + 1);
+
+                    }
+                }
             }
 
             //place trap platforms
@@ -144,5 +188,8 @@ public class PuzzlingBuilder : MonoBehaviour
         GetComponent<PuzzlingGame>().tileArray = tileArray;
 
         GetComponent<PuzzlingGame>().ActivatePlates(startScript.adjacentPlates);
+
+        //delete the script at the end
+        Destroy(this);
     }
 }
