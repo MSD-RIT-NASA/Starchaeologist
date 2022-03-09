@@ -20,8 +20,11 @@ import numpy as np
 from scipy.spatial import ConvexHull
 from scipy.spatial.distance import cdist
 from scipy.stats import t
+import math
 
 # from scipy.stats import ppf
+from itertools import combinations
+
 
 data = [
     [None, 2.13465207868007,4.89956174599918,2.66060181598207,7.85470370475888],
@@ -131,12 +134,14 @@ class Server(Thread):
         # plt.plot(xComponents,yComponents, 'ro-')
         points = np.array(points)
         hull = ConvexHull(points)
-        print(hull.area) # Can be used for equation
+        area = hull.area
+        # print("Hull Area: " + str(area)) # Can be used for equation
 
-        cov = np.cov(points, rowvar=False)
+        # cov = np.cov(points, rowvar=False)
 
         m = points.mean()
         s = points.std() 
+        # print("Standard Deviation: " + str(s))
         dof = len(points)-1    
         confidence = 0.75
 
@@ -145,42 +150,50 @@ class Server(Thread):
         upperRange = m+s*t_crit/np.sqrt(len(points)) 
         # print(lowerRange)
         # print(upperRange)
-        print("Range: " + str(upperRange-lowerRange))
+        ranges = upperRange-lowerRange
+        # print("Range: " + str(ranges))
+        # newpoints = list(zip(xComponents,yComponents))
+        distances = [self.dist(p1, p2) for p1, p2 in combinations(points, 2)]
+        avg_distance = sum(distances) / len(distances)
+        std_distance = np.std(distances)
+        # print("Avg STD Distance: " + str(std_distance))
+        # print("Avg Distance: " + str(avg_distance))
         # np.percentile(points,[100*(1-confidence)/2,100*(1-(1-confidence)/2)]) 
-
+        score = round(75/avg_distance + 75/std_distance + 75/ranges + 75/area) 
+        print("Score: " + str(score))
 
         # Location of the center of the ellipse.
-        mean_pos = points.mean(axis=0)
+        # mean_pos = points.mean(axis=0)
 
-        # METHOD 1
-        width1, height1, theta1 = self.cov_ellipse(points, cov, 2)
+        # # METHOD 1
+        # width1, height1, theta1 = self.cov_ellipse(points, cov, 2)
 
-        # METHOD 2
-        width2, height2, theta2 = self.cov_ellipse2(points, cov, 2)
-        ax = plt.gca()
-        plt.plot(xComponents,yComponents, 'ro-')
-        # plt.scatter(xComponents, yComponents, c='k', s=1, alpha=.5)
-        # First ellipse
-        ellipse1 = Ellipse(xy=mean_pos, width=width1, height=height1, angle=theta1,
-                        edgecolor='b', fc='None', lw=2, zorder=4)
-        # ellipse1.area
-        ax.add_patch(ellipse1)
-        # Second ellipse
-        ellipse2 = Ellipse(xy=mean_pos, width=width2, height=height2, angle=theta2,
-                        edgecolor='r', fc='None', lw=.8, zorder=4)
-        ax.add_patch(ellipse2)
-        plt.show()
-        hullpoints = points[hull.vertices,:]
-        # Naive way of finding the best pair in O(H^2) time if H is number of points on
-        # hull
-        hdist = cdist(hullpoints, hullpoints, metric='euclidean')
-        # print(hdist)
-        # Get the farthest apart points
-        bestpair = np.unravel_index(hdist.argmax(), hdist.shape)
-        # print(bestpair)
-        #Print them
-        # print([hullpoints[bestpair[0]],hullpoints[bestpair[1]]])
-        plt.show()
+        # # METHOD 2
+        # width2, height2, theta2 = self.cov_ellipse2(points, cov, 2)
+        # ax = plt.gca()
+        # plt.plot(xComponents,yComponents, 'ro-')
+        # # plt.scatter(xComponents, yComponents, c='k', s=1, alpha=.5)
+        # # First ellipse
+        # ellipse1 = Ellipse(xy=mean_pos, width=width1, height=height1, angle=theta1,
+        #                 edgecolor='b', fc='None', lw=2, zorder=4)
+        # # ellipse1.area
+        # ax.add_patch(ellipse1)
+        # # Second ellipse
+        # ellipse2 = Ellipse(xy=mean_pos, width=width2, height=height2, angle=theta2,
+        #                 edgecolor='r', fc='None', lw=.8, zorder=4)
+        # ax.add_patch(ellipse2)
+        # plt.show()
+        # hullpoints = points[hull.vertices,:]
+        # # Naive way of finding the best pair in O(H^2) time if H is number of points on
+        # # hull
+        # hdist = cdist(hullpoints, hullpoints, metric='euclidean')
+        # # print(hdist)
+        # # Get the farthest apart points
+        # bestpair = np.unravel_index(hdist.argmax(), hdist.shape)
+        # # print(bestpair)
+        # #Print them
+        # # print([hullpoints[bestpair[0]],hullpoints[bestpair[1]]])
+        # plt.show()
 
     def eigsorted(self,cov):
         '''
@@ -219,6 +232,9 @@ class Server(Thread):
 
         return width, height, theta
 
+    def dist(self, p1, p2):
+        (x1, y1), (x2, y2) = p1, p2
+        return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
     # TODO
     def setMotionFloor(self, angle1, angle2):
         return

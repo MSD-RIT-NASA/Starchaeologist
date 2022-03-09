@@ -8,7 +8,8 @@ class db:
     def closeConnection(self):
         self.conn.close()
 
-    def execute_query(self, connection, query):
+    def execute_query(self, query):
+        connection = self.conn
         cursor = connection.cursor()
         try:
             cursor.execute(query)
@@ -17,7 +18,8 @@ class db:
         except Error as e:
             print(f"The error '{e}' occurred")
 
-    def search_query(self, connection, query):
+    def search_query(self, query):
+        connection = self.conn
         cursor = connection.cursor()
         try:
             cursor.execute(query)
@@ -31,89 +33,106 @@ class db:
             print(f"The error '{e}' occurred")
 
 
-def createTables(self, db):
-    query = (
-        """
-        CREATE TABLE IF NOT EXISTS USERS (
-            USER_ID INTEGER PRIMARY KEY,
-            USERNAME TEXT NOT NULL,
-            PASSWORD TEXT NOT NULL
+    def createTables(self):
+        query = (
+            """
+            CREATE TABLE IF NOT EXISTS USERS (
+                USER_ID INTEGER PRIMARY KEY,
+                USERNAME TEXT NOT NULL,
+                PASSWORD TEXT NOT NULL
+            )
+            """
         )
-        """
-    )
-    db.execute_query(self, db.conn, query)
+        self.execute_query(query)
 
-    query = (
-        """
-        CREATE TABLE IF NOT EXISTS SCORETYPES(
-            SCORETYPE_ID INTEGER PRIMARY KEY,
-            NAME TEXT NOT NULL
+        query = (
+            """
+            CREATE TABLE IF NOT EXISTS SCORETYPES(
+                SCORETYPE_ID INTEGER PRIMARY KEY,
+                NAME TEXT NOT NULL
+            )
+            """
         )
-        """
-    )
-    db.execute_query(self, db.conn, query)
+        self.execute_query(query)
 
 
-    query = (
-        """
-        CREATE TABLE IF NOT EXISTS GAMES(
-            GAME_ID INTEGER PRIMARY KEY,
-            NAME TEXT NOT NULL,
-            EXELINK TEXT NOT NULL
+        query = (
+            """
+            CREATE TABLE IF NOT EXISTS GAMES(
+                GAME_ID INTEGER PRIMARY KEY,
+                NAME TEXT NOT NULL,
+                EXELINK TEXT NOT NULL
+            )
+            """
         )
-        """
-    )
-    db.execute_query(self, db.conn, query)
+        self.execute_query(query)
 
 
-    query = (
-        """
-        CREATE TABLE IF NOT EXISTS SCORES(
-            SCORE_ID INTEGER PRIMARY KEY,
-            USER_ID INTEGER,
-            SCORETYPE_ID INTEGER,
-            GAME_ID INTEGER,
-            VALUE INTEGER,
-            FOREIGN KEY (USER_ID) 
-                REFERENCES USERS (USER_ID) 
-                    ON DELETE CASCADE 
-                    ON UPDATE NO ACTION,
-            FOREIGN KEY (SCORETYPE_ID) 
-                REFERENCES SCORETYPES (SCORETYPE_ID) 
-                    ON DELETE CASCADE 
-                    ON UPDATE NO ACTION, 
-            FOREIGN KEY (GAME_ID) 
-                REFERENCES GAMES (GAME_ID) 
-                    ON DELETE CASCADE 
-                    ON UPDATE NO ACTION 
+        query = (
+            """
+            CREATE TABLE IF NOT EXISTS SCORES(
+                SCORE_ID INTEGER PRIMARY KEY,
+                USER_ID INTEGER,
+                SCORETYPE_ID INTEGER,
+                GAME_ID INTEGER,
+                VALUE INTEGER,
+                FOREIGN KEY (USER_ID) 
+                    REFERENCES USERS (USER_ID) 
+                        ON DELETE CASCADE 
+                        ON UPDATE NO ACTION,
+                FOREIGN KEY (SCORETYPE_ID) 
+                    REFERENCES SCORETYPES (SCORETYPE_ID) 
+                        ON DELETE CASCADE 
+                        ON UPDATE NO ACTION, 
+                FOREIGN KEY (GAME_ID) 
+                    REFERENCES GAMES (GAME_ID) 
+                        ON DELETE CASCADE 
+                        ON UPDATE NO ACTION 
+            )
+            """
         )
-        """
-    )
-    db.execute_query(self, db.conn, query)
+        self.execute_query(query)
 
 
 
-def addUser(db, UserName, Password):
-    query = (
-        "INSERT INTO USERS(USERNAME, PASSWORD)"
-        "VALUES('"+UserName+"','"+Password+"')"
-    )
-    db.execute_query(db.conn, query)
-    return findUserID(db, UserName)
+    def addUser(self, UserName, Password):
+        query = (
+            "INSERT INTO USERS(USERNAME, PASSWORD)"
+            "VALUES('"+UserName+"','"+Password+"')"
+        )
+        self.execute_query(query)
+        return self.findUserID(UserName)
 
-def findUserID(db, UserName):
-    query = (
-        "SELECT * FROM USERS WHERE USERNAME='"+UserName+"'"
-    )
-    return db.search_query(db.conn, query)
-    
+    def getGameScore(self, USER_ID):
+        query = (
+            "SELECT VALUE FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='2'"
+        )
+        return self.search_query(query)
 
-def addScore(db, USER_ID, SCORETYPE_ID, GAME_ID, VALUE):
-    query = (
-        "INSERT INTO SCORES(USER_ID, SCORETYPE_ID, GAME_ID, VALUE)"
-        "VALUES("+USER_ID+","+SCORETYPE_ID+","+GAME_ID+","+VALUE+")"
-    )
-    db.execute_query(db.conn, query)
+    def getBalanceScore(self, USER_ID):
+        query = (
+            "SELECT VALUE FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='1'"
+        )
+        return self.search_query(query)
+
+    def findUserID(self, UserName):
+        query = (
+            "SELECT * FROM USERS WHERE USERNAME='"+UserName+"'"
+        )
+        return self.search_query(query)
+        
+
+    def addScore(self, USER_ID, SCORETYPE_ID, GAME_ID, VALUE):
+        query = (
+            "INSERT INTO SCORES(USER_ID, SCORETYPE_ID, GAME_ID, VALUE)"
+            "VALUES("+USER_ID+","+SCORETYPE_ID+","+GAME_ID+","+VALUE+")"
+        )
+        self.execute_query(query)
 
 if __name__ == '__main__':
     database = db()
+    query = (
+            "INSERT INTO SCORETYPES(NAME)" +
+            "VALUES('GAME')"
+        )
+    database.execute_query(query)

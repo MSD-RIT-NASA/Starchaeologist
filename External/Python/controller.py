@@ -1,4 +1,4 @@
-from distutils.log import debug
+# from distutils.log import debug
 import logging
 import wx
 from views import DefaultView, HubView, LoginView, StatisticsView
@@ -6,7 +6,7 @@ from pubsub import pub
 import server as Server
 import time
 import killswitch as KillSwitch
-from database.dbcalls import db, findUserID, addUser
+from database.dbcalls import db
 
 class Controller:
     def __init__(self, debug):
@@ -46,10 +46,10 @@ class Controller:
         self.loginView.ShowModal()
 
     def loginAttempt(self, username, password):
-        val = findUserID(self.db,username)
+        val = self.db.findUserID(username)
         if val is not None:
             if password == val[0][2]:
-                self.currentUser = val[0][0]
+                self.currentUser = str(val[0][0])
                 self.mainView.Show(False)
                 self.loginView.Close()
                 # Set statistics functon
@@ -60,9 +60,9 @@ class Controller:
                 resp = wx.MessageDialog(None, "Incorrect Password for this Username. Please try again.", "Failed Login" , wx.OK).ShowModal()
                 resp.Destroy()
         else:
-            val = addUser(self.db, username, password)
+            val = self.db.addUser(username, password)
             # New User Added Popup?
-            self.currentUser = val[0][0]
+            self.currentUser = str(val[0][0])
             self.mainView.Show(False)
             self.loginView.Close()
             
@@ -80,11 +80,16 @@ class Controller:
         window.Destroy()
     
     def statisticsOpen(self):
-        self.statisticsView.ShowModal()
+        self.statisticsView.Show()
 
     def setUserStatistics(self):
-        pass
-
+        print(self.currentUser)
+        bScore = self.db.getBalanceScore(self.currentUser)
+        gScore = self.db.getGameScore(self.currentUser)
+        print(bScore)
+        print(gScore)
+        pub.sendMessage("statistics.plot", bScore=bScore, gScore=gScore)
+        
     def gameStart(self):
         # [SteamVR Directory]\bin\win64\vrstartup.exe
         # server = Server.Server(debug=debug)
