@@ -7,23 +7,33 @@ import server as Server
 import time
 import killswitch as KillSwitch
 from database.dbcalls import db
+from event_channel.threaded_event_channel import ThreadedEventChannel
 
 class Controller:
     def __init__(self, debug):
-        self.mainView = DefaultView.DefaultView(None, "Training System")
-        self.hubView = HubView.HubView(None)
-        self.loginView = LoginView.LoginView(None)
-        self.statisticsView = StatisticsView.StatisticsView(None)
         self.db = db()
         
         self.currentUser = None
         self.debug = debug
         # Threads
-        self.killSwitch = KillSwitch.KillSwitchMonitor()
-        self.killSwitch.start()
-        time.sleep(1)
         self.server = Server.Server(debug=self.debug)
         self.server.start()
+        time.sleep(1)
+        self.killSwitch = KillSwitch.KillSwitchMonitor()
+        self.killSwitch.start()
+        
+        self.non_blocking_threaded = ThreadedEventChannel(blocking=False)
+        self.non_blocking_threaded.subscribe("statistics.userPlot", self.setUserStatistics)
+
+        gameOneScores, gameTwoScores, gameThreeScores = self.db.getTopScores()
+        
+        #Views
+        self.mainView = DefaultView.DefaultView(None, "Training System", gameOneScores, gameTwoScores, gameThreeScores)
+        self.hubView = HubView.HubView(None)
+        self.loginView = LoginView.LoginView(None)
+        self.statisticsView = StatisticsView.StatisticsView(None)
+        
+        
         # Pub subscriptions
         pub.subscribe(self.loginOpen, 'login.open')
         pub.subscribe(self.loginAttempt, 'login.attempt')
@@ -35,9 +45,6 @@ class Controller:
         pub.subscribe(self.gameStart, 'game.start')
 
         pub.subscribe(self.closeApp, "app.end")
-        
-    
-        
         
         self.mainView.Show(True)
         
@@ -53,7 +60,8 @@ class Controller:
                 self.mainView.Show(False)
                 self.loginView.Close()
                 # Set statistics functon
-                self.setUserStatistics()
+                self.non_blocking_threaded.publish("statistics.userPlot")
+                
                 self.hubView.Show(True)
                 
             else:
@@ -67,7 +75,8 @@ class Controller:
             self.loginView.Close()
             
             # Set statistics functon
-            self.setUserStatistics()
+            self.non_blocking_threaded.publish("statistics.userPlot")
+            
             self.hubView.Show(True)
 
     def logoutOpen(self):
@@ -79,15 +88,14 @@ class Controller:
             self.mainView.Show(True)
         window.Destroy()
     
+
     def statisticsOpen(self):
         self.statisticsView.Show()
 
     def setUserStatistics(self):
-        print(self.currentUser)
         bScore = self.db.getBalanceScore(self.currentUser)
         gScore = self.db.getGameScore(self.currentUser)
-        print(bScore)
-        print(gScore)
+        
         pub.sendMessage("statistics.plot", bScore=bScore, gScore=gScore)
         
     def gameStart(self):
@@ -103,14 +111,12 @@ class Controller:
         self.hubView.Show(False)
         self.loginView.Show(False)
         self.statisticsView.Show(False)
-        logging.info("Closed all Views")
+        logging.info("Closed All Views")
         pub.sendMessage('killswitch.end')
         self.killSwitch.join()
         pub.sendMessage('server.end')
         self.server.join()
+        logging.info("Closed All Servers")
         exit(0)
-        # 
-        # pub.sendMessage('server.end')
-        # pub.sendMessage('app.end')
 
    

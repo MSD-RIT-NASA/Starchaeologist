@@ -20,6 +20,7 @@ class App(Thread):
     def run(self):
         self.app = wx.App()
         self.controller = Controller.Controller(self.debug)
+        logging.info("Starting Main Loop")
         self.app.MainLoop()
 
 
