@@ -10,6 +10,7 @@ class LoginView(wx.Dialog):
       user_lbl = wx.StaticText(self, label="Username:")
       user_sizer.Add(user_lbl, 0, wx.ALL|wx.CENTER, 5)
       self.user = wx.TextCtrl(self)
+      # self.user.SetHint('Enter Username') 
       user_sizer.Add(self.user, 0, wx.ALL, 5)
       
       # pass info
@@ -19,6 +20,7 @@ class LoginView(wx.Dialog):
       p_sizer.Add(p_lbl, 0, wx.ALL|wx.CENTER, 5)
       self.password = wx.TextCtrl(self, style=wx.TE_PASSWORD|wx.TE_PROCESS_ENTER)
       p_sizer.Add(self.password, 0, wx.ALL, 5)
+      # self.password.SetHint('Enter Password') 
       
       main_sizer = wx.BoxSizer(wx.VERTICAL)
       main_sizer.Add(user_sizer, 0, wx.ALL, 5)
@@ -32,12 +34,15 @@ class LoginView(wx.Dialog):
       self.Centre()
       # self.btn = wx.Button(panel, wx.ID_OK, label = "ok", size = (50,20), pos = (75,50))
    def onLogin(self, event):
-        """
-        Check credentials and login
-        """
-        user_username = self.user.GetValue()
-        user_password = self.password.GetValue()
-        
-        pub.sendMessage('login.attempt', username=user_username, password=user_password)
+      """
+      Check credentials and login
+      """
+      user_username = self.user.GetValue()
+      user_password = self.password.GetValue()
+      
+      pub.sendMessage('login.attempt', username=user_username, password=user_password)
+      
+      self.user.Clear()
+      self.password.Clear()
 
 

@@ -73,7 +73,6 @@ class Server(Thread):
     def __init__(self, debug):
         Thread.__init__(self)
         if debug:
-            # self.arduino = serial.Serial(port='COM5', baudrate=115200, timeout=.1)
             self.arduino = None
         else:
             self.arduino = serial.Serial(port='COM5', baudrate=115200, timeout=.1)
@@ -97,7 +96,7 @@ class Server(Thread):
 
     # TODO
     def gatherBalanceData(self):
-        print("Going to gather info from force platform")
+        logging.info("Going to gather info from force platform")
         self.arduinoWrite("3")
         balanceData = []
         while True:
@@ -246,7 +245,7 @@ class Server(Thread):
     
     def unityWrite(self, message):
         if self.debug:
-            print(message)
+            logging.debug(message)
         else:
             encodedMessage = message.encode()
             self.socket.send(encodedMessage)
@@ -257,7 +256,7 @@ class Server(Thread):
     
     def arduinoWrite(self, message): # START SEND STOP
         if self.debug:
-            print(message)
+            logging.debug(message)
         else:
             self.arduino.write(bytes(message, 'utf-8'))
     

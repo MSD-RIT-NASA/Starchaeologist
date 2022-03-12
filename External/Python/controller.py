@@ -1,8 +1,9 @@
-# from distutils.log import debug
 import logging
 import wx
+import wx.adv
 from views import DefaultView, HubView, LoginView, StatisticsView
 from pubsub import pub
+from datetime import datetime
 import server as Server
 import time
 import killswitch as KillSwitch
@@ -15,6 +16,7 @@ class Controller:
         
         self.currentUser = None
         self.debug = debug
+        self.plotted = False
         # Threads
         self.server = Server.Server(debug=self.debug)
         self.server.start()
@@ -46,6 +48,7 @@ class Controller:
 
         pub.subscribe(self.closeApp, "app.end")
         
+        time.sleep(1)
         self.mainView.Show(True)
         
 
@@ -59,13 +62,17 @@ class Controller:
                 self.currentUser = str(val[0][0])
                 self.mainView.Show(False)
                 self.loginView.Close()
+                
+                self.plotted = False
                 # Set statistics functon
                 self.non_blocking_threaded.publish("statistics.userPlot")
                 
                 self.hubView.Show(True)
                 
+                
             else:
-                resp = wx.MessageDialog(None, "Incorrect Password for this Username. Please try again.", "Failed Login" , wx.OK).ShowModal()
+                resp = wx.MessageDialog(None, "Incorrect Password for this Username. Please try again.", "Failed Login" , wx.OK)
+                resp.ShowModal()
                 resp.Destroy()
         else:
             val = self.db.addUser(username, password)
@@ -74,10 +81,12 @@ class Controller:
             self.mainView.Show(False)
             self.loginView.Close()
             
+            self.plotted = False
             # Set statistics functon
             self.non_blocking_threaded.publish("statistics.userPlot")
             
             self.hubView.Show(True)
+            
 
     def logoutOpen(self):
         window = wx.MessageDialog(None, "Are you sure you want to logout?", "Logout" , wx.YES_NO|wx.YES_DEFAULT)
@@ -86,19 +95,42 @@ class Controller:
             self.currentUser = None
             self.hubView.Show(False)
             self.mainView.Show(True)
+            self.plotted = False
         window.Destroy()
     
 
     def statisticsOpen(self):
-        self.statisticsView.Show()
+        logging.info("Opening Statistics")
+        dialog = wx.ProgressDialog("Loading Statistics", "Time remaining", 100, style=wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME)
+        cancelled = False
+        while self.plotted == False and cancelled == False:
+            wx.Sleep(1)
+            if dialog.WasCancelled():
+                cancelled = True
+            dialog.Pulse()
+        dialog.Destroy()
+
+        if not cancelled:
+            self.statisticsView.Show()
 
     def setUserStatistics(self):
         bScore = self.db.getBalanceScore(self.currentUser)
         gScore = self.db.getGameScore(self.currentUser)
+        # print(bScore)
+
         
+        # print(gScore)
         pub.sendMessage("statistics.plot", bScore=bScore, gScore=gScore)
+        self.plotted = True
+        
         
     def gameStart(self):
+        self.db.addScore(5,1,1,10)
+        self.db.addScore(5,1,2,60)
+        self.db.addScore(5,1,3,30)
+        self.db.addScore(5,2,1,70)
+        self.db.addScore(5,2,2,50)
+        self.db.addScore(5,2,3,30)
         # [SteamVR Directory]\bin\win64\vrstartup.exe
         # server = Server.Server(debug=debug)
         # server.start()

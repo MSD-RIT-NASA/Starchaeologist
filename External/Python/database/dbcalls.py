@@ -93,8 +93,6 @@ class db:
         )
         self.execute_query(query)
 
-
-
     def addUser(self, UserName, Password):
         query = (
             "INSERT INTO USERS(USERNAME, PASSWORD)"
@@ -105,14 +103,18 @@ class db:
 
     def getGameScore(self, USER_ID):
         query = (
-            "SELECT VALUE, DATE_ADDED FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='2' ORDER BY DATE_ADDED ASC"
+            "SELECT VALUE, DATE_ADDED, GAME_ID "+
+            "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='2' ORDER BY DATE_ADDED ASC"
         )
+        
         return self.search_query(query)
 
     def getBalanceScore(self, USER_ID):
         query = (
-            "SELECT VALUE, DATE_ADDED FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='1' ORDER BY DATE_ADDED ASC"
+            "SELECT VALUE, DATE_ADDED, GAME_ID "+
+            "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='1' ORDER BY DATE_ADDED ASC"
         )
+
         return self.search_query(query)
 
     def findUserID(self, UserName):
@@ -125,7 +127,7 @@ class db:
     def addScore(self, USER_ID, SCORETYPE_ID, GAME_ID, VALUE):
         query = (
             "INSERT INTO SCORES(USER_ID, SCORETYPE_ID, GAME_ID, VALUE)"
-            "VALUES("+USER_ID+","+SCORETYPE_ID+","+GAME_ID+","+VALUE+")"
+            "VALUES("+str(USER_ID)+","+str(SCORETYPE_ID)+","+str(GAME_ID)+","+str(VALUE)+")"
         )
         self.execute_query(query)
 

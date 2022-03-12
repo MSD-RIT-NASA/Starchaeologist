@@ -4,7 +4,7 @@ from pubsub import pub
 
 class DefaultView(wx.Frame):             
     def __init__(self, parent, title, gameOneScores, gameTwoScores, gameThreeScores): 
-      super(DefaultView, self).__init__(parent, title = title, size= wx.Size(800,600), style= wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX)  
+      super(DefaultView, self).__init__(parent, title = title, size= wx.Size(1000,800), style= wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX)  
       self.SetBackgroundColour('white')
       self.Header = 1
 
@@ -39,7 +39,6 @@ class DefaultView(wx.Frame):
 
       vBox.Add(headerBox, 0, wx.EXPAND)
     
-      vBox.AddSpacer(0)
       vBox.Add(self.panel_one, 1, wx.EXPAND)
       vBox.Add(self.panel_two, 1, wx.EXPAND)
       vBox.Add(self.panel_three, 1, wx.EXPAND)
@@ -61,6 +60,7 @@ class DefaultView(wx.Frame):
       self.header1.BackgroundColour = "blue"
       
       self.SetSizerAndFit(vBox)
+      self.SetMinSize((350,400))
       self.Centre()
 
       
@@ -145,6 +145,8 @@ class ScoreBoard(wx.Panel):
           self.vert_sizer.Add(text, 1, wx.EXPAND | wx.CENTER)
         count+=1
       self.SetSizerAndFit(vert_sizer)
+      self.Layout()
+
     
 if __name__ == '__main__':
    app = wx.App()

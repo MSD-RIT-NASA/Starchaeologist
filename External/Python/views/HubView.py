@@ -31,11 +31,12 @@ class HubView(wx.Frame):
       self.Bind(wx.EVT_CLOSE, self.onClose)
       
       hbox.Add(fgs, proportion = 2, flag = wx.ALL|wx.EXPAND, border = 15) 
-
+      
       panel.SetSizerAndFit(hbox)
       self.Centre()
       self.SetSizerAndFit(hbox)
-    
+      
+      
     def statisticsOpen(self, event):
       pub.sendMessage('statistics.open')
        
