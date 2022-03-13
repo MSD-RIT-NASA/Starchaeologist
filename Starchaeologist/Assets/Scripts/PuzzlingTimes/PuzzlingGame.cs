@@ -7,10 +7,12 @@ public class PuzzlingGame : MonoBehaviour
 {
 
     public List<GameObject>[] tileArray;
+    public List<GameObject>[] ceilingArray;
     List<Vector2> activePlates = new List<Vector2>();
     Vector2 currentPosition;
     PlateScript currentScript;
     public bool activateTrap = false;
+    public bool trapDone = false;
     float trapTimer = 0f;
 
     public GameObject startPlatform;
@@ -32,10 +34,6 @@ public class PuzzlingGame : MonoBehaviour
     void Update()
     {
         Communication();
-        if(activateTrap)
-        {
-            TrapTime();
-        }
     }
 
     //called by the plate the player lands on to activate teleportation for adjacent plates
@@ -119,7 +117,8 @@ public class PuzzlingGame : MonoBehaviour
         }
     }
 
-    void TrapTime()
+    //called from the current platform to set off the trap
+    public void TrapTime()
     {
         /*TO DO
          -This function will go through the process of setting off the trap once the
@@ -128,12 +127,22 @@ public class PuzzlingGame : MonoBehaviour
         -activate the adjacent platforms
          */
         Debug.Log("Trap Time");
-        trapTimer = trapTimer + Time.deltaTime;
-        if(trapTimer > 3f)
-        {
-            activateTrap = false;
-            currentScript.reactivate = true;
-            trapTimer = 0f;
-        }
+        int xIndex = (int)currentPosition.x;
+        int yIndex = (int)currentPosition.y;
+
+        ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().DataSetup(currentScript);
+        //trapTimer = trapTimer + Time.deltaTime;
+        //if(trapTimer > 3f)
+        //{
+        //    activateTrap = false;
+        //    currentScript.reactivate = true;
+        //    trapTimer = 0f;
+        //}
+    }
+
+    //this will be called by trap objects once the hit the player
+    public void TrapHit()
+    {
+
     }
 }

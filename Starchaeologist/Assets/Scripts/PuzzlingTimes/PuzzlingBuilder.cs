@@ -186,6 +186,8 @@ public class PuzzlingBuilder : MonoBehaviour
 
         //send the data over to the game script
         GetComponent<PuzzlingGame>().tileArray = tileArray;
+        GetComponent<PuzzlingGame>().ceilingArray = ceilingArray;
+
 
         GetComponent<PuzzlingGame>().ActivatePlates(startScript.adjacentPlates);
 

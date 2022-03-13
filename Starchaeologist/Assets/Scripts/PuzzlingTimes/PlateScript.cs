@@ -73,26 +73,26 @@ public class PlateScript : MonoBehaviour
                     }
                     wobbling = false;
                     trapping = true;
-                    managerReference.activateTrap = true;
+                    managerReference.TrapTime();
                     Debug.Log("Back to zero");
                 }
                 wobbleTimer = wobbleTimer + Time.deltaTime;
             }
-            else if (trapping && !managerReference.activateTrap)//then the trap will go off
-            {
-                /* TO DO
-                 figure out the trapping
-                 */
-                Debug.Log("Trap done");
-                trapping = false;
-                //trapTimer = trapTimer + Time.deltaTime;
-                //
-                //if(trapTimer > 3f)
-                //{
-                //    //reactivate = true;
-                //    trapping = false;
-                //}
-            }
+            //else if (trapping && !managerReference.activateTrap)//then the trap will go off
+            //{
+            //    /* TO DO
+            //     figure out the trapping
+            //     */
+            //    Debug.Log("Trap done");
+            //    trapping = false;
+            //    //trapTimer = trapTimer + Time.deltaTime;
+            //    //
+            //    //if(trapTimer > 3f)
+            //    //{
+            //    //    //reactivate = true;
+            //    //    trapping = false;
+            //    //}
+            //}
         }
         if(reactivate)
         {
