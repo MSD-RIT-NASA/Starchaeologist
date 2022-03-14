@@ -25,7 +25,8 @@ CGINCLUDE
 
 
 	sampler2D _ShoreTex;
-	//Changed at the suggestion of http://answers.unity.com/answers/1560010/view.html
+	//Changed at the suggestion of http://answers.unity.com/answers/1560010/view.html; this is ultimately what 
+	// fixed the pink missing texture effect
 	//sampler2D_float _CameraDepthTexture;
 	UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
   
@@ -81,13 +82,15 @@ CGINCLUDE
 
 	v2f vert(appdata_full v)
 	{
-		v2f o;
-		UNITY_INITIALIZE_OUTPUT(v2f, o);
+		/*v2f o;
+		UNITY_INITIALIZE_OUTPUT(v2f, o);*/
 
 		//VR compatibility addtion; see below
 		//https://www.reddit.com/r/vive_vr/comments/p9jkyg/unity_a_gameobject_is_only_being_rendered_in_one/h9z7hbj/
 		//https://docs.unity3d.com/Manual/SinglePassInstancing.html
+		v2f o;
 		UNITY_SETUP_INSTANCE_ID(v);
+		UNITY_INITIALIZE_OUTPUT(v2f, o);
 		UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 		
 		half3 worldSpaceVertex = mul(unity_ObjectToWorld,(v.vertex)).xyz;
@@ -171,6 +174,10 @@ CGINCLUDE
 	half4 frag( v2f i ) : SV_Target
 	{ 
  
+		//VR compatibility addtion; see below
+		//https://docs.unity3d.com/Manual/SinglePassInstancing.html
+		UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
+
 		half4 edgeBlendFactors = half4(1.0, 0.0, 0.0, 0.0);
 		
 		#ifdef WATER_EDGEBLEND_ON
