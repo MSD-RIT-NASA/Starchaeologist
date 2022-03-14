@@ -36,8 +36,6 @@ public class WhipControl : MonoBehaviour
         defaultRot = transform.rotation;
         vEstimator.SetEstimationActve(false);
         ToggleWhipCurled(true);
-
-        DebugEntryManager.updateEntry?.Invoke($"({name}) Test", $"<color=#FF0000>X</color>, <color=#00FF00>Y</color>, <color=#0000FF>Z</color>");
     }
 
     private void OnEnable()
@@ -69,18 +67,33 @@ public class WhipControl : MonoBehaviour
 
     private void TryDoSwing()
     {
-        if (vEstimator.CurrentAvgVelocity is Vector3 avgVel && avgVel.sqrMagnitude >= minSwingSpeed * minSwingSpeed)
+        if (vEstimator.CurrentAvgVelocity is Vector3 avgVel)
         {
-            ToggleWhipCurled(false);
-            //transform.forward = avgVel.normalized;
-
-            uncurlCorout = Coroutilities.DoAfterDelay(this, () =>
+            if (avgVel.sqrMagnitude >= minSwingSpeed * minSwingSpeed)
             {
-                ToggleWhipCurled(true);
-                //transform.rotation = defaultRot;
-                uncurlCorout = null;
-            },
-            0.375f);
+                DebugEntryManager.updateEntry?.Invoke($"Swing Success", $"True, avgVel (<color=#FF0000>{avgVel.x}</color>, " +
+                    $"<color=#00FF00>{avgVel.y}</color>, <color=#0000FF>{avgVel.z}</color>) is valid & fast enough", 3);
+
+                ToggleWhipCurled(false);
+                //transform.forward = avgVel.normalized;
+
+                uncurlCorout = Coroutilities.DoAfterDelay(this, () =>
+                {
+                    ToggleWhipCurled(true);
+                    //transform.rotation = defaultRot;
+                    uncurlCorout = null;
+                },
+                0.375f);
+            }
+            else
+            {
+                DebugEntryManager.updateEntry?.Invoke($"Swing Success", $"False, avgVel (<color=#FF0000>{avgVel.x}</color>, " +
+                    $"<color=#00FF00>{avgVel.y}</color>, <color=#0000FF>{avgVel.z}</color>) is valid but not fast enough", 3);
+            }
+        }
+        else
+        {
+            DebugEntryManager.updateEntry?.Invoke($"Swing Success", $"False, avgVel is invalid", 3);
         }
     }
 
