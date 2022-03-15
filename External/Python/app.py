@@ -16,13 +16,11 @@ class App(Thread):
         Thread.__init__(self)
         self.debug = debug
         
-    
     def run(self):
         self.app = wx.App()
         self.controller = Controller.Controller(self.debug)
         logging.info("Starting Main Application")
         self.app.MainLoop()
-
 
 if __name__ == '__main__':
     logging.basicConfig(
