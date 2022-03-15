@@ -55,13 +55,13 @@ class DefaultView(wx.Frame):
       self.timer = wx.Timer(self)
       self.Bind(wx.EVT_TIMER, self.UpdateHeader, self.timer)
       
-      self.timer.Start(5000)
       
       self.header1.BackgroundColour = "blue"
       
       self.SetSizerAndFit(vBox)
       self.SetMinSize((350,400))
       self.Centre()
+      self.Layout()
 
       
     def Login(self, event):

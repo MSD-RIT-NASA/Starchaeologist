@@ -1,16 +1,13 @@
 import math
 import wx
-from wx.lib import plot as wxplot
-# import pyqtgraph as pg
 from pubsub import pub
+import multiprocessing as mp
+# from matplotlib.widgets import Cursor
 
 import logging
-import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
-# from database.dbcalls import db
 import matplotlib
-import numpy as np
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
@@ -19,36 +16,33 @@ matplotlib.use('WXAgg')
 class StatisticsView(wx.Frame): 
    def __init__(self, parent): 
       super(StatisticsView, self).__init__(parent, title = "Statistics") 
+
       self.panel_one = BalancePanel(self)
       self.panel_two = BalancePanel(self)
       self.panel_two.Hide()
-      # self.panel_one.Draw(graphics1)
-      # self.panel_two.Draw(graphics2) 
+      
       self.sizer = wx.BoxSizer(wx.VERTICAL)
       self.SetMinSize((400,300))
       self.sizer.Add(self.panel_one, 1, wx.EXPAND | wx.ALL, 10)
       self.sizer.Add(self.panel_two, 1, wx.EXPAND | wx.ALL, 10)
-      # hsizer = wx.BoxSizer(wx.HORIZONTAL)
+
       gridSizer = wx.GridSizer(1, 2,5,5)
-      # gridSizer.AddMany([
-      #    (wx.RadioButton(self,label="Balance Score"), 0, wx.EXPAND),
-      #    (wx.RadioButton(self,label="Game Score"), 0, wx.EXPAND)
-      # ])
+      
       rbutton = wx.RadioButton(self,label="Balance Score")
       rbutton.SetFocus()
-      # hsizer.Add(rbutton, 1, wx.ALIGN_CENTER|wx.ALL, 25)
+      
       rbutton1 = wx.RadioButton(self,label="Game Score")
-      # hsizer.AddStretchSpacer(2)
+      
       gridSizer.Add(rbutton, 0, wx.EXPAND)
       gridSizer.Add(rbutton1, 0, wx.EXPAND)
       self.sizer.Add(gridSizer, 0, wx.ALL|wx.EXPAND, 5)
       self.Bind(wx.EVT_CLOSE, self.onClose)
       self.Bind(wx.EVT_RADIOBUTTON, self.onSwitchPanels)
       self.SetSizerAndFit(self.sizer)
-      pub.subscribe(self.plotScores, "statistics.plot")
+      
+      pub.subscribe(self.plotBalanceScore, "statistics.game")
+      pub.subscribe(self.plotGameScore, "statistics.balance")
 
-
-    #----------------------------------------------------------------------
    def onSwitchPanels(self, event):
       """"""
       radioBox = event.GetEventObject() 
@@ -61,12 +55,22 @@ class StatisticsView(wx.Frame):
          self.panel_one.Show()
          self.panel_two.Hide()
       self.Layout()
-
-   def plotScores(self, bScore, gScore):
-      logging.info("Plotting Score Statistics")
-      self.panel_one.plotScore(gScore)
-      self.panel_two.plotScore(bScore)
-      logging.info("Storing Score Statistics")
+   
+   def plotBalanceScore(self, score):
+      logging.info("Plotting Balance Score Statistics")
+      if score[0] is not None and score[1] is not None and score[2] is not None:
+         self.panel_one.plotScore(score)
+      else:
+         self.panel_one.noResults()
+      logging.info("Caching Balance Score Statistics")
+   
+   def plotGameScore(self, score):
+      logging.info("Plotting Game Score Statistics")
+      if score[0] is not None and score[1] is not None and score[2] is not None:
+         self.panel_two.plotScore(score)
+      else:
+         self.panel_two.noResults()
+      logging.info("Caching Game Score Statistics")
 
    def onClose(self, event):
       logging.info("Closing Statistics View")
@@ -77,19 +81,21 @@ class BalancePanel(wx.Panel):
       """Constructor"""
       wx.Panel.__init__(self, parent=parent)
       vert_sizer = wx.BoxSizer(wx.VERTICAL)
-      self.vert_sizer = vert_sizer
-
       self.figure = Figure()
+   
+      self.axes = self.figure.subplots()
       self.canvas = FigureCanvas(self, -1, self.figure)
       
-      self.axes = self.figure.add_subplot(111)
+      self.default = wx.StaticText(self, label="No Results to Display", style=wx.ALIGN_CENTER)
       
+      vert_sizer.Add(self.default, 1, wx.EXPAND | wx.CENTER)
+      self.default.Show(False)
       
       vert_sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.EXPAND)
+      self.canvas.draw()
       self.SetSizerAndFit(vert_sizer)
+      self.vert_sizer = vert_sizer
       
-      
-   
    def displayBreakdown(self, event):
       print("Something")
       thisline = event.artist
@@ -102,35 +108,24 @@ class BalancePanel(wx.Panel):
       
       wx.MessageBox('x :'+ str(xdata[ind]) + ' y: ' + str(ydata[ind]), 'Info',wx.OK | wx.ICON_INFORMATION)
       
+   def noResults(self):
+      self.axes.cla()
+      self.default.Show(True)
+
    def plotScore(self, scores):
-      xGame1 = []
-      yGame1 = []
-      xGame2 = []
-      yGame2 = []
-      xGame3 = []
-      yGame3 = []
+      self.default.Show(False)
+      colors = ['r', 'b', 'g']
+      labels = ["G1", "G2", "G3"]
+      for i in range(0,len(scores)):
+         if scores[i] == None:
+            continue
 
-      for score in scores:
-         if score[2] == 1:
-            xGame1.append(datetime.fromisoformat(score[1]))
-            yGame1.append(score[0])
-         elif score[2] == 2:
-            xGame2.append(datetime.fromisoformat(score[1]))
-            yGame2.append(score[0])
-         elif score[2] == 3:
-            xGame3.append(datetime.fromisoformat(score[1]))
-            yGame3.append(score[0])
+         xScore, yScore = zip(*scores[i])
+         dateScore = [datetime.fromtimestamp(x) for x in xScore]
+
+         line, = self.axes.plot(dateScore, yScore, colors[i], ls = ':', picker = True, pickradius =3, marker = 'o')
+         line.set_label(labels[i])
          
-      
-      self.line1, = self.axes.plot(xGame1,yGame1, 'b', ls = ':', picker = True, pickradius =3, marker = 'o')
-      self.line1.set_label('Label via method')
-
-      self.line2, = self.axes.plot(xGame2,yGame2, 'g', ls = ':', picker = True, pickradius =3, marker = 'o')
-      self.line2.set_label('Label via method')
-      
-      self.line3, = self.axes.plot(xGame3,yGame3, 'r', ls = ':', picker = True, pickradius =3, marker = 'o')
-      self.line3.set_label('Label via method')
-      # mdates.
       self.axes.xaxis.set_major_locator(mdates.DayLocator(bymonthday=range(1, 32)))
       self.axes.xaxis.set_minor_locator(mdates.DayLocator())
       self.axes.grid(True)

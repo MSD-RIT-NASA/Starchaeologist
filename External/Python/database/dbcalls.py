@@ -102,20 +102,41 @@ class db:
         return self.findUserID(UserName)
 
     def getGameScore(self, USER_ID):
-        query = (
-            "SELECT VALUE, DATE_ADDED, GAME_ID "+
-            "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='2' ORDER BY DATE_ADDED ASC"
+        queryOne = (
+            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE "+
+            "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='2' AND GAME_ID='1' ORDER BY DATE_ADDED ASC"
         )
-        
-        return self.search_query(query)
+        queryTwo = (
+            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE "+
+            "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='2' AND GAME_ID='2' ORDER BY DATE_ADDED ASC"
+        )
+        queryThree = (
+            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE "+
+            "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='2' AND GAME_ID='3' ORDER BY DATE_ADDED ASC"
+        )
+        result1 = self.search_query(queryOne)
+        result2 = self.search_query(queryTwo)
+        result3 = self.search_query(queryThree)
+        return [result1, result2, result3]
 
     def getBalanceScore(self, USER_ID):
-        query = (
-            "SELECT VALUE, DATE_ADDED, GAME_ID "+
-            "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='1' ORDER BY DATE_ADDED ASC"
+        queryOne = (
+            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE "+
+            "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='1' AND GAME_ID='1' ORDER BY DATE_ADDED ASC"
         )
-
-        return self.search_query(query)
+        queryTwo = (
+            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE "+
+            "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='1' AND GAME_ID='2' ORDER BY DATE_ADDED ASC"
+        )
+        queryThree = (
+            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE "+
+            "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='1' AND GAME_ID='3' ORDER BY DATE_ADDED ASC"
+        )
+        
+        result1 = self.search_query(queryOne)
+        result2 = self.search_query(queryTwo)
+        result3 = self.search_query(queryThree)
+        return [result1, result2, result3]
 
     def findUserID(self, UserName):
         query = (
