@@ -26,6 +26,9 @@ public class Trap_Ceiling : MonoBehaviour
     // set up the data every time the trap is activated
     public void DataSetup(PlateScript getCurrent)
     {
+        /*TO DO
+         Make this spawn multiple random spikes from 9? optional positions
+         */
         plateReference = getCurrent;
 
         spearObject = null;
@@ -54,10 +57,10 @@ public class Trap_Ceiling : MonoBehaviour
     {
         switch (trapStep)
         {
-            case 0:
-                Suspense();
-                break;
-            case 1://spawn to poke
+            //case 0:
+            //    Suspense();
+            //    break;
+            case 0://spawn to poke
                 //check if the location has been reached
                 if(lerpRatio == 1f)
                 {
@@ -69,12 +72,12 @@ public class Trap_Ceiling : MonoBehaviour
                     Debug.Log("step: " + trapStep);
                     break;
                 }
-                lerpRatio = lerpRatio + (Time.deltaTime * 1);
+                lerpRatio = lerpRatio + (Time.deltaTime * 4);
                 break;
-            case 2:
-                Suspense();
+            case 1:
+                Suspense(2f);
                 break;
-            case 3://poke to stab
+            case 2://poke to stab
                 //check if the location has been reached
                 if (lerpRatio == 1f)
                 {
@@ -86,12 +89,12 @@ public class Trap_Ceiling : MonoBehaviour
                     Debug.Log("step: " + trapStep);
                     break;
                 }
-                lerpRatio = lerpRatio + (Time.deltaTime * 4);
+                lerpRatio = lerpRatio + (Time.deltaTime * 6);
                 break;
-            case 4:
-                Suspense();
+            case 3:
+                Suspense(1f);
                 break;
-            case 5://stab to spawn
+            case 4://stab to spawn
                 //check if the location has been reached
                 if (lerpRatio == 1f)
                 {
@@ -99,7 +102,7 @@ public class Trap_Ceiling : MonoBehaviour
                     Debug.Log("step: " + trapStep);
                     break;
                 }
-                lerpRatio = lerpRatio + (Time.deltaTime * 2);
+                lerpRatio = lerpRatio + (Time.deltaTime * 4);
                 break;
             case 6://cleanup
                 Destroy(spearObject);
@@ -116,9 +119,9 @@ public class Trap_Ceiling : MonoBehaviour
     }
 
     //function that pauses for suspense
-    void Suspense()
+    void Suspense(float pauseFor)
     {
-        if(pauseTimer >= 1.5f)
+        if(pauseTimer >= pauseFor)
         {
             pauseTimer = 0f;
             trapStep++;

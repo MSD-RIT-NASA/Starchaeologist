@@ -8,12 +8,16 @@ public class PuzzlingGame : MonoBehaviour
 
     public List<GameObject>[] tileArray;
     public List<GameObject>[] ceilingArray;
+    public List<GameObject>[] wallArray;
+    public List<GameObject> swingList;
+    public List<GameObject>[] pillarArray;
     List<Vector2> activePlates = new List<Vector2>();
     Vector2 currentPosition;
     PlateScript currentScript;
     public bool activateTrap = false;
     public bool trapDone = false;
     float trapTimer = 0f;
+    bool healing = false;
 
     public GameObject startPlatform;
     public GameObject endPlatform;
@@ -60,6 +64,7 @@ public class PuzzlingGame : MonoBehaviour
 
         //save the list of activated plates
         activePlates = getAdjacent;
+        healing = false;
     }
 
     //called by the plate the player lands on to deactivate teleportation for adjacent plates
@@ -129,20 +134,44 @@ public class PuzzlingGame : MonoBehaviour
         Debug.Log("Trap Time");
         int xIndex = (int)currentPosition.x;
         int yIndex = (int)currentPosition.y;
+        int thisTrap = currentScript.trapList[Random.Range(0,currentScript.trapList.Count)];
 
-        ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().DataSetup(currentScript);
-        //trapTimer = trapTimer + Time.deltaTime;
-        //if(trapTimer > 3f)
-        //{
-        //    activateTrap = false;
-        //    currentScript.reactivate = true;
-        //    trapTimer = 0f;
-        //}
+        //set up the trap list
+        //0 = ceiling spikes
+        //1 = arrows
+        //2 = log swing          
+        //3 = pillar swipe
+        switch (thisTrap)
+        {
+            case 0:
+                Debug.Log("Ceiling Spikes!");
+                ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().DataSetup(currentScript);
+                break;
+            case 1:
+                Debug.Log("Arrows!");
+                wallArray[yIndex][Random.Range(0, 2)].GetComponent<Trap_Arrow>().DataSetup(currentScript);
+                break;
+            case 2:
+                Debug.Log("Log Swing!");
+                currentScript.reactivate = true;
+                break;
+            case 3:
+                Debug.Log("Pillar Swipe!");
+                currentScript.reactivate = true;
+                break;
+            default:
+                break;
+        }
     }
 
-    //this will be called by trap objects once the hit the player
+    //a method called by obstacles when the player hits them which will increment points
     public void TrapHit()
     {
-
+        //healing should stop multiple objects from causing damage from the same trap
+        if(!healing)
+        {
+            healing = true;
+            Debug.Log("The player hit me!");
+        }
     }
 }

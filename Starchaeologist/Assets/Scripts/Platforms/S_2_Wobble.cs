@@ -49,7 +49,7 @@ public class S_2_Wobble : MonoBehaviour
                 back2Zero = false;
                 dataReady = false;
                 enabled = false;
-                Debug.Log("I should be off");
+                //Debug.Log("I should be off");
                 return;
             }
             else if(tiltRatio > 0.5f)//otherwise move toward zero (0.5 technically)

@@ -20,9 +20,12 @@ public class PuzzlingBuilder : MonoBehaviour
     public GameObject ceilingPrefab;
     public GameObject swingPrefab;
     public GameObject wallPrefab;
+    public GameObject pillarPrefab;
     List<GameObject>[] ceilingArray;
     List<GameObject>[] wallArray;
     List<GameObject> swingList;
+    List<GameObject>[] pillarArray;
+
 
     public GameObject perimeterPrefab;
     List<GameObject> perimeterList = new List<GameObject>();
@@ -38,6 +41,7 @@ public class PuzzlingBuilder : MonoBehaviour
         ceilingArray = new List<GameObject>[6];
         wallArray = new List<GameObject>[roomLength * 3];
         swingList = new List<GameObject>();
+        pillarArray = new List<GameObject>[roomLength];
     }
 
     // Update is called once per frame
@@ -61,7 +65,7 @@ public class PuzzlingBuilder : MonoBehaviour
             tileArray[i] = new List<GameObject>();
             trapArray[i] = new List<bool>();
             ceilingArray[i] = new List<GameObject>();
-            
+            int pillarIndex = 0;
 
             for (int j = 0; j < lengthValue; j++)
             {
@@ -79,7 +83,7 @@ public class PuzzlingBuilder : MonoBehaviour
 
                 PlateScript scriptReference = tileArray[i][j].transform.GetChild(0).GetComponent<PlateScript>();
                 scriptReference.GetComponent<TeleportationAnchor>().enabled = false;
-                scriptReference.myPosition = new Vector2(i, j);
+                scriptReference.DataSetup(new Vector2(i, j));
 
                 //create the list of plates adjacent to the created plate
                 List<Vector2> giveAdjacent = new List<Vector2>();
@@ -116,7 +120,7 @@ public class PuzzlingBuilder : MonoBehaviour
                 }
                 scriptReference.adjacentPlates = giveAdjacent;
 
-                //place the ceiling swings and wall traps
+                //place the ceiling swings, wall traps, and pillar traps
                 if (i == 0)
                 {
                     //swings
@@ -133,10 +137,21 @@ public class PuzzlingBuilder : MonoBehaviour
                         //0 = left wall
                         wallArray[j][0] = Instantiate(wallPrefab);
                         wallArray[j][0].transform.position = new Vector3(-2, 0, (j * 2) + 1);
+                        wallArray[j][0].GetComponent<Trap_Arrow>().rightSide = false;
                         //1 = right wall
                         wallArray[j][1] = Instantiate(wallPrefab);
                         wallArray[j][1].transform.position = new Vector3(14, 0, (j * 2) + 1);
-
+                        wallArray[j][1].GetComponent<Trap_Arrow>().rightSide = true;
+                    }
+                    else//pillars
+                    {
+                        /*Pillar building here*/
+                        pillarArray[pillarIndex] = new List<GameObject>();
+                        pillarArray[pillarIndex].Add(null);
+                        pillarArray[pillarIndex].Add(null);
+                        //0 = left pillar
+                        //1 = right pillar
+                        pillarIndex++;
                     }
                 }
             }
@@ -164,13 +179,13 @@ public class PuzzlingBuilder : MonoBehaviour
 
         //give the adjacent platforms to the start/end platforms
         PlateScript endScript = GameObject.Find("EndPlatform").transform.GetChild(0).GetComponent<PlateScript>();
-        endScript.adjacentPlates = startAdjacent;
-        endScript.myPosition = endScript.adjacentPlates[0];
+        endScript.adjacentPlates = endAdjacent;
+        endScript.DataSetup(endAdjacent[0]);
         endScript.GetComponent<TeleportationArea>().enabled = false;
 
         PlateScript startScript = GameObject.Find("StartPlatform").transform.GetChild(0).GetComponent<PlateScript>();
         startScript.adjacentPlates = startAdjacent;
-        startScript.myPosition = startScript.adjacentPlates[0];
+        startScript.DataSetup(startAdjacent[0]);
 
         //move the last platform to the end of the room
         GameObject.Find("EndPlatform").transform.position = new Vector3(6, 0, roomLength * 6);
@@ -187,6 +202,9 @@ public class PuzzlingBuilder : MonoBehaviour
         //send the data over to the game script
         GetComponent<PuzzlingGame>().tileArray = tileArray;
         GetComponent<PuzzlingGame>().ceilingArray = ceilingArray;
+        GetComponent<PuzzlingGame>().wallArray = wallArray;
+        GetComponent<PuzzlingGame>().swingList = swingList;
+        GetComponent<PuzzlingGame>().pillarArray = pillarArray;
 
 
         GetComponent<PuzzlingGame>().ActivatePlates(startScript.adjacentPlates);

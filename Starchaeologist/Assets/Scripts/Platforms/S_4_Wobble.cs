@@ -69,7 +69,7 @@ public class S_4_Wobble : MonoBehaviour
                     GetComponent<PlateScript>().desiredRotation = Quaternion.Euler(0, 0, 0);
                     back2Zero = false;
                     dataReady = false;
-                    Debug.Log("I should be off");
+                    //Debug.Log("I should be off");
                     enabled = false;
                     return;
                 }

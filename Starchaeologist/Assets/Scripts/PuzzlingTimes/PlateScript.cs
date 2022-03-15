@@ -4,28 +4,14 @@ using UnityEngine;
 
 public class PlateScript : MonoBehaviour
 {
-
-    /*
-     TO DO:
-        -keep record of what trap will get used for this plate (game manager's job)
-        -include use one of the wobble scripts once the player steps on this
-        -Tell the Game Manager the rotation for the platform, then get the python's rotation
-        -give the game manager this platform's indexes so it know which one to listen to 
-     */
-
-    //public int xIndex;
-    //public int zIndex;
-
     public Vector2 myPosition;
     public List<Vector2> adjacentPlates;
     public bool reactivate = false;
-    bool triggered = false;
+    public bool triggered = false;
     PuzzlingGame managerReference;
 
     //trap variables
     public bool trapped = false;
-    bool trapping = false;
-    float trapTimer = 0f;
 
     /*wobble variables*/
     //general
@@ -39,15 +25,41 @@ public class PlateScript : MonoBehaviour
     S_4_Wobble fourWayScript;
     public Quaternion desiredRotation;
 
+    //the manager scrpt will use this to determine which trap to set off
+    public List<int> trapList;
+
 
     // Start is called before the first frame update
-    void Start()
+    public void DataSetup(Vector2 getPosition)
     {
+        myPosition = getPosition;
         managerReference = GameObject.Find("GameManager").GetComponent<PuzzlingGame>();
         twoWayScript = GetComponent<S_2_Wobble>();
         fourWayScript = GetComponent<S_4_Wobble>();
         desiredRotation = Quaternion.Euler(0, 0, 0);
         twoWayScript = GetComponent<S_2_Wobble>();
+
+        //set up the trap list
+        //0 = ceiling spikes
+        //1 = arrows
+        //2 = log swing          
+        //3 = pillar swipe
+        trapList = new List<int>();
+        trapList.Add(0);//every platform can be ceiling spiked           
+        
+        if ((int)myPosition.y % 3 != 1)//pillars obstruct arrows
+        {
+            trapList.Add(1);
+        }
+        
+        if((int)myPosition.x == 2 || (int)myPosition.x == 3)//swings and pillars cannot affect the same plate
+        {
+            trapList.Add(2);
+        }
+        else
+        {
+            trapList.Add(3);
+        }
     }
 
     // Update is called once per frame
@@ -57,10 +69,6 @@ public class PlateScript : MonoBehaviour
         {
             if (wobbling)//when the player enters the tile it will first wobble/lower
             {
-                /* TO DO
-                 figure out the wobbling
-                 */
-                //Debug.Log("I'm wobbling");
                 if(wobbleTimer > 5f)
                 {
                     if(wobbleType == 0)
@@ -71,28 +79,13 @@ public class PlateScript : MonoBehaviour
                     {
                         fourWayScript.back2Zero = true;
                     }
+                    wobbleTimer = 0f;
                     wobbling = false;
-                    trapping = true;
                     managerReference.TrapTime();
                     Debug.Log("Back to zero");
                 }
                 wobbleTimer = wobbleTimer + Time.deltaTime;
             }
-            //else if (trapping && !managerReference.activateTrap)//then the trap will go off
-            //{
-            //    /* TO DO
-            //     figure out the trapping
-            //     */
-            //    Debug.Log("Trap done");
-            //    trapping = false;
-            //    //trapTimer = trapTimer + Time.deltaTime;
-            //    //
-            //    //if(trapTimer > 3f)
-            //    //{
-            //    //    //reactivate = true;
-            //    //    trapping = false;
-            //    //}
-            //}
         }
         if(reactivate)
         {
@@ -136,12 +129,6 @@ public class PlateScript : MonoBehaviour
             {
                 reactivate = true;
             }
-            /*
-                -disable teleportation for the duration of the trap
-                -Wobble the platform
-                -set off the trap
-                -re-enable teleportation
-             */
         }
     }
 }

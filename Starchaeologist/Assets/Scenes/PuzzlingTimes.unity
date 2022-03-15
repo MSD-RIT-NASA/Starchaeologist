@@ -608,6 +608,7 @@ MonoBehaviour:
   tiltRange: 10
   tiltSpeed: 1
   desiredRotation: {x: 0, y: 0, z: 0, w: 0}
+  trapList: 
 --- !u!1 &339448799
 GameObject:
   m_ObjectHideFlags: 0
@@ -1498,6 +1499,7 @@ MonoBehaviour:
   ceilingPrefab: {fileID: 6548673210526659539, guid: 3a1324afc6ca398498619a186be650ba, type: 3}
   swingPrefab: {fileID: 6548673210526659539, guid: f43ab709a97893141a0dd0d824fd2308, type: 3}
   wallPrefab: {fileID: 6548673210526659539, guid: 0936af85d78e54d4383a8f23aaaab149, type: 3}
+  pillarPrefab: {fileID: 0}
   perimeterPrefab: {fileID: 2012771316494878327, guid: 8f30519f7aab14042ade3c10effaa8b2, type: 3}
   roomLength: 4
 --- !u!4 &839490669
@@ -1526,6 +1528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d68080d01c682a14c9096c6527f31d40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swingList: []
   activateTrap: 0
   trapDone: 0
   startPlatform: {fileID: 863713764}
@@ -2152,6 +2155,7 @@ MonoBehaviour:
   tiltRange: 10
   tiltSpeed: 1
   desiredRotation: {x: 0, y: 0, z: 0, w: 0}
+  trapList: 
 --- !u!1001 &1314740531
 PrefabInstance:
   m_ObjectHideFlags: 0
