@@ -149,8 +149,16 @@ public class PuzzlingBuilder : MonoBehaviour
                         pillarArray[pillarIndex] = new List<GameObject>();
                         pillarArray[pillarIndex].Add(null);
                         pillarArray[pillarIndex].Add(null);
+                        Vector3 pillarPosition;
+                        Vector3 pillarRotation;
                         //0 = left pillar
+                        pillarPosition = new Vector3(-1, 1.5f, (j * 2) + 1);
+                        pillarRotation = new Vector3(0, 0, 0);
+                        pillarArray[pillarIndex][0] = Instantiate(pillarPrefab, pillarPosition, Quaternion.Euler(pillarRotation));
                         //1 = right pillar
+                        pillarPosition = new Vector3(13, 1.5f, (j * 2) + 1);
+                        pillarRotation = new Vector3(0, 180, 0);
+                        pillarArray[pillarIndex][1] = Instantiate(pillarPrefab, pillarPosition, Quaternion.Euler(pillarRotation));
                         pillarIndex++;
                     }
                 }

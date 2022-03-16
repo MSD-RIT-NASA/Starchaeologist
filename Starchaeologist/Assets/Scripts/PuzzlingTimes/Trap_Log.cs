@@ -12,7 +12,6 @@ public class Trap_Log : MonoBehaviour
     float lerpRatio = 1f;
     float swingSpeed = 2f;
     bool trapping = false;
-    bool starting = false;
     bool rightSide = true;
     int swingStep = 0;
 
@@ -28,15 +27,13 @@ public class Trap_Log : MonoBehaviour
 
         pauseTimer = 0f;
         trapping = true;
-        starting = true;
         swingStep = 0;
     }
 
     //choose a side
     void Start()
     {
-        int leftOrRight = Random.Range(0,2);
-        if(leftOrRight == 1)
+        if(Random.Range(0, 2) == 1)
         {
             lerpRatio = 1f;
             rightSide = true;
@@ -67,7 +64,7 @@ public class Trap_Log : MonoBehaviour
                 Suspense(1f);
                 break;
             case 1://slow swing
-                if(slowTimer > 1f)
+                if(slowTimer > 0.7f)
                 {
                     swingStep++;
                     Debug.Log("Step 2");

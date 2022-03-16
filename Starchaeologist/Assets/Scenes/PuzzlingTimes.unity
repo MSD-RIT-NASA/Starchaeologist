@@ -603,7 +603,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myPosition: {x: 0, y: 0}
   adjacentPlates: []
-  reactivate: 0
   triggered: 0
   trapped: 0
   tiltRange: 10
@@ -1500,7 +1499,7 @@ MonoBehaviour:
   ceilingPrefab: {fileID: 6548673210526659539, guid: 3a1324afc6ca398498619a186be650ba, type: 3}
   swingPrefab: {fileID: 6548673210526659539, guid: f43ab709a97893141a0dd0d824fd2308, type: 3}
   wallPrefab: {fileID: 6548673210526659539, guid: 0936af85d78e54d4383a8f23aaaab149, type: 3}
-  pillarPrefab: {fileID: 0}
+  pillarPrefab: {fileID: 1026845039597745795, guid: 1c7dcb0b9e329424f8d6f7afb7151945, type: 3}
   perimeterPrefab: {fileID: 2012771316494878327, guid: 8f30519f7aab14042ade3c10effaa8b2, type: 3}
   roomLength: 4
 --- !u!4 &839490669
@@ -2151,7 +2150,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myPosition: {x: 0, y: 0}
   adjacentPlates: []
-  reactivate: 0
   triggered: 0
   trapped: 0
   tiltRange: 10

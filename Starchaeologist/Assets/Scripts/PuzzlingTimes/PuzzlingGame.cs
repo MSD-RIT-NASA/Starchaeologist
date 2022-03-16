@@ -157,7 +157,14 @@ public class PuzzlingGame : MonoBehaviour
                 break;
             case 3:
                 Debug.Log("Pillar Swipe!");
-                currentScript.Reactivate();
+                //figure out which pillar to use
+                int pillarSide = 0;
+                if(xIndex > 3)
+                {
+                    pillarSide = 1;
+                }
+                int pillarDepth = yIndex / 3;
+                pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().DataSetup(currentScript);
                 break;
             default:
                 break;
