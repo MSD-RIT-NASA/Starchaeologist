@@ -10,8 +10,6 @@ public class Trap_Object : MonoBehaviour
         if (other.gameObject.CompareTag("PlayerHead"))
         {
             GameObject.Find("Game Manager").GetComponent<PuzzlingGame>().TrapHit();
-
-            Destroy(this);
         }
     }
 }

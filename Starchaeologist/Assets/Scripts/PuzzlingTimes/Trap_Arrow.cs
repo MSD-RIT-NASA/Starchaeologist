@@ -62,7 +62,7 @@ public class Trap_Arrow : MonoBehaviour
         if(starting)
         {
             //pause for suspense
-            Suspense();
+            Suspense(1.5f);
         }
         else
         {
@@ -76,7 +76,7 @@ public class Trap_Arrow : MonoBehaviour
                     arrows.RemoveAt(0);
                 }
                 trapping = false;
-                plateReference.reactivate = true;
+                plateReference.Reactivate();
                 plateReference = null;
             }
             else
@@ -101,9 +101,9 @@ public class Trap_Arrow : MonoBehaviour
     }
 
     //function that pauses for suspense
-    void Suspense()
+    void Suspense(float pauseFor)
     {
-        if (pauseTimer >= 1.5f)
+        if (pauseTimer >= pauseFor)
         {
             starting = false;
         }

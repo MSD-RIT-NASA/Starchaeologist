@@ -5,11 +5,13 @@ using UnityEngine;
 public class Trap_Ceiling : MonoBehaviour
 {
     public GameObject spearReference;
-    float spawnHeight = 8f;
-    float pokeHeight = 7.5f;
+    float spawnHeight = 8.5f;
+    float pokeHeight = 8f;
     float stabHeight = 3.5f;
 
-    GameObject spearObject;
+    GameObject[] spears;
+    int[] selectedPorts;
+    int[] openPorts;
 
     PlateScript plateReference;
 
@@ -20,8 +22,8 @@ public class Trap_Ceiling : MonoBehaviour
     bool pauseSpear = false;
     float pauseTimer = 0f;
 
-    Vector3 fromHere;
-    Vector3 toThere;
+    Vector3[] fromHere;
+    Vector3[] toThere;
 
     // set up the data every time the trap is activated
     public void DataSetup(PlateScript getCurrent)
@@ -31,11 +33,37 @@ public class Trap_Ceiling : MonoBehaviour
          */
         plateReference = getCurrent;
 
-        spearObject = null;
-        spearObject = Instantiate(spearReference, new Vector3(0, spawnHeight, 0), Quaternion.Euler(0, 0, 0), transform);
+        //select which ports to use
+        fromHere = new Vector3[3];
+        toThere = new Vector3[3];
+        spears = new GameObject[3];
+        selectedPorts = new int[3];
+        int i = 0;
+        while(i < 3)
+        {
+            //the first spike will always be in the center
+            int portIndex = 0;
+            if(i != 0)
+            {
+                portIndex = Random.Range(1, 9);
 
-        fromHere = new Vector3(0, spawnHeight, 0);
-        toThere = new Vector3(0, pokeHeight, 0);
+                //make sure the third is not the same as the second
+                if (i == 2 && portIndex == selectedPorts[1])
+                {
+                    continue;
+                }
+            }
+
+            //if the port selected has not been used
+            selectedPorts[i] = portIndex;
+            Vector3 spearPosition = new Vector3(transform.GetChild(selectedPorts[i]).transform.position.x, spawnHeight, transform.GetChild(selectedPorts[i]).transform.position.z);
+            spears[i] = Instantiate(spearReference, spearPosition, Quaternion.Euler(0, 0, 0));
+
+            fromHere[i] = new Vector3(transform.GetChild(selectedPorts[i]).transform.position.x, spawnHeight, transform.GetChild(selectedPorts[i]).transform.position.z);
+            toThere[i] = new Vector3(transform.GetChild(selectedPorts[i]).transform.position.x, pokeHeight, transform.GetChild(selectedPorts[i]).transform.position.z);
+
+            i++;
+        }
 
         trapping = true;
         lerpRatio = 0f;
@@ -57,17 +85,19 @@ public class Trap_Ceiling : MonoBehaviour
     {
         switch (trapStep)
         {
-            //case 0:
-            //    Suspense();
-            //    break;
             case 0://spawn to poke
                 //check if the location has been reached
                 if(lerpRatio == 1f)
                 {
                     //play an audio cue
                     lerpRatio = 0f;
-                    fromHere = new Vector3(0, pokeHeight, 0);
-                    toThere = new Vector3(0, stabHeight, 0);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        float getX = transform.GetChild(selectedPorts[i]).transform.position.x;
+                        float getZ = transform.GetChild(selectedPorts[i]).transform.position.z;
+                        fromHere[i] = new Vector3(getX, pokeHeight, getZ);
+                        toThere[i] = new Vector3(getX, stabHeight, getZ);
+                    }
                     trapStep++;
                     Debug.Log("step: " + trapStep);
                     break;
@@ -83,8 +113,13 @@ public class Trap_Ceiling : MonoBehaviour
                 {
                     //play an audio cue
                     lerpRatio = 0f;
-                    fromHere = new Vector3(0, stabHeight, 0);
-                    toThere = new Vector3(0, spawnHeight, 0);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        float getX = transform.GetChild(selectedPorts[i]).transform.position.x;
+                        float getZ = transform.GetChild(selectedPorts[i]).transform.position.z;
+                        fromHere[i] = new Vector3(getX, stabHeight, getZ);
+                        toThere[i] = new Vector3(getX, spawnHeight, getZ);
+                    }
                     trapStep++;
                     Debug.Log("step: " + trapStep);
                     break;
@@ -104,10 +139,13 @@ public class Trap_Ceiling : MonoBehaviour
                 }
                 lerpRatio = lerpRatio + (Time.deltaTime * 4);
                 break;
-            case 6://cleanup
-                Destroy(spearObject);
-                spearObject = null;
-                plateReference.reactivate = true;
+            case 5://cleanup
+                for (int i = 0; i < 3; i++)
+                {
+                    Destroy(spears[i]);
+                    spears[i] = null;
+                }
+                plateReference.Reactivate();
                 plateReference = null;
                 trapping = false;
                 return;
@@ -115,7 +153,10 @@ public class Trap_Ceiling : MonoBehaviour
 
         //clamp and lerp
         lerpRatio = Mathf.Clamp(lerpRatio, 0f, 1f);
-        spearObject.transform.localPosition = Vector3.Lerp(fromHere, toThere, lerpRatio);
+        for (int i = 0; i < 3; i++)
+        {
+            spears[i].transform.localPosition = Vector3.Lerp(fromHere[i], toThere[i], lerpRatio);
+        }
     }
 
     //function that pauses for suspense

@@ -6,7 +6,7 @@ public class PlateScript : MonoBehaviour
 {
     public Vector2 myPosition;
     public List<Vector2> adjacentPlates;
-    public bool reactivate = false;
+    //public bool reactivate = false;
     public bool triggered = false;
     PuzzlingGame managerReference;
 
@@ -87,13 +87,13 @@ public class PlateScript : MonoBehaviour
                 wobbleTimer = wobbleTimer + Time.deltaTime;
             }
         }
-        if(reactivate)
-        {
-            Debug.Log("you can move now");
-            reactivate = false;
-            managerReference.ActivatePlates(adjacentPlates);
-            triggered = false;
-        }
+        //if(reactivate)
+        //{
+        //    Debug.Log("you can move now");
+        //    reactivate = false;
+        //    managerReference.ActivatePlates(adjacentPlates);
+        //    triggered = false;
+        //}
     }
 
     //trigger detection
@@ -127,8 +127,15 @@ public class PlateScript : MonoBehaviour
             }
             else
             {
-                reactivate = true;
+                Reactivate();
             }
         }
+    }
+
+    public void Reactivate()
+    {
+        Debug.Log("you can move now");
+        managerReference.ActivatePlates(adjacentPlates);
+        triggered = false;
     }
 }

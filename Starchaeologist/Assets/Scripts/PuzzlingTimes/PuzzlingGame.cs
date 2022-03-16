@@ -153,11 +153,11 @@ public class PuzzlingGame : MonoBehaviour
                 break;
             case 2:
                 Debug.Log("Log Swing!");
-                currentScript.reactivate = true;
+                swingList[yIndex].GetComponent<Trap_Log>().DataSetup(currentScript);
                 break;
             case 3:
                 Debug.Log("Pillar Swipe!");
-                currentScript.reactivate = true;
+                currentScript.Reactivate();
                 break;
             default:
                 break;
