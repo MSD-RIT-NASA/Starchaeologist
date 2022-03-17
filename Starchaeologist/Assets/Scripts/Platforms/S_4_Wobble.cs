@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class S_4_Wobble : MonoBehaviour
 {
-    public float tiltRange = 10f;
+    public float tiltRange = 5f;
     public float tiltSpeed = 1.0f;
+    public bool back2Zero = false;
 
     Quaternion newTilt;
     Quaternion oldTilt;
@@ -16,27 +17,41 @@ public class S_4_Wobble : MonoBehaviour
     float secondaryX;
     float secondaryZ;
 
-    public bool isFigure = false;
+    bool isFigure = false;
+    bool dataReady = false;
 
     bool flip = false;
     int flop = 0;
 
     // Start is called before the first frame update
-    void Awake()
+    public void DataSetup(int myType = 1)
     {
+        if (myType == 1)
+        {
+            isFigure = false;
+        }
+        else
+        {
+            isFigure = true;
+        }
+        back2Zero = false;
         newTilt = Quaternion.Euler(0, 0, 0);
         oldTilt = Quaternion.Euler(0, 0, 0);
         primaryX = Random.Range(-tiltRange, tiltRange);
         primaryZ = Random.Range(-tiltRange, tiltRange);
         secondaryX = Random.Range(-tiltRange, tiltRange);
         secondaryZ = Random.Range(-tiltRange, tiltRange);
+        dataReady = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        tiltRatio = Mathf.Clamp(tiltRatio, 0f, 1f);
-        FourWay();
+        if(dataReady)
+        {
+            tiltRatio = Mathf.Clamp(tiltRatio, 0f, 1f);
+            FourWay();
+        }
     }
 
     //FourWayCircular() simulates a wobbling platform using 2 rotations and their inverses to creat a circular pattern
@@ -46,7 +61,21 @@ public class S_4_Wobble : MonoBehaviour
         if (transform.localRotation == newTilt)
         {
             //find the next rotation
-            if (flip)
+            if(back2Zero)
+            {
+                if(transform.localRotation == Quaternion.Euler(0,0,0))
+                {
+                    //if we're going back to zero and the platform has reached that, disable the script
+                    GetComponent<PlateScript>().desiredRotation = Quaternion.Euler(0, 0, 0);
+                    back2Zero = false;
+                    dataReady = false;
+                    //Debug.Log("I should be off");
+                    enabled = false;
+                    return;
+                }
+                newTilt = Quaternion.Euler(0, 0, 0);
+            }
+            else if (flip)
             {
                 primaryX *= -1f;
                 primaryZ *= -1f;
@@ -79,7 +108,7 @@ public class S_4_Wobble : MonoBehaviour
         }
 
         //lerp
-        transform.localRotation = Quaternion.Slerp(oldTilt, newTilt, tiltRatio);
+        GetComponent<PlateScript>().desiredRotation = Quaternion.Slerp(oldTilt, newTilt, tiltRatio);
 
         //increment time
         tiltRatio = tiltRatio + Time.deltaTime * tiltSpeed;

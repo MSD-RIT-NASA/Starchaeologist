@@ -1,12 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class PuzzlingBuilder : MonoBehaviour
 {
+    /*
+     TO DO:
+        -figure out what traps will go with what plates
+            -place the traps
+     */
+
+    //floor tile variables
     public GameObject tilePrefab;
     List<GameObject>[] tileArray;
     public List<bool>[] trapArray;
+
+    //trap variables
+    public GameObject ceilingPrefab;
+    public GameObject swingPrefab;
+    public GameObject wallPrefab;
+    public GameObject pillarPrefab;
+    List<GameObject>[] ceilingArray;
+    List<GameObject>[] wallArray;
+    List<GameObject> swingList;
+    List<GameObject>[] pillarArray;
+
 
     public GameObject perimeterPrefab;
     List<GameObject> perimeterList = new List<GameObject>();
@@ -14,34 +33,140 @@ public class PuzzlingBuilder : MonoBehaviour
     public int roomLength = 4;
 
     // Start is called before the first frame update
-    void Awake()
+    void DataSetup()
     {
-        
+        tileArray = new List<GameObject>[6];
+        trapArray = new List<bool>[6];
+
+        ceilingArray = new List<GameObject>[6];
+        wallArray = new List<GameObject>[roomLength * 3];
+        swingList = new List<GameObject>();
+        pillarArray = new List<GameObject>[roomLength];
     }
 
     // Update is called once per frame
     void Start()
     {
-        //instantiate the tile array
-        tileArray = new List<GameObject>[6];
-        trapArray = new List<bool>[6];
+        //set up the game script before continuing
+        GetComponent<PuzzlingGame>().DataSetup();
+        DataSetup();
+
+        int lengthValue = (roomLength * 3);
+
+        //start and end adjacent tiles (includes themselves)
+        List<Vector2> startAdjacent = new List<Vector2>();
+        startAdjacent.Add(new Vector2(0, -1));
+        List<Vector2> endAdjacent = new List<Vector2>();
+        endAdjacent.Add(new Vector2(0, lengthValue));
+
         for (int i = 0; i < tileArray.Length; i++)
         {
+
             tileArray[i] = new List<GameObject>();
             trapArray[i] = new List<bool>();
-            for (int j = 0; j < (roomLength * 3); j++)
+            ceilingArray[i] = new List<GameObject>();
+            int pillarIndex = 0;
+
+            for (int j = 0; j < lengthValue; j++)
             {
                 //place the room tiles
                 tileArray[i].Add(null);
                 tileArray[i][j] = Instantiate(tilePrefab);
-                tileArray[i][j].transform.rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
+                //tileArray[i][j].transform.rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
                 tileArray[i][j].transform.position = new Vector3((i * 2) + 1, 0, (j * 2) + 1);
                 trapArray[i].Add(false);
+
+                //place the ceiling traps
+                ceilingArray[i].Add(null);
+                ceilingArray[i][j] = Instantiate(ceilingPrefab);
+                ceilingArray[i][j].transform.position = new Vector3((i * 2) + 1, 0, (j * 2) + 1);
+
+                PlateScript scriptReference = tileArray[i][j].transform.GetChild(0).GetComponent<PlateScript>();
+                scriptReference.GetComponent<TeleportationAnchor>().enabled = false;
+                scriptReference.DataSetup(new Vector2(i, j));
+
+                //create the list of plates adjacent to the created plate
+                List<Vector2> giveAdjacent = new List<Vector2>();
+                //middle
+                giveAdjacent.Add(new Vector2(i, j + 1));
+                giveAdjacent.Add(new Vector2(i, j - 1));
+                //left
+                if(i != 0)
+                {
+                    giveAdjacent.Add(new Vector2(i - 1, j));
+                    //avoid duplicates of the start/end platform
+                    if (j != 0)
+                    {
+                        giveAdjacent.Add(new Vector2(i - 1, j - 1));
+                    }
+                    if(j != lengthValue - 1)
+                    {
+                        giveAdjacent.Add(new Vector2(i - 1, j + 1));
+                    }
+                }
+                //Right
+                if (i != (tileArray.Length - 1))
+                {
+                    giveAdjacent.Add(new Vector2(i + 1, j));
+                    //avoid duplicates of the start/end platform
+                    if (j != 0)
+                    {
+                        giveAdjacent.Add(new Vector2(i + 1, j - 1));
+                    }
+                    if (j != lengthValue - 1)
+                    {
+                        giveAdjacent.Add(new Vector2(i + 1, j + 1));
+                    }
+                }
+                scriptReference.adjacentPlates = giveAdjacent;
+
+                //place the ceiling swings, wall traps, and pillar traps
+                if (i == 0)
+                {
+                    //swings
+                    swingList.Add(null);
+                    swingList[j] = Instantiate(swingPrefab);
+                    swingList[j].transform.position = new Vector3(6, 0, (j * 2) + 1);
+
+                    //walls
+                    wallArray[j] = new List<GameObject>();
+                    if (j % 3 != 1)//avoid the pillar
+                    {
+                        wallArray[j].Add(null);
+                        wallArray[j].Add(null);
+                        //0 = left wall
+                        wallArray[j][0] = Instantiate(wallPrefab);
+                        wallArray[j][0].transform.position = new Vector3(-2, 0, (j * 2) + 1);
+                        wallArray[j][0].GetComponent<Trap_Arrow>().rightSide = false;
+                        //1 = right wall
+                        wallArray[j][1] = Instantiate(wallPrefab);
+                        wallArray[j][1].transform.position = new Vector3(14, 0, (j * 2) + 1);
+                        wallArray[j][1].GetComponent<Trap_Arrow>().rightSide = true;
+                    }
+                    else//pillars
+                    {
+                        /*Pillar building here*/
+                        pillarArray[pillarIndex] = new List<GameObject>();
+                        pillarArray[pillarIndex].Add(null);
+                        pillarArray[pillarIndex].Add(null);
+                        Vector3 pillarPosition;
+                        Vector3 pillarRotation;
+                        //0 = left pillar
+                        pillarPosition = new Vector3(-1, 1.5f, (j * 2) + 1);
+                        pillarRotation = new Vector3(0, 0, 0);
+                        pillarArray[pillarIndex][0] = Instantiate(pillarPrefab, pillarPosition, Quaternion.Euler(pillarRotation));
+                        //1 = right pillar
+                        pillarPosition = new Vector3(13, 1.5f, (j * 2) + 1);
+                        pillarRotation = new Vector3(0, 180, 0);
+                        pillarArray[pillarIndex][1] = Instantiate(pillarPrefab, pillarPosition, Quaternion.Euler(pillarRotation));
+                        pillarIndex++;
+                    }
+                }
             }
 
             //place trap platforms
             int k = 0;
-            while(k < roomLength * 1.5)
+            while(k < roomLength * 2)
             {
                 int kIndex = Random.Range(0, trapArray[i].Count);
                 if(trapArray[i][kIndex])
@@ -49,9 +174,29 @@ public class PuzzlingBuilder : MonoBehaviour
                     continue;
                 }
                 trapArray[i][kIndex] = true;
+                //tileArray[i][kIndex].transform.GetChild(0).gameObject.AddComponent<PlateScript>();
+                tileArray[i][kIndex].transform.GetChild(0).gameObject.GetComponent<PlateScript>().trapped = true;
+
                 k++;
             }
+
+            //add to the start and end adjacent platforms
+            startAdjacent.Add(new Vector2(i, 0));
+            endAdjacent.Add(new Vector2(i, lengthValue - 1));
         }
+
+        //give the adjacent platforms to the start/end platforms
+        PlateScript endScript = GameObject.Find("EndPlatform").transform.GetChild(0).GetComponent<PlateScript>();
+        endScript.adjacentPlates = endAdjacent;
+        endScript.DataSetup(endAdjacent[0]);
+        endScript.GetComponent<TeleportationArea>().enabled = false;
+
+        PlateScript startScript = GameObject.Find("StartPlatform").transform.GetChild(0).GetComponent<PlateScript>();
+        startScript.adjacentPlates = startAdjacent;
+        startScript.DataSetup(startAdjacent[0]);
+
+        //move the last platform to the end of the room
+        GameObject.Find("EndPlatform").transform.position = new Vector3(6, 0, roomLength * 6);
 
         //place the outer walls of the room
         for (int i = 0; i < roomLength; i++)
@@ -62,7 +207,17 @@ public class PuzzlingBuilder : MonoBehaviour
             perimeterList[i].transform.position = new Vector3(6, 0, zPosition);
         }
 
-        //move the last platform to the end of the room
-        GameObject.Find("EndPlatform").transform.position = new Vector3(6, 0, roomLength * 6);
+        //send the data over to the game script
+        GetComponent<PuzzlingGame>().tileArray = tileArray;
+        GetComponent<PuzzlingGame>().ceilingArray = ceilingArray;
+        GetComponent<PuzzlingGame>().wallArray = wallArray;
+        GetComponent<PuzzlingGame>().swingList = swingList;
+        GetComponent<PuzzlingGame>().pillarArray = pillarArray;
+
+
+        GetComponent<PuzzlingGame>().ActivatePlates(startScript.adjacentPlates);
+
+        //delete the script at the end
+        Destroy(this);
     }
 }
