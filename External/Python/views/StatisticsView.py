@@ -4,6 +4,8 @@ from pubsub import pub
 import multiprocessing as mp
 # import mplcursors
 
+import numpy as np
+
 # from matplotlib.widgets import Cursor
 
 import logging
@@ -79,7 +81,6 @@ class StatisticsView(wx.Frame):
    def onClose(self, event):
       logging.info("Closing Statistics View")
       self.Show(False)
-      exit(0)
 
 class BalancePanel(wx.Panel):
    def __init__(self, parent):
@@ -91,7 +92,6 @@ class BalancePanel(wx.Panel):
       self.axes = self.figure.subplots()
       self.lines = []
       self.canvas = FigureCanvas(self, -1, self.figure)
-      # self.canvas = self.figure.canvas
 
       self.default = wx.StaticText(self, label="No Results to Display", style=wx.ALIGN_CENTER)
       
@@ -99,52 +99,20 @@ class BalancePanel(wx.Panel):
       self.default.Show(False)
       
       vert_sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.EXPAND)
-      # self.canvas.draw()
       self.SetSizerAndFit(vert_sizer)
       
-      self.canvas.draw()
-      self.canvas.mpl_connect("motion_notify_event", self.hover)
-
-
-
       self.vert_sizer = vert_sizer
       self.annot_x = (plt.xlim()[1] + plt.xlim()[0])/2
       self.annot_y = (plt.ylim()[1] + plt.ylim()[0])/2
-      # self.annot = self.axes.annotate("", xy=(0,0), xytext=(20,20),textcoords="offset points",
-      #               bbox=dict(boxstyle="round", fc="w"),
-      #               arrowprops=dict(arrowstyle="->"))
-      # self.annot = self.axes.annotate("", xy=(0,0), xytext=(5,5),textcoords="offset points")
-      # self.annot.set_visible(False)
-      # xfmt = mdates.DateFormatter('%Y-%m-%d %H:%M:%S')
-      # self.axes.xaxis.set_major_formatter(xfmt)
-      
-   def displayBreakdown(self, event):
-      print("Something")
-      thisline = event.artist
-      xdata = thisline.get_xdata()
-      # print(xdata)
-      # event.mo
-      ydata = thisline.get_ydata()
-      # print(ydata)
-      xVal = event.mouseevent.xdata
-      ind = round(event.mouseevent.xdata)
-      print(mdates.num2date(xVal))
-      print(mdates.num2date(ind))
-      print(xdata)
-      # print(xdata[1])
-      # print(xdata[2])
-      # print(xdata[3])
-      # # print(type(xDate))
-      # print(xdata)
-      # mdates.num2
-      # # print(type(xdata[0]))
-      # # print(type(xDate))
-      # if date in xdata:
-      #    index = xdata.index(date)
-      #    print(index)
+      self.annot = self.axes.annotate("", xy=(0,0), xytext=(-20,20), 
+         textcoords="offset points", bbox=dict(boxstyle="round", fc="w"),
+         arrowprops=dict(arrowstyle="->"))  
+      self.annot.set_visible(False)
+
+      self.canvas.mpl_connect("motion_notify_event", self.hover)
+ 
+      self.canvas.draw()
          
-         # wx.MessageBox('x :'+ str(xdata[ind]) + ' y: ' + str(ydata[ind]), 'Info',wx.OK | wx.ICON_INFORMATION)
-      
    def noResults(self):
       self.axes.clear()
       self.axes.text(self.annot_x, self.annot_y, "No Data", 
@@ -152,7 +120,6 @@ class BalancePanel(wx.Panel):
       self.canvas.draw()
 
    def plotScore(self, scores):
-      print(scores)
       self.axes.text(self.annot_x, self.annot_y,"",ha='center', fontsize=36, color='#DD4012')
       self.default.Show(False)
       colors = ['r', 'b', 'g']
@@ -165,56 +132,34 @@ class BalancePanel(wx.Panel):
          
          line, = self.axes.plot(dateScore, yScore, colors[i], ls = ':', picker = True, pickradius =3, marker = 'o')
          line.set_label(labels[i])
-         # self.lines.append(line)
          
       self.axes.xaxis.set_major_locator(mdates.DayLocator(bymonthday=range(1, 32)))
       self.axes.xaxis.set_minor_locator(mdates.DayLocator())
       self.axes.grid(True)
       self.axes.legend()
       self.canvas.draw()
-      # mplcursors.cursor(hover=True)
       
-      # self.annot = self.axes.annotate("", xy=(0,0), xytext=(5,5),textcoords="offset points")
-      # self.annot.set_visible(False)
-      # mplcursors.cursor(hover=True)
-      # self.canvas.mpl_connect('pick_event', self.displayBreakdown)
-
    def hover(self, event):
-      for line in self.axes.get_lines():
-         if line.contains(event)[0]:
-            linePointsX = line.get_xdata()
-            linePointsY = line.get_ydata()
-            idx = min(range(len(linePointsX)), key=lambda i: abs(mdates.date2num(linePointsX[i])-event.xdata))
-            
-            # self.axes.text(event.xdata, event.ydata, "No Data" + str(linePointsY[idx]), 
-            #       ha='center', fontsize=12, color='#DD4012')
-            # self.canvas.draw()
-            # self.axes.text(event.xdata,event.ydata + 0.5, "Date:" + str(linePointsY[idx]))
-            # self.annot.xy = (event.xdata, event.ydata)
-            # print(self.annot.xy)
-            # self.axes.annotate("", xy=(linePointsX[idx],
-            #    linePointsY[idx]+40),
-            #    xytext=(linePointsX[idx],
-            #    linePointsY[idx]+500), 
-            #    arrowprops=dict(arrowstyle='simple', color='black'))
-            # line.annotate("%i" % 10, (10 + 10, 10 + 10), ha= 'center')
-            # write the name of every point contained in the event
-            # self.annot.set_text("{}".format(', '.join([str(linePointsY[n]) for n in [idx]])))
-            # # self.annot.set_text("Date:" + str(linePointsY[idx]))
-            # self.annot.set_visible(True)    
-         else:
-            continue
-            # self.axes.text(self.annot_x, self.annot_y,"",ha='center', fontsize=36, color='#DD4012')
-            # self.canvas.draw()
+      vis = self.annot.get_visible()
+      if event.inaxes == self.axes:
+         for line in self.axes.get_lines():
+            cont, ind = line.contains(event)
+            if cont:
+               self.update_annot(ind, line)
+               self.annot.set_visible(True)
+               self.canvas.draw_idle()
+            else:
+               if vis:
+                  self.annot.set_visible(False)
+                  self.canvas.draw_idle()
 
-         #    pass
-   
-            # print(idx)
-            # print(event.xdata)
-      # pass
-
-      # 
-        
+   def update_annot(self, ind, line):
+      x, y = line.get_data()
+      self.annot.xy = (x[ind["ind"][0]], y[ind["ind"][0]])
+      text = str(x[ind["ind"][0]]) + ", "+ str(y[ind["ind"][0]])
+      self.annot.set_text(text)
+      self.annot.get_bbox_patch().set_alpha(0.4)
+              
 if __name__ == '__main__':
    app = wx.App()
    view = StatisticsView(None)

@@ -1,5 +1,6 @@
 import logging
 import multiprocessing
+import threading
 import wx
 import wx.adv
 from views import DefaultView, HubView, LoginView, StatisticsView
@@ -25,7 +26,7 @@ class Controller:
         self.server = Server.Server(debug=self.debug)
         self.server.start()
         time.sleep(1)
-        self.killSwitch = KillSwitch.KillSwitchMonitor()
+        self.killSwitch = KillSwitch.KillSwitchMonitor(debug=self.debug)
         self.killSwitch.start()
         
         gameOneScores, gameTwoScores, gameThreeScores = self.db.getTopScores()
@@ -60,6 +61,7 @@ class Controller:
         val = self.db.findUserID(username)
         if val is not None:
             if password == val[0][2]:
+                logging.info("User Logging In")
                 self.currentUser = str(val[0][0])
                 self.mainView.Show(False)
                 self.loginView.Close()            
@@ -72,8 +74,10 @@ class Controller:
                 self.plottingProcesses.append(proc1)
                 proc2 = multiprocessing.Process(target=self.setUserBalanceStatistics(), args=())
                 self.plottingProcesses.append(proc2)
-                proc1.start() 
-                proc2.start()
+                th1 = threading.Thread(target=proc1.start)
+                th2 = threading.Thread(target=proc2.start)
+                th1.start()
+                th2.start()
                 
                 self.hubView.Show(True)
             else:
@@ -81,6 +85,7 @@ class Controller:
                 resp.ShowModal()
                 resp.Destroy()
         else:
+            logging.info("New User Logging In")
             val = self.db.addUser(username, password)
             # New User Added Popup?
             resp = wx.MessageDialog(None,"New User Added to Database","Welcome to the Training System " + username + "!", wx.OK)
@@ -109,6 +114,7 @@ class Controller:
         window = wx.MessageDialog(None, "Are you sure you want to logout?", "Logout" , wx.YES_NO|wx.YES_DEFAULT)
         resp = window.ShowModal()
         if resp == wx.ID_YES:
+            logging.info("User Logging Out")
             self.currentUser = None
             self.hubView.Show(False)
             self.mainView.Show(True)

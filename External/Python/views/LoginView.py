@@ -33,6 +33,7 @@ class LoginView(wx.Dialog):
       self.SetSizerAndFit(main_sizer)
       self.Centre()
       # self.btn = wx.Button(panel, wx.ID_OK, label = "ok", size = (50,20), pos = (75,50))
+   
    def onLogin(self, event):
       """
       Check credentials and login
