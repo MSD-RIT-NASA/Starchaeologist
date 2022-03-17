@@ -88,20 +88,24 @@ class BalancePanel(wx.Panel):
       vert_sizer = wx.BoxSizer(wx.VERTICAL)
       self.figure = Figure()
 
-      self.figure, self.axes = plt.subplots(1)
-
+      self.axes = self.figure.subplots()
       self.lines = []
       self.canvas = FigureCanvas(self, -1, self.figure)
-      
+      # self.canvas = self.figure.canvas
+
       self.default = wx.StaticText(self, label="No Results to Display", style=wx.ALIGN_CENTER)
       
       vert_sizer.Add(self.default, 1, wx.EXPAND | wx.CENTER)
       self.default.Show(False)
       
       vert_sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.EXPAND)
-      self.canvas.draw()
+      # self.canvas.draw()
       self.SetSizerAndFit(vert_sizer)
       
+      self.canvas.draw()
+      self.canvas.mpl_connect("motion_notify_event", self.hover)
+
+
 
       self.vert_sizer = vert_sizer
       self.annot_x = (plt.xlim()[1] + plt.xlim()[0])/2
@@ -109,8 +113,8 @@ class BalancePanel(wx.Panel):
       # self.annot = self.axes.annotate("", xy=(0,0), xytext=(20,20),textcoords="offset points",
       #               bbox=dict(boxstyle="round", fc="w"),
       #               arrowprops=dict(arrowstyle="->"))
-      self.annot = self.axes.annotate("", xy=(0,0), xytext=(5,5),textcoords="offset points")
-      self.annot.set_visible(False)
+      # self.annot = self.axes.annotate("", xy=(0,0), xytext=(5,5),textcoords="offset points")
+      # self.annot.set_visible(False)
       # xfmt = mdates.DateFormatter('%Y-%m-%d %H:%M:%S')
       # self.axes.xaxis.set_major_formatter(xfmt)
       
@@ -142,14 +146,14 @@ class BalancePanel(wx.Panel):
          # wx.MessageBox('x :'+ str(xdata[ind]) + ' y: ' + str(ydata[ind]), 'Info',wx.OK | wx.ICON_INFORMATION)
       
    def noResults(self):
-      self.axes.cla()
+      self.axes.clear()
       self.axes.text(self.annot_x, self.annot_y, "No Data", 
                   ha='center', fontsize=36, color='#DD4012')
-      # self.default.Show(True)
+      self.canvas.draw()
 
    def plotScore(self, scores):
       print(scores)
-      self.axes.text(self.annot_x, self.annot_y,"")
+      self.axes.text(self.annot_x, self.annot_y,"",ha='center', fontsize=36, color='#DD4012')
       self.default.Show(False)
       colors = ['r', 'b', 'g']
       labels = ["G1", "G2", "G3"]
@@ -161,20 +165,19 @@ class BalancePanel(wx.Panel):
          
          line, = self.axes.plot(dateScore, yScore, colors[i], ls = ':', picker = True, pickradius =3, marker = 'o')
          line.set_label(labels[i])
-         self.lines.append(line)
+         # self.lines.append(line)
          
       self.axes.xaxis.set_major_locator(mdates.DayLocator(bymonthday=range(1, 32)))
       self.axes.xaxis.set_minor_locator(mdates.DayLocator())
       self.axes.grid(True)
       self.axes.legend()
-      
-      # mplcursors.cursor(hover=True)
       self.canvas.draw()
-      self.annot = self.axes.annotate("", xy=(0,0), xytext=(5,5),textcoords="offset points")
-      self.annot.set_visible(False)
+      # mplcursors.cursor(hover=True)
+      
+      # self.annot = self.axes.annotate("", xy=(0,0), xytext=(5,5),textcoords="offset points")
+      # self.annot.set_visible(False)
       # mplcursors.cursor(hover=True)
       # self.canvas.mpl_connect('pick_event', self.displayBreakdown)
-      self.canvas.mpl_connect("motion_notify_event", self.hover)
 
    def hover(self, event):
       for line in self.axes.get_lines():
@@ -182,8 +185,12 @@ class BalancePanel(wx.Panel):
             linePointsX = line.get_xdata()
             linePointsY = line.get_ydata()
             idx = min(range(len(linePointsX)), key=lambda i: abs(mdates.date2num(linePointsX[i])-event.xdata))
+            
+            # self.axes.text(event.xdata, event.ydata, "No Data" + str(linePointsY[idx]), 
+            #       ha='center', fontsize=12, color='#DD4012')
+            # self.canvas.draw()
             # self.axes.text(event.xdata,event.ydata + 0.5, "Date:" + str(linePointsY[idx]))
-            self.annot.xy = (event.xdata, event.ydata)
+            # self.annot.xy = (event.xdata, event.ydata)
             # print(self.annot.xy)
             # self.axes.annotate("", xy=(linePointsX[idx],
             #    linePointsY[idx]+40),
@@ -195,8 +202,11 @@ class BalancePanel(wx.Panel):
             # self.annot.set_text("{}".format(', '.join([str(linePointsY[n]) for n in [idx]])))
             # # self.annot.set_text("Date:" + str(linePointsY[idx]))
             # self.annot.set_visible(True)    
-         # else:
-         #    # self.annot.set_visible(False)
+         else:
+            continue
+            # self.axes.text(self.annot_x, self.annot_y,"",ha='center', fontsize=36, color='#DD4012')
+            # self.canvas.draw()
+
          #    pass
    
             # print(idx)
@@ -208,15 +218,24 @@ class BalancePanel(wx.Panel):
 if __name__ == '__main__':
    app = wx.App()
    view = StatisticsView(None)
-   # bScore = [None, None, None]
-   # gScore = [None, None, None]
-   # view.plotBalanceScore(bScore)
-   # view.plotGameScore(gScore)
+   
+   bScore = [None, None, None]
+   gScore = [None, None, None]
+   view.plotBalanceScore(bScore)
+   view.plotGameScore(gScore)
+
    bScore = [[(1646934163, 365), (1647012919, 91), (1647012919, 5), (1647099955, 70)], [(1647012919, 55), (1647012919, 51), (1647012919, 59), (1647099955, 50)], [(1647012919, 50), (1647099955, 30)]]
    gScore = [[(1646934163, 65), (1647012919, 56), (1647099955, 10)], [(1647012919, 15), (1647012919, 19), (1647012919, 15), (1647099955, 60)], [(1647012919, 18), (1647012919, 81), (1647099955, 30)]]
    view.plotBalanceScore(bScore)
    view.plotGameScore(gScore)
+
+   # bScore = [None, None, None]
+   # gScore = [None, None, None]
+   # view.plotBalanceScore(bScore)
+   # view.plotGameScore(gScore)
+
    view.Show()
+
    app.MainLoop()
    
    # app=wx.PySimpleApp()
