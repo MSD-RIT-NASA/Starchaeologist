@@ -18,7 +18,14 @@ public class Trap_Arrow : MonoBehaviour
     float currentX = 0;
     float arrowSpeed = 16f;
 
+    public AudioSource arrow;
+
     PlateScript plateReference;
+
+    void Start()
+    {
+        arrow = GetComponent<AudioSource>();
+    }
 
     public void DataSetup(PlateScript getCurrent)
     {
@@ -63,6 +70,7 @@ public class Trap_Arrow : MonoBehaviour
         {
             //pause for suspense
             Suspense(1.5f);
+            arrow.Play();
         }
         else
         {

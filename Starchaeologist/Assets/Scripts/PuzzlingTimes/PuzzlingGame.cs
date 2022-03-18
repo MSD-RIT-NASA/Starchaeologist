@@ -22,6 +22,13 @@ public class PuzzlingGame : MonoBehaviour
     public GameObject startPlatform;
     public GameObject endPlatform;
 
+    public AudioSource trap_warning;
+
+    void Start()
+    {
+        trap_warning = GetComponent<AudioSource>();
+    }
+
     // Start is called before the first frame update
     public void DataSetup()
     {
@@ -135,6 +142,7 @@ public class PuzzlingGame : MonoBehaviour
         int xIndex = (int)currentPosition.x;
         int yIndex = (int)currentPosition.y;
         int thisTrap = currentScript.trapList[Random.Range(0,currentScript.trapList.Count)];
+        trap_warning.Play();
 
         //set up the trap list
         //0 = ceiling spikes

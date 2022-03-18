@@ -18,7 +18,10 @@ public class Trap_Log : MonoBehaviour
     float pauseTimer = 0f;
     float slowTimer = 0f;
 
+    public AudioSource log;
+
     PlateScript plateReference;
+
 
     // Start is called before the first frame update
     public void DataSetup(PlateScript getCurrent)
@@ -33,7 +36,9 @@ public class Trap_Log : MonoBehaviour
     //choose a side
     void Start()
     {
-        if(Random.Range(0, 2) == 1)
+        log = GetComponent<AudioSource>();
+
+        if (Random.Range(0, 2) == 1)
         {
             lerpRatio = 1f;
             rightSide = true;
@@ -62,9 +67,10 @@ public class Trap_Log : MonoBehaviour
         {
             case 0://pause for suspense
                 Suspense(1f);
+                log.PlayDelayed(.4f);
                 break;
             case 1://slow swing
-                if(slowTimer > 0.7f)
+                if (slowTimer > 0.7f)
                 {
                     swingStep++;
                     Debug.Log("Step 2");
