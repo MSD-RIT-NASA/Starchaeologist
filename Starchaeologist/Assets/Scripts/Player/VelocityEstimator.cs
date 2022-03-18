@@ -37,7 +37,6 @@ public class VelocityEstimator : MonoBehaviour
         {
             estimating = shouldEstimate;
             estVelocityBank.Clear();
-            Debug.Log($"Turned {(shouldEstimate ? "on" : "off")} {gameObject.name}'s VelocityEstimator.");
         }
     }
 
@@ -47,6 +46,10 @@ public class VelocityEstimator : MonoBehaviour
         {
             UpdateVelocityBank();
             CurrentAvgVelocity = GetAverageFromBank();
+
+            if (currentAvgVel is Vector3 cAvg)
+                DebugEntryManager.updateEntry?.Invoke($"V Estimator", $"V = <color=#FF0000>{cAvg.x}</color>, " +
+                    $"<color=#00FF00>{cAvg.y}</color>, <color=#0000FF>{cAvg.z}</color>)", 3);
         }
     }
 
