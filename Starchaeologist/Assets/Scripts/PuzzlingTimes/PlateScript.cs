@@ -33,7 +33,7 @@ public class PlateScript : MonoBehaviour
     public void DataSetup(Vector2 getPosition)
     {
         myPosition = getPosition;
-        managerReference = GameObject.Find("GameManager").GetComponent<PuzzlingGame>();
+        managerReference = GameObject.Find("Game Manager").GetComponent<PuzzlingGame>();
         twoWayScript = GetComponent<S_2_Wobble>();
         fourWayScript = GetComponent<S_4_Wobble>();
         desiredRotation = Quaternion.Euler(0, 0, 0);
@@ -100,7 +100,7 @@ public class PlateScript : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //check of the collider is the player
-        if (other.gameObject.CompareTag("Player") && !triggered)
+        if (other.gameObject.CompareTag("PlayerBody") && !triggered)
         {
             triggered = true;
 
