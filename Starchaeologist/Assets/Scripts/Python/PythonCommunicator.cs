@@ -28,7 +28,7 @@ public class PythonCommunicator : MonoBehaviour
 
     //rotation
     public Vector2 desiredRotation = new Vector2(0, 0);
-    Vector2 realRotation = new Vector2(0, 0);
+    public Vector2 realRotation = new Vector2(0, 0);
 
     //score
     bool transferScore = false;
@@ -84,6 +84,7 @@ public class PythonCommunicator : MonoBehaviour
                 //send messages
                 if(quitGame)//the game is quitting
                 {
+                    quitGame = false;
                     Debug.Log("Quit Game");
                     threadRunning = false;
                     NetMQConfig.Cleanup();
@@ -149,6 +150,32 @@ public class PythonCommunicator : MonoBehaviour
 
     void SplitMessage(string message)
     {
+        //split the string into two floats
+        string[] splitMessage = message.Split(' ');
 
+        if (splitMessage[0] == "calibrateStop")//get the score data back and do something with it
+        {
+            balanceScore = float.Parse(splitMessage[1], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+        }
+        else if(splitMessage[0] == "rotation")//get the rotation back and set it
+        {
+            float xRotation = float.Parse(splitMessage[1], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+            float zRotation = float.Parse(splitMessage[2], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+
+            //The python sends negatives back as larger angles, this turns them back to negatives
+            if (xRotation > 180f)
+            {
+                xRotation = xRotation - 360f;
+            }
+            if (zRotation > 180f)
+            {
+                zRotation = zRotation - 360f;
+            }
+
+            //set the rotation of the raft to the given rotation
+            realRotation = new Vector2(xRotation, zRotation);
+
+            Debug.Log("Received: " + "xRotation(" + xRotation + "), zRotation(" + zRotation + ")");
+        }
     }
 }
