@@ -25,6 +25,13 @@ public class Trap_Ceiling : MonoBehaviour
     Vector3[] fromHere;
     Vector3[] toThere;
 
+    public AudioSource spike;
+
+    void Start()
+    {
+        spike = GetComponent<AudioSource>();
+    }
+
     // set up the data every time the trap is activated
     public void DataSetup(PlateScript getCurrent)
     {
@@ -90,6 +97,7 @@ public class Trap_Ceiling : MonoBehaviour
                 if(lerpRatio == 1f)
                 {
                     //play an audio cue
+
                     lerpRatio = 0f;
                     for (int i = 0; i < 3; i++)
                     {
@@ -106,6 +114,7 @@ public class Trap_Ceiling : MonoBehaviour
                 break;
             case 1:
                 Suspense(2f);
+                spike.Play();
                 break;
             case 2://poke to stab
                 //check if the location has been reached

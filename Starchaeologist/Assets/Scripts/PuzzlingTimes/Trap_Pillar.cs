@@ -12,6 +12,9 @@ public class Trap_Pillar : MonoBehaviour
     float swingSpeed = 2f;
     float extendSpeed = 2f;
 
+    //Game Sound Effects
+    public AudioSource pillar;
+
     PlateScript plateReference;
 
     public void DataSetup(PlateScript getCurrent)
@@ -25,6 +28,9 @@ public class Trap_Pillar : MonoBehaviour
 
     void Start()
     {
+        //Set up Audio Components
+        pillar = GetComponent<AudioSource>();
+
         //decided where the blade will start
         if (Random.Range(0, 2) == 1)//left side of the pillar
         {
@@ -66,6 +72,7 @@ public class Trap_Pillar : MonoBehaviour
                 break;
             case 1://brief pause
                 Suspense(0.5f);
+                pillar.Play();
                 break;
             case 2://swing blade
                 if (rightSide)
@@ -93,7 +100,7 @@ public class Trap_Pillar : MonoBehaviour
                 transform.GetChild(0).transform.localRotation = Quaternion.Euler(new Vector3(0, lerpRatio * 180f, 0));
                 break;
             case 3://brief pause
-                Suspense(0.5f);
+                pillar.Play();
                 break;
             case 4://retract blade
                 if (lerpRatio == 0f)
