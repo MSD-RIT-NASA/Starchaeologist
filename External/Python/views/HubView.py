@@ -33,8 +33,9 @@ class HubView(wx.Frame):
       hbox.Add(fgs, proportion = 2, flag = wx.ALL|wx.EXPAND, border = 15) 
       
       panel.SetSizerAndFit(hbox)
-      self.Centre()
+      
       self.SetSizerAndFit(hbox)
+      self.Centre()
       
       
     def statisticsOpen(self, event):

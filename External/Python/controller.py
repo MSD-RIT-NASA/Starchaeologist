@@ -81,7 +81,7 @@ class Controller:
                 
                 self.hubView.Show(True)
             else:
-                resp = wx.MessageDialog(None, "Incorrect Password for this Username. Please try again.", "Failed Login" , wx.OK)
+                resp = wx.MessageDialog(None, "Incorrect Password for this Username. Please try again.", "Incorrect Login Credentials" , wx.OK)
                 resp.ShowModal()
                 resp.Destroy()
         else:
@@ -95,7 +95,6 @@ class Controller:
             self.currentUser = str(val[0][0])
             self.mainView.Show(False)
             self.loginView.Close()
-            # self.hubView.Show(True)
                             
             # Set statistics functon works
             self.bPlotted = False
@@ -138,7 +137,7 @@ class Controller:
         self.gPlotted = True
 
     def statisticsOpen(self):
-        logging.info("Opening Statistics")
+        logging.info("Opening Statistics View")
         dialog = wx.ProgressDialog("Loading Statistics", "", maximum=100, style=wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME)
         cancelled = False
         while (self.bPlotted == False or self.gPlotted == False) and cancelled == False:

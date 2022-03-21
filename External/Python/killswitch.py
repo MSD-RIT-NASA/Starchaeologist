@@ -24,19 +24,17 @@ class KillSwitchMonitor(Thread):
     def run(self):
         logging.info("Starting Kill Switch Thread")
         while not self.end:
-            if not self.debug:
-                command = self.arduino.readline().decode("utf-8")
-                if command == "1":
-                    pub.sendMessage('killSwitch.check',message="live")
-                elif command == "2":
-                    pub.sendMessage('killSwitch.check',message="kill")
+            command = self.arduino.readline().decode("utf-8")
+            if command == "1":
+                pub.sendMessage('killSwitch.check',message="live")
+            elif command == "2":
+                pub.sendMessage('killSwitch.check',message="kill")
             time.sleep(0.05)
 
-    
     def endThread(self):
         logging.info("Ending Kill Switch Thread")
         self.end = True
             
 if __name__ == '__main__':
-    killSwitch = KillSwitchMonitor()
+    killSwitch = KillSwitchMonitor(False)
     killSwitch.start()

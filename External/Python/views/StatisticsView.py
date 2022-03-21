@@ -45,12 +45,15 @@ class StatisticsView(wx.Frame):
       self.Bind(wx.EVT_CLOSE, self.onClose)
       self.Bind(wx.EVT_RADIOBUTTON, self.onSwitchPanels)
       self.SetSizerAndFit(self.sizer)
+      self.Centre()
       
       pub.subscribe(self.plotGameScore, "statistics.game")
       pub.subscribe(self.plotBalanceScore, "statistics.balance")
 
    def onSwitchPanels(self, event):
-      """"""
+      """
+      Switch between Game Score and Balance Score Panels
+      """
       radioBox = event.GetEventObject() 
       if radioBox.GetLabel() == "Game Score":
          self.SetTitle("Panel Two Showing")
@@ -63,6 +66,9 @@ class StatisticsView(wx.Frame):
       self.Layout()
    
    def plotBalanceScore(self, score):
+      """
+      Plot Balance Score
+      """
       logging.info("Plotting Balance Score Statistics")
       if score[0] is not None and score[1] is not None and score[2] is not None:
          self.panel_one.plotScore(score)
@@ -71,6 +77,9 @@ class StatisticsView(wx.Frame):
       logging.info("Caching Balance Score Statistics")
    
    def plotGameScore(self, score):
+      """
+      Plot Game Score
+      """
       logging.info("Plotting Game Score Statistics")
       if score[0] is not None and score[1] is not None and score[2] is not None:
          self.panel_two.plotScore(score)
@@ -79,6 +88,9 @@ class StatisticsView(wx.Frame):
       logging.info("Caching Game Score Statistics")
 
    def onClose(self, event):
+      """
+      Close Statistics View
+      """
       logging.info("Closing Statistics View")
       self.Show(False)
 
@@ -114,12 +126,18 @@ class BalancePanel(wx.Panel):
       self.canvas.draw()
          
    def noResults(self):
+      """
+      Display when user has no scores in the panel 
+      """
       self.axes.clear()
       self.axes.text(self.annot_x, self.annot_y, "No Data", 
                   ha='center', fontsize=36, color='#DD4012')
       self.canvas.draw()
 
    def plotScore(self, scores):
+      """
+      Plot scores into the axis, where each line represents a different game
+      """
       self.axes.text(self.annot_x, self.annot_y,"",ha='center', fontsize=36, color='#DD4012')
       self.default.Show(False)
       colors = ['r', 'b', 'g']

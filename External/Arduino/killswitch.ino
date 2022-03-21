@@ -2,10 +2,10 @@
   Kill Switch Monitor
 */
 
-int aliveOutputPin = 43; 
-int aliveInputPin = 35;
-int killOutputPin = 51;
-int killInputPin = 29;
+int aliveOutputPin = 7; 
+int aliveInputPin = 8;
+int killOutputPin = 5;
+int killInputPin = 10;
 int kill = 0;      // variable to store the read value
 int alive = 0;      // variable to store the read value
 int readingAlive = 1;
@@ -18,14 +18,15 @@ void setup(){
 }
 
 void loop(){
+//Alive: 1 Kill: 2
   if(readingAlive == 1){
     alive = 0;
     digitalWrite(aliveOutputPin, HIGH);   // sets the LED on
     alive = digitalRead(aliveInputPin);   // read the input pin
     if(alive == 1){
-      Serial.write("1");
+      Serial.print("2");
     } else{
-      Serial.write("2");
+      Serial.print("1");
       readingAlive = 0;
     }
   } else{
@@ -33,9 +34,9 @@ void loop(){
     digitalWrite(killOutputPin, HIGH);   // sets the LED on
     kill = digitalRead(killInputPin);   // read the input pin
     if(kill == 1){
-      Serial.write("2");
+      Serial.print("1");
     } else{
-      Serial.write("1");
+      Serial.print("2");
       readingAlive = 1;
     }
   }
