@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'UNITY_INSTANCE_ID' with 'UNITY_VERTEX_INPUT_INSTANCE_ID'
+
 Shader "LowPolyWater/WaterShaded" {
 Properties { 
 
@@ -23,7 +25,10 @@ CGINCLUDE
 
 
 	sampler2D _ShoreTex;
-	sampler2D_float _CameraDepthTexture;
+	//Changed at the suggestion of http://answers.unity.com/answers/1560010/view.html; this is ultimately what 
+	// fixed the pink missing texture effect
+	//sampler2D_float _CameraDepthTexture;
+	UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
   
 	uniform float4 _BaseColor;  
     uniform float _Shininess;
@@ -42,6 +47,11 @@ CGINCLUDE
 	{
 		float4 vertex : POSITION;
 		float3 normal : NORMAL;
+		
+		//VR compatibility addtion; see below
+		//https://www.reddit.com/r/vive_vr/comments/p9jkyg/unity_a_gameobject_is_only_being_rendered_in_one/h9z7hbj/
+		//https://docs.unity3d.com/Manual/SinglePassInstancing.html
+		UNITY_VERTEX_INPUT_INSTANCE_ID
 	};
  
 	
@@ -58,6 +68,10 @@ CGINCLUDE
         float3 normalDir : TEXCOORD8;
 
 		UNITY_FOG_COORDS(5)
+		//VR compatibility addtion; see below
+		//https://www.reddit.com/r/vive_vr/comments/p9jkyg/unity_a_gameobject_is_only_being_rendered_in_one/h9z7hbj/
+		//https://docs.unity3d.com/Manual/SinglePassInstancing.html
+		UNITY_VERTEX_OUTPUT_STEREO
 	}; 
  
 	inline half4 Foam(sampler2D shoreTex, half4 coords) 
@@ -68,9 +82,16 @@ CGINCLUDE
 
 	v2f vert(appdata_full v)
 	{
-		v2f o;
-		UNITY_INITIALIZE_OUTPUT(v2f, o);
+		/*v2f o;
+		UNITY_INITIALIZE_OUTPUT(v2f, o);*/
 
+		//VR compatibility addtion; see below
+		//https://www.reddit.com/r/vive_vr/comments/p9jkyg/unity_a_gameobject_is_only_being_rendered_in_one/h9z7hbj/
+		//https://docs.unity3d.com/Manual/SinglePassInstancing.html
+		v2f o;
+		UNITY_SETUP_INSTANCE_ID(v);
+		UNITY_INITIALIZE_OUTPUT(v2f, o);
+		UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 		
 		half3 worldSpaceVertex = mul(unity_ObjectToWorld,(v.vertex)).xyz;
 		half3 vtxForAni = (worldSpaceVertex).xzz;
@@ -153,6 +174,10 @@ CGINCLUDE
 	half4 frag( v2f i ) : SV_Target
 	{ 
  
+		//VR compatibility addtion; see below
+		//https://docs.unity3d.com/Manual/SinglePassInstancing.html
+		UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
+
 		half4 edgeBlendFactors = half4(1.0, 0.0, 0.0, 0.0);
 		
 		#ifdef WATER_EDGEBLEND_ON
