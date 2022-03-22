@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class S_LeftAction : MonoBehaviour
+public class S_HandAction : MonoBehaviour
 {
     ActionBasedController controller;
     XRRayInteractor teleportRay;
