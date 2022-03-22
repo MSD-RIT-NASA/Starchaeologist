@@ -30,7 +30,7 @@ public class S_Raft : MonoBehaviour
     }
 
     //Raft() simulates the motion of a raft on water by randomly choosing rotations and lerping to those rotations
-    public Vector3 Raft()
+    public void Raft()
     {
         tiltRatio = Mathf.Clamp(tiltRatio, 0f, 1f);
 
@@ -60,6 +60,6 @@ public class S_Raft : MonoBehaviour
         //increment time
         tiltRatio = tiltRatio + Time.deltaTime * tiltSpeed;
 
-        return plannedRotation;
+        //return plannedRotation;
     }
 }

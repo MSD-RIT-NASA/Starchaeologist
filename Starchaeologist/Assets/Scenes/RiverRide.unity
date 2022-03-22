@@ -3172,6 +3172,7 @@ GameObject:
   - component: {fileID: 915549102}
   - component: {fileID: 915549103}
   - component: {fileID: 915549104}
+  - component: {fileID: 915549105}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -3274,6 +3275,20 @@ MonoBehaviour:
   rotationX: 0
   rotationZ: 0
   rotationChanged: 0
+--- !u!114 &915549105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915549101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a4d4b21f28d6f4faf34a56a5b97215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  desiredRotation: {x: 0, y: 0}
+  realRotation: {x: 0, y: 0}
 --- !u!1 &938760415
 GameObject:
   m_ObjectHideFlags: 0
