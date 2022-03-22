@@ -9,6 +9,7 @@ public class scoreScript : MonoBehaviour
     private float showTime = 1f;
     private float hideTime = 0f;
     public static int Score;
+    public static bool scoreMenu=false;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,24 +22,11 @@ public class scoreScript : MonoBehaviour
     void Update()
     {
         
-        if(txt.enabled && (Time.time >= hideTime))
+        if(txt.enabled && (Time.time >= hideTime)&& !scoreMenu)
         {
             txt.enabled = false;
         }
-        /*
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            artifactScore();
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            treasureScore();
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            hitScore();
-        }
-        */
+        
     }
     public void artifactScore()
     {
@@ -54,8 +42,12 @@ public class scoreScript : MonoBehaviour
     {
         Score -= 10;
         txtVisual(10);
+        //enable vignette
     }
+    void vignetteFade()
+    {
 
+    }
     void txtVisual(int points)
     {
         if (points == 10)
@@ -71,5 +63,24 @@ public class scoreScript : MonoBehaviour
         
         txt.enabled = true;
         hideTime = Time.time + showTime;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Treasure"))
+        {
+            treasureScore();
+        }else if (other.gameObject.CompareTag("Artifact"))
+        {
+            artifactScore();
+        }else if (other.gameObject.CompareTag("obstacle")) //possible name for tag
+        {
+            hitScore();
+        }
+        //when the player first comes into contact with the end block, show the score screen
+        if (other.gameObject.CompareTag("PlayerBody"))
+        {
+            scoreMenu = true;
+        }
     }
 }
