@@ -23,7 +23,7 @@ public class PlateScript : MonoBehaviour
 
     S_2_Wobble twoWayScript;
     S_4_Wobble fourWayScript;
-    public Quaternion desiredRotation;
+    public Vector3 desiredRotation;
 
     //the manager scrpt will use this to determine which trap to set off
     public List<int> trapList;
@@ -33,10 +33,10 @@ public class PlateScript : MonoBehaviour
     public void DataSetup(Vector2 getPosition)
     {
         myPosition = getPosition;
-        managerReference = GameObject.Find("GameManager").GetComponent<PuzzlingGame>();
+        managerReference = GameObject.Find("Game Manager").GetComponent<PuzzlingGame>();
         twoWayScript = GetComponent<S_2_Wobble>();
         fourWayScript = GetComponent<S_4_Wobble>();
-        desiredRotation = Quaternion.Euler(0, 0, 0);
+        desiredRotation = new Vector3(0, 0, 0);
         twoWayScript = GetComponent<S_2_Wobble>();
 
         //set up the trap list
@@ -100,7 +100,7 @@ public class PlateScript : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //check of the collider is the player
-        if (other.gameObject.CompareTag("Player") && !triggered)
+        if (other.gameObject.CompareTag("PlayerBody") && !triggered)
         {
             triggered = true;
 

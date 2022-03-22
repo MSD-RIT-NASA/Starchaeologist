@@ -24,9 +24,12 @@ public class PuzzlingGame : MonoBehaviour
 
     public AudioSource trap_warning;
 
+    PythonCommunicator communicateReference;
+
     void Start()
     {
         trap_warning = GetComponent<AudioSource>();
+        communicateReference = GetComponent<PythonCommunicator>();
     }
 
     // Start is called before the first frame update
@@ -125,7 +128,14 @@ public class PuzzlingGame : MonoBehaviour
          */
         if(currentScript.trapped)
         {
-            currentScript.transform.localRotation = currentScript.desiredRotation;
+            //currentScript.transform.localRotation = currentScript.desiredRotation;
+            Vector2 giveRotation = new Vector2(currentScript.desiredRotation.x, currentScript.desiredRotation.z);
+            communicateReference.desiredRotation = giveRotation;
+            currentScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
+        }
+        else
+        {
+            communicateReference.desiredRotation = new Vector2(0, 0);
         }
     }
 

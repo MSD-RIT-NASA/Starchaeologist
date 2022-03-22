@@ -126,7 +126,7 @@ public class PuzzlingBuilder : MonoBehaviour
                     //swings
                     swingList.Add(null);
                     swingList[j] = Instantiate(swingPrefab);
-                    swingList[j].transform.position = new Vector3(6, 0f, (j * 2) + 1);
+                    swingList[j].transform.position = new Vector3(6, 5.5f, (j * 2) + 1);
 
                     //walls
                     wallArray[j] = new List<GameObject>();

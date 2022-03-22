@@ -38,10 +38,12 @@ public class S_RiverGame : MonoBehaviour
     -Send 'quit'
     -Receive 'quit'
     */
-    private HelloRequester pythonCommunicator;
+    //private HelloRequester pythonCommunicator;
     public float rotationX = 0f;
     public float rotationZ = 0f;
     public bool rotationChanged = false;
+
+    PythonCommunicator communicateReference;
 
 
 
@@ -53,7 +55,7 @@ public class S_RiverGame : MonoBehaviour
         raftReference = GameObject.Find("Raft_Fake");
         riverWater = GameObject.Find("RiverWater");
 
-        pythonCommunicator = new HelloRequester();
+        //pythonCommunicator = new HelloRequester();
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
         //pythonCommunicator.Start();
     }
@@ -72,48 +74,13 @@ public class S_RiverGame : MonoBehaviour
                 playerReference.transform.parent = raftReference.transform;
             }
             MoveRaft();
-            //get the expected rotation of the raft
-            Vector3 plannedRotation = raftScript.Raft();
-            //send that rotation to the python script
-            //pythonMessage = plannedRotation.x + " " + plannedRotation.z;
-            if (!pythonCommunicator.Running)//check if the thread is currently running
-            {
-                //if it isn't, start the thread and give a rotation
-                string giveMessage = plannedRotation.x + " " + plannedRotation.z;
-                pythonCommunicator.giveRotation = giveMessage;
-                pythonCommunicator.StartThread();
-            }
-            //set the local rotation of the raft to the new rotation
-            string getMessage = pythonCommunicator.getRotation;
-            if (getMessage != null)//check if the rotation has been sent back
-            {
-                //split the string into two floats
-                string[] getValues = getMessage.Split(' ');
-
-                float xRotation = float.Parse(getValues[0], CultureInfo.InvariantCulture.NumberFormat);
-                float zRotation = float.Parse(getValues[1], CultureInfo.InvariantCulture.NumberFormat);
-
-                //The python sends negatives back as larger angles, this turns them back to negatives
-                if(xRotation > 180f)
-                {
-                    xRotation = xRotation - 360f;
-                }
-                if (zRotation > 180f)
-                {
-                    zRotation = zRotation - 360f;
-                }
-
-                //set the rotation of the raft to the given rotation
-                raftScript.transform.localRotation = Quaternion.Euler(xRotation, 0, zRotation);
-                
-                Debug.Log("Received: " + "xRotation(" + xRotation + "), zRotation(" + zRotation + ")");
-                pythonCommunicator.getRotation = null;
-            }
-            //raftScript.transform.localRotation = Quaternion.Euler(pythonRotation);
+            //make the raft rotate
+            raftScript.Raft();
         }
 
         //python communication
-        
+        Communication();
+
     }
 
 
@@ -196,9 +163,28 @@ public class S_RiverGame : MonoBehaviour
     }
 
 
-    private void OnDestroy()
+    //python communication function
+    void Communication()
     {
-        pythonCommunicator.Stop();
+        /*To DO
+        -This script is the link between the python script and the plate scripts
+        -get the desired rotation from the plate script
+        -send it to the python script
+        -grab the rotation of the real platform
+        -set the platform's rotation as such
+        -for now just send the desired rotation right into the platform's localRotation
+         */
+        if (timeToMove)
+        {
+            //currentScript.transform.localRotation = currentScript.desiredRotation;
+            Vector2 giveRotation = new Vector2(raftScript.plannedRotation.x, raftScript.plannedRotation.z);
+            communicateReference.desiredRotation = giveRotation;
+            raftScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
+        }
+        else
+        {
+            communicateReference.desiredRotation = new Vector2(0, 0);
+        }
     }
 }
 
