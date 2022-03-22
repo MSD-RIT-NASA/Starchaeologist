@@ -23,6 +23,10 @@ public class PuzzlingGame : MonoBehaviour
     public GameObject endPlatform;
 
     public AudioSource trap_warning;
+    public AudioClip trap_warning1;
+    public AudioClip trap_warning2;
+    public AudioClip trap_warning3;
+    public AudioClip trap_warning4;
 
     PythonCommunicator communicateReference;
 
@@ -152,7 +156,7 @@ public class PuzzlingGame : MonoBehaviour
         int xIndex = (int)currentPosition.x;
         int yIndex = (int)currentPosition.y;
         int thisTrap = currentScript.trapList[Random.Range(0,currentScript.trapList.Count)];
-        trap_warning.Play();
+        //trap_warning.Play();
 
         //set up the trap list
         //0 = ceiling spikes
@@ -162,18 +166,22 @@ public class PuzzlingGame : MonoBehaviour
         switch (thisTrap)
         {
             case 0:
+                trap_warning.PlayOneShot(trap_warning1);
                 Debug.Log("Ceiling Spikes!");
                 ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().DataSetup(currentScript);
                 break;
             case 1:
+                trap_warning.PlayOneShot(trap_warning2);
                 Debug.Log("Arrows!");
                 wallArray[yIndex][Random.Range(0, 2)].GetComponent<Trap_Arrow>().DataSetup(currentScript);
                 break;
             case 2:
+                trap_warning.PlayOneShot(trap_warning3);
                 Debug.Log("Log Swing!");
                 swingList[yIndex].GetComponent<Trap_Log>().DataSetup(currentScript);
                 break;
             case 3:
+                trap_warning.PlayOneShot(trap_warning4);
                 Debug.Log("Pillar Swipe!");
                 //figure out which pillar to use
                 int pillarSide = 0;

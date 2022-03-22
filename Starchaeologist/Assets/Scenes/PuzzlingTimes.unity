@@ -1067,7 +1067,7 @@ MonoBehaviour:
   trapped: 0
   tiltRange: 10
   tiltSpeed: 1
-  desiredRotation: {x: 0, y: 0, z: 0, w: 0}
+  desiredRotation: {x: 0, y: 0, z: 0}
   trapList: 
 --- !u!4 &289850487 stripped
 Transform:
@@ -2451,7 +2451,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &839490670
 MonoBehaviour:
@@ -2471,6 +2471,10 @@ MonoBehaviour:
   startPlatform: {fileID: 863713764}
   endPlatform: {fileID: 1913507104}
   trap_warning: {fileID: 839490671}
+  trap_warning1: {fileID: 8300000, guid: 86fa0606f01fc9f4f85f72b0bc8139f9, type: 3}
+  trap_warning2: {fileID: 8300000, guid: 89511af519c5ff5438c3427b359b80a4, type: 3}
+  trap_warning3: {fileID: 8300000, guid: 70a0debf3ba84dd4e862af7b902bd3d2, type: 3}
+  trap_warning4: {fileID: 8300000, guid: 08e4501ce5e59bd448ace1ffb887c9d0, type: 3}
 --- !u!82 &839490671
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2481,7 +2485,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 89511af519c5ff5438c3427b359b80a4, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -3863,7 +3867,7 @@ MonoBehaviour:
   trapped: 0
   tiltRange: 10
   tiltSpeed: 1
-  desiredRotation: {x: 0, y: 0, z: 0, w: 0}
+  desiredRotation: {x: 0, y: 0, z: 0}
   trapList: 
 --- !u!4 &1292615660 stripped
 Transform:
