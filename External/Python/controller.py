@@ -1,11 +1,13 @@
 import logging
 import multiprocessing
 import threading
+from pip import main
 import wx
 import wx.adv
 from views import DefaultView, HubView, LoginView, StatisticsView
 from pubsub import pub
 import server as Server
+import subprocess
 from threading import Thread
 import time
 import killswitch as KillSwitch
@@ -137,6 +139,9 @@ class Controller:
         self.gPlotted = True
 
     def statisticsOpen(self):
+        """
+        Opens Statistics View. Displays loading message 
+        """
         logging.info("Opening Statistics View")
         dialog = wx.ProgressDialog("Loading Statistics", "", maximum=100, style=wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME)
         cancelled = False
@@ -151,20 +156,26 @@ class Controller:
             self.statisticsView.Show()
 
     def gameStart(self):
-        # self.db.addScore(5,1,1,10)
-        # self.db.addScore(5,1,2,60)
-        # self.db.addScore(5,1,3,30)
-        # self.db.addScore(5,2,1,70)
-        # self.db.addScore(5,2,2,50)
-        # self.db.addScore(5,2,3,30)
-        # [SteamVR Directory]\bin\win64\vrstartup.exe
-        # server = Server.Server(debug=debug)
-        # server.start()
-        # server.join()
-        # logging.info("Closing Server")
+        """
+        Opens Unity Game through SteamVR
+        """
+        # os.system("steam://rungameid/250820")
+        # steam steam://rungameid/{YouGameID}
+        
+        
+        # Opens SteamVR
+        subprocess.call(r"C:\Program Files (x86)\Steam\Steam.exe -applaunch 250820")
+
+        # Opens SteamVR
+        # subprocess.call(r"C:\Program Files (x86)\Steam\steamapps\common\SteamVR\bin\win64\vrstartup.exe")
+
+        # os.system("steam steam://run/570")
         pass
     
     def closeApp(self):
+        """
+        Close Entire Application, after user check
+        """
         window = wx.MessageDialog(None, "Are you sure you want to quit?", "Close" , wx.YES_NO|wx.YES_DEFAULT)
         resp = window.ShowModal()
         if resp == wx.ID_YES:
@@ -184,3 +195,5 @@ class Controller:
         else:
             window.Destroy()
 
+if __name__ == '__main__':
+    subprocess.call(r"C:\Program Files (x86)\Steam\steamapps\common\SteamVR\bin\win64\vrstartup.exe")

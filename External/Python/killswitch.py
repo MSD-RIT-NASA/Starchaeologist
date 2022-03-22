@@ -17,7 +17,7 @@ class KillSwitchMonitor(Thread):
         self.end = False
         self.debug = debug
         if not self.debug:
-            self.arduino = serial.Serial(port='COM6', baudrate=115200, timeout=.1)
+            self.arduino = serial.Serial(port='COM3', baudrate=115200, timeout=.1)
             
         pub.subscribe(self.endThread, 'killswitch.end')
         # Initialize connection to kill switch
@@ -26,8 +26,10 @@ class KillSwitchMonitor(Thread):
         while not self.end:
             command = self.arduino.readline().decode("utf-8")
             if command == "1":
+                # print("live")
                 pub.sendMessage('killSwitch.check',message="live")
             elif command == "2":
+                # print("kill")
                 pub.sendMessage('killSwitch.check',message="kill")
             time.sleep(0.05)
 
