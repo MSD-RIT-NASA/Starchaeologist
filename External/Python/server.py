@@ -75,7 +75,7 @@ class Server(Thread):
         if debug:
             self.arduino = None
         else:
-            self.arduino = serial.Serial(port='COM5', baudrate=115200, timeout=.1)
+            self.arduino = serial.Serial(port='COM6', baudrate=115200, timeout=.1)
                 
         self.debug = debug
         self.end = False
@@ -97,14 +97,18 @@ class Server(Thread):
     # TODO
     def gatherBalanceData(self):
         logging.info("Going to gather info from force platform")
-        self.arduinoWrite("3")
+        time.sleep(1)
+        self.arduinoWrite("8")
+        # self.arduinoWrite("8")
         balanceData = []
         while True:
-            data = self.arduino.readline()
-            if data.decode("utf-8") == "END":
+            data = self.arduinoRead()
+            if data == "END":
                 break
             # Edit the data, so easily readable later
+            # print(data)
             balanceData.append(data)
+        print(balanceData)
         return balanceData
 
     # TODO
@@ -193,6 +197,7 @@ class Server(Thread):
         # #Print them
         # # print([hullpoints[bestpair[0]],hullpoints[bestpair[1]]])
         # plt.show()
+        pass
 
     def eigsorted(self,cov):
         '''
@@ -247,18 +252,33 @@ class Server(Thread):
         if self.debug:
             logging.debug(message)
         else:
-            encodedMessage = message.encode()
-            self.socket.send(encodedMessage)
-        
-    def arduinoRead(self): 
-        data = self.arduino.readline()
-        return data
+            try:
+                encodedMessage = message.encode()
+                self.socket.send(encodedMessage)
+            except:
+                print("Unity Not Properly Setup")
+                
+    def arduinoRead(self):
+        # data_raw = self.arduino.readline().decode("utf-8").strip() 
+        while True:
+            data_raw = self.arduino.readline().decode("ISO-8859-1").strip() 
+            if data_raw:
+                # print("Raw " + data_raw)
+                break
+            # else:
+            #     self.arduinoWrite("3")
+                # print("Should change mode")
+
+        return data_raw
     
     def arduinoWrite(self, message): # START SEND STOP
         if self.debug:
             logging.debug(message)
         else:
-            self.arduino.write(bytes(message, 'utf-8'))
+            try:
+                self.arduino.write(bytes(message, 'utf-8'))
+            except:
+                print("Arduino Not Properly Setup")
     
     def shutDown(self):
         self.arduinoWrite("STOP")
@@ -320,7 +340,7 @@ class Server(Thread):
 
 if __name__ == "__main__":
     port = "tcp://*:5555"
-    server = Server(debug=True)
+    server = Server(debug=False)
     score = None
     setupError = 0
     logging.basicConfig(
@@ -334,9 +354,9 @@ if __name__ == "__main__":
     logging.info("Confirming Unity Connection")
     # server.confirmUnityConnection()
     
-    server.plotSensorData(data)
-    server.plotSensorData(data2)
-    server.plotSensorData(data3)
+    # server.plotSensorData(data)
+    # server.plotSensorData(data2)
+    # server.plotSensorData(data3)
     # server.arduinoWrite(port.encode())
     # text = server.arduinoRead()
     # print(text)
@@ -345,11 +365,15 @@ if __name__ == "__main__":
     # print(text)
     # logging.info(text)
     if setupError == 0:
-        # logging.info("Starting Server")
+        logging.info("Starting Server")
+        server.arduinoWrite("3")
         while True :
-            logging.info("Waiting For Message From Unity")
-            decodedMessage = server.unityRead()
-            logging.info("Message Recieved From Unity: " +decodedMessage)
+            time.sleep(1)
+            server.arduinoWrite("3")
+            decodedMessage = "readScore"
+            # logging.info("Waiting For Message From Unity")
+            # decodedMessage = server.unityRead()
+            # logging.info("Message Recieved From Unity: " +decodedMessage)
             if(decodedMessage == "endGame"):
                 logging.info("End of Mini-Game Reached")
                 # TODO: Send game score to unity
@@ -382,3 +406,4 @@ if __name__ == "__main__":
                 except:
                     logging.error("Error occured while parsing data")
                     server.unityWrite(decodedMessage)
+            break
