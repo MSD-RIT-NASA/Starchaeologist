@@ -300,14 +300,15 @@ void loop() {
       }
       Serial.println("Done recording");
       pyComm = Serial.readString();
-      Serial.println(pyComm.toInt());
+//      Serial.println(pyComm.toInt());
       if (pyComm.toInt() == sendData or pyComm == "8"){
           for(int i = 0; i < 10; i++){
-            Serial.println(String(data[i].timestamp));
+//            Serial.println(String(data[i].timestamp));
             Serial.println(String(data[i].measurements[0]));
             Serial.println(String(data[i].measurements[1]));
             Serial.println(String(data[i].measurements[2]));
             Serial.println(String(data[i].measurements[3]));
+            Serial.println("1");
             delay(500);
           }
           Serial.println(endSend);

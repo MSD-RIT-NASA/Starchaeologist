@@ -75,7 +75,7 @@ class Server(Thread):
         if debug:
             self.arduino = None
         else:
-            self.arduino = serial.Serial(port='COM6', baudrate=115200, timeout=.1)
+            self.arduino = serial.Serial(port='COM3', baudrate=115200, timeout=.1)
                 
         self.debug = debug
         self.end = False
@@ -96,28 +96,29 @@ class Server(Thread):
 
     # TODO
     def gatherBalanceData(self):
-        logging.info("Going to gather info from force platform")
+        logging.info("Started Gathering Info From Force Platform")
         time.sleep(1)
         self.arduinoWrite("8")
-        # self.arduinoWrite("8")
         balanceData = []
+        dataEntry = []
+        dataSet = False
         while True:
             data = self.arduinoRead()
             if data == "END":
                 break
-            # Edit the data, so easily readable later
-            # print(data)
-            balanceData.append(data)
-        print(balanceData)
+            elif data == "Done recording":
+                dataSet = True
+            elif dataSet:
+                if data == "1":
+                    balanceData.append(dataEntry)
+                    dataEntry = []
+                else:
+                    dataEntry.append(int(data))
+        logging.info("Gathered Balance Data")
         return balanceData
 
     # TODO
     def calculateBalanceScore(self,sensorData):
-        print("Determine Balance" + sensorData)
-        # Return array of different attributes, first value total, others are the attributes
-        return [0]
-    
-    def plotSensorData(self,sensorData):
         points = []
         xComponents = []
         yComponents = []
@@ -126,78 +127,61 @@ class Server(Thread):
         for i in range(0,len(sensorData),1):
             xComponent = 0
             yComponent = 0
-            xComponent += sensorData[i][2] + sensorData[i][4] - (sensorData[i][1] + sensorData[i][3])
-            yComponent += sensorData[i][2] + sensorData[i][1] - (sensorData[i][4] + sensorData[i][3])
+            xComponent += sensorData[i][1] + sensorData[i][3] - (sensorData[i][0] + sensorData[i][2])
+            yComponent += sensorData[i][1] + sensorData[i][0] - (sensorData[i][3] + sensorData[i][2])
             
             point = np.array([xComponent, yComponent])
             points.append(point)
             xComponents.append(xComponent)
             yComponents.append(yComponent)
             
-        # plt.plot(xComponents,yComponents, 'ro-')
-        points = np.array(points)
+        points = np.array(points, dtype='int64')
         hull = ConvexHull(points)
         area = hull.area
-        # print("Hull Area: " + str(area)) # Can be used for equation
-
-        # cov = np.cov(points, rowvar=False)
-
+        
         m = points.mean()
         s = points.std() 
-        # print("Standard Deviation: " + str(s))
+        
         dof = len(points)-1    
         confidence = 0.75
 
         t_crit = np.abs(t.ppf((1-confidence)/2,dof))
         lowerRange = m-s*t_crit/np.sqrt(len(points)) 
         upperRange = m+s*t_crit/np.sqrt(len(points)) 
-        # print(lowerRange)
-        # print(upperRange)
+        
         ranges = upperRange-lowerRange
-        # print("Range: " + str(ranges))
-        # newpoints = list(zip(xComponents,yComponents))
+        
         distances = [self.dist(p1, p2) for p1, p2 in combinations(points, 2)]
         avg_distance = sum(distances) / len(distances)
         std_distance = np.std(distances)
-        # print("Avg STD Distance: " + str(std_distance))
-        # print("Avg Distance: " + str(avg_distance))
-        # np.percentile(points,[100*(1-confidence)/2,100*(1-(1-confidence)/2)]) 
-        score = round(75/avg_distance + 75/std_distance + 75/ranges + 75/area) 
-        print("Score: " + str(score))
-
-        # Location of the center of the ellipse.
+        
+        score = round(75/avg_distance + 75/std_distance + 75/ranges + 75/area)
+        
+        score = round((area)/(avg_distance + std_distance + ranges) * 100)
+        
+        logging.info("Calculated Balance Score")
+        
+        # Plotting
+        # cov = np.cov(points, rowvar=False)
         # mean_pos = points.mean(axis=0)
-
-        # # METHOD 1
         # width1, height1, theta1 = self.cov_ellipse(points, cov, 2)
-
-        # # METHOD 2
         # width2, height2, theta2 = self.cov_ellipse2(points, cov, 2)
         # ax = plt.gca()
         # plt.plot(xComponents,yComponents, 'ro-')
-        # # plt.scatter(xComponents, yComponents, c='k', s=1, alpha=.5)
-        # # First ellipse
         # ellipse1 = Ellipse(xy=mean_pos, width=width1, height=height1, angle=theta1,
         #                 edgecolor='b', fc='None', lw=2, zorder=4)
-        # # ellipse1.area
         # ax.add_patch(ellipse1)
-        # # Second ellipse
         # ellipse2 = Ellipse(xy=mean_pos, width=width2, height=height2, angle=theta2,
         #                 edgecolor='r', fc='None', lw=.8, zorder=4)
         # ax.add_patch(ellipse2)
         # plt.show()
         # hullpoints = points[hull.vertices,:]
-        # # Naive way of finding the best pair in O(H^2) time if H is number of points on
-        # # hull
         # hdist = cdist(hullpoints, hullpoints, metric='euclidean')
-        # # print(hdist)
-        # # Get the farthest apart points
         # bestpair = np.unravel_index(hdist.argmax(), hdist.shape)
-        # # print(bestpair)
-        # #Print them
-        # # print([hullpoints[bestpair[0]],hullpoints[bestpair[1]]])
         # plt.show()
-        pass
+
+        return score
+    
 
     def eigsorted(self,cov):
         '''
@@ -238,7 +222,10 @@ class Server(Thread):
 
     def dist(self, p1, p2):
         (x1, y1), (x2, y2) = p1, p2
-        return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+        s1 = (abs(x2 - x1)) ** 2
+        s2 = (abs(y2 - y1)) ** 2
+        return math.sqrt(s2 + s1)
+    
     # TODO
     def setMotionFloor(self, angle1, angle2):
         return
@@ -259,15 +246,10 @@ class Server(Thread):
                 print("Unity Not Properly Setup")
                 
     def arduinoRead(self):
-        # data_raw = self.arduino.readline().decode("utf-8").strip() 
         while True:
             data_raw = self.arduino.readline().decode("ISO-8859-1").strip() 
             if data_raw:
-                # print("Raw " + data_raw)
                 break
-            # else:
-            #     self.arduinoWrite("3")
-                # print("Should change mode")
 
         return data_raw
     
@@ -285,6 +267,8 @@ class Server(Thread):
 
     def run(self):
         logging.info("Starting Server")
+        time.sleep(1)
+        self.arduinoWrite("3")
         while True and not self.end:     
             if self.debug:
                 logging.info("Server in debug mode")
@@ -303,14 +287,13 @@ class Server(Thread):
                     gameScore = decodedMessage.split(" ")
                     
                     # Read values from forceplate
-                    logging.info("Read Values From Force Plate")
                     balanceData = self.gatherBalanceData()
                     
                     # Calculate balance Score 
                     balanceScore = self.calculateBalanceScore(balanceData)
 
                     # Send message that data has been recieved so game can start again
-                    calibrationConfirmation = "calibrate " + balanceScore[0]  
+                    calibrationConfirmation = "calibrate " + balanceScore 
                     self.unityWrite(calibrationConfirmation)
 
                     # Send scores to database
@@ -366,10 +349,11 @@ if __name__ == "__main__":
     # logging.info(text)
     if setupError == 0:
         logging.info("Starting Server")
+        time.sleep(1)
         server.arduinoWrite("3")
         while True :
-            time.sleep(1)
-            server.arduinoWrite("3")
+            # time.sleep(1)
+            # server.arduinoWrite("3")
             decodedMessage = "readScore"
             # logging.info("Waiting For Message From Unity")
             # decodedMessage = server.unityRead()
@@ -386,7 +370,7 @@ if __name__ == "__main__":
                 break
             elif(decodedMessage == "readScore"):
                 # TODO: Read values from database
-                logging.info("Going to Read Values From Force Plate")
+                logging.info("Read Values From Force Plate")
                 
                 
                 balanceData = server.gatherBalanceData()
