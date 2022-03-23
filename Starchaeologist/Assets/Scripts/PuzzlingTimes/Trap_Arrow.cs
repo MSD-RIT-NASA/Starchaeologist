@@ -13,18 +13,22 @@ public class Trap_Arrow : MonoBehaviour
     float arrowX = 0f;
     float pauseTimer = 0f;
 
-    int rightWall = 14;
-    int leftWall = -2;
+    float rightWall = 13.7f;
+    float leftWall = -1.7f;
     float currentX = 0;
     float arrowSpeed = 16f;
 
-    public AudioSource arrow;
+    public AudioSource arrowSound;
 
     PlateScript plateReference;
 
     void Start()
     {
-        arrow = GetComponent<AudioSource>();
+        arrowSound = GetComponent<AudioSource>();
+        if(!rightSide)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
     }
 
     public void DataSetup(PlateScript getCurrent)
@@ -36,11 +40,13 @@ public class Trap_Arrow : MonoBehaviour
         pauseTimer = 0f;
 
         arrows = new List<GameObject>();
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 1; i < transform.childCount; i++)
         {
             arrows.Add(null);
-            arrows[i] = Instantiate(arrowReference, transform.GetChild(i).transform);
-            //adjust the rotation based on the side once the actual arrow model is used
+            arrows[i - 1] = Instantiate(arrowReference, transform.GetChild(i).transform);
+
+            //adjust the rotation based on the side
+            arrows[i - 1].transform.localRotation = Quaternion.Euler(0, -90, 0);
         }
 
         if(rightSide)
@@ -69,8 +75,8 @@ public class Trap_Arrow : MonoBehaviour
         if(starting)
         {
             //pause for suspense
-            Suspense(1.5f);
-            arrow.Play();
+            Suspense(4f);
+            arrowSound.Play();
         }
         else
         {

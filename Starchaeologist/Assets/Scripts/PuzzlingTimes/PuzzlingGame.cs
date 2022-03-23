@@ -130,17 +130,28 @@ public class PuzzlingGame : MonoBehaviour
         -set the platform's rotation as such
         -for now just send the desired rotation right into the platform's localRotation
          */
+
+        //if (currentScript.trapped)
+        //{
+        //    currentScript.transform.localRotation = Quaternion.Euler(currentScript.desiredRotation);
+        //}
+
+        currentScript.transform.localRotation = currentScript.desiredRotation;
         if(currentScript.trapped)
         {
-            //currentScript.transform.localRotation = currentScript.desiredRotation;
-            Vector2 giveRotation = new Vector2(currentScript.desiredRotation.x, currentScript.desiredRotation.z);
-            communicateReference.desiredRotation = giveRotation;
-            currentScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
+            Debug.Log(currentScript.desiredRotation.eulerAngles);
         }
-        else
-        {
-            communicateReference.desiredRotation = new Vector2(0, 0);
-        }
+
+        //if (currentScript.trapped)
+        //{
+        //    Vector2 giveRotation = new Vector2(currentScript.desiredRotation.x, currentScript.desiredRotation.z);
+        //    communicateReference.desiredRotation = giveRotation;
+        //    currentScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
+        //}
+        //else
+        //{
+        //    communicateReference.desiredRotation = new Vector2(0, 0);
+        //}
     }
 
     //called from the current platform to set off the trap
