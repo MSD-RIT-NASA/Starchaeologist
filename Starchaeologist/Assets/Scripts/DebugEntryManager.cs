@@ -18,7 +18,7 @@ public class DebugEntryManager : MonoBehaviour
     public static Action<string> removeEntry;
 
     // ! Add an `|| true` to this preprocessor directive to make the DebugCanvas work in builds ! //
-#if UNITY_EDITOR
+#if UNITY_EDITOR || true
     [SerializeField] private TextMeshProUGUI entryPrefab = null;
 
     /// <summary>
