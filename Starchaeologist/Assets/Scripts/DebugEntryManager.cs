@@ -47,7 +47,8 @@ public class DebugEntryManager : MonoBehaviour
         {
             spawnedEntries[entryName].text = $"{entryName} = \"{formattedVal}\"";
 
-            if (expirationTimers.TryGetValue(entryName, out Coroutine timer)) { Coroutilities.TryStopCoroutine(this, timer); }
+            if (expirationTimers.TryGetValue(entryName, out Coroutine timer))
+                Coroutilities.TryStopCoroutine(this, timer);
             expirationTimers.Remove(entryName);
         }
         else
