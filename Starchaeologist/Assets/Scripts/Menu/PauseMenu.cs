@@ -8,7 +8,10 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
 
-  public void Update()
+    //public AudioSource buttonClick;
+    //public AudioClip click;
+
+    public void Update() //in theory this should work ... just need a VR input
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -46,7 +49,20 @@ public class PauseMenu : MonoBehaviour
 
     public void Restart()
     {
+        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByName("RiverRide"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
 
+        else if(SceneManager.GetActiveScene() == SceneManager.GetSceneByName("PuzzlingTimes"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        else
+        {
+            Resume();
+        }
+       
     }
 
     public void QuitGame()
