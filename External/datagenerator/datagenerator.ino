@@ -21,19 +21,18 @@ typedef struct{
 #define SCALE_4_PIN_DAT 38
 #define SCALE_4_PIN_CLK 36
 
-#define calibration_factor 2280
-
 HX711 scale_1(SCALE_1_PIN_DAT, SCALE_1_PIN_CLK);
 HX711 scale_2(SCALE_2_PIN_DAT, SCALE_2_PIN_CLK);
 HX711 scale_3(SCALE_3_PIN_DAT, SCALE_3_PIN_CLK);
 HX711 scale_4(SCALE_4_PIN_DAT, SCALE_4_PIN_CLK);
 
-//constants command keys
+//constant command keys
 const uint8_t wait = 0;
 const uint8_t sendAsYouGoMode = 1;
 const uint8_t constantMode = 3;
 const uint8_t sendData = 8;
-const uint8_t calibrateMode = 16;   // Implment this to run the tare() at the right time
+const uint8_t calibrateMode = 16;
+const uint8_t start = 32;
 const uint8_t endSend = 42;
 
 uint8_t mode = 0;
@@ -44,16 +43,13 @@ void setup() {
   while(!Serial);   // waits for laptop serial port to connect
   // Serial.println("serial connection made");
   
-  scale_1.set_scale(calibration_factor);
-  scale_2.set_scale(calibration_factor);
-  scale_3.set_scale(calibration_factor);
-  scale_4.set_scale(calibration_factor);
   scale_1.tare();
   scale_2.tare();
   scale_3.tare();
   scale_4.tare();
   
   Serial.println("Startup is complete");
+  Serial.flush();
   mode = wait;
 }
 
@@ -68,7 +64,8 @@ void loop()
       Serial.flush();
       while (!Serial.available());
       pyComm = Serial.read();
-      if (pyComm == constantMode) {
+      if (pyComm == constantMode) 
+      {
         mode = pyComm;
       }
       break;
@@ -86,7 +83,8 @@ void loop()
       // Uncomment and edit to add option for secondary command to set time frame in sec
       // while (Serial.available() == 0)
       // {};
-      // if (Serial.available() > 0) {
+      // if (Serial.available() > 0) 
+      // {
       //   secsToRemember = Serial.read();
       // }
       unsigned int secsToRemember = 60;
@@ -186,6 +184,18 @@ void loop()
         }
       }
       Serial.write(endSend);
+      Serial.flush();
+      mode = wait;
+      break;
+    }
+
+    case calibrateMode:
+    {
+      scale_1.tare();
+      scale_2.tare();
+      scale_3.tare();
+      scale_4.tare();
+
       mode = wait;
       break;
     }
@@ -196,9 +206,4 @@ void loop()
       break;
     }
   }
-}
-
-void serial_flush() 
-{
-  while (Serial.available()) Serial.read();
 }
