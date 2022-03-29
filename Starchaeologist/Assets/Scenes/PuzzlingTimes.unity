@@ -3794,6 +3794,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 2004393753}
+  pauseActionRef: {fileID: 225231899232684990, guid: c348712bda248c246b8c49b3db54643f, type: 3}
 --- !u!1 &863713764
 GameObject:
   m_ObjectHideFlags: 0
@@ -5581,6 +5582,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb6c2cd10d2bac4e9df651027bf2784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonClick: {fileID: 0}
+  click: {fileID: 0}
 --- !u!114 &1473623868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7891,6 +7894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 2004393753}
+  pauseActionRef: {fileID: 0}
 --- !u!114 &2004393756
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1761,6 +1761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb6c2cd10d2bac4e9df651027bf2784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonClick: {fileID: 0}
+  click: {fileID: 0}
 --- !u!114 &488288857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2728,6 +2730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 836433715}
+  pauseActionRef: {fileID: 0}
 --- !u!114 &836433718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2931,6 +2934,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 836433715}
+  pauseActionRef: {fileID: 225231899232684990, guid: c348712bda248c246b8c49b3db54643f, type: 3}
 --- !u!1001 &945332729
 PrefabInstance:
   m_ObjectHideFlags: 0
