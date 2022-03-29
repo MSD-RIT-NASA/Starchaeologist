@@ -148,6 +148,7 @@ void loop()
               Serial.println(String(data[i].measurements[1]));
               Serial.println(String(data[i].measurements[2]));
               Serial.println(String(data[i].measurements[3]));
+              Serial.println("1");
               Serial.flush();
             }
             Serial.write(endSend);
@@ -175,6 +176,7 @@ void loop()
         Serial.println(String(scale_2.read()));
         Serial.println(String(scale_3.read()));
         Serial.println(String(scale_4.read()));
+        Serial.println("1");
         Serial.flush();
         
         // check if time is up
