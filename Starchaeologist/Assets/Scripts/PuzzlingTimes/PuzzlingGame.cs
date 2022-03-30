@@ -136,22 +136,36 @@ public class PuzzlingGame : MonoBehaviour
         //    currentScript.transform.localRotation = Quaternion.Euler(currentScript.desiredRotation);
         //}
 
-        currentScript.transform.localRotation = currentScript.desiredRotation;
-        if(currentScript.trapped)
+        //currentScript.transform.localRotation = currentScript.desiredRotation;
+        //if(currentScript.trapped)
+        //{
+        //    Debug.Log(currentScript.desiredRotation.eulerAngles);
+        //}
+
+        float desiredX = currentScript.desiredRotation.eulerAngles.x;
+        float desiredZ = currentScript.desiredRotation.eulerAngles.z;
+
+        //keep everything uniform to hopefully avoid errors
+        //keep rotation values within the range of (-10) to (10)
+        if(desiredX > 180)
         {
-            Debug.Log(currentScript.desiredRotation.eulerAngles);
+            desiredX -= 360f;
+        }
+        if (desiredZ > 180)
+        {
+            desiredZ -= 360f;
         }
 
-        //if (currentScript.trapped)
-        //{
-        //    Vector2 giveRotation = new Vector2(currentScript.desiredRotation.x, currentScript.desiredRotation.z);
-        //    communicateReference.desiredRotation = giveRotation;
-        //    currentScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
-        //}
-        //else
-        //{
-        //    communicateReference.desiredRotation = new Vector2(0, 0);
-        //}
+        if (currentScript.trapped)
+        {
+            Vector2 giveRotation = new Vector2(desiredX, desiredZ);
+            communicateReference.desiredRotation = giveRotation;
+            currentScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
+        }
+        else
+        {
+            communicateReference.desiredRotation = new Vector2(0, 0);
+        }
     }
 
     //called from the current platform to set off the trap
