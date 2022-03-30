@@ -1141,7 +1141,7 @@ MonoBehaviour:
   trapped: 0
   tiltRange: 10
   tiltSpeed: 1
-  desiredRotation: {x: 0, y: 0, z: 0}
+  desiredRotation: {x: 0, y: 0, z: 0, w: 0}
   trapList: 
 --- !u!4 &289850487 stripped
 Transform:
@@ -2580,6 +2580,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e6cad3d99b2c84d92e8c23e5f1058d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  treasurePrefabs:
+  - {fileID: 2899595631582243972, guid: 352501bcc2dd0e74eb9047494079c81f, type: 3}
+  - {fileID: 5286565569865051167, guid: f66a2408533de9d42a8b781b5f68a1ec, type: 3}
+  - {fileID: 4328456171610270049, guid: af900a58398c8074e830f373e0ec750d, type: 3}
+  - {fileID: 2218973407346580244, guid: 075dcf59537ab4a49a46970c36c8cebd, type: 3}
+  - {fileID: 8779571309560358197, guid: c8b0876f93899084c8fce04b2c82d777, type: 3}
+  - {fileID: 2240620234968401645, guid: a2ff789a172933c40925bcb6349b6456, type: 3}
+  - {fileID: 2427158349449963868, guid: e8e3273f8d05d6b48b67564b1b48152c, type: 3}
+  - {fileID: 7741937711840232210, guid: c101757b5c15ac6459f01235e93803a5, type: 3}
   tilePrefab: {fileID: 6548673210526659539, guid: 292e87eade6d67043bc5e601af798fb4, type: 3}
   ceilingPrefab: {fileID: 6548673210526659539, guid: 3a1324afc6ca398498619a186be650ba, type: 3}
   swingPrefab: {fileID: 6053136410156316217, guid: f43ab709a97893141a0dd0d824fd2308, type: 3}
@@ -3867,7 +3876,7 @@ MonoBehaviour:
   trapped: 0
   tiltRange: 10
   tiltSpeed: 1
-  desiredRotation: {x: 0, y: 0, z: 0}
+  desiredRotation: {x: 0, y: 0, z: 0, w: 0}
   trapList: 
 --- !u!4 &1292615660 stripped
 Transform:
