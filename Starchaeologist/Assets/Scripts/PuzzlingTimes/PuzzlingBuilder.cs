@@ -72,6 +72,7 @@ public class PuzzlingBuilder : MonoBehaviour
             ceilingArray[i] = new List<GameObject>();
             int pillarIndex = 0;
 
+
             for (int j = 0; j < lengthValue; j++)
             {
                 //place the room tiles
@@ -190,7 +191,7 @@ public class PuzzlingBuilder : MonoBehaviour
                 }
 
                 //treasure
-                if(k < roomLength)
+                if (k < roomLength)
                 {
                     placing = true;
                     while (placing)
@@ -213,6 +214,7 @@ public class PuzzlingBuilder : MonoBehaviour
 
                 k++;
             }
+
 
             //add to the start and end adjacent platforms
             startAdjacent.Add(new Vector2(i, 0));

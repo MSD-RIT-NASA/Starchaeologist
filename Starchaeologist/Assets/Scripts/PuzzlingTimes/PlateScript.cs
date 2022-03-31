@@ -9,6 +9,7 @@ public class PlateScript : MonoBehaviour
     //public bool reactivate = false;
     public bool triggered = false;
     PuzzlingGame managerReference;
+    public bool ready = false;
 
     //trap variables
     public bool trapped = false;
@@ -60,6 +61,8 @@ public class PlateScript : MonoBehaviour
         {
             trapList.Add(3);
         }
+
+        ready = true;
     }
 
     // Update is called once per frame
@@ -100,7 +103,7 @@ public class PlateScript : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //check of the collider is the player
-        if (other.gameObject.CompareTag("PlayerBody") && !triggered)
+        if (other.gameObject.CompareTag("PlayerBody") && !triggered && ready)
         {
             triggered = true;
 
