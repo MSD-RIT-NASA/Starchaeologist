@@ -26,49 +26,6 @@ import math
 from itertools import combinations
 
 
-data = [
-    [None, 2.13465207868007,4.89956174599918,2.66060181598207,7.85470370475888],
-    [None, 4.28587711941725,3.87793918274247,9.30913868002088,5.61656090739023],
-    [None, 5.7841504070834,4.20312918219861,2.35600260801427,7.57694010975628],
-    [None, 9.54939253281308,3.75112311297614,9.99550894414797,9.71744358433292],
-    [None, 5.60526204137377,3.69543214267838,3.09467786787761,9.71541751255999],
-    [None, 4.15204880673068,5.39928982658279,3.79305433099766,7.38310103275958],
-    [None, 8.79014501571196,3.85258397034024,8.30697977184643,6.75868917245357],
-    [None, 4.82898640997195,9.63078790140841,3.9874571068154,9.37223417562071],
-    [None, 4.55177440659691,4.31705308534068,1.83755879515668,3.39807878453195],
-    [None, 8.64012769173837,7.05287374185998,8.30119405933711,3.20412490712671]
-]
-data2 = [
-    [None, 1.29759106333255,1.41730118422643,0.883845783715996,2.04727100536566],
-    [None, 0.683016567343388,2.21436281093134,2.80327027281899,2.65911087471019],
-    [None,1.86047466185897,1.55068611472411,4.50416328362383,4.46881027075872],
-    [None,3.27897346265566,2.9918062169998,0.499271904816512,2.08878341926671],
-    [None,1.81902880771972,4.18124504675215,2.09451893255791,1.60953734703806],
-    [None,2.03891879834184,0.735982816077761,2.35437806339673,1.8513676393085],
-    [None,0.893243843174187,4.27308916406384,1.61331337672347,1.72286500210076],
-    [None,1.82488548980322,3.81299511194834,1.54527430075466,4.59720880891998],
-    [None,1.42773845578904,4.70682336609197,4.2455909113612,1.19746566386775],
-    [None,3.6725038297812,4.78532591452139,2.17495555718194,4.35049065917288]
-]
-
-data3 = [
-    [None, 2.5,2.6,2.5,2.5],
-    [None, 2.5,2.5,2.6,2.5],
-    [None, 2.5,2.5,2.5,2.6],
-    [None, 2.6,2.5,2.5,2.5],
-    [None, 2.5,2.7,2.5,2.5],
-    [None, 2.5,2.5,2.7,2.5],
-    [None, 2.5,2.5,2.5,2.7],
-    [None, 2.7,2.5,2.5,2.5],
-    [None, 2.5,2.8,2.5,2.5],
-]
-# def mean_confidence_interval(data, confidence=0.95):
-#     a = 1.0 * np.array(data)
-#     n = len(a)
-#     m, se = np.mean(a), sem(a)
-#     h = se * scipy.stats.t.ppf((1 + confidence) / 2., n-1)
-#     return m, m-h, m+h
-
 class Server(Thread):
     def __init__(self, debug):
         Thread.__init__(self)
@@ -94,7 +51,6 @@ class Server(Thread):
         else:
             self.unityWrite("kill")
 
-    # TODO
     def gatherBalanceData(self):
         logging.info("Started Gathering Info From Force Platform")
         time.sleep(1)
@@ -119,6 +75,7 @@ class Server(Thread):
 
     # TODO
     def calculateBalanceScore(self,sensorData):
+        print(sensorData)
         points = []
         xComponents = []
         yComponents = []
@@ -155,7 +112,7 @@ class Server(Thread):
         avg_distance = sum(distances) / len(distances)
         std_distance = np.std(distances)
         
-        score = round(75/avg_distance + 75/std_distance + 75/ranges + 75/area)
+        # score = round(75/avg_distance + 75/std_distance + 75/ranges + 75/area)
         
         score = round((area)/(avg_distance + std_distance + ranges) * 100)
         
@@ -243,7 +200,7 @@ class Server(Thread):
                 encodedMessage = message.encode()
                 self.socket.send(encodedMessage)
             except:
-                print("Unity Not Properly Setup")
+                logging.error("Unity Not Properly Setup")
                 
     def arduinoRead(self):
         while True:
@@ -260,10 +217,13 @@ class Server(Thread):
             try:
                 self.arduino.write(bytes(message, 'utf-8'))
             except:
-                print("Arduino Not Properly Setup")
+                logging.error("Arduino Not Properly Setup")
     
-    def shutDown(self):
+    def arduinoShutDown(self):
         self.arduinoWrite("STOP")
+    
+    def unityShutDown(self):
+        self.unityWrite("quit")
 
     def run(self):
         logging.info("Starting Server")
@@ -280,7 +240,9 @@ class Server(Thread):
             if(decodedMessage == "quit"): 
                 # TODO: Used for ending script
                 print("End of Unity Game reached")
-                pub.sendMessage("unityGameEnded")
+                # pub.sendMessage("unityGameEnded")
+                self.unityShutDown()
+                self.arduinoShutDown()
                 break
             elif(decodedMessage.startsWith("calibrate")):
                 try:
@@ -323,7 +285,7 @@ class Server(Thread):
 
 if __name__ == "__main__":
     port = "tcp://*:5555"
-    server = Server(debug=False)
+    server = Server(debug=True)
     score = None
     setupError = 0
     logging.basicConfig(
