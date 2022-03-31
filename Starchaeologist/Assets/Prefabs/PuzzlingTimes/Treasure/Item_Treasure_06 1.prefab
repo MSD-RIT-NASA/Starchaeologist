@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2768938461113472400}
   - component: {fileID: 6609917229404112205}
   - component: {fileID: 4938734671447399037}
+  - component: {fileID: 5375721939999573427}
+  - component: {fileID: 5692305392855952368}
   m_Layer: 0
   m_Name: six_sided_gem
   m_TagString: Untagged
@@ -25,13 +27,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77461140842569276}
-  m_LocalRotation: {x: 0.70694244, y: 0.015244884, z: 0.70694244, w: 0.015244884}
-  m_LocalPosition: {x: -2.97, y: 4.1028495, z: 0}
+  m_LocalRotation: {x: 0.6294288, y: -0.32220972, z: 0.614954, w: 0.34904435}
+  m_LocalPosition: {x: -0.057, y: 0.109, z: 0}
   m_LocalScale: {x: 17.121012, y: 11.530043, z: 17.121006}
   m_Children: []
   m_Father: {fileID: 8028720516707803739}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 56.687, y: 90, z: 177.529}
 --- !u!33 &6609917229404112205
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -81,6 +83,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!54 &5375721939999573427
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77461140842569276}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!64 &5692305392855952368
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77461140842569276}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6437410396529656253, guid: 9fe476fe047c963418ff04cd98275058, type: 3}
 --- !u!1 &8779571309560358197
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,7 +123,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8028720516707803739}
   m_Layer: 0
-  m_Name: Item_Treasure_06
+  m_Name: Item_Treasure_06 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

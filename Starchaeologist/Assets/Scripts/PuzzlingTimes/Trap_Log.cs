@@ -66,7 +66,7 @@ public class Trap_Log : MonoBehaviour
         switch (swingStep)
         {
             case 0://pause for suspense
-                Suspense(1f);
+                Suspense(2f);
                 log.PlayDelayed(.4f);
                 break;
             case 1://slow swing

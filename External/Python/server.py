@@ -314,12 +314,9 @@ if __name__ == "__main__":
         time.sleep(1)
         server.arduinoWrite("3")
         while True :
-            # time.sleep(1)
-            # server.arduinoWrite("3")
-            decodedMessage = "readScore"
-            # logging.info("Waiting For Message From Unity")
-            # decodedMessage = server.unityRead()
-            # logging.info("Message Recieved From Unity: " +decodedMessage)
+            logging.info("Waiting For Message From Unity")
+            decodedMessage = server.unityRead()
+            logging.info("Message Recieved From Unity: " +decodedMessage)
             if(decodedMessage == "endGame"):
                 logging.info("End of Mini-Game Reached")
                 # TODO: Send game score to unity

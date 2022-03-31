@@ -7,9 +7,12 @@ public class PuzzlingBuilder : MonoBehaviour
 {
     /*
      TO DO:
-        -figure out what traps will go with what plates
-            -place the traps
+        
      */
+
+    //treasure variables
+    public List<GameObject> treasurePrefabs;
+    public List<bool>[] treasureArray;
 
     //floor tile variables
     public GameObject tilePrefab;
@@ -37,6 +40,7 @@ public class PuzzlingBuilder : MonoBehaviour
     {
         tileArray = new List<GameObject>[6];
         trapArray = new List<bool>[6];
+        treasureArray = new List<bool>[6];
 
         ceilingArray = new List<GameObject>[6];
         wallArray = new List<GameObject>[roomLength * 3];
@@ -64,6 +68,7 @@ public class PuzzlingBuilder : MonoBehaviour
 
             tileArray[i] = new List<GameObject>();
             trapArray[i] = new List<bool>();
+            treasureArray[i] = new List<bool>();
             ceilingArray[i] = new List<GameObject>();
             int pillarIndex = 0;
 
@@ -75,6 +80,7 @@ public class PuzzlingBuilder : MonoBehaviour
                 //tileArray[i][j].transform.rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
                 tileArray[i][j].transform.position = new Vector3((i * 2) + 1, 0, (j * 2) + 1);
                 trapArray[i].Add(false);
+                treasureArray[i].Add(false);
 
                 //place the ceiling traps
                 ceilingArray[i].Add(null);
@@ -164,18 +170,46 @@ public class PuzzlingBuilder : MonoBehaviour
                 }
             }
 
-            //place trap platforms
+            //set trap platforms and place treasure
             int k = 0;
             while(k < roomLength * 2)
             {
-                int kIndex = Random.Range(0, trapArray[i].Count);
-                if(trapArray[i][kIndex])
+                bool placing = true;
+                //traps
+                while(placing)
                 {
-                    continue;
+                    int yIndex = Random.Range(0, trapArray[i].Count);
+                    if (trapArray[i][yIndex])
+                    {
+                        continue;
+                    }
+                    trapArray[i][yIndex] = true;
+                    //tileArray[i][kIndex].transform.GetChild(0).gameObject.AddComponent<PlateScript>();
+                    tileArray[i][yIndex].transform.GetChild(0).gameObject.GetComponent<PlateScript>().trapped = true;
+                    placing = false;
                 }
-                trapArray[i][kIndex] = true;
-                //tileArray[i][kIndex].transform.GetChild(0).gameObject.AddComponent<PlateScript>();
-                tileArray[i][kIndex].transform.GetChild(0).gameObject.GetComponent<PlateScript>().trapped = true;
+
+                //treasure
+                if(k < roomLength)
+                {
+                    placing = true;
+                    while (placing)
+                    {
+                        int yIndex = Random.Range(0, trapArray[i].Count);
+                        if (treasureArray[i][yIndex])
+                        {
+                            continue;
+                        }
+                        treasureArray[i][yIndex] = true;
+                        GameObject placeTreasure = Instantiate(treasurePrefabs[Random.Range(0, treasurePrefabs.Count)]);
+                        Vector3 anchorPosition = tileArray[i][yIndex].transform.GetChild(1).transform.position;
+                        placeTreasure.transform.position = new Vector3(anchorPosition.x + Random.Range(-0.5f, 0.5f), anchorPosition.y, anchorPosition.z + Random.Range(0f, 0.5f));
+                        placeTreasure.transform.localRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+                        placing = false;
+                    }
+                }
+                
+
 
                 k++;
             }

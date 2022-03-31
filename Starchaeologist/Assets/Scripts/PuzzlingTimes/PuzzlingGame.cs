@@ -130,10 +130,35 @@ public class PuzzlingGame : MonoBehaviour
         -set the platform's rotation as such
         -for now just send the desired rotation right into the platform's localRotation
          */
-        if(currentScript.trapped)
+
+        //if (currentScript.trapped)
+        //{
+        //    currentScript.transform.localRotation = Quaternion.Euler(currentScript.desiredRotation);
+        //}
+
+        //currentScript.transform.localRotation = currentScript.desiredRotation;
+        //if(currentScript.trapped)
+        //{
+        //    Debug.Log(currentScript.desiredRotation.eulerAngles);
+        //}
+
+        float desiredX = currentScript.desiredRotation.eulerAngles.x;
+        float desiredZ = currentScript.desiredRotation.eulerAngles.z;
+
+        //keep everything uniform to hopefully avoid errors
+        //keep rotation values within the range of (-10) to (10)
+        if(desiredX > 180)
         {
-            //currentScript.transform.localRotation = currentScript.desiredRotation;
-            Vector2 giveRotation = new Vector2(currentScript.desiredRotation.x, currentScript.desiredRotation.z);
+            desiredX -= 360f;
+        }
+        if (desiredZ > 180)
+        {
+            desiredZ -= 360f;
+        }
+
+        if (currentScript.trapped)
+        {
+            Vector2 giveRotation = new Vector2(desiredX, desiredZ);
             communicateReference.desiredRotation = giveRotation;
             currentScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
         }
