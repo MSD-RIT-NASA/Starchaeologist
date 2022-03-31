@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class scoreScript : MonoBehaviour
 {
     private Text txt;
+    private Text txtMenu;
     private float showTime = 1f;
     private float hideTime = 0f;
     public static int Score;
@@ -14,8 +15,10 @@ public class scoreScript : MonoBehaviour
     void Start()
     {
         Score = 0;
-        txt= gameObject.GetComponent<Text>();
+        txt= GameObject.Find("Score").GetComponent<Text>();
         txt.enabled = false;
+        txtMenu= GameObject.Find("ScoreMenu").GetComponent<Text>();
+        txtMenu.enabled = false;
     }
 
     // Update is called once per frame
@@ -25,6 +28,9 @@ public class scoreScript : MonoBehaviour
         if(txt.enabled && (Time.time >= hideTime)&& !scoreMenu)
         {
             txt.enabled = false;
+        }
+        if(scoreMenu){
+            txtMenu.enabled = true;
         }
         
     }
@@ -67,20 +73,28 @@ public class scoreScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Treasure"))
-        {
-            treasureScore();
-        }else if (other.gameObject.CompareTag("Artifact"))
-        {
-            artifactScore();
-        }else if (other.gameObject.CompareTag("obstacle")) //possible name for tag
-        {
-            hitScore();
+        if (other.gameObject.CompareTag("PlayerHead")){
+
+            if (gameObject.CompareTag("Treasure"))
+            {
+                treasureScore();
+            }else if (gameObject.CompareTag("Artifact"))
+            {
+                artifactScore();
+            }else if (gameObject.CompareTag("Obstacle")) 
+            {
+                hitScore();
+            }
         }
         //when the player first comes into contact with the end block, show the score screen
-        if (other.gameObject.CompareTag("PlayerBody"))
+        if (other.gameObject.CompareTag("PlayerBody")&&gameObject.CompareTag("Finish"))
         {
             scoreMenu = true;
+            for(int s=0;s<Score;s++){
+                txtMenu.text = "Game Score:\n"+s.ToString()+"\n\nPlayer Stats:\n";//+communication player score
+            }
+            
         }
+        
     }
 }
