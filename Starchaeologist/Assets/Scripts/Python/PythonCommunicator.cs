@@ -53,7 +53,7 @@ public class PythonCommunicator : MonoBehaviour
         if(!threadRunning)
         {
             threadRunning = true;
-            Communicate();
+            StartThread();
         }
     }
 
