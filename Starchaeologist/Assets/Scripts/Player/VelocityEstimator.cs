@@ -22,7 +22,7 @@ public class VelocityEstimator : MonoBehaviour
     private void Start()
     {
         estVelocityBank = new LinkedList<Vector3>();
-        previousPos = transform.position;
+        previousPos = transform.localPosition;
     }
 
     /// <summary>
@@ -42,15 +42,21 @@ public class VelocityEstimator : MonoBehaviour
 
     private void FixedUpdate()
     {
+        DebugEntryManager.updateEntry?.Invoke("V Est Local Pos", $"<color=#FF0000>{transform.localPosition.x}</color>, " +
+            $"<color=#00FF00>{transform.localPosition.y}</color>, <color=#0000FF>{transform.localPosition.z}</color>", -1);
+
         if (estimating)
         {
             UpdateVelocityBank();
             CurrentAvgVelocity = GetAverageFromBank();
 
-            if (currentAvgVel is Vector3 cAvg)
-                DebugEntryManager.updateEntry?.Invoke($"V Estimator", $"V = <color=#FF0000>{cAvg.x}</color>, " +
-                    $"<color=#00FF00>{cAvg.y}</color>, <color=#0000FF>{cAvg.z}</color>)", 3);
+            //if (currentAvgVel is Vector3 cAvg)
+            //    DebugEntryManager.updateEntry?.Invoke($"V Estimator", $"V = <color=#FF0000>{cAvg.x}</color>, " +
+            //        $"<color=#00FF00>{cAvg.y}</color>, <color=#0000FF>{cAvg.z}</color>", 3);
         }
+
+        //After doing everything else, set previousPos to be the current pos (since it's about to be "previous")
+        previousPos = transform.localPosition;
     }
 
     /// <summary>
@@ -62,7 +68,7 @@ public class VelocityEstimator : MonoBehaviour
     {
         if (!Mathf.Approximately(Time.fixedDeltaTime, 0))
         {
-            Vector3 vel = (transform.position - previousPos) / Time.fixedDeltaTime;
+            Vector3 vel = (transform.localPosition - previousPos) / Time.fixedDeltaTime;
             if (estVelocityBank.Count >= velBankCapacity)
             {
                 estVelocityBank.RemoveLast();

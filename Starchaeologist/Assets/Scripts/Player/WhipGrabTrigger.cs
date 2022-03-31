@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WhipGrabTrigger : MonoBehaviour
 {
+    [SerializeField] [TagSelector] string[] tagsToGrab;
     [SerializeField] private Transform grabPullDestination;
 
     private void Start()
@@ -25,7 +27,8 @@ public class WhipGrabTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("WhipGrabbable"))
+        //If other's tag matches any of the tags in tagsToGrab, grab it.
+        if (Array.Exists(tagsToGrab, tag => other.CompareTag(tag)))
         {
             Debug.Log($"Grabbing {other.gameObject.name} with the whip...");
             other.gameObject.GetComponent<WhipGrabbableItem>().FlyToGrabber(grabPullDestination);

@@ -2,29 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
 
-  public void Update()
+    //public AudioSource buttonClick;
+    //public AudioClip click;
+
+    [SerializeField] private InputActionReference pauseActionRef;
+
+    private void OnEnable()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Debug.Log("Key press");
-            if (GameIsPaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
-        }
+        pauseActionRef.action.performed += OnPauseAction;
+    }
+    private void OnDisable()
+    {
+        pauseActionRef.action.performed -= OnPauseAction;
     }
 
-   public void Resume()
+    private void OnPauseAction(InputAction.CallbackContext ctx)
+    {
+        if (GameIsPaused)
+            Resume();
+        else
+            Pause();
+    }
+
+    public void Resume()
     {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
@@ -46,6 +53,19 @@ public class PauseMenu : MonoBehaviour
 
     public void Restart()
     {
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("RiverRide"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("PuzzlingTimes"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        else
+        {
+            Resume();
+        }
 
     }
 
@@ -56,10 +76,10 @@ public class PauseMenu : MonoBehaviour
         {
             UnityEditor.EditorApplication.isPlaying = false;
         }
-        else 
+        else
 #endif
 
             Application.Quit();
-        
+
     }
 }
