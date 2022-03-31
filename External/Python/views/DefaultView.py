@@ -40,6 +40,7 @@ class DefaultView(wx.Frame):
       self.header3.name = 3
       self.header3.Bind(wx.EVT_BUTTON, self.switchGame)
 
+      self.header3.Hide()
       vBox.Add(headerBox, 0, wx.EXPAND)
     
       vBox.Add(self.panel_one, 1, wx.EXPAND)

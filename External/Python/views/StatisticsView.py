@@ -45,6 +45,7 @@ class StatisticsView(wx.Frame):
       self.Bind(wx.EVT_CLOSE, self.onClose)
       self.Bind(wx.EVT_RADIOBUTTON, self.onSwitchPanels)
       self.SetSizerAndFit(self.sizer)
+      self.SetTitle("Balance Score Showing")
       self.Centre()
       
       pub.subscribe(self.plotGameScore, "statistics.game")
@@ -56,11 +57,11 @@ class StatisticsView(wx.Frame):
       """
       radioBox = event.GetEventObject() 
       if radioBox.GetLabel() == "Game Score":
-         self.SetTitle("Panel Two Showing")
+         self.SetTitle("Game Score Showing")
          self.panel_one.Hide()
          self.panel_two.Show()
       else:
-         self.SetTitle("Panel One Showing")
+         self.SetTitle("Balance Score Showing")
          self.panel_one.Show()
          self.panel_two.Hide()
       self.Layout()
@@ -102,6 +103,9 @@ class BalancePanel(wx.Panel):
       self.figure = Figure()
 
       self.axes = self.figure.subplots()
+      self.axes.set_xlabel("Time")
+      self.axes.set_ylabel("Score")
+
       self.lines = []
       self.canvas = FigureCanvas(self, -1, self.figure)
 
@@ -141,7 +145,7 @@ class BalancePanel(wx.Panel):
       self.axes.text(self.annot_x, self.annot_y,"",ha='center', fontsize=36, color='#DD4012')
       self.default.Show(False)
       colors = ['r', 'b', 'g']
-      labels = ["G1", "G2", "G3"]
+      labels = ["Game 1", "Game 2", "Game 3"]
       for i in range(0,len(scores)):
          if scores[i] == None:
             continue
@@ -182,15 +186,16 @@ if __name__ == '__main__':
    app = wx.App()
    view = StatisticsView(None)
    
-   bScore = [None, None, None]
-   gScore = [None, None, None]
-   view.plotBalanceScore(bScore)
-   view.plotGameScore(gScore)
+   # bScore = [None, None, None]
+   # gScore = [None, None, None]
+   # view.plotBalanceScore(bScore)
+   # view.plotGameScore(gScore)
 
    bScore = [[(1646934163, 365), (1647012919, 91), (1647012919, 5), (1647099955, 70)], [(1647012919, 55), (1647012919, 51), (1647012919, 59), (1647099955, 50)], [(1647012919, 50), (1647099955, 30)]]
-   gScore = [[(1646934163, 65), (1647012919, 56), (1647099955, 10)], [(1647012919, 15), (1647012919, 19), (1647012919, 15), (1647099955, 60)], [(1647012919, 18), (1647012919, 81), (1647099955, 30)]]
+   # gScore = [[(1646934163, 65), (1647012919, 56), (1647099955, 10)], [(1647012919, 15), (1647012919, 19), (1647012919, 15), (1647099955, 60)], [(1647012919, 18), (1647012919, 81), (1647099955, 30)]]
+   gScore = [[(1647012919, 15), (1647032929, 19), (1647072949, 15), (1647099955, 60)], [(1647012919, 18), (1647062949, 81), (1647099955, 30)]]
    view.plotBalanceScore(bScore)
-   view.plotGameScore(gScore)
+   view.panel_two.plotScore(gScore)
 
    # bScore = [None, None, None]
    # gScore = [None, None, None]
