@@ -9,7 +9,8 @@ public class Trap_Object : MonoBehaviour
         //when the player hits the obstacle, tell the game manager to deduct points
         if (other.gameObject.CompareTag("PlayerHead"))
         {
-            GameObject.Find("Game Manager").GetComponent<PuzzlingGame>().TrapHit();
+            //GameObject.Find("Game Manager").GetComponent<PuzzlingGame>().TrapHit();
+            PuzzlingGame.singleton.TrapHit();
         }
     }
 }

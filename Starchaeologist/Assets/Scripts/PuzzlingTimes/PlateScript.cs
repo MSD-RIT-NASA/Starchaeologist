@@ -63,41 +63,33 @@ public class PlateScript : MonoBehaviour
         }
 
         ready = true;
+
+        enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(trapped)//make sure the platform is trapped
+        if (wobbling)//when the player enters the tile it will first wobble/lower
         {
-            if (wobbling)//when the player enters the tile it will first wobble/lower
+            if(wobbleTimer > 5f)
             {
-                if(wobbleTimer > 5f)
+                if(wobbleType == 0)
                 {
-                    if(wobbleType == 0)
-                    {
-                        twoWayScript.back2Zero = true;
-                    }
-                    else
-                    {
-                        fourWayScript.back2Zero = true;
-                    }
-                    wobbleTimer = 0f;
-                    wobbling = false;
-                    PuzzlingGame.singleton.TrapTime();
-                    //managerReference.TrapTime();
-                    Debug.Log("Back to zero");
+                    twoWayScript.back2Zero = true;
                 }
-                wobbleTimer = wobbleTimer + Time.deltaTime;
+                else
+                {
+                    fourWayScript.back2Zero = true;
+                }
+                wobbleTimer = 0f;
+                wobbling = false;
+                PuzzlingGame.singleton.TrapTime();
+                //managerReference.TrapTime();
+                Debug.Log("Back to zero");
             }
+            wobbleTimer = wobbleTimer + Time.deltaTime;
         }
-        //if(reactivate)
-        //{
-        //    Debug.Log("you can move now");
-        //    reactivate = false;
-        //    managerReference.ActivatePlates(adjacentPlates);
-        //    triggered = false;
-        //}
     }
 
     //trigger detection
@@ -115,6 +107,7 @@ public class PlateScript : MonoBehaviour
             //if the platform is trapped starting wobbling, if not go straight to activating the adjacent tiles
             if (trapped)
             {
+                enabled = true;
                 //randomly  choose a wobble patern
                 wobbling = true;
                 wobbleType = Random.Range(0, 3);
@@ -143,5 +136,6 @@ public class PlateScript : MonoBehaviour
         //managerReference.ActivatePlates(adjacentPlates);
         PuzzlingGame.singleton.ActivatePlates(adjacentPlates);
         triggered = false;
+        enabled = false;
     }
 }

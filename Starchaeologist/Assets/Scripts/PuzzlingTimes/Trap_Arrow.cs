@@ -28,6 +28,8 @@ public class Trap_Arrow : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
         }
+
+        enabled = false;
     }
 
     public void DataSetup(PlateScript getCurrent)
@@ -91,6 +93,7 @@ public class Trap_Arrow : MonoBehaviour
                 trapping = false;
                 plateReference.Reactivate();
                 plateReference = null;
+                enabled = false;
             }
             else
             {

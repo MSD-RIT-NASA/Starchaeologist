@@ -42,6 +42,8 @@ public class Trap_Pillar : MonoBehaviour
             rightSide = false;
             transform.GetChild(0).transform.localRotation = Quaternion.Euler(new Vector3(0, 180, 0));
         }
+
+        enabled = false;
     }
 
     // Update is called once per frame
@@ -116,7 +118,8 @@ public class Trap_Pillar : MonoBehaviour
                 plateReference.Reactivate();
                 plateReference = null;
                 rightSide = !rightSide;
-                break;
+                enabled = false;
+                return;
         }
     }
 

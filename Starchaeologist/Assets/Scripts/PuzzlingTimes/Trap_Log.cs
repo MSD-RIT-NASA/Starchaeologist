@@ -50,6 +50,8 @@ public class Trap_Log : MonoBehaviour
             rightSide = false;
             transform.GetChild(0).transform.rotation = Quaternion.Euler(leftSwing);
         }
+
+        enabled = false;
     }
 
     // Update is called once per frame
@@ -111,7 +113,8 @@ public class Trap_Log : MonoBehaviour
                 plateReference = null;
                 trapping = false;
                 rightSide = !rightSide;
-                break;
+                enabled = false;
+                return;
         }
 
         //clamp and lerp

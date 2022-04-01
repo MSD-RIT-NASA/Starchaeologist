@@ -28,6 +28,8 @@ public class Trap_Ceiling : MonoBehaviour
     void Start()
     {
         spike = GetComponent<AudioSource>();
+
+        enabled = false;
     }
 
     // set up the data every time the trap is activated
@@ -155,6 +157,7 @@ public class Trap_Ceiling : MonoBehaviour
                 plateReference.Reactivate();
                 plateReference = null;
                 trapping = false;
+                enabled = false;
                 return;
         }
 
