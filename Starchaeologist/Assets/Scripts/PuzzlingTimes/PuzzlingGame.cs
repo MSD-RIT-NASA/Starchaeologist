@@ -16,7 +16,6 @@ public class PuzzlingGame : MonoBehaviour
     PlateScript currentScript;
     public bool activateTrap = false;
     public bool trapDone = false;
-    float trapTimer = 0f;
     bool healing = false;
 
     public GameObject startPlatform;

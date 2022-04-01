@@ -426,7 +426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e988983f96fe1dd48800bcdfc82f23e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_LineWidth: 0.02
+  m_LineWidth: 0.005
   m_OverrideInteractorLineLength: 1
   m_LineLength: 10
   m_WidthCurve:
@@ -484,8 +484,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   m_InvalidColorGradient:
     serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0, b: 0, a: 1}
+    key0: {r: 0.3647059, g: 0.9882353, b: 1, a: 1}
+    key1: {r: 0.3647059, g: 0.9882353, b: 1, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -986,7 +986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e988983f96fe1dd48800bcdfc82f23e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_LineWidth: 0.02
+  m_LineWidth: 0.005
   m_OverrideInteractorLineLength: 1
   m_LineLength: 10
   m_WidthCurve:
@@ -1044,8 +1044,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   m_InvalidColorGradient:
     serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0, b: 0, a: 1}
+    key0: {r: 0.36320752, g: 0.98918957, b: 1, a: 1}
+    key1: {r: 0.3647059, g: 0.9882353, b: 1, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1615,6 +1615,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3fe6c206150f64dac8677bf7304c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftHand: 0
+  paused: 0
 --- !u!1 &4352970851362235457
 GameObject:
   m_ObjectHideFlags: 0
@@ -2303,6 +2305,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3fe6c206150f64dac8677bf7304c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftHand: 1
+  paused: 0
 --- !u!1 &4352970851759115724
 GameObject:
   m_ObjectHideFlags: 0

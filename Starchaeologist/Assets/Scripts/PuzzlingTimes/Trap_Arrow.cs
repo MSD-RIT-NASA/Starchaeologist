@@ -10,7 +10,6 @@ public class Trap_Arrow : MonoBehaviour
     bool starting = false;
     public bool rightSide;
 
-    float arrowX = 0f;
     float pauseTimer = 0f;
 
     float rightWall = 13.7f;

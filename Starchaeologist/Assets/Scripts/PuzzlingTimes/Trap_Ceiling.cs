@@ -11,7 +11,6 @@ public class Trap_Ceiling : MonoBehaviour
 
     GameObject[] spears;
     int[] selectedPorts;
-    int[] openPorts;
 
     PlateScript plateReference;
 
@@ -19,7 +18,6 @@ public class Trap_Ceiling : MonoBehaviour
     int trapStep = 0;
     float lerpRatio = 0f;
 
-    bool pauseSpear = false;
     float pauseTimer = 0f;
 
     Vector3[] fromHere;
