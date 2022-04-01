@@ -91,17 +91,13 @@ public class S_RiverGame : MonoBehaviour
         if (currentSpeed != raftSpeed && !slowDown)
         {
             currentSpeed = currentSpeed + (raftAcceleration * Time.deltaTime * raftSpeed * 5f);
-            /* 
-            TO DO: Make this also affect the wobbling of the raft so it increases as the speed increases
-            */
+            
             raftScript.tiltRange = raftScript.tiltRange + (raftAcceleration * Time.deltaTime * raftScript.maxRange * 5f);
         }
         else if (slowDown)
         {
             currentSpeed = currentSpeed - (raftAcceleration * Time.deltaTime * raftSpeed);
-            /* 
-            TO DO: Make this also affect the wobbling of the raft so it decreases as the speed decreases
-            */
+            
             raftScript.tiltRange = raftScript.tiltRange - (raftAcceleration * Time.deltaTime * raftScript.maxRange);
         }
         currentSpeed = Mathf.Clamp(currentSpeed, 0.25f, raftSpeed);

@@ -347,7 +347,6 @@ if __name__ == "__main__":
     if setupError == 0:
         # logging.info("Starting Server")
         while True :
-            break
             logging.info("Waiting For Message From Unity")
             decodedMessage = server.unityRead()
             logging.info("Message Recieved From Unity: " +decodedMessage)

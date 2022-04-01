@@ -16,13 +16,16 @@ public class PuzzlingGame : MonoBehaviour
     PlateScript currentScript;
     public bool activateTrap = false;
     public bool trapDone = false;
-    float trapTimer = 0f;
     bool healing = false;
 
     public GameObject startPlatform;
     public GameObject endPlatform;
 
     public AudioSource trap_warning;
+    public AudioClip trap_warning1;
+    public AudioClip trap_warning2;
+    public AudioClip trap_warning3;
+    public AudioClip trap_warning4;
 
     PythonCommunicator communicateReference;
 
@@ -126,10 +129,35 @@ public class PuzzlingGame : MonoBehaviour
         -set the platform's rotation as such
         -for now just send the desired rotation right into the platform's localRotation
          */
-        if(currentScript.trapped)
+
+        //if (currentScript.trapped)
+        //{
+        //    currentScript.transform.localRotation = Quaternion.Euler(currentScript.desiredRotation);
+        //}
+
+        //currentScript.transform.localRotation = currentScript.desiredRotation;
+        //if(currentScript.trapped)
+        //{
+        //    Debug.Log(currentScript.desiredRotation.eulerAngles);
+        //}
+
+        float desiredX = currentScript.desiredRotation.eulerAngles.x;
+        float desiredZ = currentScript.desiredRotation.eulerAngles.z;
+
+        //keep everything uniform to hopefully avoid errors
+        //keep rotation values within the range of (-10) to (10)
+        if(desiredX > 180)
         {
-            //currentScript.transform.localRotation = currentScript.desiredRotation;
-            Vector2 giveRotation = new Vector2(currentScript.desiredRotation.x, currentScript.desiredRotation.z);
+            desiredX -= 360f;
+        }
+        if (desiredZ > 180)
+        {
+            desiredZ -= 360f;
+        }
+
+        if (currentScript.trapped)
+        {
+            Vector2 giveRotation = new Vector2(desiredX, desiredZ);
             communicateReference.desiredRotation = giveRotation;
             currentScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
         }
@@ -152,7 +180,7 @@ public class PuzzlingGame : MonoBehaviour
         int xIndex = (int)currentPosition.x;
         int yIndex = (int)currentPosition.y;
         int thisTrap = currentScript.trapList[Random.Range(0,currentScript.trapList.Count)];
-        trap_warning.Play();
+        //trap_warning.Play();
 
         //set up the trap list
         //0 = ceiling spikes
@@ -162,18 +190,22 @@ public class PuzzlingGame : MonoBehaviour
         switch (thisTrap)
         {
             case 0:
+                trap_warning.PlayOneShot(trap_warning1);
                 Debug.Log("Ceiling Spikes!");
                 ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().DataSetup(currentScript);
                 break;
             case 1:
+                trap_warning.PlayOneShot(trap_warning2);
                 Debug.Log("Arrows!");
                 wallArray[yIndex][Random.Range(0, 2)].GetComponent<Trap_Arrow>().DataSetup(currentScript);
                 break;
             case 2:
+                trap_warning.PlayOneShot(trap_warning3);
                 Debug.Log("Log Swing!");
                 swingList[yIndex].GetComponent<Trap_Log>().DataSetup(currentScript);
                 break;
             case 3:
+                trap_warning.PlayOneShot(trap_warning4);
                 Debug.Log("Pillar Swipe!");
                 //figure out which pillar to use
                 int pillarSide = 0;

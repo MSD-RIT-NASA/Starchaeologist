@@ -45,7 +45,7 @@ public class S_2_Wobble : MonoBehaviour
             if(Mathf.Abs(Quaternion.Angle(transform.localRotation, Quaternion.Euler(0,0,0))) < 1f)
             {
                 //if we're going back to zero and the platform has reached that, disable the script
-                GetComponent<PlateScript>().desiredRotation = Quaternion.Euler(0, 0, 0).eulerAngles;
+                GetComponent<PlateScript>().desiredRotation = Quaternion.Euler(0,0,0);
                 back2Zero = false;
                 dataReady = false;
                 enabled = false;
@@ -78,6 +78,6 @@ public class S_2_Wobble : MonoBehaviour
         }
 
         //lerp
-        GetComponent<PlateScript>().desiredRotation = Quaternion.Slerp(backTilt, forthTilt, tiltRatio).eulerAngles;
+        GetComponent<PlateScript>().desiredRotation = Quaternion.Slerp(backTilt, forthTilt, tiltRatio);
     }
 }

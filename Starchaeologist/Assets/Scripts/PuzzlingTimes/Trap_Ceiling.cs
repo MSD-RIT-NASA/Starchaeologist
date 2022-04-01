@@ -5,13 +5,12 @@ using UnityEngine;
 public class Trap_Ceiling : MonoBehaviour
 {
     public GameObject spearReference;
-    float spawnHeight = 8.5f;
-    float pokeHeight = 8f;
-    float stabHeight = 3.5f;
+    float spawnHeight = 7.5f;
+    float pokeHeight = 7f;
+    float stabHeight = 2.5f;
 
     GameObject[] spears;
     int[] selectedPorts;
-    int[] openPorts;
 
     PlateScript plateReference;
 
@@ -19,7 +18,6 @@ public class Trap_Ceiling : MonoBehaviour
     int trapStep = 0;
     float lerpRatio = 0f;
 
-    bool pauseSpear = false;
     float pauseTimer = 0f;
 
     Vector3[] fromHere;
@@ -113,7 +111,7 @@ public class Trap_Ceiling : MonoBehaviour
                 lerpRatio = lerpRatio + (Time.deltaTime * 4);
                 break;
             case 1:
-                Suspense(2f);
+                Suspense(4f);
                 spike.Play();
                 break;
             case 2://poke to stab
