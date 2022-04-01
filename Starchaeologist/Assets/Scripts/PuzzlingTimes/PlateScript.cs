@@ -9,6 +9,7 @@ public class PlateScript : MonoBehaviour
     //public bool reactivate = false;
     public bool triggered = false;
     PuzzlingGame managerReference;
+    public bool ready = false;
 
     //trap variables
     public bool trapped = false;
@@ -23,7 +24,7 @@ public class PlateScript : MonoBehaviour
 
     S_2_Wobble twoWayScript;
     S_4_Wobble fourWayScript;
-    public Vector3 desiredRotation;
+    public Quaternion desiredRotation;
 
     //the manager scrpt will use this to determine which trap to set off
     public List<int> trapList;
@@ -36,7 +37,7 @@ public class PlateScript : MonoBehaviour
         managerReference = GameObject.Find("Game Manager").GetComponent<PuzzlingGame>();
         twoWayScript = GetComponent<S_2_Wobble>();
         fourWayScript = GetComponent<S_4_Wobble>();
-        desiredRotation = new Vector3(0, 0, 0);
+        desiredRotation = Quaternion.Euler(0, 0, 0);
         twoWayScript = GetComponent<S_2_Wobble>();
 
         //set up the trap list
@@ -60,6 +61,8 @@ public class PlateScript : MonoBehaviour
         {
             trapList.Add(3);
         }
+
+        ready = true;
     }
 
     // Update is called once per frame
@@ -100,7 +103,7 @@ public class PlateScript : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //check of the collider is the player
-        if (other.gameObject.CompareTag("PlayerBody") && !triggered)
+        if (other.gameObject.CompareTag("PlayerBody") && !triggered && ready)
         {
             triggered = true;
 

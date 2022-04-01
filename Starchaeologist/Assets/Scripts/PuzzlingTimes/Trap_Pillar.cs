@@ -71,7 +71,7 @@ public class Trap_Pillar : MonoBehaviour
                 ExtendRetract(true);
                 break;
             case 1://brief pause
-                Suspense(0.5f);
+                Suspense(1.5f);
                 pillar.Play();
                 break;
             case 2://swing blade
@@ -100,7 +100,7 @@ public class Trap_Pillar : MonoBehaviour
                 transform.GetChild(0).transform.localRotation = Quaternion.Euler(new Vector3(0, lerpRatio * 180f, 0));
                 break;
             case 3://brief pause
-                Suspense(0.5f);
+                Suspense(1.5f);
                 pillar.Play();
                 break;
             case 4://retract blade
