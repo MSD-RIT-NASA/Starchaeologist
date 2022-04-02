@@ -4,29 +4,24 @@
 #
 
 from threading import Thread
-from pip import main
 from pubsub import pub
 import serial
 from _thread import *;
 import logging
 import zmq
 import time
-from itertools import count
-from multiprocessing import Process
 from scipy.stats import norm, chi2
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 import numpy as np
-from scipy.spatial import ConvexHull
-from scipy.spatial.distance import cdist
-from scipy.stats import t
+from database.dbcalls import db
 import math
-
-# from scipy.stats import ppf
-from itertools import combinations
-
+import pandas as pd
 
 class Server(Thread):
+    """
+    Server controls interactions between Python to and from Unity and Python to and from Arduino
+    """
     def __init__(self, debug):
         Thread.__init__(self)
         if debug:
@@ -39,15 +34,13 @@ class Server(Thread):
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
         self.socket.bind("tcp://*:5555")
-        self.score = None;
         pub.subscribe(self.killSwitch, "killSwitch.check")
         pub.subscribe(self.endThread, 'server.end')
 
     
     def killSwitch(self, message):
         if message == "live":
-            if self.debug == False:
-                self.unityWrite("live")
+            self.unityWrite("live")
         else:
             self.unityWrite("kill")
 
@@ -73,72 +66,57 @@ class Server(Thread):
         logging.info("Gathered Balance Data")
         return balanceData
 
-    # TODO
     def calculateBalanceScore(self,sensorData):
-        print(sensorData)
+        logging.info("Started Calculating Balance Score")
         points = []
         xComponents = []
         yComponents = []
+        times = []
         xComponent = 0
         yComponent = 0
         for i in range(0,len(sensorData),1):
             xComponent = 0
             yComponent = 0
-            xComponent += sensorData[i][1] + sensorData[i][3] - (sensorData[i][0] + sensorData[i][2])
-            yComponent += sensorData[i][1] + sensorData[i][0] - (sensorData[i][3] + sensorData[i][2])
-            
+            xComponent += sensorData[i][2] + sensorData[i][4] - (sensorData[i][1] + sensorData[i][3])
+            yComponent += sensorData[i][2] + sensorData[i][1] - (sensorData[i][4] + sensorData[i][3])
             point = np.array([xComponent, yComponent])
             points.append(point)
             xComponents.append(xComponent)
             yComponents.append(yComponent)
-            
-        points = np.array(points, dtype='int64')
-        hull = ConvexHull(points)
-        area = hull.area
+            times.append(sensorData[i][0])
         
-        m = points.mean()
-        s = points.std() 
+        factor = np.sqrt(np.square(xComponents) + np.square(yComponents))
+        meanCOP = np.mean(factor)
+        stdCOP = np.std(factor)
+        diff = np.square(np.diff(xComponents/np.std(xComponents))) + np.square(np.diff(yComponents/np.std(yComponents)))
+        lengthCOP = np.sum(np.sqrt(diff))
         
-        dof = len(points)-1    
-        confidence = 0.75
-
-        t_crit = np.abs(t.ppf((1-confidence)/2,dof))
-        lowerRange = m-s*t_crit/np.sqrt(len(points)) 
-        upperRange = m+s*t_crit/np.sqrt(len(points)) 
+        centroid = (sum(xComponents) / len(points), sum(yComponents) / len(points))
         
-        ranges = upperRange-lowerRange
+        score = 5 * (meanCOP+stdCOP+lengthCOP)/(abs(centroid[0]) + abs(centroid[1]))
         
-        distances = [self.dist(p1, p2) for p1, p2 in combinations(points, 2)]
-        avg_distance = sum(distances) / len(distances)
-        std_distance = np.std(distances)
-        
-        # score = round(75/avg_distance + 75/std_distance + 75/ranges + 75/area)
-        
-        score = round((area)/(avg_distance + std_distance + ranges) * 100)
-        
-        logging.info("Calculated Balance Score")
-        
-        # Plotting
-        # cov = np.cov(points, rowvar=False)
-        # mean_pos = points.mean(axis=0)
-        # width1, height1, theta1 = self.cov_ellipse(points, cov, 2)
-        # width2, height2, theta2 = self.cov_ellipse2(points, cov, 2)
-        # ax = plt.gca()
-        # plt.plot(xComponents,yComponents, 'ro-')
-        # ellipse1 = Ellipse(xy=mean_pos, width=width1, height=height1, angle=theta1,
-        #                 edgecolor='b', fc='None', lw=2, zorder=4)
-        # ax.add_patch(ellipse1)
-        # ellipse2 = Ellipse(xy=mean_pos, width=width2, height=height2, angle=theta2,
-        #                 edgecolor='r', fc='None', lw=.8, zorder=4)
-        # ax.add_patch(ellipse2)
-        # plt.show()
-        # hullpoints = points[hull.vertices,:]
-        # hdist = cdist(hullpoints, hullpoints, metric='euclidean')
-        # bestpair = np.unravel_index(hdist.argmax(), hdist.shape)
-        # plt.show()
-
-        return score
+        # # Plotting
+        # self.plotScore(points)
+        logging.info("Finished Calculating Balance Score")
+        return score, meanCOP, stdCOP, lengthCOP, centroid[0], centroid[1]
     
+    def plotScore(self, points):
+        """
+        Plot Moving COP
+        """
+        cov = np.cov(points, rowvar=False)
+        mean_pos = points.mean(axis=0)
+        width1, height1, theta1 = self.cov_ellipse(points, cov, 2)
+        width2, height2, theta2 = self.cov_ellipse2(points, cov, 2)
+        ax = plt.gca()
+        plt.plot(points, 'ro-')
+        ellipse1 = Ellipse(xy=mean_pos, width=width1, height=height1, angle=theta1,
+                        edgecolor='b', fc='None', lw=2, zorder=4)
+        ax.add_patch(ellipse1)
+        ellipse2 = Ellipse(xy=mean_pos, width=width2, height=height2, angle=theta2,
+                        edgecolor='r', fc='None', lw=.8, zorder=4)
+        ax.add_patch(ellipse2)
+        plt.show()
 
     def eigsorted(self,cov):
         '''
@@ -252,7 +230,7 @@ class Server(Thread):
                     balanceData = self.gatherBalanceData()
                     
                     # Calculate balance Score 
-                    balanceScore = self.calculateBalanceScore(balanceData)
+                    balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = self.calculateBalanceScore(balanceData)
 
                     # Send message that data has been recieved so game can start again
                     calibrationConfirmation = "calibrate " + balanceScore 
@@ -260,7 +238,8 @@ class Server(Thread):
 
                     # Send scores to database
                     pub.sendMessage('database.GameScore', score=gameScore[1])
-                    pub.sendMessage('database.BalanceScore', score=balanceScore)
+                    pub.sendMessage('database.BalanceScore', score=balanceScore, gameID=gameScore[2],meanCOP=meanCOP, stdCOP=stdCOP,
+                                    lengthCOP=lengthCOP, centroidX=centroidX, centroidY=centroidY)
                 except:
                     logging.error("Error occured while parsing data")
                     self.unityWrite("error " + decodedMessage)
@@ -293,27 +272,59 @@ if __name__ == "__main__":
         level=logging.INFO,
         datefmt='%Y-%m-%d %H:%M:%S')
 
-    logging.info("Confirming Force Platform Connection")
-    # server.confirmArduinoConnection()
+    data = [
+        [950, 105.5, 103, 102, 101],
+        [955, 100, 105, 100, 100],
+        [960, 103, 102, 105, 101],
+        [965, 100, 100, 100, 105],
+        [970, 117, 100, 100, 100],
+        [975, 100, 110, 105, 110],
+        [980, 100, 100, 110, 102],
+        [985, 102, 100, 100, 110],
+        [990, 115, 100, 100, 100],
+        [995, 100, 115, 107, 106],
+        [1000, 100, 106, 115, 100]
+    ]
 
-    logging.info("Confirming Unity Connection")
-    # server.confirmUnityConnection()
+    data2 = [
+        [950, 1006, 1034, 1027, 1023],
+        [955, 1000, 1055, 1003, 1003],
+        [960, 1003, 1026, 1051, 1015],
+        [965, 1000, 1000, 1003, 1057],
+        [970, 1170, 1000, 1009, 1001],
+        [975, 1000, 1100, 1056, 1102],
+        [980, 1000, 1000, 1109, 1023],
+        [985, 1020, 1000, 1006, 1104],
+        [990, 1150, 1000, 1003, 1005],
+        [995, 1000, 1150, 1072, 1065]
+    ]
+
+    data3 = [
+        [950, 1, 1, 1, 1],
+        [955, 1.2, 1.1, 1.1, 1.1],
+        [960, 1, 1, 1, 1],
+        [965, 1.2, 1.1, 1.1, 1.1],
+        [970, 1, 1, 1, 1],
+        [975, 1.2, 1.1, 1.1, 1.1],
+        [980, 1, 1, 1, 1],
+        [985, 1.2, 1.1, 1.1, 1.1],
+        [990, 1, 1, 1, 1],
+        [995, 1.2, 1.1, 1.1, 1.1]
+    ]
+    database = db()
+    balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data)
+    database.addBalanceScore(4,2,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
+    balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data2)
+    database.addBalanceScore(2,1,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
+    balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data3)
+    database.addBalanceScore(1,2,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
     
-    # server.plotSensorData(data)
-    # server.plotSensorData(data2)
-    # server.plotSensorData(data3)
-    # server.arduinoWrite(port.encode())
-    # text = server.arduinoRead()
-    # print(text)
-    # logging.info(text)
-    # text = server.arduinoRead()
-    # print(text)
-    # logging.info(text)
     if setupError == 0:
         logging.info("Starting Server")
         time.sleep(1)
         server.arduinoWrite("3")
         while True :
+            break
             logging.info("Waiting For Message From Unity")
             decodedMessage = server.unityRead()
             logging.info("Message Recieved From Unity: " +decodedMessage)
@@ -325,7 +336,7 @@ if __name__ == "__main__":
                 score = None
             elif(decodedMessage == "closeApp"): 
                 # TODO: Used for ending script
-                print("End of application reached")
+                logging.info("End of application reached")
                 break
             elif(decodedMessage == "readScore"):
                 # TODO: Read values from database

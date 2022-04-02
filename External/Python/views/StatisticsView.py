@@ -23,8 +23,8 @@ class StatisticsView(wx.Frame):
    def __init__(self, parent): 
       super(StatisticsView, self).__init__(parent, title = "Statistics") 
 
-      self.panel_one = BalancePanel(self)
-      self.panel_two = BalancePanel(self)
+      self.panel_one = ScorePanel(self)
+      self.panel_two = ScorePanel(self)
       self.panel_two.Hide()
       
       self.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -95,7 +95,7 @@ class StatisticsView(wx.Frame):
       logging.info("Closing Statistics View")
       self.Show(False)
 
-class BalancePanel(wx.Panel):
+class ScorePanel(wx.Panel):
    def __init__(self, parent):
       """Constructor"""
       wx.Panel.__init__(self, parent=parent)
@@ -142,10 +142,12 @@ class BalancePanel(wx.Panel):
       """
       Plot scores into the axis, where each line represents a different game
       """
+      self.axes.clear()
       self.axes.text(self.annot_x, self.annot_y,"",ha='center', fontsize=36, color='#DD4012')
       self.default.Show(False)
       colors = ['r', 'b', 'g']
       labels = ["Game 1", "Game 2", "Game 3"]
+
       for i in range(0,len(scores)):
          if scores[i] == None:
             continue
@@ -194,8 +196,8 @@ if __name__ == '__main__':
    bScore = [[(1646934163, 365), (1647012919, 91), (1647012919, 5), (1647099955, 70)], [(1647012919, 55), (1647012919, 51), (1647012919, 59), (1647099955, 50)], [(1647012919, 50), (1647099955, 30)]]
    # gScore = [[(1646934163, 65), (1647012919, 56), (1647099955, 10)], [(1647012919, 15), (1647012919, 19), (1647012919, 15), (1647099955, 60)], [(1647012919, 18), (1647012919, 81), (1647099955, 30)]]
    gScore = [[(1647012919, 15), (1647032929, 19), (1647072949, 15), (1647099955, 60)], [(1647012919, 18), (1647062949, 81), (1647099955, 30)]]
-   view.plotBalanceScore(bScore)
-   view.panel_two.plotScore(gScore)
+   view.plotBalanceScore(bScore, 0, 0)
+   view.panel_two.plotScore(gScore, 1, 0)
 
    # bScore = [None, None, None]
    # gScore = [None, None, None]

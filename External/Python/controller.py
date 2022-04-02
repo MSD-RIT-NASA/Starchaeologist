@@ -1,14 +1,12 @@
 import logging
 import multiprocessing
 import threading
-from pip import main
 import wx
 import wx.adv
 from views import DefaultView, HubView, LoginView, StatisticsView
 from pubsub import pub
 import server as Server
 import subprocess
-from threading import Thread
 import time
 import killswitch as KillSwitch
 from database.dbcalls import db
@@ -51,7 +49,11 @@ class Controller:
         pub.subscribe(self.gameStart, 'game.start')
 
         pub.subscribe(self.closeApp, "app.end")
-        
+
+        pub.subscribe(self.addBalanceScore, "database.BalanceScore")
+        pub.subscribe(self.addGameScore, "database.GameScore")
+
+
         self.mainView.Show(True)
         self.mainView.timer.Start(5000)
 
@@ -60,10 +62,11 @@ class Controller:
         self.loginView.ShowModal()
 
     def loginAttempt(self, username, password):
+        logging.info("Attempting User Login")
         val = self.db.findUserID(username)
         if val is not None:
             if password == val[0][2]:
-                logging.info("User Logging In")
+                logging.info("Successful User Login")
                 self.currentUser = str(val[0][0])
                 self.mainView.Show(False)
                 self.loginView.Close()            
@@ -154,6 +157,13 @@ class Controller:
 
         if not cancelled:
             self.statisticsView.Show()
+
+
+    def addGameScore(self, score, gameID):
+        self.db.addGameScore(self.currentUser,gameID,score)
+    
+    def addBalanceScore(self, score, gameID, meanCOP, stdCOP, lengthCOP, centroidX, centroidY):
+        self.db.addBalanceScore(self.currentUser,gameID,score,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
 
     def gameStart(self):
         """

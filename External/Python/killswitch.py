@@ -3,7 +3,6 @@
 #  Created by: William Johnson
 #
 
-from distutils.log import debug
 import logging
 import serial
 import time
@@ -20,7 +19,7 @@ class KillSwitchMonitor(Thread):
             self.arduino = serial.Serial(port='COM3', baudrate=115200, timeout=.1)
             
         pub.subscribe(self.endThread, 'killswitch.end')
-        # Initialize connection to kill switch
+
     def run(self):
         logging.info("Starting Kill Switch Thread")
         while not self.end:
