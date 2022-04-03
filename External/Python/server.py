@@ -16,7 +16,6 @@ from matplotlib.patches import Ellipse
 import numpy as np
 from database.dbcalls import db
 import math
-import pandas as pd
 
 class Server(Thread):
     """
@@ -39,12 +38,18 @@ class Server(Thread):
 
     
     def killSwitch(self, message):
+        """
+        Constant send kill switch message
+        """
         if message == "live":
             self.unityWrite("live")
         else:
             self.unityWrite("kill")
 
     def gatherBalanceData(self):
+        """
+        Grab sensor data from the arduino
+        """
         logging.info("Started Gathering Info From Force Platform")
         time.sleep(1)
         self.arduinoWrite("8")
@@ -67,6 +72,9 @@ class Server(Thread):
         return balanceData
 
     def calculateBalanceScore(self,sensorData):
+        """
+        Calculate balance score from sensor data
+        """
         logging.info("Started Calculating Balance Score")
         points = []
         xComponents = []
@@ -96,13 +104,14 @@ class Server(Thread):
         score = 5 * (meanCOP+stdCOP+lengthCOP)/(abs(centroid[0]) + abs(centroid[1]))
         
         # # Plotting
-        # self.plotScore(points)
+        # self.plotScore(np.array(points, dtype="int64"))
+
         logging.info("Finished Calculating Balance Score")
         return score, meanCOP, stdCOP, lengthCOP, centroid[0], centroid[1]
     
     def plotScore(self, points):
         """
-        Plot Moving COP
+        Plot COP over time
         """
         cov = np.cov(points, rowvar=False)
         mean_pos = points.mean(axis=0)
@@ -181,6 +190,9 @@ class Server(Thread):
                 logging.error("Unity Not Properly Setup")
                 
     def arduinoRead(self):
+        """
+        Read message from arduino
+        """
         while True:
             data_raw = self.arduino.readline().decode("ISO-8859-1").strip() 
             if data_raw:
@@ -188,7 +200,10 @@ class Server(Thread):
 
         return data_raw
     
-    def arduinoWrite(self, message): # START SEND STOP
+    def arduinoWrite(self, message): 
+        """
+        Send message to arduino
+        """
         if self.debug:
             logging.debug(message)
         else:
@@ -204,6 +219,9 @@ class Server(Thread):
         self.unityWrite("quit")
 
     def run(self):
+        """
+        Behavior for Python server
+        """
         logging.info("Starting Server")
         time.sleep(1)
         self.arduinoWrite("3")
@@ -216,8 +234,7 @@ class Server(Thread):
             decodedMessage = self.unityRead()
             logging.info("Message Recieved From Unity: " + decodedMessage)
             if(decodedMessage == "quit"): 
-                # TODO: Used for ending script
-                print("End of Unity Game reached")
+                logging.info("End of Unity Game reached")
                 # pub.sendMessage("unityGameEnded")
                 self.unityShutDown()
                 self.arduinoShutDown()
@@ -259,6 +276,9 @@ class Server(Thread):
                     self.unityWrite("error " + decodedMessage)
     
     def endThread(self):
+        """
+        End Server Thread
+        """
         logging.info("Ending Server Thread")
         self.end = True
 
