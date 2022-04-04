@@ -8,7 +8,8 @@ public class PlateScript : MonoBehaviour
     public List<Vector2> adjacentPlates;
     //public bool reactivate = false;
     public bool triggered = false;
-    PuzzlingGame managerReference;
+    //PuzzlingGame managerReference;
+    public bool ready = false;
 
     //trap variables
     public bool trapped = false;
@@ -33,7 +34,7 @@ public class PlateScript : MonoBehaviour
     public void DataSetup(Vector2 getPosition)
     {
         myPosition = getPosition;
-        managerReference = GameObject.Find("Game Manager").GetComponent<PuzzlingGame>();
+        //managerReference = GameObject.Find("Game Manager").GetComponent<PuzzlingGame>();
         twoWayScript = GetComponent<S_2_Wobble>();
         fourWayScript = GetComponent<S_4_Wobble>();
         desiredRotation = Quaternion.Euler(0, 0, 0);
@@ -60,6 +61,8 @@ public class PlateScript : MonoBehaviour
         {
             trapList.Add(3);
         }
+
+        ready = true;
     }
 
     // Update is called once per frame
@@ -81,7 +84,8 @@ public class PlateScript : MonoBehaviour
                     }
                     wobbleTimer = 0f;
                     wobbling = false;
-                    managerReference.TrapTime();
+                    PuzzlingGame.singleton.TrapTime();
+                    //managerReference.TrapTime();
                     Debug.Log("Back to zero");
                 }
                 wobbleTimer = wobbleTimer + Time.deltaTime;
@@ -100,12 +104,13 @@ public class PlateScript : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //check of the collider is the player
-        if (other.gameObject.CompareTag("PlayerBody") && !triggered)
+        if (other.gameObject.CompareTag("PlayerBody") && !triggered && ready)
         {
             triggered = true;
 
             //deactivate the platforms that are currently active
-            managerReference.DeactivatePlatforms(myPosition);
+            //managerReference.DeactivatePlatforms(myPosition);
+            PuzzlingGame.singleton.DeactivatePlatforms(myPosition);
 
             //if the platform is trapped starting wobbling, if not go straight to activating the adjacent tiles
             if (trapped)
@@ -135,7 +140,8 @@ public class PlateScript : MonoBehaviour
     public void Reactivate()
     {
         Debug.Log("you can move now");
-        managerReference.ActivatePlates(adjacentPlates);
+        //managerReference.ActivatePlates(adjacentPlates);
+        PuzzlingGame.singleton.ActivatePlates(adjacentPlates);
         triggered = false;
     }
 }

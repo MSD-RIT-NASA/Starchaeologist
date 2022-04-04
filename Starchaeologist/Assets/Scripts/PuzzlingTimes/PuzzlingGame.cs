@@ -5,6 +5,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class PuzzlingGame : MonoBehaviour
 {
+    //singleton test
+    public static PuzzlingGame singleton;
+
 
     public List<GameObject>[] tileArray;
     public List<GameObject>[] ceilingArray;
@@ -16,7 +19,6 @@ public class PuzzlingGame : MonoBehaviour
     PlateScript currentScript;
     public bool activateTrap = false;
     public bool trapDone = false;
-    float trapTimer = 0f;
     bool healing = false;
 
     public GameObject startPlatform;
@@ -32,6 +34,15 @@ public class PuzzlingGame : MonoBehaviour
 
     void Start()
     {
+        if(singleton != null && singleton != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            singleton = this;
+        }
+
         trap_warning = GetComponent<AudioSource>();
         communicateReference = GetComponent<PythonCommunicator>();
     }
@@ -193,16 +204,20 @@ public class PuzzlingGame : MonoBehaviour
             case 0:
                 trap_warning.PlayOneShot(trap_warning1);
                 Debug.Log("Ceiling Spikes!");
+                ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().enabled = true;
                 ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().DataSetup(currentScript);
                 break;
             case 1:
                 trap_warning.PlayOneShot(trap_warning2);
                 Debug.Log("Arrows!");
-                wallArray[yIndex][Random.Range(0, 2)].GetComponent<Trap_Arrow>().DataSetup(currentScript);
+                int thisSide = Random.Range(0, 2);
+                wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().enabled = true;
+                wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().DataSetup(currentScript);
                 break;
             case 2:
                 trap_warning.PlayOneShot(trap_warning3);
                 Debug.Log("Log Swing!");
+                swingList[yIndex].GetComponent<Trap_Log>().enabled = true;
                 swingList[yIndex].GetComponent<Trap_Log>().DataSetup(currentScript);
                 break;
             case 3:
@@ -215,6 +230,7 @@ public class PuzzlingGame : MonoBehaviour
                     pillarSide = 1;
                 }
                 int pillarDepth = yIndex / 3;
+                pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().enabled = true;
                 pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().DataSetup(currentScript);
                 break;
             default:
