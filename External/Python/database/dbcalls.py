@@ -1,3 +1,4 @@
+import logging
 import sqlite3
 from sqlite3 import Error
 
@@ -14,9 +15,9 @@ class db:
         try:
             cursor.execute(query)
             connection.commit()
-            print("Query executed successfully")
+            logging.info("Query executed successfully")
         except Error as e:
-            print(f"The error '{e}' occurred")
+            logging.error(f"The error '{e}' occurred")
 
     def search_query(self, query):
         connection = self.conn
@@ -30,7 +31,7 @@ class db:
                 return rows
             # connection.commit()
         except Error as e:
-            print(f"The error '{e}' occurred")
+            logging.error(f"The error '{e}' occurred")
 
 
     def createTables(self):
@@ -145,10 +146,19 @@ class db:
         return self.search_query(query)
         
 
-    def addScore(self, USER_ID, SCORETYPE_ID, GAME_ID, VALUE):
+    def addGameScore(self, USER_ID, GAME_ID, VALUE):
         query = (
             "INSERT INTO SCORES(USER_ID, SCORETYPE_ID, GAME_ID, VALUE)"
-            "VALUES("+str(USER_ID)+","+str(SCORETYPE_ID)+","+str(GAME_ID)+","+str(VALUE)+")"
+            "VALUES("+str(USER_ID)+", 2,"+str(GAME_ID)+","+str(VALUE)+")"
+        )
+        self.execute_query(query)
+        pass
+
+    def addBalanceScore(self, USER_ID, GAME_ID, VALUE, MEAN_COP, STD_COP, LENGTH_COP, CENTROID_X, CENTROID_Y):
+        query = (
+            "INSERT INTO SCORES(USER_ID, SCORETYPE_ID, GAME_ID, VALUE, MEAN_COP, STD_COP, LENGTH_COP, CENTROID_X, CENTROID_Y)"
+            "VALUES("+str(USER_ID)+", 1,"+str(GAME_ID)+","+str(VALUE)+","+
+            str(MEAN_COP)+","+str(STD_COP)+","+str(LENGTH_COP)+","+str(CENTROID_X)+","+str(CENTROID_Y)+")"
         )
         self.execute_query(query)
 
@@ -178,66 +188,17 @@ class db:
 
 if __name__ == '__main__':
     database = db()
-    # database.getTopScores()
-    # query = """
-    #     CREATE TABLE IF NOT EXISTS SCORES(
-    #             SCORE_ID INTEGER PRIMARY KEY,
-    #             USER_ID INTEGER,
-    #             SCORETYPE_ID INTEGER,
-    #             GAME_ID INTEGER,
-    #             VALUE INTEGER,
-    #             DATE_ADDED TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    #             FOREIGN KEY (USER_ID) 
-    #                 REFERENCES USERS (USER_ID) 
-    #                     ON DELETE CASCADE 
-    #                     ON UPDATE NO ACTION,
-    #             FOREIGN KEY (SCORETYPE_ID) 
-    #                 REFERENCES SCORETYPES (SCORETYPE_ID) 
-    #                     ON DELETE CASCADE 
-    #                     ON UPDATE NO ACTION, 
-    #             FOREIGN KEY (GAME_ID) 
-    #                 REFERENCES GAMES (GAME_ID) 
-    #                     ON DELETE CASCADE 
-    #                     ON UPDATE NO ACTION 
-    #         )
-    # """
-    # database.execute_query(query)
-    # query = """
-    #             INSERT INTO SCORES (USER_ID, SCORETYPE_ID, GAME_ID, VALUE)
-    #             SELECT USER_ID, SCORETYPE_ID, GAME_ID, VALUE 
-    #             FROM SCORES_OLD 
-    #         """
-    # database.execute_query(query)
-    
-    # query = """
-    #             DROP TABLE SCORES_OLD 
-    #         """
-   
     # query = """
     # INSERT INTO GAMES(NAME, EXELINK)
     # VALUES("River Rafting", ""),
     # ("Searching", ""),
     # ("Mystery", "")
     # """
-    query = (
-            """INSERT INTO SCORES(USER_ID,SCORETYPE_ID,GAME_ID,VALUE)
-            VALUES(5,2,3,50),
-                  (5,2,2,55),
-                  (5,1,1,56),
-                  (5,1,2,15),
-                  (5,1,3,18),
-                  (5,1,2,19),
-                  (5,2,1,91),
-                  (5,2,2,51),
-                  (5,1,3,81),
-                  (5,2,2,59),
-                  (5,2,1,5),
-                  (5,1,2,15)
-            """
-        )
+    query = """
+    ALTER TABLE SCORES ADD COLUMN CENTROID_Y REAL DEFAULT 0.0;
+    """
     # query = """
-    # DELETE FROM SCORES
-    # WHERE GAME_ID = 3 AND SC;
+    # ALTER TABLE SCORES DROP COLUMN CENTROID_X;
     # """
     database.execute_query(query)
     

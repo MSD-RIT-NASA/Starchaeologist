@@ -6,7 +6,7 @@ import wx.adv
 from views import DefaultView, HubView, LoginView, StatisticsView
 from pubsub import pub
 import server as Server
-from threading import Thread
+import subprocess
 import time
 import killswitch as KillSwitch
 from database.dbcalls import db
@@ -49,7 +49,11 @@ class Controller:
         pub.subscribe(self.gameStart, 'game.start')
 
         pub.subscribe(self.closeApp, "app.end")
-        
+
+        pub.subscribe(self.addBalanceScore, "database.BalanceScore")
+        pub.subscribe(self.addGameScore, "database.GameScore")
+
+
         self.mainView.Show(True)
         self.mainView.timer.Start(5000)
 
@@ -58,10 +62,11 @@ class Controller:
         self.loginView.ShowModal()
 
     def loginAttempt(self, username, password):
+        logging.info("Attempting User Login")
         val = self.db.findUserID(username)
         if val is not None:
             if password == val[0][2]:
-                logging.info("User Logging In")
+                logging.info("Successful User Login")
                 self.currentUser = str(val[0][0])
                 self.mainView.Show(False)
                 self.loginView.Close()            
@@ -81,7 +86,7 @@ class Controller:
                 
                 self.hubView.Show(True)
             else:
-                resp = wx.MessageDialog(None, "Incorrect Password for this Username. Please try again.", "Failed Login" , wx.OK)
+                resp = wx.MessageDialog(None, "Incorrect Password for this Username. Please try again.", "Incorrect Login Credentials" , wx.OK)
                 resp.ShowModal()
                 resp.Destroy()
         else:
@@ -95,7 +100,6 @@ class Controller:
             self.currentUser = str(val[0][0])
             self.mainView.Show(False)
             self.loginView.Close()
-            # self.hubView.Show(True)
                             
             # Set statistics functon works
             self.bPlotted = False
@@ -138,7 +142,10 @@ class Controller:
         self.gPlotted = True
 
     def statisticsOpen(self):
-        logging.info("Opening Statistics")
+        """
+        Opens Statistics View. Displays loading message 
+        """
+        logging.info("Opening Statistics View")
         dialog = wx.ProgressDialog("Loading Statistics", "", maximum=100, style=wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME)
         cancelled = False
         while (self.bPlotted == False or self.gPlotted == False) and cancelled == False:
@@ -151,21 +158,34 @@ class Controller:
         if not cancelled:
             self.statisticsView.Show()
 
+
+    def addGameScore(self, score, gameID):
+        self.db.addGameScore(self.currentUser,gameID,score)
+    
+    def addBalanceScore(self, score, gameID, meanCOP, stdCOP, lengthCOP, centroidX, centroidY):
+        self.db.addBalanceScore(self.currentUser,gameID,score,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
+
     def gameStart(self):
-        # self.db.addScore(5,1,1,10)
-        # self.db.addScore(5,1,2,60)
-        # self.db.addScore(5,1,3,30)
-        # self.db.addScore(5,2,1,70)
-        # self.db.addScore(5,2,2,50)
-        # self.db.addScore(5,2,3,30)
-        # [SteamVR Directory]\bin\win64\vrstartup.exe
-        # server = Server.Server(debug=debug)
-        # server.start()
-        # server.join()
-        # logging.info("Closing Server")
+        """
+        Opens Unity Game through SteamVR
+        """
+        # os.system("steam://rungameid/250820")
+        # steam steam://rungameid/{YouGameID}
+        
+        
+        # Opens SteamVR
+        subprocess.call(r"C:\Program Files (x86)\Steam\Steam.exe -applaunch 250820")
+
+        # Opens SteamVR
+        # subprocess.call(r"C:\Program Files (x86)\Steam\steamapps\common\SteamVR\bin\win64\vrstartup.exe")
+
+        # os.system("steam steam://run/570")
         pass
     
     def closeApp(self):
+        """
+        Close Entire Application, after user check
+        """
         window = wx.MessageDialog(None, "Are you sure you want to quit?", "Close" , wx.YES_NO|wx.YES_DEFAULT)
         resp = window.ShowModal()
         if resp == wx.ID_YES:
@@ -185,3 +205,5 @@ class Controller:
         else:
             window.Destroy()
 
+if __name__ == '__main__':
+    subprocess.call(r"C:\Program Files (x86)\Steam\steamapps\common\SteamVR\bin\win64\vrstartup.exe")

@@ -5,7 +5,6 @@
 
 from distutils.log import debug
 from threading import Thread
-from pubsub import pub
 import wx
 import controller as Controller
 from threading import Thread
