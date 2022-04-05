@@ -191,13 +191,12 @@ public class S_RiverBuilder : MonoBehaviour
             if (i <= (segmentCount / 2))//jungle river
             {
                 //place the transition piece
-                GameObject transitionPiece = Instantiate(jungleTransitions[bankHeight][oldHeight]);
+                transitionPiece = Instantiate(jungleTransitions[bankHeight][oldHeight]);
                 newSegment = Instantiate(jungleSegments[bankHeight][Random.Range(0, segmentArray[bankHeight].Count)]);
             }
             else//cave river
             {
                 //place the transition piece
-                GameObject transitionPiece;
                 if (beginCave)//spawn the river entrance
                 {
                     beginCave = false;
