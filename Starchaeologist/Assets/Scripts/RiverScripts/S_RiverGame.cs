@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class S_RiverGame : MonoBehaviour
 {
+    public static S_RiverGame singleton;
+
     GameObject playerReference;
     GameObject raftReference;
     S_Raft raftScript;
@@ -51,6 +53,17 @@ public class S_RiverGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (singleton != null && singleton != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            singleton = this;
+        }
+
+        communicateReference = GetComponent<PythonCommunicator>();
+
         playerReference = GameObject.Find("Player_Rig");
         raftReference = GameObject.Find("Raft_Fake");
         riverWater = GameObject.Find("RiverWater");
