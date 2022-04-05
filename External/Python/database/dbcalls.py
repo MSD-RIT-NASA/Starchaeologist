@@ -104,11 +104,11 @@ class db:
 
     def getGameScore(self, USER_ID):
         queryOne = (
-            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE "+
+            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE, MEAN_COP, STD_COP, LENGTH_COP, CENTROID_X, CENTROID_Y "+
             "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='2' AND GAME_ID='1' ORDER BY DATE_ADDED ASC"
         )
         queryTwo = (
-            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE "+
+            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE, MEAN_COP, STD_COP, LENGTH_COP, CENTROID_X, CENTROID_Y "+
             "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='2' AND GAME_ID='2' ORDER BY DATE_ADDED ASC"
         )
         queryThree = (
@@ -118,15 +118,15 @@ class db:
         result1 = self.search_query(queryOne)
         result2 = self.search_query(queryTwo)
         result3 = self.search_query(queryThree)
-        return [result1, result2, result3]
+        return [result1, result2]
 
     def getBalanceScore(self, USER_ID):
         queryOne = (
-            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE "+
+            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE, MEAN_COP, STD_COP, LENGTH_COP, CENTROID_X, CENTROID_Y "+
             "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='1' AND GAME_ID='1' ORDER BY DATE_ADDED ASC"
         )
         queryTwo = (
-            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE "+
+            "SELECT CAST(strftime('%s', DATE_ADDED) AS INT), VALUE, MEAN_COP, STD_COP, LENGTH_COP, CENTROID_X, CENTROID_Y "+
             "FROM SCORES WHERE USER_ID='"+USER_ID+"' AND SCORETYPE_ID='1' AND GAME_ID='2' ORDER BY DATE_ADDED ASC"
         )
         queryThree = (
@@ -137,7 +137,7 @@ class db:
         result1 = self.search_query(queryOne)
         result2 = self.search_query(queryTwo)
         result3 = self.search_query(queryThree)
-        return [result1, result2, result3]
+        return [result1, result2]
 
     def findUserID(self, UserName):
         query = (

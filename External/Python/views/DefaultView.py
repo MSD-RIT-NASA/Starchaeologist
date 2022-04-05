@@ -13,10 +13,10 @@ class DefaultView(wx.Frame):
 
       self.panel_one = ScoreBoard(self, gameOneScores)
       self.panel_two = ScoreBoard(self, gameTwoScores)
-      self.panel_three = ScoreBoard(self, gameThreeScores)
+      # self.panel_three = ScoreBoard(self, gameThreeScores)
       self.panel_two.Hide()
       
-      self.panel_three.Hide()
+      # self.panel_three.Hide()
 
       vBox = wx.BoxSizer(wx.VERTICAL)
       headerBox = wx.BoxSizer(wx.HORIZONTAL)
@@ -34,18 +34,18 @@ class DefaultView(wx.Frame):
       self.header2.name = 2
       self.header2.Bind(wx.EVT_BUTTON, self.switchGame)
 
-      self.header3 = wx.Button(self, -1,label="Game 3")
+      # self.header3 = wx.Button(self, -1,label="Game 3")
 
-      headerBox.Add(self.header3, wx.EXPAND)
-      self.header3.name = 3
-      self.header3.Bind(wx.EVT_BUTTON, self.switchGame)
+      # headerBox.Add(self.header3, wx.EXPAND)
+      # self.header3.name = 3
+      # self.header3.Bind(wx.EVT_BUTTON, self.switchGame)
 
-      self.header3.Hide()
+      # self.header3.Hide()
       vBox.Add(headerBox, 0, wx.EXPAND)
     
       vBox.Add(self.panel_one, 1, wx.EXPAND)
       vBox.Add(self.panel_two, 1, wx.EXPAND)
-      vBox.Add(self.panel_three, 1, wx.EXPAND)
+      # vBox.Add(self.panel_three, 1, wx.EXPAND)
       
       btn1 = wx.Button(self, label = "Login")
       # btn1 = GB.GradientButton(self, label="Login")
@@ -66,7 +66,7 @@ class DefaultView(wx.Frame):
       
       self.header1.BackgroundColour = self.color
       self.header2.BackgroundColour = self.color2
-      self.header3.BackgroundColour = self.color2
+      # self.header3.BackgroundColour = self.color2
       
       self.SetSizerAndFit(vBox)
       self.SetMinSize((350,400))
@@ -90,14 +90,8 @@ class DefaultView(wx.Frame):
 
       elif self.Header == 2:
           self.panel_two.Hide()
-          self.panel_three.Show()
-          self.header2.BackgroundColour = self.color2
-          self.header3.BackgroundColour = self.color
-          self.Header = 3
-      elif self.Header == 3:
-          self.panel_three.Hide()
           self.panel_one.Show()
-          self.header3.BackgroundColour = self.color2
+          self.header2.BackgroundColour = self.color2
           self.header1.BackgroundColour = self.color
           self.Header = 1
       self.Update()
@@ -107,32 +101,20 @@ class DefaultView(wx.Frame):
       gameID = event.GetEventObject().name
       self.timer.Stop()
       if gameID == 1:
-        self.panel_three.Hide()
         self.panel_two.Hide()
         self.panel_one.Show()
 
         self.Header = 1
         self.header1.BackgroundColour = self.color
         self.header2.BackgroundColour = self.color2
-        self.header3.BackgroundColour = self.color2
       elif gameID == 2:
-        self.panel_three.Hide()
         self.panel_one.Hide()
         self.panel_two.Show()
         
         self.Header = 2
         self.header1.BackgroundColour = self.color2
         self.header2.BackgroundColour = self.color
-        self.header3.BackgroundColour = self.color2
-      elif gameID == 3:
-        self.panel_one.Hide()
-        self.panel_two.Hide()
-        self.panel_three.Show()
 
-        self.Header = 3
-        self.header1.BackgroundColour = self.color2
-        self.header2.BackgroundColour = self.color2
-        self.header3.BackgroundColour = self.color
       self.Layout()
       self.timer.Start(5000)
 		

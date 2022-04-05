@@ -33,7 +33,7 @@ class Controller:
             if serverPortStatus[0][1].startswith("Arduino"):
                 self.server = Server.Server(debug=self.debug, port=serverPort)
                 self.server.start()
-                time.sleep(1)    
+                time.sleep(1)
             else:
                 self.server = None
                 logging.error("Server not started: Arduino not connected to port " + serverPort)
@@ -79,14 +79,6 @@ class Controller:
         self.mainView.Show(True)
         self.mainView.timer.Start(5000)
 
-    def check_presence(self, port):
-        myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
-        if port not in myports:
-            print("Arduino has been disconnected!")
-            # logging.error("Arduino has been disconnected!")
-        else:
-            print("Arduino Connected")
-            logging.info("Arduino Connected")
 
     def loginOpen(self):
         self.loginView.ShowModal()
@@ -199,18 +191,8 @@ class Controller:
         """
         Opens Unity Game through SteamVR
         """
-        # os.system("steam://rungameid/250820")
-        # steam steam://rungameid/{YouGameID}
-        
-        
-        # Opens SteamVR
-        subprocess.call(r"C:\Program Files (x86)\Steam\Steam.exe -applaunch 250820")
-
-        # Opens SteamVR
-        # subprocess.call(r"C:\Program Files (x86)\Steam\steamapps\common\SteamVR\bin\win64\vrstartup.exe")
-
-        # os.system("steam steam://run/570")
-        pass
+        logging.info("Starting Unity Game")
+        subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
     
     def closeApp(self):
         """
@@ -242,5 +224,5 @@ if __name__ == '__main__':
         format='%(asctime)s %(levelname)-8s %(message)s',
         level=logging.INFO,
         datefmt='%Y-%m-%d %H:%M:%S')
-    # subprocess.call(r"C:\Program Files (x86)\Steam\steamapps\common\SteamVR\bin\win64\vrstartup.exe")
+    # subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
     c = Controller()
