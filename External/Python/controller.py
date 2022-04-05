@@ -1,4 +1,5 @@
 import logging
+import serial.tools.list_ports
 import multiprocessing
 import threading
 import wx
@@ -12,7 +13,7 @@ import killswitch as KillSwitch
 from database.dbcalls import db
 
 class Controller:
-    def __init__(self, debug):
+    def __init__(self, debug=False):
         self.db = db()
         
         self.currentUser = None
@@ -21,13 +22,34 @@ class Controller:
         self.plottingProcesses = []
         self.bPlotted = False
         self.gPlotted = False
-
+        serverPort = "COM6"
+        killSwitchPort = "COM3"
         # Threads
-        self.server = Server.Server(debug=self.debug)
-        self.server.start()
-        time.sleep(1)
-        self.killSwitch = KillSwitch.KillSwitchMonitor(debug=self.debug)
-        self.killSwitch.start()
+        ports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
+        
+        serverPortStatus = [port for port in ports if serverPort in port ]
+        killSwitchPortStatus = [port for port in ports if killSwitchPort in port ]
+        if(len(serverPortStatus) > 0):
+            if serverPortStatus[0][1].startswith("Arduino"):
+                self.server = Server.Server(debug=self.debug, port=serverPort)
+                self.server.start()
+                time.sleep(1)    
+            else:
+                self.server = None
+                logging.error("Server not started: Arduino not connected to port " + serverPort)
+        else:
+            self.server = None
+            logging.error("Server not started: Arduino not connected to port " + serverPort)
+        if(len(killSwitchPortStatus) > 0):
+            if killSwitchPortStatus[0][1].startswith("Arduino"):
+                self.killSwitch = KillSwitch.KillSwitchMonitor(debug=self.debug, port=killSwitchPort)
+                self.killSwitch.start()
+            else:
+                self.killSwitch = None
+                logging.error("KillSwitch not started: Arduino not connected to port " + killSwitchPort)
+        else:
+            self.killSwitch = None
+            logging.error("KillSwitch not started: Arduino not connected to port " + killSwitchPort)
         
         gameOneScores, gameTwoScores, gameThreeScores = self.db.getTopScores()
         
@@ -57,6 +79,14 @@ class Controller:
         self.mainView.Show(True)
         self.mainView.timer.Start(5000)
 
+    def check_presence(self, port):
+        myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
+        if port not in myports:
+            print("Arduino has been disconnected!")
+            # logging.error("Arduino has been disconnected!")
+        else:
+            print("Arduino Connected")
+            logging.info("Arduino Connected")
 
     def loginOpen(self):
         self.loginView.ShowModal()
@@ -195,10 +225,12 @@ class Controller:
             self.loginView.Show(False)
             self.statisticsView.Show(False)
             logging.info("Closed All Views")
-            pub.sendMessage('killswitch.end')
-            self.killSwitch.join()
-            pub.sendMessage('server.end')
-            self.server.join()
+            if self.killSwitch != None:
+                pub.sendMessage('killswitch.end')
+                self.killSwitch.join()
+            if self.server != None:
+                pub.sendMessage('server.end')
+                self.server.join()
             logging.info("Closed All Servers")
             window.Destroy()
             exit(0)
@@ -206,4 +238,9 @@ class Controller:
             window.Destroy()
 
 if __name__ == '__main__':
-    subprocess.call(r"C:\Program Files (x86)\Steam\steamapps\common\SteamVR\bin\win64\vrstartup.exe")
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        level=logging.INFO,
+        datefmt='%Y-%m-%d %H:%M:%S')
+    # subprocess.call(r"C:\Program Files (x86)\Steam\steamapps\common\SteamVR\bin\win64\vrstartup.exe")
+    c = Controller()

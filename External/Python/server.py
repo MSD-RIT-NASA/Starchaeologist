@@ -21,12 +21,10 @@ class Server(Thread):
     """
     Server controls interactions between Python to and from Unity and Python to and from Arduino
     """
-    def __init__(self, debug):
+    def __init__(self, port, debug= False):
         Thread.__init__(self)
-        if debug:
-            self.arduino = None
-        else:
-            self.arduino = serial.Serial(port='COM3', baudrate=115200, timeout=.1)
+        
+        self.arduino = serial.Serial(port=port, baudrate=115200, timeout=.1)
                 
         self.debug = debug
         self.end = False
@@ -227,7 +225,7 @@ class Server(Thread):
         self.arduinoWrite("3")
         while True and not self.end:     
             if self.debug:
-                logging.info("Server in debug mode")
+                logging.info("Debug Mode: Server closed")
                 time.sleep(1)
                 break
             logging.info("Waiting For Message From Unity")

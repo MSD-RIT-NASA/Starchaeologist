@@ -3,7 +3,6 @@
 #  Created by: William Johnson
 #
 
-from distutils.log import debug
 from threading import Thread
 import wx
 import controller as Controller
@@ -11,7 +10,7 @@ from threading import Thread
 import logging
 
 class App(Thread):
-    def __init__(self, debug):
+    def __init__(self, debug = False):
         Thread.__init__(self)
         self.debug = debug
         
