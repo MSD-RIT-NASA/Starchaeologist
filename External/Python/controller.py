@@ -22,34 +22,28 @@ class Controller:
         self.plottingProcesses = []
         self.bPlotted = False
         self.gPlotted = False
-        serverPort = "COM6"
+        serverPort = "COM4"
         killSwitchPort = "COM3"
         # Threads
         ports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
-        
-        serverPortStatus = [port for port in ports if serverPort in port ]
-        killSwitchPortStatus = [port for port in ports if killSwitchPort in port ]
-        if(len(serverPortStatus) > 0):
-            if serverPortStatus[0][1].startswith("Arduino"):
-                self.server = Server.Server(debug=self.debug, port=serverPort)
-                self.server.start()
-                time.sleep(1)
-            else:
-                self.server = None
-                logging.error("Server not started: Arduino not connected to port " + serverPort)
-        else:
-            self.server = None
-            logging.error("Server not started: Arduino not connected to port " + serverPort)
-        if(len(killSwitchPortStatus) > 0):
-            if killSwitchPortStatus[0][1].startswith("Arduino"):
-                self.killSwitch = KillSwitch.KillSwitchMonitor(debug=self.debug, port=killSwitchPort)
-                self.killSwitch.start()
-            else:
-                self.killSwitch = None
-                logging.error("KillSwitch not started: Arduino not connected to port " + killSwitchPort)
-        else:
-            self.killSwitch = None
-            logging.error("KillSwitch not started: Arduino not connected to port " + killSwitchPort)
+        for port in ports:
+            if serverPort in port:
+                logging.info("Server Port Found")
+                if port[1].startswith("Arduino"):
+                    self.server = Server.Server(debug=self.debug, port=serverPort)
+                    self.server.start()
+                    time.sleep(1)
+                else:
+                    self.server = None
+                    logging.error("Server not started: Arduino not connected to port " + serverPort)
+            elif killSwitchPort in port:
+                logging.info("KillSwitch Port Found")
+                if port[1].startswith("Arduino"):
+                    self.killSwitch = KillSwitch.KillSwitchMonitor(debug=self.debug, port=killSwitchPort)
+                    self.killSwitch.start()
+                else:
+                    self.killSwitch = None
+                    logging.error("KillSwitch not started: Arduino not connected to port " + killSwitchPort)
         
         gameOneScores, gameTwoScores, gameThreeScores = self.db.getTopScores()
         
