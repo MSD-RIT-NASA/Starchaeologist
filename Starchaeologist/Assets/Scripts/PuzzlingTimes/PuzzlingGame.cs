@@ -5,7 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class PuzzlingGame : MonoBehaviour
 {
-    //singleton test
+    //singleton
     public static PuzzlingGame singleton;
 
 

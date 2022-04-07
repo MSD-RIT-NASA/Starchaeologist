@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class S_RiverGame : MonoBehaviour
 {
+    //singleton
+    public static S_RiverGame singleton;
+
     [SerializeField] GameObject playerReference;
     [SerializeField] GameObject raftReference;
     [SerializeField] GameObject riverWater;
@@ -51,6 +54,15 @@ public class S_RiverGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (singleton != null && singleton != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            singleton = this;
+        }
+
         //pythonCommunicator = new HelloRequester();
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
         //pythonCommunicator.Start();
