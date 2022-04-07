@@ -16,6 +16,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnEnable()
     {
+        Debug.Log($"PauseMenu on {name}: pauseActionRef = {pauseActionRef}");
         pauseActionRef.action.performed += OnPauseAction;
     }
     private void OnDisable()
@@ -25,6 +26,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnPauseAction(InputAction.CallbackContext ctx)
     {
+        Debug.Log("pause action performed");
         if (GameIsPaused)
             Resume();
         else
