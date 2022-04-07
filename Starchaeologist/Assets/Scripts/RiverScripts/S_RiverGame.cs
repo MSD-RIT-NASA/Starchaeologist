@@ -6,12 +6,10 @@ using UnityEngine;
 
 public class S_RiverGame : MonoBehaviour
 {
-    public static S_RiverGame singleton;
-
-    GameObject playerReference;
-    GameObject raftReference;
+    [SerializeField] GameObject playerReference;
+    [SerializeField] GameObject raftReference;
+    [SerializeField] GameObject riverWater;
     S_Raft raftScript;
-    GameObject riverWater;
 
     public List<GameObject> riverReferences = new List<GameObject>(); //populated with positions while the river is being built from the S_RiverBuilder script
     Vector3 nextDestination = new Vector3(0, 0, 0);
@@ -53,21 +51,6 @@ public class S_RiverGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (singleton != null && singleton != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            singleton = this;
-        }
-
-        communicateReference = GetComponent<PythonCommunicator>();
-
-        playerReference = GameObject.Find("Player_Rig");
-        raftReference = GameObject.Find("Raft_Fake");
-        riverWater = GameObject.Find("RiverWater");
-
         //pythonCommunicator = new HelloRequester();
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
         //pythonCommunicator.Start();
@@ -85,6 +68,7 @@ public class S_RiverGame : MonoBehaviour
                 raftScript.tilting = true;
                 playerAttached = true;
                 playerReference.transform.parent = raftReference.transform;
+                playerReference.transform.position = raftReference.transform.GetChild(0).position;
             }
             MoveRaft();
             //make the raft rotate
@@ -104,13 +88,13 @@ public class S_RiverGame : MonoBehaviour
         if (currentSpeed != raftSpeed && !slowDown)
         {
             currentSpeed = currentSpeed + (raftAcceleration * Time.deltaTime * raftSpeed * 5f);
-            
+
             raftScript.tiltRange = raftScript.tiltRange + (raftAcceleration * Time.deltaTime * raftScript.maxRange * 5f);
         }
         else if (slowDown)
         {
             currentSpeed = currentSpeed - (raftAcceleration * Time.deltaTime * raftSpeed);
-            
+
             raftScript.tiltRange = raftScript.tiltRange - (raftAcceleration * Time.deltaTime * raftScript.maxRange);
         }
         currentSpeed = Mathf.Clamp(currentSpeed, 0.25f, raftSpeed);
@@ -175,6 +159,9 @@ public class S_RiverGame : MonoBehaviour
     //python communication function
     void Communication()
     {
+        if (!communicateReference)
+            return;
+
         /*To DO
         -This script is the link between the python script and the plate scripts
         -get the desired rotation from the plate script
