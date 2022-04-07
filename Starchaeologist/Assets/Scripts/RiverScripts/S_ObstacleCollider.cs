@@ -10,7 +10,7 @@ public class S_ObstacleCollider : MonoBehaviour
         if (other.gameObject.CompareTag("PlayerHead"))
         {
             //GameObject.Find("Game Manager").GetComponent<S_RiverGame>().ObstacleHit();
-            S_RiverGame.singleton.ObstacleHit();
+            scoreScript.singleton.hitScore();
 
             Destroy(this);
         }

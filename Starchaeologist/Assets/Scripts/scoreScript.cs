@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class scoreScript : MonoBehaviour
 {
+    public static scoreScript singleton;
+
     private Text txt;
     private Text txtMenu;
     private float showTime = 1f;
@@ -14,6 +16,15 @@ public class scoreScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (singleton != null && singleton != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            singleton = this;
+        }
+
         Score = 0;
         txt= GameObject.Find("Score").GetComponent<Text>();
         txt.enabled = false;
