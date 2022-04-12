@@ -8,11 +8,8 @@ public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
-
-    //public AudioSource buttonClick;
-    //public AudioClip click;
-
     [SerializeField] private InputActionReference pauseActionRef;
+    [SerializeField] GameObject playerReference;
 
     private void OnEnable()
     {
@@ -33,6 +30,20 @@ public class PauseMenu : MonoBehaviour
             Pause();
     }
 
+    private void UpdateMenuPosition()
+    {
+        GameObject tempPlayer = new GameObject();
+        tempPlayer.transform.position = playerReference.transform.position;
+        Quaternion tempRotation = playerReference.transform.rotation;
+        tempRotation.x = 0;
+        tempRotation.z = 0;
+        tempPlayer.transform.rotation = tempRotation;
+        Destroy(tempPlayer);
+        Vector3 spawnPos = playerReference.transform.position + (tempPlayer.transform.forward * 1.5f);
+        pauseMenuUI.transform.position = spawnPos;
+    }
+
+
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
@@ -42,6 +53,7 @@ public class PauseMenu : MonoBehaviour
 
     void Pause()
     {
+        UpdateMenuPosition();
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
