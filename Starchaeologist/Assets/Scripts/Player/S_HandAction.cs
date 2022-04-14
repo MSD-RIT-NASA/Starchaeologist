@@ -9,6 +9,7 @@ public class S_HandAction : MonoBehaviour
     XRRayInteractor teleportRay;
     XRInteractorLineVisual teleportLine;
     GameObject teleportReticle;
+    PauseMenu pauseMenu;
     float activationThreshold = 0.2f;
     bool teleportActive = false;
     public bool leftHand = false;
@@ -55,6 +56,7 @@ public class S_HandAction : MonoBehaviour
         {
             Debug.Log("Pause");
             paused = true;
+            pauseMenu.Pause();
             rightHand.paused = true;
             rightRay.SetActive(true);
             leftRay.SetActive(true);
