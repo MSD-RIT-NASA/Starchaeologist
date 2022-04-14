@@ -56,7 +56,7 @@ public class S_HandAction : MonoBehaviour
         {
             Debug.Log("Pause");
             paused = true;
-            pauseMenu.Pause();
+            //pauseMenu.Pause();
             rightHand.paused = true;
             rightRay.SetActive(true);
             leftRay.SetActive(true);

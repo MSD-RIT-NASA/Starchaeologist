@@ -55,6 +55,7 @@ public class PuzzlingBuilder : MonoBehaviour
         //PuzzlingGame.singleton.DataSetup();
         GetComponent<PuzzlingGame>().DataSetup();
         DataSetup();
+        GetComponent<PythonCommunicator>().gameMode = 2;
 
         int lengthValue = (roomLength * 3);
 
