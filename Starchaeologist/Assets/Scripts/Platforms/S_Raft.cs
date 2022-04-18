@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class S_Raft : MonoBehaviour
 {
-    public float maxRange = 10f;
+    public float maxRange = 5f;
     public float tiltRange = 0f;
     public float tiltSpeed = 1.0f;
     public bool tilting = false;
@@ -23,13 +23,8 @@ public class S_Raft : MonoBehaviour
         plannedRotation = new Vector3(0, 0, 0);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //Raft();
-    }
-
     //Raft() simulates the motion of a raft on water by randomly choosing rotations and lerping to those rotations
+    //called by S_RiverGame
     public void Raft()
     {
         tiltRatio = Mathf.Clamp(tiltRatio, 0f, 1f);
