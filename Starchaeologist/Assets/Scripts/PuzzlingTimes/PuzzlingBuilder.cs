@@ -78,16 +78,14 @@ public class PuzzlingBuilder : MonoBehaviour
             for (int j = 0; j < lengthValue; j++)
             {
                 //place the room tiles
-                tileArray[i].Add(null);
-                tileArray[i][j] = Instantiate(tilePrefab);
+                tileArray[i].Add(Instantiate(tilePrefab));
                 //tileArray[i][j].transform.rotation = Quaternion.Euler(0, 90 * Random.Range(0, 4), 0);
                 tileArray[i][j].transform.position = new Vector3((i * 2) + 1, 0, (j * 2) + 1);
                 trapArray[i].Add(false);
                 treasureArray[i].Add(false);
 
                 //place the ceiling traps
-                ceilingArray[i].Add(null);
-                ceilingArray[i][j] = Instantiate(ceilingPrefab);
+                ceilingArray[i].Add(Instantiate(ceilingPrefab));
                 ceilingArray[i][j].transform.position = new Vector3((i * 2) + 1, 0, (j * 2) + 1);
 
                 PlateScript scriptReference = tileArray[i][j].transform.GetChild(0).GetComponent<PlateScript>();
@@ -133,22 +131,19 @@ public class PuzzlingBuilder : MonoBehaviour
                 if (i == 0)
                 {
                     //swings
-                    swingList.Add(null);
-                    swingList[j] = Instantiate(swingPrefab);
+                    swingList.Add(Instantiate(swingPrefab));
                     swingList[j].transform.position = new Vector3(6, 5.5f, (j * 2) + 1);
 
                     //walls
                     wallArray[j] = new List<GameObject>();
                     if (j % 3 != 1)//avoid the pillar
                     {
-                        wallArray[j].Add(null);
-                        wallArray[j].Add(null);
+                        wallArray[j].Add(Instantiate(wallPrefab));
+                        wallArray[j].Add(Instantiate(wallPrefab));
                         //0 = left wall
-                        wallArray[j][0] = Instantiate(wallPrefab);
                         wallArray[j][0].transform.position = new Vector3(-2, 0, (j * 2) + 1);
                         wallArray[j][0].GetComponent<Trap_Arrow>().rightSide = false;
                         //1 = right wall
-                        wallArray[j][1] = Instantiate(wallPrefab);
                         wallArray[j][1].transform.position = new Vector3(14, 0, (j * 2) + 1);
                         wallArray[j][1].GetComponent<Trap_Arrow>().rightSide = true;
                     }
@@ -156,18 +151,16 @@ public class PuzzlingBuilder : MonoBehaviour
                     {
                         /*Pillar building here*/
                         pillarArray[pillarIndex] = new List<GameObject>();
-                        pillarArray[pillarIndex].Add(null);
-                        pillarArray[pillarIndex].Add(null);
                         Vector3 pillarPosition;
                         Vector3 pillarRotation;
                         //0 = left pillar
                         pillarPosition = new Vector3(-1, 1.5f, (j * 2) + 1);
                         pillarRotation = new Vector3(0, 0, 0);
-                        pillarArray[pillarIndex][0] = Instantiate(pillarPrefab, pillarPosition, Quaternion.Euler(pillarRotation));
+                        pillarArray[pillarIndex].Add(Instantiate(pillarPrefab, pillarPosition, Quaternion.Euler(pillarRotation)));
                         //1 = right pillar
                         pillarPosition = new Vector3(13, 1.5f, (j * 2) + 1);
                         pillarRotation = new Vector3(0, 180, 0);
-                        pillarArray[pillarIndex][1] = Instantiate(pillarPrefab, pillarPosition, Quaternion.Euler(pillarRotation));
+                        pillarArray[pillarIndex].Add(Instantiate(pillarPrefab, pillarPosition, Quaternion.Euler(pillarRotation)));
                         pillarIndex++;
                     }
                 }

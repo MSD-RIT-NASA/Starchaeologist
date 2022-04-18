@@ -125,11 +125,7 @@ public class PythonCommunicator : MonoBehaviour
                 //receive messages
                 string message = null;
                 bool gotMessage = false;
-                while (threadRunning)
-                {
-                    gotMessage = client.TryReceiveFrameString(out message); // this returns true if it's successful
-                    if (gotMessage) break;
-                }
+                gotMessage = client.TryReceiveFrameString(out message); // this returns true if it's successful
 
                 if (gotMessage)
                 {
@@ -152,6 +148,7 @@ public class PythonCommunicator : MonoBehaviour
                             Debug.Log("received 'quit'");
                             threadRunning = false;
                             NetMQConfig.Cleanup();
+                            Application.Quit();
                             return;
                         default://the message is either about score or rotation
                             SplitMessage(message);
