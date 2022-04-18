@@ -11,7 +11,7 @@ using System.Threading;
 //    -Send: 'rotation rotation1(float) rotation2(float)'
 //    - Receive: 'rotation rotation1(float) rotation2(float)'
 //    Score Calibration 
-//    -Send: 'calibrate gameScore(float)'
+//    -Send: 'calibrate gameScore(float) gameMode(int)'
 //    - Receive: 'calibrateStop balanceScore(float)'
 //    Killswitch
 //    - Receive 'kill'
@@ -22,6 +22,14 @@ using System.Threading;
 
 public class PythonCommunicator : MonoBehaviour
 {
+    //Game Mode
+    /*
+     * Main Menu = 0
+     * River Ride = 1
+     * Puzzling Times = 2
+     */
+    public int gameMode = 0;
+
     //thread
     bool threadRunning = false;
     Thread communicateThread;
@@ -54,6 +62,12 @@ public class PythonCommunicator : MonoBehaviour
         {
             threadRunning = true;
             StartThread();
+        }
+
+        if(comeBack)
+        {
+            /*TO DO*/
+            //allow the game to be unpaused after it's been killed
         }
     }
 
@@ -90,12 +104,15 @@ public class PythonCommunicator : MonoBehaviour
                     NetMQConfig.Cleanup();
                     //TO DO
                     //quit the game
+                    Application.Quit();
                     return;
                 }
                 else if(transferScore)//send the score
                 {
                     Debug.Log("Sending Score");
                     transferScore = false;
+                    string giveScore = "calibrate " + gameScore + " " + gameMode;
+                    client.SendFrame(giveScore);
                 }
                 else//send the desired rotation
                 {
@@ -108,11 +125,7 @@ public class PythonCommunicator : MonoBehaviour
                 //receive messages
                 string message = null;
                 bool gotMessage = false;
-                while (threadRunning)
-                {
-                    gotMessage = client.TryReceiveFrameString(out message); // this returns true if it's successful
-                    if (gotMessage) break;
-                }
+                gotMessage = client.TryReceiveFrameString(out message); // this returns true if it's successful
 
                 if (gotMessage)
                 {
@@ -135,6 +148,7 @@ public class PythonCommunicator : MonoBehaviour
                             Debug.Log("received 'quit'");
                             threadRunning = false;
                             NetMQConfig.Cleanup();
+                            Application.Quit();
                             return;
                         default://the message is either about score or rotation
                             SplitMessage(message);

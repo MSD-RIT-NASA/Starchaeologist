@@ -42,7 +42,7 @@ public class S_RiverBuilder : MonoBehaviour
     List<GameObject>[] jungleTransitions;
     List<GameObject>[] caveTransitions;
 
-    List<Vector3>[] obstacleSpawns;
+    List<List<Vector3>> obstacleSpawns;
 
     // Start is called before the first frame update
     void Start()
@@ -54,6 +54,7 @@ public class S_RiverBuilder : MonoBehaviour
 
         //give the game script the list of river pieces
         GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
+        GetComponent<PythonCommunicator>().gameMode = 1;
 
         //remove this script
         Destroy(this);
@@ -61,7 +62,7 @@ public class S_RiverBuilder : MonoBehaviour
 
     private void DataSetup()
     {
-        obstacleSpawns = new List<Vector3>[segmentCount];
+        obstacleSpawns = new List<List<Vector3>>(segmentCount);
 
         //set up the segments given in the scene into a managable array
         segmentArray = new List<GameObject>[4];
@@ -127,7 +128,7 @@ public class S_RiverBuilder : MonoBehaviour
 
 
             //record the positions available for spawning obstacles and artifacts
-            obstacleSpawns[i] = new List<Vector3>();
+            obstacleSpawns.Add(new List<Vector3>());
             obstacleSpawns[i].Add(newSpawn.transform.position);
             int j = 2;
             while (j < newSpawn.transform.childCount)
@@ -227,7 +228,7 @@ public class S_RiverBuilder : MonoBehaviour
 
 
             //record the positions available for spawning obstacles and artifacts
-            obstacleSpawns[i] = new List<Vector3>();
+            obstacleSpawns.Add(new List<Vector3>());
             obstacleSpawns[i].Add(newSegment.transform.position);
             int j = 2;
             while (j < newSegment.transform.childCount)
@@ -274,12 +275,11 @@ public class S_RiverBuilder : MonoBehaviour
     {
         //see if there is a location to spawn at
         Vector3 givePosition = Vector3.zero;
-        int objectAttempts = 0;
         int i = -1;
         while (givePosition == Vector3.zero)
         {
             //choose a river segment to spawn on
-            i = Random.Range(0, obstacleSpawns.Length);
+            i = Random.Range(0, obstacleSpawns.Count);
 
             if (obstacleSpawns[i].Count != 0)
             {
@@ -288,13 +288,10 @@ public class S_RiverBuilder : MonoBehaviour
                 givePosition = obstacleSpawns[i][j];
                 obstacleSpawns[i].RemoveAt(j);
             }
-            else if(objectAttempts >= 10)
+            else
             {
-                Debug.Log("No more room");
-                return;
+                obstacleSpawns.RemoveAt(i);
             }
-
-            objectAttempts++;
         }
 
         i++;
