@@ -167,10 +167,14 @@ class ScorePanel(wx.Panel):
       self.axes.grid(True)
       self.axes.legend()
       if flag:
-         self.fig.canvas.mpl_connect("pick_event", self.on_pick)
+         self.fig.canvas.mpl_connect("pick_event", self.onPick)
+      else:
+         self.fig.canvas.mpl_connect("pick_event", self.onPickGame)
       self.fig.canvas.draw()
    
-   def on_pick(self,event):
+
+
+   def onPick(self,event):
       ind = event.ind[0]
       thisline = event.artist
       date_time = thisline.get_xdata()[ind].strftime("%m/%d/%Y, %H:%M:%S")
@@ -196,6 +200,25 @@ class ScorePanel(wx.Panel):
                "Game 1 Balance Score Breakdown",
                wx.OK | wx.CLOSE
          ).ShowModal()
+   
+   def onPickGame(self,event):
+      ind = event.ind[0]
+      thisline = event.artist
+      date_time = thisline.get_xdata()[ind].strftime("%m/%d/%Y, %H:%M:%S")
+      if thisline.get_label() == "Game 2":
+         wx.MessageDialog(None,
+               "Recorded on "+ str(date_time) + "\n" +
+               "Game Score: " + str(round(thisline.get_ydata()[ind],2)),
+               "Game 2 Balance Score Breakdown",
+               wx.OK | wx.CLOSE
+         ).ShowModal()
+      else:
+         r = wx.MessageDialog(None,
+               "Recorded on "+ str(date_time) + "\n" +
+               "Game Score: " + str(round(thisline.get_ydata()[ind],2)),
+               "Game 1 Balance Score Breakdown",
+               wx.OK | wx.CLOSE
+         ).ShowModal()
 
 if __name__ == '__main__':
    app = wx.App()
@@ -203,7 +226,7 @@ if __name__ == '__main__':
    
    bScore = [[(1648937325, 95, 80.0, 40.0, 30.0, 20.0, 10.0),(1648997325, 195, 80.0, 40.0, 30.0, 20.0, 10.0)], [(1648937325, 93, 12.675686465930625, 5.855042106763086, 22.91533792001619, -0.9545454545454546, 0.4090909090909091), (1648948277, 151.9689104732696, 12.675686465930625, 5.855042106763086, 22.91533792001619, -0.9545454545454546, 0.4090909090909091)]]
    # gScore = [[(1646934163, 65), (1647012919, 56), (1647099955, 10)], [(1647012919, 15), (1647012919, 19), (1647012919, 15), (1647099955, 60)], [(1647012919, 18), (1647012919, 81), (1647099955, 30)]]
-   gScore = [[(1646934163, 695, 0.0, 0.0, 0.0, 0.0, 0.0)], [(1646934163, 695, 0.0, 0.0, 0.0, 0.0, 0.0), (1646954163, 191, 0.0, 0.0, 0.0, 0.0, 0.0)]]
+   gScore = [[(1646934163, 695, 0.0, 0.0, 0.0, 0.0, 0.0)], [(1646934163, 615, 0.0, 0.0, 0.0, 0.0, 0.0), (1646954163, 191, 0.0, 0.0, 0.0, 0.0, 0.0)]]
    
    view.plotGameScore(gScore)
    view.plotBalanceScore(bScore)
