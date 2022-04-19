@@ -11,13 +11,13 @@ from threading import Thread
 from pubsub import pub
 
 class KillSwitchMonitor(Thread):
-    def __init__(self, debug):
+    def __init__(self, port, debug=False):
         Thread.__init__(self)
         self.end = False
         self.debug = debug
-        if not self.debug:
-            self.arduino = serial.Serial(port='COM3', baudrate=115200, timeout=.1)
-            
+        
+        self.arduino = serial.Serial(port=port, baudrate=115200, timeout=.1)
+        
         pub.subscribe(self.endThread, 'killswitch.end')
 
     def run(self):

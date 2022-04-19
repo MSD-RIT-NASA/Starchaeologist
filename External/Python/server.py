@@ -1,8 +1,9 @@
 #
 #  server.py
 #  Created by: William Johnson
-#
 
+import os
+import csv
 from threading import Thread
 from pubsub import pub
 import serial
@@ -21,12 +22,10 @@ class Server(Thread):
     """
     Server controls interactions between Python to and from Unity and Python to and from Arduino
     """
-    def __init__(self, debug):
+    def __init__(self, port, debug= False):
         Thread.__init__(self)
-        if debug:
-            self.arduino = None
-        else:
-            self.arduino = serial.Serial(port='COM3', baudrate=115200, timeout=.1)
+        
+        self.arduino = serial.Serial(port=port, baudrate=115200, timeout=.1)
                 
         self.debug = debug
         self.end = False
@@ -52,12 +51,18 @@ class Server(Thread):
         """
         logging.info("Started Gathering Info From Force Platform")
         time.sleep(1)
-        self.arduinoWrite("8")
+        # self.arduinoWrite("3")
+        # time.sleep(1)
+        # self.arduinoWrite("8")
         balanceData = []
         dataEntry = []
         dataSet = False
         while True:
             data = self.arduinoRead()
+            print(data)
+            # self.arduinoWrite("3")
+            # data = self.arduinoRead()
+            # print(data)
             if data == "END":
                 break
             elif data == "Done recording":
@@ -172,6 +177,13 @@ class Server(Thread):
     
     # TODO
     def setMotionFloor(self, angle1, angle2):
+        with open('./External/Matlab/file.csv', 'w', encoding='UTF8') as f:
+            writer = csv.writer(f)
+            writer.writerow([angle1,angle2])
+        # Tell Matlab to read values
+        
+        os.remove("./External/Matlab/file.csv")
+
         return
 
     def unityRead(self):
@@ -227,7 +239,7 @@ class Server(Thread):
         self.arduinoWrite("3")
         while True and not self.end:     
             if self.debug:
-                logging.info("Server in debug mode")
+                logging.info("Debug Mode: Server closed")
                 time.sleep(1)
                 break
             logging.info("Waiting For Message From Unity")
@@ -238,6 +250,7 @@ class Server(Thread):
                 # pub.sendMessage("unityGameEnded")
                 self.unityShutDown()
                 self.arduinoShutDown()
+                
                 break
             elif(decodedMessage.startsWith("calibrate")):
                 try:
@@ -260,13 +273,13 @@ class Server(Thread):
                 except:
                     logging.error("Error occured while parsing data")
                     self.unityWrite("error " + decodedMessage)
-            elif(decodedMessage.startsWith("rotation")):
+            elif(decodedMessage.startswith("rotation")):
                 try:
                     # Get rotation values
                     rotationList = decodedMessage.split(" ")
                    
                     # Set Motion Floor Platform to these angles
-                    self.setMotionFloor(rotationList[1],rotationList[2])
+                    self.setMotionFloor(float(rotationList[1]),float(rotationList[2]))
                     
                     # Send angles back to Unity Game as confirmation
                     rotationConfirmation = "rotation " + str(rotationList[1]) + " " + str(rotationList[1]) 
@@ -284,7 +297,7 @@ class Server(Thread):
 
 if __name__ == "__main__":
     port = "tcp://*:5555"
-    server = Server(debug=True)
+    server = Server(debug=True, port="COM5")
     score = None
     setupError = 0
     logging.basicConfig(
@@ -292,61 +305,63 @@ if __name__ == "__main__":
         level=logging.INFO,
         datefmt='%Y-%m-%d %H:%M:%S')
 
-    data = [
-        [950, 105.5, 103, 102, 101],
-        [955, 100, 105, 100, 100],
-        [960, 103, 102, 105, 101],
-        [965, 100, 100, 100, 105],
-        [970, 117, 100, 100, 100],
-        [975, 100, 110, 105, 110],
-        [980, 100, 100, 110, 102],
-        [985, 102, 100, 100, 110],
-        [990, 115, 100, 100, 100],
-        [995, 100, 115, 107, 106],
-        [1000, 100, 106, 115, 100]
-    ]
+    # data = [
+    #     [950, 105.5, 103, 102, 101],
+    #     [955, 100, 105, 100, 100],
+    #     [960, 103, 102, 105, 101],
+    #     [965, 100, 100, 100, 105],
+    #     [970, 117, 100, 100, 100],
+    #     [975, 100, 110, 105, 110],
+    #     [980, 100, 100, 110, 102],
+    #     [985, 102, 100, 100, 110],
+    #     [990, 115, 100, 100, 100],
+    #     [995, 100, 115, 107, 106],
+    #     [1000, 100, 106, 115, 100]
+    # ]
 
-    data2 = [
-        [950, 1006, 1034, 1027, 1023],
-        [955, 1000, 1055, 1003, 1003],
-        [960, 1003, 1026, 1051, 1015],
-        [965, 1000, 1000, 1003, 1057],
-        [970, 1170, 1000, 1009, 1001],
-        [975, 1000, 1100, 1056, 1102],
-        [980, 1000, 1000, 1109, 1023],
-        [985, 1020, 1000, 1006, 1104],
-        [990, 1150, 1000, 1003, 1005],
-        [995, 1000, 1150, 1072, 1065]
-    ]
+    # data2 = [
+    #     [950, 1006, 1034, 1027, 1023],
+    #     [955, 1000, 1055, 1003, 1003],
+    #     [960, 1003, 1026, 1051, 1015],
+    #     [965, 1000, 1000, 1003, 1057],
+    #     [970, 1170, 1000, 1009, 1001],
+    #     [975, 1000, 1100, 1056, 1102],
+    #     [980, 1000, 1000, 1109, 1023],
+    #     [985, 1020, 1000, 1006, 1104],
+    #     [990, 1150, 1000, 1003, 1005],
+    #     [995, 1000, 1150, 1072, 1065]
+    # ]
 
-    data3 = [
-        [950, 1, 1, 1, 1],
-        [955, 1.2, 1.1, 1.1, 1.1],
-        [960, 1, 1, 1, 1],
-        [965, 1.2, 1.1, 1.1, 1.1],
-        [970, 1, 1, 1, 1],
-        [975, 1.2, 1.1, 1.1, 1.1],
-        [980, 1, 1, 1, 1],
-        [985, 1.2, 1.1, 1.1, 1.1],
-        [990, 1, 1, 1, 1],
-        [995, 1.2, 1.1, 1.1, 1.1]
-    ]
-    database = db()
-    balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data)
-    database.addBalanceScore(4,2,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
-    balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data2)
-    database.addBalanceScore(2,1,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
-    balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data3)
-    database.addBalanceScore(1,2,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
+    # data3 = [
+    #     [950, 1, 1, 1, 1],
+    #     [955, 1.2, 1.1, 1.1, 1.1],
+    #     [960, 1, 1, 1, 1],
+    #     [965, 1.2, 1.1, 1.1, 1.1],
+    #     [970, 1, 1, 1, 1],
+    #     [975, 1.2, 1.1, 1.1, 1.1],
+    #     [980, 1, 1, 1, 1],
+    #     [985, 1.2, 1.1, 1.1, 1.1],
+    #     [990, 1, 1, 1, 1],
+    #     [995, 1.2, 1.1, 1.1, 1.1]
+    # ]
+    # database = db()
+    # balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data)
+    # database.addBalanceScore(4,2,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
+    # balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data2)
+    # database.addBalanceScore(2,1,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
+    # balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data3)
+    # database.addBalanceScore(1,2,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
     
     if setupError == 0:
         logging.info("Starting Server")
-        time.sleep(1)
+        time.sleep(3)
         server.arduinoWrite("3")
+        time.sleep(3)
         while True :
-            break
+            
             logging.info("Waiting For Message From Unity")
-            decodedMessage = server.unityRead()
+            # decodedMessage = server.unityRead()
+            decodedMessage = "rotation 6.5 7.86"
             logging.info("Message Recieved From Unity: " +decodedMessage)
             if(decodedMessage == "endGame"):
                 logging.info("End of Mini-Game Reached")
@@ -366,18 +381,22 @@ if __name__ == "__main__":
                 balanceData = server.gatherBalanceData()
                 # Send message that data has been recieved so game can start again
                 server.unityWrite("ScoreGathered")
-
+                print(balanceData)
                 # Calculate Score algorithm 
                 score = server.calculateBalanceScore(balanceData)
-            else:
+                print(score)
+            elif(decodedMessage.startswith("rotation")):
                 try:
-                    posList = decodedMessage.split(" ")
-                    # TODO: Set Motion Floor Platform to these angles
-                    server.setMotionFloor(posList[0],posList[1])
+                    # Get rotation values
+                    rotationList = decodedMessage.split(" ")
+                   
+                    # Set Motion Floor Platform to these angles
+                    server.setMotionFloor(float(rotationList[1]),float(rotationList[2]))
+                    
                     # Send angles back to Unity Game as confirmation
-                    unityAngles = str(posList[0]) + " " + str(posList[1]) 
-                    server.unityWrite(unityAngles)
+                    rotationConfirmation = "rotation " + str(rotationList[1]) + " " + str(rotationList[1]) 
+                    server.unityWrite(rotationConfirmation)
                 except:
                     logging.error("Error occured while parsing data")
-                    server.unityWrite(decodedMessage)
+                    server.unityWrite("error " + decodedMessage)
             break
