@@ -61,7 +61,7 @@ public class S_2_Wobble : MonoBehaviour
                 flip = true;
             }
         }
-        else if((flip && transform.localRotation == forthTilt) || (!flip && transform.localRotation == backTilt))
+        else if((flip && Quaternion.Angle(transform.localRotation, forthTilt) < 2) || (!flip && Quaternion.Angle(transform.localRotation, backTilt) < 2))
         {
             //invert the rotation and set that as the new goal
             flip = !flip;

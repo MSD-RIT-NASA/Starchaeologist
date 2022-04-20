@@ -30,7 +30,7 @@ public class S_Raft : MonoBehaviour
         tiltRatio = Mathf.Clamp(tiltRatio, 0f, 1f);
 
         //check if the new rotation has been reached
-        if (Quaternion.Angle(transform.localRotation, newTilt) < 5) //TODO: Make sure this actually works!
+        if (Quaternion.Angle(transform.localRotation, newTilt) < 2) //TODO: Make sure this actually works!
         {
             if(tilting)
             {

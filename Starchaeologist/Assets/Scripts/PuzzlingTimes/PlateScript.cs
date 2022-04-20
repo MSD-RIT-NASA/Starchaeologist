@@ -96,7 +96,7 @@ public class PlateScript : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //check of the collider is the player
-        if (other.gameObject.CompareTag("PlayerBody") && !triggered && ready)
+        if (other.gameObject.CompareTag("PlayerFoot") && !triggered && ready)
         {
             triggered = true;
 

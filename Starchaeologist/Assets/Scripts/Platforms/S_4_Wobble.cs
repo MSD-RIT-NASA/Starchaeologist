@@ -58,7 +58,7 @@ public class S_4_Wobble : MonoBehaviour
     public void FourWay()
     {
         //check if the new rotation has been reach
-        if (transform.localRotation == newTilt)
+        if (Quaternion.Angle(transform.localRotation, newTilt) < 2)
         {
             //find the next rotation
             if(back2Zero)

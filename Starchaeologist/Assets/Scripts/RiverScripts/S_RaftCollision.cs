@@ -8,7 +8,7 @@ public class S_RaftCollision : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //when the player first comes into contact with the raft, tell the game to start playing then remove this script to save space
-        if (other.gameObject.CompareTag("PlayerBody"))
+        if (other.gameObject.CompareTag("PlayerFoot"))
         {
             //stop the player from teleporting back to land once the ride starts
             GameObject startReference = GameObject.Find("RiverStart");
