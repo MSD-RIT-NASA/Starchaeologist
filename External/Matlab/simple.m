@@ -1,4 +1,3 @@
 function ave = simple(x)
-    ave = sum(x(:))/numel(x);
-    disp('job done')
+    ave = x*2;
 end
