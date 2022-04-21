@@ -6,7 +6,7 @@ public class VelocityEstimator : MonoBehaviour
 {
     [Tooltip("The max number of elements allowed in the velocity bank. The oldest element will be removed if an " +
         "addition would exceed the capacity.")]
-    [SerializeField] private int velBankCapacity = 10;
+    [SerializeField] [Min(1)] private int velBankCapacity = 10;
     [Tooltip("Whether this estimator is actually estimating right now, or not. Basically, an on/off switch.")]
     [SerializeField] private bool estimating = true;
 
