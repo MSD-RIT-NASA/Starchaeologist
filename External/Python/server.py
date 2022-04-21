@@ -26,13 +26,15 @@ class Server(Thread):
     def __init__(self, port, debug= False):
         Thread.__init__(self)
         
-        # self.arduino = serial.Serial(port=port, baudrate=115200, timeout=.1)
+        self.arduino = serial.Serial(port=port, baudrate=115200, timeout=.1)
                 
         self.debug = debug
         self.end = False
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
         self.eng = matlab.engine.start_matlab()
+        s = self.eng.genpath("External/Matlab")
+        self.eng.addpath(s, nargout=0)
         self.socket.bind("tcp://*:5555")
         pub.subscribe(self.killSwitch, "killSwitch.check")
         pub.subscribe(self.endThread, 'server.end')
@@ -183,7 +185,8 @@ class Server(Thread):
             writer = csv.writer(f)
             writer.writerow([angle1,angle2])
         # Tell Matlab to read values
-        self.eng.simple(nargout=0, x=7)
+
+        status = self.eng.simple(7)
         os.remove("./External/Matlab/file.csv")
 
         return
@@ -383,25 +386,18 @@ if __name__ == "__main__":
                 balanceData = server.gatherBalanceData()
                 # Send message that data has been recieved so game can start again
                 server.unityWrite("ScoreGathered")
-                print(balanceData)
                 # Calculate Score algorithm 
                 score = server.calculateBalanceScore(balanceData)
-                print(score)
             elif(decodedMessage.startswith("rotation")):
                 try:
                     # Get rotation values
                     rotationList = decodedMessage.split(" ")
-                    print(rotationList)
                     var1 = float(rotationList[1])
-                    print(var1)
                     var2 = float(rotationList[2])
-                    print(var2)
                     # Set Motion Floor Platform to these angles
                     server.setMotionFloor(var1,var2)
-                    print(rotationList)
                     # Send angles back to Unity Game as confirmation
                     rotationConfirmation = "rotation " + rotationList[1] + " " + rotationList[2]
-                    print(rotationConfirmation)
                     server.unityWrite(rotationConfirmation)
                 except:
                     logging.error("Error occured while parsing data")
