@@ -10,28 +10,25 @@ public class WhipGrabTrigger : MonoBehaviour
 
     private void Start()
     {
-        if (!grabPullDestination)
-        {
-            Debug.LogError($"A destination for things grabbed by the whip was not supplied to {gameObject.name}!");
-        }
+        Debug.Assert(grabPullDestination, $"GrabTrigger on {name} is missing a destination for grabbed objects. " +
+            $"Did you forget to set one in the inspector?");
     }
 
-    private void OnEnable()
-    {
-        Debug.Log($"WhipGrabTrigger on {gameObject.name} is now on.");
-    }
-    private void OnDisable()
-    {
-        Debug.Log($"WhipGrabTrigger on {gameObject.name} is now off.");
-    }
+    private void OnEnable() => Debug.Log($"WhipGrabTrigger on {name} is now on.");
+    private void OnDisable() => Debug.Log($"WhipGrabTrigger on {name} is now off.");
 
     private void OnTriggerEnter(Collider other)
     {
         //If other's tag matches any of the tags in tagsToGrab, grab it.
         if (Array.Exists(tagsToGrab, tag => other.CompareTag(tag)))
         {
-            Debug.Log($"Grabbing {other.gameObject.name} with the whip...");
+            Debug.Log($"Grabbed {other.name}, pulling it to destination {grabPullDestination}");
             other.gameObject.GetComponent<WhipGrabbableItem>().FlyToGrabber(grabPullDestination);
+        }
+        else
+        {
+            Debug.Log($"{other.name} was not grabbed; it wasn't tagged with one of " +
+                $"the following:" + string.Join(" ", tagsToGrab));
         }
     }
 }

@@ -15,7 +15,7 @@ public class WhipControl : MonoBehaviour
     [Tooltip("To swing the whip, the velocity of the player's hand should have a magnitude greater than this.")]
     [SerializeField] [Min(0)] private float minSwingSpeed;
 
-    private Quaternion defaultRot;
+    //private Quaternion defaultRot;
     private Coroutine uncurlCorout = null;
 
     private void Start()
@@ -24,16 +24,14 @@ public class WhipControl : MonoBehaviour
         {
             if (!TryGetComponent(out vEstimator))
             {
-                Debug.LogError($"{gameObject.name}'s WhipControl was not given a VelocityEstimator to reference, and GetComponent " +
-                    $"failed! Give {gameObject.name}'s WhipControl a VelocityEstimator reference, or attach one.");
+                Debug.LogError($"{name}'s WhipControl was not given a VelocityEstimator to reference, and GetComponent " +
+                    $"failed! Give {name}'s WhipControl a VelocityEstimator reference, or attach one.");
             }
         }
-        if (!whipCurledRef || !whipUncurledRef)
-        {
-            Debug.LogError($"{gameObject.name}'s WhipControl is missing a curled/uncurled whip reference. Double check the inspector.");
-        }
+        Debug.Assert(whipCurledRef, $"WhipControl on {name} is missing a curled whip reference. Did you forget to assign one in the inspector?");
+        Debug.Assert(whipUncurledRef, $"WhipControl on {name} is missing an uncurled whip reference. Did you forget to assign one in the inspector?");
 
-        defaultRot = transform.rotation;
+        //defaultRot = transform.rotation;
         vEstimator.SetEstimationActve(false);
         ToggleWhipCurled(true);
     }
