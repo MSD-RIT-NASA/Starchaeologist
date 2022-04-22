@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ffc716c1882f71459b9bd6cc03b068b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  velTransform: {fileID: 0}
   velBankCapacity: 10
   estimating: 0
 --- !u!114 &5459870910042511326
@@ -273,7 +274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2fe0258b19344b7419b7a9ed23417b2d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fe0258b19344b7419b7a9ed23417b2d, type: 3}
