@@ -21,8 +21,8 @@ public class S_2_Wobble : MonoBehaviour
         back2Zero = false;
         float wobbleX = Random.Range(-tiltRange, tiltRange);
         float wobbleZ = Random.Range(-tiltRange, tiltRange);
-        forthTilt = Quaternion.Euler(wobbleX, 0, wobbleZ);
-        backTilt = Quaternion.Euler(-wobbleX, 0, -wobbleZ);
+        forthTilt = Quaternion.Euler(wobbleX, -45, wobbleZ);
+        backTilt = Quaternion.Euler(-wobbleX, -45, -wobbleZ);
         dataReady = true;
     }
 
@@ -42,10 +42,10 @@ public class S_2_Wobble : MonoBehaviour
         //check if the desired rotation has been reach
         if(back2Zero)
         {
-            if(Mathf.Abs(Quaternion.Angle(transform.localRotation, Quaternion.Euler(0,0,0))) < 1f)
+            if(Mathf.Abs(Quaternion.Angle(transform.parent.transform.localRotation, Quaternion.Euler(0,-45,0))) < 0.75f)
             {
                 //if we're going back to zero and the platform has reached that, disable the script
-                GetComponent<PlateScript>().desiredRotation = Quaternion.Euler(0,0,0);
+                GetComponent<PlateScript>().desiredRotation = Quaternion.Euler(0,-45,0);
                 back2Zero = false;
                 dataReady = false;
                 enabled = false;
@@ -61,7 +61,7 @@ public class S_2_Wobble : MonoBehaviour
                 flip = true;
             }
         }
-        else if((flip && Quaternion.Angle(transform.localRotation, forthTilt) < 2) || (!flip && Quaternion.Angle(transform.localRotation, backTilt) < 2))
+        else if((flip && Quaternion.Angle(transform.parent.transform.localRotation, forthTilt) < 0.75f) || (!flip && Quaternion.Angle(transform.parent.transform.localRotation, backTilt) < 0.75f))
         {
             //invert the rotation and set that as the new goal
             flip = !flip;

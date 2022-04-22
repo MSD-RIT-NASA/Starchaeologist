@@ -61,12 +61,14 @@ public class PauseMenu : MonoBehaviour
 
     public void MainMenu()
     {
+        pauseMenuUI.SetActive(false);
         SceneManager.LoadScene(0);
         Time.timeScale = 1f;
     }
 
     public void Restart()
     {
+
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("RiverRide"))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

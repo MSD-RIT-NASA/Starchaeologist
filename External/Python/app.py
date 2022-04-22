@@ -21,9 +21,8 @@ class App(Thread):
         self.app.MainLoop()
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        format='%(asctime)s %(levelname)-8s %(message)s',
-        level=logging.INFO,
+    logging.basicConfig(level=logging.INFO, 
+        format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
         datefmt='%Y-%m-%d %H:%M:%S')
     app = App(debug=True)
     app.start()

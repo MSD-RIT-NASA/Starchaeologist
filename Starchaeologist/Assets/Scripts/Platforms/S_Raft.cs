@@ -17,10 +17,10 @@ public class S_Raft : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        newTilt = Quaternion.Euler(0, 0, 0);
-        oldTilt = Quaternion.Euler(0, 0, 0);
+        newTilt = Quaternion.Euler(0, -45, 0);
+        oldTilt = Quaternion.Euler(0, -45, 0);
 
-        plannedRotation = new Vector3(0, 0, 0);
+        plannedRotation = new Vector3(0, -45, 0);
     }
 
     //Raft() simulates the motion of a raft on water by randomly choosing rotations and lerping to those rotations
@@ -30,12 +30,12 @@ public class S_Raft : MonoBehaviour
         tiltRatio = Mathf.Clamp(tiltRatio, 0f, 1f);
 
         //check if the new rotation has been reached
-        if (Quaternion.Angle(transform.localRotation, newTilt) < 2) //TODO: Make sure this actually works!
+        if (Quaternion.Angle(transform.localRotation, newTilt) < 0.75f) //TODO: Make sure this actually works!
         {
             if(tilting)
             {
                 //choose a rotation to lerp to
-                newTilt = Quaternion.Euler(Random.Range(-tiltRange, tiltRange), 0, Random.Range(-tiltRange, tiltRange));
+                newTilt = Quaternion.Euler(Random.Range(-tiltRange, tiltRange), -45, Random.Range(-tiltRange, tiltRange));
             }
             else
             {

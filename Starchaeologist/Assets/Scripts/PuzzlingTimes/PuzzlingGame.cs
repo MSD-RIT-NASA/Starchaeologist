@@ -30,6 +30,9 @@ public class PuzzlingGame : MonoBehaviour
     public AudioClip trap_warning3;
     public AudioClip trap_warning4;
 
+    //vignette stuff
+    public GameObject vignetteWarning;
+
     PythonCommunicator communicateReference;
 
     void Start()
@@ -84,7 +87,7 @@ public class PuzzlingGame : MonoBehaviour
                 endPlatform.GetComponent<TeleportationArea>().enabled = true;
                 continue;
             }
-            tileArray[xIndex][yIndex].transform.GetChild(0).GetComponent<TeleportationAnchor>().enabled = true;
+            tileArray[xIndex][yIndex].transform.GetChild(0).GetChild(0).GetComponent<TeleportationAnchor>().enabled = true;
         }
 
         //save the list of activated plates
@@ -111,7 +114,7 @@ public class PuzzlingGame : MonoBehaviour
                 endPlatform.GetComponent<TeleportationArea>().enabled = false;
                 continue;
             }
-            tileArray[xIndex][yIndex].transform.GetChild(0).GetComponent<TeleportationAnchor>().enabled = false;
+            tileArray[xIndex][yIndex].transform.GetChild(0).GetChild(0).GetComponent<TeleportationAnchor>().enabled = false;
         }
 
         //set the global variables to the new position
@@ -126,7 +129,7 @@ public class PuzzlingGame : MonoBehaviour
         }
         else
         {
-            currentScript = tileArray[(int)getCurrent.x][(int)getCurrent.y].transform.GetChild(0).GetComponent<PlateScript>();
+            currentScript = tileArray[(int)getCurrent.x][(int)getCurrent.y].transform.GetChild(0).GetChild(0).GetComponent<PlateScript>();
         }
     }
 
@@ -171,7 +174,8 @@ public class PuzzlingGame : MonoBehaviour
         {
             Vector2 giveRotation = new Vector2(desiredX, desiredZ);
             communicateReference.desiredRotation = giveRotation;
-            currentScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
+            currentScript.transform.parent.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
+            //currentScript.transform.parent.transform.localRotation = currentScript.desiredRotation;
         }
         else
         {
@@ -193,6 +197,9 @@ public class PuzzlingGame : MonoBehaviour
         int yIndex = (int)currentPosition.y;
         int thisTrap = currentScript.trapList[Random.Range(0,currentScript.trapList.Count)];
         //trap_warning.Play();
+        //Turn on warning vingette
+        vignetteOn();
+        Invoke("vignetteOff", 3.0f); //set inactive after 3 seconds have passed
 
         //set up the trap list
         //0 = ceiling spikes
@@ -247,5 +254,15 @@ public class PuzzlingGame : MonoBehaviour
             healing = true;
             Debug.Log("The player hit me!");
         }
+    }
+
+    void vignetteOn()
+    {
+        vignetteWarning.SetActive(true);
+    }
+
+    void vignetteOff()
+    {
+        vignetteWarning.SetActive(false);
     }
 }
