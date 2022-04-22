@@ -9,8 +9,11 @@ public class scoreScript : MonoBehaviour
 
     private Text txt;
     private Text txtMenu;
+    private Text txtCalibration;
     private float showTime = 1f;
     private float hideTime = 0f;
+    private float calibrateOn = 30f;
+    private float calibrateOff = 0f;
     public static int Score;
     public static bool scoreMenu=false;
     public GameObject vignette;
@@ -31,6 +34,8 @@ public class scoreScript : MonoBehaviour
         txt.enabled = false;
         txtMenu= GameObject.Find("ScoreMenu").GetComponent<Text>();
         txtMenu.enabled = false;
+        txtCalibration= GameObject.Find("CalibrationCanvas").GetComponent<Text>();
+        txtCalibration.enabled = false;
     }
 
     // Update is called once per frame
@@ -40,7 +45,7 @@ public class scoreScript : MonoBehaviour
         {
             txt.enabled = false;
         }
-        if(scoreMenu){
+        if(scoreMenu){ //set to true when playerFoot collides with "finish" tag
             txtMenu.enabled = true;
         }
         
@@ -94,26 +99,36 @@ public class scoreScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("PlayerHead")){
 
+           if (gameObject.CompareTag("Obstacle")) 
+            {
+                hitScore();
+            }
+        }
+        if (other.gameObject.CompareTag("PlayerBody")){
+
             if (gameObject.CompareTag("Treasure"))
             {
                 treasureScore();
             }else if (gameObject.CompareTag("Artifact"))
             {
                 artifactScore();
-            }else if (gameObject.CompareTag("Obstacle")) 
-            {
-                hitScore();
             }
         }
         //when the player first comes into contact with the end block, show the score screen
-        if (other.gameObject.CompareTag("PlayerBody")&&gameObject.CompareTag("Finish"))
+        if (other.gameObject.CompareTag("PlayerFoot")&&gameObject.CompareTag("Finish"))
         {
-            scoreMenu = true;
-            for(int s=0;s<Score;s++){
-                txtMenu.text = "Game Score:\n"+s.ToString()+"\n\nPlayer Stats:\n";//+communication player score
-            }
-            
+            txtCalibration.enabled=true;
+            Invoke("ShowScoreMenu", 30f);
         }
         
+    }
+
+    void ShowScoreMenu()
+    {
+        txtCalibration.enabled=false;
+        scoreMenu = true;
+        for(int s=0;s<Score;s++){
+            txt.text = s.ToString();//+communication player score
+        }
     }
 }

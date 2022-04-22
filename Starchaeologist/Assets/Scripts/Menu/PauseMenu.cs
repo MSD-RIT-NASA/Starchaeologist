@@ -85,6 +85,21 @@ public class PauseMenu : MonoBehaviour
 
     }
 
+    public void ChangeLevel()
+    {
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("RiverRide"))
+        {
+            SceneManager.LoadScene(SceneManager.GetSceneByName("PuzzlingTimes").buildIndex);
+        }
+
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("PuzzlingTimes"))
+        {
+            SceneManager.LoadScene(SceneManager.GetSceneByName("RiverRide").buildIndex);
+        }
+        
+
+    }
+
     public void QuitGame()
     {
 #if UNITY_EDITOR
