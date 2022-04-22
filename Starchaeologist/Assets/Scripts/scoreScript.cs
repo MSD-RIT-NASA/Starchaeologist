@@ -13,6 +13,7 @@ public class scoreScript : MonoBehaviour
     private float hideTime = 0f;
     public static int Score;
     public static bool scoreMenu=false;
+    public GameObject vignette;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,8 +35,7 @@ public class scoreScript : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
+    {        
         if(txt.enabled && (Time.time >= hideTime)&& !scoreMenu)
         {
             txt.enabled = false;
@@ -60,10 +60,18 @@ public class scoreScript : MonoBehaviour
         Score -= 10;
         txtVisual(10);
         //enable vignette
+        vignetteOn();
+        Invoke("vignetteOff", 3.0f); //set inactive after 3 seconds have passed
     }
-    void vignetteFade()
-    {
 
+    void vignetteOn()
+    {
+        vignette.SetActive(true);
+    }
+
+    void vignetteOff()
+    {
+        vignette.SetActive(false);
     }
     void txtVisual(int points)
     {
