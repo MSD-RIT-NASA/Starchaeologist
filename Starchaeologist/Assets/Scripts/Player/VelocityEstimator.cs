@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class VelocityEstimator : MonoBehaviour
 {
+    [SerializeField] private Transform velTransform;
     [Tooltip("The max number of elements allowed in the velocity bank. The oldest element will be removed if an " +
         "addition would exceed the capacity.")]
-    [SerializeField] private int velBankCapacity = 10;
+    [SerializeField] [Min(1)] private int velBankCapacity = 10;
     [Tooltip("Whether this estimator is actually estimating right now, or not. Basically, an on/off switch.")]
     [SerializeField] private bool estimating = true;
 
@@ -21,8 +22,12 @@ public class VelocityEstimator : MonoBehaviour
 
     private void Start()
     {
+        //If we weren't given a transform to estimate the velocity of, assume it's this script's.
+        if (!velTransform)
+            velTransform = transform;
+
         estVelocityBank = new LinkedList<Vector3>();
-        previousPos = transform.localPosition;
+        previousPos = velTransform.localPosition;
     }
 
     /// <summary>
@@ -42,8 +47,8 @@ public class VelocityEstimator : MonoBehaviour
 
     private void FixedUpdate()
     {
-        DebugEntryManager.updateEntry?.Invoke("V Est Local Pos", $"<color=#FF0000>{transform.localPosition.x}</color>, " +
-            $"<color=#00FF00>{transform.localPosition.y}</color>, <color=#0000FF>{transform.localPosition.z}</color>", -1);
+        DebugEntryManager.updateEntry?.Invoke("V Est Local Pos", $"<color=#FF0000>{velTransform.localPosition.x}</color>, " +
+            $"<color=#00FF00>{velTransform.localPosition.y}</color>, <color=#0000FF>{velTransform.localPosition.z}</color>", -1);
 
         if (estimating)
         {
@@ -56,7 +61,7 @@ public class VelocityEstimator : MonoBehaviour
         }
 
         //After doing everything else, set previousPos to be the current pos (since it's about to be "previous")
-        previousPos = transform.localPosition;
+        previousPos = velTransform.localPosition;
     }
 
     /// <summary>
@@ -68,7 +73,7 @@ public class VelocityEstimator : MonoBehaviour
     {
         if (!Mathf.Approximately(Time.fixedDeltaTime, 0))
         {
-            Vector3 vel = (transform.localPosition - previousPos) / Time.fixedDeltaTime;
+            Vector3 vel = (velTransform.localPosition - previousPos) / Time.fixedDeltaTime;
             if (estVelocityBank.Count >= velBankCapacity)
             {
                 estVelocityBank.RemoveLast();
