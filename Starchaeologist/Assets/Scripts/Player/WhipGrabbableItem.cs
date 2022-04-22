@@ -34,7 +34,7 @@ public class WhipGrabbableItem : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("PlayerBody"))
         {
             Debug.Log($"Object ${gameObject.name} was just collected!");
             Coroutilities.TryStopCoroutine(this, ref flyToPlayerCorout);
