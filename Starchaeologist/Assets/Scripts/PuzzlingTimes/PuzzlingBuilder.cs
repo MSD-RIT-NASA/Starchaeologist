@@ -88,7 +88,7 @@ public class PuzzlingBuilder : MonoBehaviour
                 ceilingArray[i].Add(Instantiate(ceilingPrefab));
                 ceilingArray[i][j].transform.position = new Vector3((i * 2) + 1, 0, (j * 2) + 1);
 
-                PlateScript scriptReference = tileArray[i][j].transform.GetChild(0).GetComponent<PlateScript>();
+                PlateScript scriptReference = tileArray[i][j].transform.GetChild(0).GetChild(0).GetComponent<PlateScript>();
                 scriptReference.GetComponent<TeleportationAnchor>().enabled = false;
                 scriptReference.DataSetup(new Vector2(i, j));
 
@@ -181,7 +181,7 @@ public class PuzzlingBuilder : MonoBehaviour
                     }
                     trapArray[i][yIndex] = true;
                     //tileArray[i][kIndex].transform.GetChild(0).gameObject.AddComponent<PlateScript>();
-                    tileArray[i][yIndex].transform.GetChild(0).gameObject.GetComponent<PlateScript>().trapped = true;
+                    tileArray[i][yIndex].transform.GetChild(0).GetChild(0).gameObject.GetComponent<PlateScript>().trapped = true;
                     placing = false;
                 }
 

@@ -65,6 +65,7 @@ public class S_RiverGame : MonoBehaviour
 
         //pythonCommunicator = new HelloRequester();
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
+        communicateReference = GetComponent<PythonCommunicator>();
         //pythonCommunicator.Start();
     }
 
@@ -171,8 +172,8 @@ public class S_RiverGame : MonoBehaviour
     //python communication function
     void Communication()
     {
-        if (!communicateReference)
-            return;
+        //if (!communicateReference)
+        //    return;
 
         /*To DO
         -This script is the link between the python script and the plate scripts
@@ -187,7 +188,8 @@ public class S_RiverGame : MonoBehaviour
             //currentScript.transform.localRotation = currentScript.desiredRotation;
             Vector2 giveRotation = new Vector2(raftScript.plannedRotation.x, raftScript.plannedRotation.z);
             communicateReference.desiredRotation = giveRotation;
-            raftScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
+            //raftScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
+            raftScript.transform.localRotation = Quaternion.Euler(raftScript.plannedRotation);
         }
         else
         {
