@@ -30,6 +30,9 @@ public class PuzzlingGame : MonoBehaviour
     public AudioClip trap_warning3;
     public AudioClip trap_warning4;
 
+    //vignette stuff
+    public GameObject vignetteWarning;
+
     PythonCommunicator communicateReference;
 
     void Start()
@@ -194,6 +197,9 @@ public class PuzzlingGame : MonoBehaviour
         int yIndex = (int)currentPosition.y;
         int thisTrap = currentScript.trapList[Random.Range(0,currentScript.trapList.Count)];
         //trap_warning.Play();
+        //Turn on warning vingette
+        vignetteOn();
+        Invoke("vignetteOff", 3.0f); //set inactive after 3 seconds have passed
 
         //set up the trap list
         //0 = ceiling spikes
@@ -248,5 +254,15 @@ public class PuzzlingGame : MonoBehaviour
             healing = true;
             Debug.Log("The player hit me!");
         }
+    }
+
+    void vignetteOn()
+    {
+        vignetteWarning.SetActive(true);
+    }
+
+    void vignetteOff()
+    {
+        vignetteWarning.SetActive(false);
     }
 }
