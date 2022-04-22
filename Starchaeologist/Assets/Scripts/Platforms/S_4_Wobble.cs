@@ -35,8 +35,8 @@ public class S_4_Wobble : MonoBehaviour
             isFigure = true;
         }
         back2Zero = false;
-        newTilt = Quaternion.Euler(0, 0, 0);
-        oldTilt = Quaternion.Euler(0, 0, 0);
+        newTilt = Quaternion.Euler(0, -45, 0);
+        oldTilt = Quaternion.Euler(0, -45, 0);
         primaryX = Random.Range(-tiltRange, tiltRange);
         primaryZ = Random.Range(-tiltRange, tiltRange);
         secondaryX = Random.Range(-tiltRange, tiltRange);
@@ -58,36 +58,36 @@ public class S_4_Wobble : MonoBehaviour
     public void FourWay()
     {
         //check if the new rotation has been reach
-        if (Quaternion.Angle(transform.localRotation, newTilt) < 2)
+        if (Quaternion.Angle(transform.parent.transform.localRotation, newTilt) < 2)
         {
             //find the next rotation
             if(back2Zero)
             {
-                if(transform.localRotation == Quaternion.Euler(0,0,0))
+                if(transform.parent.transform.localRotation == Quaternion.Euler(0,-45,0))
                 {
                     //if we're going back to zero and the platform has reached that, disable the script
-                    GetComponent<PlateScript>().desiredRotation = Quaternion.Euler(0, 0, 0);
+                    GetComponent<PlateScript>().desiredRotation = Quaternion.Euler(0, -45, 0);
                     back2Zero = false;
                     dataReady = false;
                     //Debug.Log("I should be off");
                     enabled = false;
                     return;
                 }
-                newTilt = Quaternion.Euler(0, 0, 0);
+                newTilt = Quaternion.Euler(0, -45, 0);
             }
             else if (flip)
             {
                 primaryX *= -1f;
                 primaryZ *= -1f;
-                newTilt = Quaternion.Euler(primaryX, 0, primaryZ);
+                newTilt = Quaternion.Euler(primaryX, -45, primaryZ);
             }
             else
             {
                 secondaryX *= -1f;
                 secondaryZ *= -1f;
-                newTilt = Quaternion.Euler(secondaryX, 0, secondaryZ);
+                newTilt = Quaternion.Euler(secondaryX, -45, secondaryZ);
             }
-            oldTilt = transform.localRotation;
+            oldTilt = transform.parent.transform.localRotation;
             tiltRatio = 0.0f;
 
 

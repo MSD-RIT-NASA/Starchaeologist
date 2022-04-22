@@ -116,7 +116,7 @@ public class PythonCommunicator : MonoBehaviour
                 }
                 else//send the desired rotation
                 {
-                    Debug.Log("Sending Rotation");
+                    //Debug.Log("Sending Rotation");
                     string giveRotation = "rotation " + desiredRotation.x + " " + desiredRotation.y;
                     client.SendFrame(giveRotation);
                 }

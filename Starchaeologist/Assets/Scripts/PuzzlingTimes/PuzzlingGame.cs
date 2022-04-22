@@ -84,7 +84,7 @@ public class PuzzlingGame : MonoBehaviour
                 endPlatform.GetComponent<TeleportationArea>().enabled = true;
                 continue;
             }
-            tileArray[xIndex][yIndex].transform.GetChild(0).GetComponent<TeleportationAnchor>().enabled = true;
+            tileArray[xIndex][yIndex].transform.GetChild(0).GetChild(0).GetComponent<TeleportationAnchor>().enabled = true;
         }
 
         //save the list of activated plates
@@ -111,7 +111,7 @@ public class PuzzlingGame : MonoBehaviour
                 endPlatform.GetComponent<TeleportationArea>().enabled = false;
                 continue;
             }
-            tileArray[xIndex][yIndex].transform.GetChild(0).GetComponent<TeleportationAnchor>().enabled = false;
+            tileArray[xIndex][yIndex].transform.GetChild(0).GetChild(0).GetComponent<TeleportationAnchor>().enabled = false;
         }
 
         //set the global variables to the new position
@@ -126,7 +126,7 @@ public class PuzzlingGame : MonoBehaviour
         }
         else
         {
-            currentScript = tileArray[(int)getCurrent.x][(int)getCurrent.y].transform.GetChild(0).GetComponent<PlateScript>();
+            currentScript = tileArray[(int)getCurrent.x][(int)getCurrent.y].transform.GetChild(0).GetChild(0).GetComponent<PlateScript>();
         }
     }
 
@@ -171,7 +171,8 @@ public class PuzzlingGame : MonoBehaviour
         {
             Vector2 giveRotation = new Vector2(desiredX, desiredZ);
             communicateReference.desiredRotation = giveRotation;
-            currentScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, 0, communicateReference.realRotation.y);
+            currentScript.transform.parent.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
+            //currentScript.transform.parent.transform.localRotation = currentScript.desiredRotation;
         }
         else
         {
