@@ -7,8 +7,13 @@ import csv
 from threading import Thread
 from pubsub import pub
 import serial
+import openpyxl
 from _thread import *;
 import matlab.engine
+import os, os.path
+import ctypes
+import win32com.client 
+from editpyxl import Workbook
 import logging
 import zmq
 import time
@@ -25,16 +30,22 @@ class Server(Thread):
     """
     def __init__(self, port, debug= False):
         Thread.__init__(self)
-        
-        self.arduino = serial.Serial(port=port, baudrate=115200, timeout=.1)
-                
+        # try:
+            # self.arduino = serial.Serial(port=port, baudrate=115200, timeout=.1)
+        # except:
+            # logging.error("Error when setting up Arduino")    
         self.debug = debug
         self.end = False
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
-        self.eng = matlab.engine.start_matlab()
-        s = self.eng.genpath("External/Matlab")
-        self.eng.addpath(s, nargout=0)
+        self.wb = Workbook()
+
+        self.source_filename = r'External/Excel/OPC Data.xlsm'
+
+        self.wb.open(self.source_filename)
+
+        self.ws = self.wb.active
+
         self.socket.bind("tcp://*:5555")
         pub.subscribe(self.killSwitch, "killSwitch.check")
         pub.subscribe(self.endThread, 'server.end')
@@ -181,13 +192,35 @@ class Server(Thread):
     
     # TODO
     def setMotionFloor(self, angle1, angle2):
-        with open('./External/Matlab/file.csv', 'w', encoding='UTF8') as f:
-            writer = csv.writer(f)
-            writer.writerow([angle1,angle2])
+        # with open('./External/Matlab/file.csv', 'w', encoding='UTF8') as f:
+        #     writer = csv.writer(f)
+        #     writer.writerow([angle1,angle2])
         # Tell Matlab to read values
+        # logging.info("Time")
+        # status = self.eng.simple(7)
+        # logging.info("Time")
+        x1 = 1.096 * math.sin(angle1)
+        
+        pos1 = (-.125 - x1) * 100000
+        x2 = 1.096 * math.sin(angle2)
+        pos2 = (-.125 + x2) * 100000
+        self.ws.cell('B4').value = pos1
+        self.ws.cell('B13').value = pos2
+        # logging.info("Hi")
+        if os.path.exists("External/Excel/OPC Data.xlsm"):
+            xl=win32com.client.Dispatch("Excel.Application")
+        #     logging.info("Cell")
+            xl.Workbooks.Open(os.path.abspath("External/Excel/OPC Data.xlsm"))
+            xl.Application.Run("External/Excel/OPC Data.xlsm!Module1.Button1_Click")
+            xl.Application.Save() # if you want to save then uncomment this line and change delete the ", ReadOnly=1" part from the open function.
+            xl.Application.Quit() # Comment this out if your excel script closes
+            del xl
+        self.wb.save(self.source_filename)
 
-        status = self.eng.simple(7)
-        os.remove("./External/Matlab/file.csv")
+
+        # self.ws['B4'] = angle1
+        # self.ws['B13'] = angle2
+        # os.remove("./External/Matlab/file.csv")
 
         return
 
@@ -268,7 +301,7 @@ class Server(Thread):
                     balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = self.calculateBalanceScore(balanceData)
 
                     # Send message that data has been recieved so game can start again
-                    calibrationConfirmation = "calibrate " + balanceScore 
+                    calibrationConfirmation = "calibrate " + balanceScore + " meanCOP " + meanCOP + " stdCOP " + stdCOP + " lengthCOP " + lengthCOP + " centroidX " + centroidX + " centroidY " + centroidY
                     self.unityWrite(calibrationConfirmation)
 
                     # Send scores to database
@@ -299,17 +332,24 @@ class Server(Thread):
         """
         logging.info("Ending Server Thread")
         self.end = True
+        self.wb.close()
+
 
 if __name__ == "__main__":
     port = "tcp://*:5555"
     server = Server(debug=False, port="COM5")
     score = None
     setupError = 0
-    logging.basicConfig(
-        format='%(asctime)s %(levelname)-8s %(message)s',
-        level=logging.INFO,
-        datefmt='%Y-%m-%d %H:%M:%S')
-
+    
+    # logging.basicConfig(
+    #     format='%(asctime)s %(levelname)-8s %(message)s',
+    #     level=logging.INFO,
+    #     datefmt='%Y-%m-%d %H:%M:%S')
+    
+    logging.basicConfig(level=logging.INFO, 
+    format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
     # data = [
     #     [950, 105.5, 103, 102, 101],
     #     [955, 100, 105, 100, 100],
@@ -388,6 +428,7 @@ if __name__ == "__main__":
                 server.unityWrite("ScoreGathered")
                 # Calculate Score algorithm 
                 score = server.calculateBalanceScore(balanceData)
+
             elif(decodedMessage.startswith("rotation")):
                 try:
                     # Get rotation values
