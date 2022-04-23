@@ -188,8 +188,8 @@ public class S_RiverGame : MonoBehaviour
             //currentScript.transform.localRotation = currentScript.desiredRotation;
             Vector2 giveRotation = new Vector2(raftScript.plannedRotation.x, raftScript.plannedRotation.z);
             communicateReference.desiredRotation = giveRotation;
-            //raftScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
-            raftScript.transform.localRotation = Quaternion.Euler(raftScript.plannedRotation);
+            raftScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
+            //raftScript.transform.localRotation = Quaternion.Euler(raftScript.plannedRotation);
         }
         else
         {
