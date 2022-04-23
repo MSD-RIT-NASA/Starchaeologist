@@ -186,8 +186,14 @@ class Controller:
         Opens Unity Game through SteamVR
         """
         logging.info("Starting Unity Game")
+
+        proc1 = multiprocessing.Process(target=self.runGame(), args=())
+        th1 = threading.Thread(target=proc1.start)
+        th1.start()        
+        # subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
+    def runGame(self):
         subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
-    
+
     def closeApp(self):
         """
         Close Entire Application, after user check
