@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+// using TMPro;
 
 public class scoreScript : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class scoreScript : MonoBehaviour
         txtBlip.enabled = false;
         txtMenu= GameObject.Find("ScoreMenu").GetComponent<Text>();
         txtMenu.enabled = false;
-        txtCalibration= GameObject.Find("CalibrationCanvas").GetComponent<Text>();
+        txtCalibration= GameObject.Find("CalibrationMsg").GetComponent<Text>();
         txtCalibration.enabled = false;
     }
 
