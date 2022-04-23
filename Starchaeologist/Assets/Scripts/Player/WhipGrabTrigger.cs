@@ -16,8 +16,8 @@ public class WhipGrabTrigger : MonoBehaviour
 
     // private void OnEnable() => Debug.Log($"WhipGrabTrigger on {name} is now on.");
     // private void OnDisable() => Debug.Log($"WhipGrabTrigger on {name} is now off.");
-    private void OnEnable() => DebugEntryManager.updateEntry("WhipTriggerActive", "true", -1);
-    private void OnDisable() => DebugEntryManager.updateEntry("WhipTriggerActive", "false", -1);
+    //private void OnEnable() => DebugEntryManager.updateEntry("WhipTriggerActive", "true", -1);
+    //private void OnDisable() => DebugEntryManager.updateEntry("WhipTriggerActive", "false", -1);
 
     private void OnTriggerEnter(Collider other)
     {
