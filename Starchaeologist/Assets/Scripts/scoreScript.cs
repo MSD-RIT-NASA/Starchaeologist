@@ -8,6 +8,7 @@ public class scoreScript : MonoBehaviour
     public static scoreScript singleton;
 
     private Text txt;
+    private Text txtBlip;
     private Text txtMenu;
     private Text txtCalibration;
     private float showTime = 1f;
@@ -30,8 +31,10 @@ public class scoreScript : MonoBehaviour
         }
 
         Score = 0;
-        txt= GameObject.Find("Score").GetComponent<Text>();
+        txt= GameObject.Find("Score").GetComponentInChildren<Text>();
         txt.enabled = false;
+        txtBlip= GameObject.Find("ScoreBlip").GetComponentInChildren<Text>();
+        txtBlip.enabled = false;
         txtMenu= GameObject.Find("ScoreMenu").GetComponent<Text>();
         txtMenu.enabled = false;
         txtCalibration= GameObject.Find("CalibrationCanvas").GetComponent<Text>();
@@ -41,9 +44,9 @@ public class scoreScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {        
-        if(txt.enabled && (Time.time >= hideTime)&& !scoreMenu)
+        if(txtBlip.enabled && (Time.time >= hideTime)&& !scoreMenu)
         {
-            txt.enabled = false;
+            txtBlip.enabled = false;
         }
         if(scoreMenu){ //set to true when playerFoot collides with "finish" tag
             txtMenu.enabled = true;
@@ -82,16 +85,16 @@ public class scoreScript : MonoBehaviour
     {
         if (points == 10)
         {
-            txt.text = "- "+points.ToString();
-            txt.color = Color.red;
+            txtBlip.text = "- "+points.ToString();
+            txtBlip.color = Color.red;
         }
         else
         {
-            txt.text = "+ " + points.ToString();
-            txt.color = Color.black;
+            txtBlip.text = "+ " + points.ToString();
+            txtBlip.color = Color.black;
         }
         
-        txt.enabled = true;
+        txtBlip.enabled = true;
         hideTime = Time.time + showTime;
     }
 
