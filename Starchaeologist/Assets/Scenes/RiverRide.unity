@@ -496,7 +496,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &231367988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1548,7 +1548,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &527487503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3107,7 +3107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00c898a87df93aa4db3b9d43aee12928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerReference: {fileID: 0}
+  playerReference: {fileID: 1606384974}
   raftReference: {fileID: 1671069995}
   riverWater: {fileID: 477218227}
   riverReferences: []
@@ -6204,6 +6204,11 @@ PrefabInstance:
 --- !u!20 &1606384973 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 7865517847723088716, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+  m_PrefabInstance: {fileID: 1606384972}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1606384974 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7865517848709632958, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
   m_PrefabInstance: {fileID: 1606384972}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1620024552

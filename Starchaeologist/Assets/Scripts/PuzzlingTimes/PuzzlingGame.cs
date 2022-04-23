@@ -32,6 +32,7 @@ public class PuzzlingGame : MonoBehaviour
 
     //vignette stuff
     public GameObject vignetteWarning;
+    public GameObject vignetteHit;
 
     PythonCommunicator communicateReference;
 
@@ -251,6 +252,8 @@ public class PuzzlingGame : MonoBehaviour
         //healing should stop multiple objects from causing damage from the same trap
         if(!healing)
         {
+            vignetteOnHit();
+            Invoke("vignetteOffHit", 5.0f); //set inactive after 5 seconds have passed
             healing = true;
             Debug.Log("The player hit me!");
         }
@@ -262,6 +265,17 @@ public class PuzzlingGame : MonoBehaviour
     }
 
     void vignetteOff()
+    {
+        vignetteWarning.SetActive(false);
+    }
+
+    
+    void vignetteOnHit()
+    {
+        vignetteWarning.SetActive(true);
+    }
+
+    void vignetteOffHit()
     {
         vignetteWarning.SetActive(false);
     }

@@ -91,7 +91,7 @@ public class PythonCommunicator : MonoBehaviour
         ForceDotNet.Force(); // this line is needed to prevent unity freeze after one use, not sure why yet
         using (RequestSocket client = new RequestSocket())
         {
-            client.Connect("tcp://localhost:5555");
+            client.Connect("tcp://localhost:5678");
 
             if (threadRunning)
             {
@@ -125,7 +125,10 @@ public class PythonCommunicator : MonoBehaviour
                 //receive messages
                 string message = null;
                 bool gotMessage = false;
-                gotMessage = client.TryReceiveFrameString(out message); // this returns true if it's successful
+                while(!gotMessage)
+                {
+                    gotMessage = client.TryReceiveFrameString(out message); // this returns true if it's successful
+                }
 
                 if (gotMessage)
                 {

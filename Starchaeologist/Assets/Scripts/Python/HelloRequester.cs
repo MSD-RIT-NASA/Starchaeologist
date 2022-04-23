@@ -19,7 +19,7 @@ public class HelloRequester : RunAbleThread
         ForceDotNet.Force(); // this line is needed to prevent unity freeze after one use, not sure why yet
         using (RequestSocket client = new RequestSocket())
         {
-            client.Connect("tcp://localhost:5555");
+            client.Connect("tcp://localhost:5678");
 
             if (Running)
             {
