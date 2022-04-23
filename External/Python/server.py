@@ -4,23 +4,32 @@
 
 import os
 import csv
+import subprocess
 from threading import Thread
 from pubsub import pub
 import serial
+import multiprocessing
+import threading
+import random
 import openpyxl
 from _thread import *;
 import matlab.engine
 import os, os.path
 import ctypes
-import win32com.client 
 from editpyxl import Workbook
 import logging
+import win32com.client
+
+import clr
+# from System.Runtime.InteropServices import Marshal
 import zmq
 import time
+import win32com
 from scipy.stats import norm, chi2
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 import numpy as np
+import pyzdde.zdde as pyz
 from database.dbcalls import db
 import math
 
@@ -31,22 +40,29 @@ class Server(Thread):
     def __init__(self, port, debug= False):
         Thread.__init__(self)
         # try:
-            # self.arduino = serial.Serial(port=port, baudrate=115200, timeout=.1)
+        # self.arduino = serial.Serial(port=port, baudrate=115200, timeout=.1)
         # except:
             # logging.error("Error when setting up Arduino")    
         self.debug = debug
         self.end = False
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
-        self.wb = Workbook()
+        self.socket.bind("tcp://*:5678")
+        # context.term()
+        # ln = pyz.createLink() # DDE link object
+        
+        # workbook = ExcelApp.Workbooks.Open(r"External/Excel/OPC Data.xlsm")
+        
 
-        self.source_filename = r'External/Excel/OPC Data.xlsm'
+        # self.wb = Workbook()
 
-        self.wb.open(self.source_filename)
+        # self.source_filename = r'External/Excel/OPC Data.xlsm'
 
-        self.ws = self.wb.active
+        # self.wb.open(self.source_filename)
 
-        self.socket.bind("tcp://*:5555")
+        # self.ws = self.wb.active
+
+        
         pub.subscribe(self.killSwitch, "killSwitch.check")
         pub.subscribe(self.endThread, 'server.end')
 
@@ -192,36 +208,31 @@ class Server(Thread):
     
     # TODO
     def setMotionFloor(self, angle1, angle2):
-        # with open('./External/Matlab/file.csv', 'w', encoding='UTF8') as f:
-        #     writer = csv.writer(f)
-        #     writer.writerow([angle1,angle2])
-        # Tell Matlab to read values
-        # logging.info("Time")
-        # status = self.eng.simple(7)
-        # logging.info("Time")
-        x1 = 1.096 * math.sin(angle1)
+        x1 = 1.096 * math.sin(math.radians(angle1))
         
         pos1 = (-.125 - x1) * 100000
-        x2 = 1.096 * math.sin(angle2)
+        x2 = 1.096 * math.sin(math.radians(angle2))
         pos2 = (-.125 + x2) * 100000
-        self.ws.cell('B4').value = pos1
-        self.ws.cell('B13').value = pos2
-        # logging.info("Hi")
-        if os.path.exists("External/Excel/OPC Data.xlsm"):
-            xl=win32com.client.Dispatch("Excel.Application")
-        #     logging.info("Cell")
-            xl.Workbooks.Open(os.path.abspath("External/Excel/OPC Data.xlsm"))
-            xl.Application.Run("External/Excel/OPC Data.xlsm!Module1.Button1_Click")
-            xl.Application.Save() # if you want to save then uncomment this line and change delete the ", ReadOnly=1" part from the open function.
-            xl.Application.Quit() # Comment this out if your excel script closes
-            del xl
-        self.wb.save(self.source_filename)
+        # clr.AddReference("Microsoft.Office.Interop.Excel")
+        ExcelApp = win32com.client.GetActiveObject("Excel.Application")
+        ExcelApp.Visible = True
+        # print("Hu")
+        ExcelApp.Range("B4").Value = [pos1]
+        # print("Cool")
+        ExcelApp.Range("B13").Value = [pos2]
+        # path = os.getcwd()
 
+        # if os.path.exists("External/Excel/OPC Data.xlsm"):
+        #     xl=win32com.client.Dispatch("Excel.Application")
+        #     os.path("External/Excel/OPC Data.xlsm")
+        #     xl.Workbooks.Open("External/Excel/OPC Data.xlsm")#, ReadOnly=1)
+        #     xl.Application.Run("External/Excel/OPC Data.xlsm!modulename.macroname")
+        ##    xl.Application.Save() # if you want to save then uncomment this line and change delete the ", ReadOnly=1" part from the open function.
+            # xl.Application.Quit() # Comment this out if your excel script closes
+            # del xl
+        
 
-        # self.ws['B4'] = angle1
-        # self.ws['B13'] = angle2
-        # os.remove("./External/Matlab/file.csv")
-
+        
         return
 
     def unityRead(self):
@@ -274,6 +285,7 @@ class Server(Thread):
         """
         logging.info("Starting Server")
         time.sleep(1)
+        rotationCount = 0
         self.arduinoWrite("3")
         while True and not self.end:     
             if self.debug:
@@ -314,14 +326,17 @@ class Server(Thread):
             elif(decodedMessage.startswith("rotation")):
                 try:
                     # Get rotation values
-                    rotationList = decodedMessage.split(" ")
-                   
-                    # Set Motion Floor Platform to these angles
-                    self.setMotionFloor(float(rotationList[1]),float(rotationList[2]))
                     
-                    # Send angles back to Unity Game as confirmation
-                    rotationConfirmation = "rotation " + str(rotationList[1]) + " " + str(rotationList[1]) 
-                    self.unityWrite(rotationConfirmation)
+                    if (rotationCount == 5):
+                        rotationList = decodedMessage.split(" ")
+                        # Set Motion Floor Platform to these angles
+                        self.setMotionFloor(float(rotationList[1]),float(rotationList[2]))
+                        
+                        # Send angles back to Unity Game as confirmation
+                        rotationConfirmation = "rotation " + str(rotationList[1]) + " " + str(rotationList[1]) 
+                        self.unityWrite(rotationConfirmation)
+                        rotationCount = 0
+                    rotationCount+=1
                 except:
                     logging.error("Error occured while parsing data")
                     self.unityWrite("error " + decodedMessage)
@@ -333,12 +348,17 @@ class Server(Thread):
         logging.info("Ending Server Thread")
         self.end = True
         self.wb.close()
+        # subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
 
+def runGame():
+    subprocess.Popen(["./Starchaeologist/builds/Starchaeologist.exe"])
 
 if __name__ == "__main__":
-    port = "tcp://*:5555"
-    server = Server(debug=False, port="COM5")
+    # port = "tcp://*:5555"
+    server = Server(debug=False, port="COM4")
+    # server.con
     score = None
+
     setupError = 0
     
     # logging.basicConfig(
@@ -397,16 +417,42 @@ if __name__ == "__main__":
     # balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data3)
     # database.addBalanceScore(1,2,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
     
+    # random.uniform(-5, 5)	
+    for i in range(-5,5,1):
+        print(i)
+        server.setMotionFloor(i,i+0.1)
+        time.sleep(0.01)
+
+    setupError = 1
+    if setupError == 1:
+        while True:
+            server.setMotionFloor(random.uniform(-5, 5),random.uniform(-5, 5))
+            # for i in range(-5,5,1):
+            #     print(i)
+            #     server.setMotionFloor(i,i+0.1)
+            #     time.sleep(0.01)
+            # for i in range(5,-5,1):
+            #     print(i)
+            #     server.setMotionFloor(i,i+0.1)
+            #     time.sleep(0.01)
+            time.sleep(0.01)
+
+    rotationCount =0
     if setupError == 0:
         logging.info("Starting Server")
         time.sleep(3)
-        server.arduinoWrite("3")
-        time.sleep(3)
+        proc1 = multiprocessing.Process(target=runGame(), args=())
+        th1 = threading.Thread(target=proc1.start)
+        th1.start()        
+
+        # subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
+        # server.arduinoWrite("3")
+        # time.sleep(3)
         while True :
             
             logging.info("Waiting For Message From Unity")
-            # decodedMessage = server.unityRead()
-            decodedMessage = "rotation 6.5 7.86"
+            decodedMessage = server.unityRead()
+            # decodedMessage = "rotation 5 4"
             logging.info("Message Recieved From Unity: " +decodedMessage)
             if(decodedMessage == "endGame"):
                 logging.info("End of Mini-Game Reached")
@@ -432,15 +478,18 @@ if __name__ == "__main__":
             elif(decodedMessage.startswith("rotation")):
                 try:
                     # Get rotation values
-                    rotationList = decodedMessage.split(" ")
-                    var1 = float(rotationList[1])
-                    var2 = float(rotationList[2])
-                    # Set Motion Floor Platform to these angles
-                    server.setMotionFloor(var1,var2)
-                    # Send angles back to Unity Game as confirmation
-                    rotationConfirmation = "rotation " + rotationList[1] + " " + rotationList[2]
-                    server.unityWrite(rotationConfirmation)
+                    if (rotationCount == 5):
+                        rotationList = decodedMessage.split(" ")
+                        var1 = float(rotationList[1])
+                        var2 = float(rotationList[2])
+                        # Set Motion Floor Platform to these angles
+                        server.setMotionFloor(var1,var2)
+                        # Send angles back to Unity Game as confirmation
+                        rotationConfirmation = "rotation " + rotationList[1] + " " + rotationList[2]
+                        server.unityWrite(rotationConfirmation)
+                        rotationCount = 0
+                    rotationCount+=1
                 except:
                     logging.error("Error occured while parsing data")
                     server.unityWrite("error " + decodedMessage)
-            break
+            

@@ -24,7 +24,7 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, 
         format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
         datefmt='%Y-%m-%d %H:%M:%S')
-    app = App(debug=True)
+    app = App(debug=False)
     app.start()
     
     
