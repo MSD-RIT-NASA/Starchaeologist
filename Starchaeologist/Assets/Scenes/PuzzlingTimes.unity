@@ -4717,9 +4717,9 @@ Canvas:
   m_GameObject: {fileID: 1041879877}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 1469803694}
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -7001,6 +7001,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+--- !u!20 &1469803694 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7865517847723088716, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+  m_PrefabInstance: {fileID: 1469803693}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1474379797
 GameObject:
   m_ObjectHideFlags: 0
@@ -7069,9 +7074,9 @@ Canvas:
   m_GameObject: {fileID: 1474379797}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 1469803694}
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -7341,6 +7346,7 @@ GameObject:
   - component: {fileID: 1553079656}
   - component: {fileID: 1553079655}
   - component: {fileID: 1553079654}
+  - component: {fileID: 1553079659}
   m_Layer: 5
   m_Name: MenuSystem
   m_TagString: Untagged
@@ -7445,6 +7451,25 @@ RectTransform:
   m_AnchoredPosition: {x: 6.274, y: 1.077}
   m_SizeDelta: {x: 1832, y: 913.5075}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1553079659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553079653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 0
+  m_CheckFor2DOcclusion: 0
+  m_CheckFor3DOcclusion: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RaycastTriggerInteraction: 1
 --- !u!4 &1556655683 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4b3c12e7ffa2204419d15e9ae724b38b, type: 3}
