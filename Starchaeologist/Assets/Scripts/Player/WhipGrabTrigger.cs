@@ -8,9 +8,11 @@ public class WhipGrabTrigger : MonoBehaviour
     [SerializeField] [TagSelector] string[] tagsToGrab;
     [SerializeField] private Transform grabPullDestination;
     [Tooltip("On enable, the whip will get valid colliders within a sphere of this radius.")]
-    [SerializeField] private float pretestRadius;
+    [SerializeField] [Min(0)] private float pretestRadius;
 
-    Collider thisColl;
+    private Collider thisColl;
+    private Collider[] cachedOverlaps;
+    private Coroutine checkerCorout;
 
     private void Start()
     {
@@ -25,19 +27,44 @@ public class WhipGrabTrigger : MonoBehaviour
         //DebugEntryManager.updateEntry("WhipTriggerActive", "true", -1);
 
         //Out of all the colliders within pretestRadius of this,
-        Collider[] overlaps = Array.FindAll(
+        cachedOverlaps = Array.FindAll(
             Physics.OverlapSphere(transform.position, pretestRadius, Physics.AllLayers, QueryTriggerInteraction.Collide),
 
             //Find and stash each one that has any of the tags in `tagsToGrab`
             overlap => Array.Exists(tagsToGrab, tag => overlap.CompareTag(tag)));
 
-        foreach (Collider olap in overlaps)
-        {
-            //Manual check if olap also overlaps thisColl
-        }
+        //Now repeatedly check for actual overlaps indefinitely—or, rather, until disabled
+        //  Note the interval; we don't actually need to check every frame
+        CheckForOverlaps();
+        checkerCorout = Coroutilities.DoUntil(this, CheckForOverlaps, () => false, 0.1f);
     }
 
-    //private void OnDisable() => DebugEntryManager.updateEntry("WhipTriggerActive", "false", -1);
+    private void OnDisable()
+    {
+        //DebugEntryManager.updateEntry("WhipTriggerActive", "false", -1);
+
+        Coroutilities.TryStopCoroutine(this, ref checkerCorout);
+    }
+
+    private void CheckForOverlaps()
+    {
+        for (int i = 0; i < cachedOverlaps.Length; i++)
+        {
+            Collider olap = cachedOverlaps[i];
+
+            //Check if olap and thisColl are overlapping
+            if (olap && Physics.ComputePenetration(
+                thisColl, transform.position, transform.rotation,
+                olap, olap.transform.position, olap.transform.rotation,
+                out _, out _))
+            {
+                //Since olap is confirmed to have the tag we want, it should also have a grabbable item script. Call its
+                //fly to grabber method, then nullify our reference to it to prevent repeat calls
+                olap.GetComponent<WhipGrabbableItem>().FlyToGrabber(grabPullDestination);
+                cachedOverlaps[i] = null;
+            }
+        }
+    }
 
     /// Does not work
     //private void OnTriggerEnter(Collider other)
