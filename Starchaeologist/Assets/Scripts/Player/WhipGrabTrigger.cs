@@ -9,6 +9,7 @@ public class WhipGrabTrigger : MonoBehaviour
     [SerializeField] private Transform grabPullDestination;
     [Tooltip("On enable, the whip will get valid colliders within a sphere of this radius.")]
     [SerializeField] [Min(0)] private float pretestRadius;
+    [SerializeField] private Vector3 destinationOffset;
 
     private Collider thisColl;
     private Collider[] cachedOverlaps;
@@ -60,7 +61,7 @@ public class WhipGrabTrigger : MonoBehaviour
             {
                 //Since olap is confirmed to have the tag we want, it should also have a grabbable item script. Call its
                 //fly to grabber method, then nullify our reference to it to prevent repeat calls
-                olap.GetComponent<WhipGrabbableItem>().FlyToGrabber(grabPullDestination);
+                olap.GetComponent<WhipGrabbableItem>().FlyToGrabber(grabPullDestination, destinationOffset);
                 cachedOverlaps[i] = null;
             }
         }
