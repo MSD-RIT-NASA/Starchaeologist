@@ -34,15 +34,18 @@ public class WhipGrabTrigger : MonoBehaviour
             //Find and stash each one that has any of the tags in `tagsToGrab`
             overlap => Array.Exists(tagsToGrab, tag => overlap.CompareTag(tag)));
 
-        DebugEntryManager.updateEntry("Pretest Overlaps",
-            $"{cachedOverlaps.Length} results: {string.Join<Collider>(" ", cachedOverlaps)}",
-            -1);
-        Debug.Log($"Pretest Overlaps: {cachedOverlaps}");
+        if (cachedOverlaps != null)
+        {
+            DebugEntryManager.updateEntry("Pretest Overlaps",
+                $"{cachedOverlaps.Length} results: {string.Join<Collider>(" ", cachedOverlaps)}",
+                -1);
+            Debug.Log($"Pretest Overlaps: {cachedOverlaps}");
 
-        //Now repeatedly check for actual overlaps indefinitely—or, rather, until disabled
-        //  Note the interval; we don't actually need to check every frame
-        CheckForOverlaps();
-        checkerCorout = Coroutilities.DoUntil(this, CheckForOverlaps, () => false, 0.1f);
+            //Now repeatedly check for hits (actual overlaps) indefinitely—or, rather, until disabled
+            //  Note the interval; we don't actually need to check every frame
+            CheckForHits();
+            checkerCorout = Coroutilities.DoUntil(this, CheckForHits, () => false, 0.1f);
+        }
     }
 
     private void OnDisable()
@@ -52,8 +55,10 @@ public class WhipGrabTrigger : MonoBehaviour
         Coroutilities.TryStopCoroutine(this, ref checkerCorout);
     }
 
-    private void CheckForOverlaps()
+    private void CheckForHits()
     {
+        List<int> hitIndices = new List<int>(cachedOverlaps.Length);
+
         for (int i = 0; i < cachedOverlaps.Length; i++)
         {
             Collider olap = cachedOverlaps[i];
@@ -64,12 +69,18 @@ public class WhipGrabTrigger : MonoBehaviour
                 olap, olap.transform.position, olap.transform.rotation,
                 out _, out _))
             {
-                //Since olap is confirmed to have the tag we want, it should also have a grabbable item script. Call its
-                //fly to grabber method, then nullify our reference to it to prevent repeat calls
+                //Since olap is confirmed to have a tag we want, it should also have a fly to grabber method.
                 olap.GetComponent<WhipGrabbableItem>().FlyToGrabber(grabPullDestination, destinationOffset);
-                cachedOverlaps[i] = null;
+                hitIndices.Add(i);
             }
         }
+
+        DebugEntryManager.updateEntry("Grab Hits",
+            $"{hitIndices.Count} hits; hit indices are [{string.Join(" ", hitIndices)}]",
+            -1);
+        //Nullify all our references to any hits, to prevent repeat calls
+        foreach (int index in hitIndices)
+            cachedOverlaps[index] = null;
     }
 
     /// Does not work
