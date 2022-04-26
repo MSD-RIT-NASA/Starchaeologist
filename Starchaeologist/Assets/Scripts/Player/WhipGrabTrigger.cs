@@ -34,6 +34,11 @@ public class WhipGrabTrigger : MonoBehaviour
             //Find and stash each one that has any of the tags in `tagsToGrab`
             overlap => Array.Exists(tagsToGrab, tag => overlap.CompareTag(tag)));
 
+        DebugEntryManager.updateEntry("Pretest Overlaps",
+            $"{cachedOverlaps.Length} results: {string.Join<Collider>(" ", cachedOverlaps)}",
+            -1);
+        Debug.Log($"Pretest Overlaps: {cachedOverlaps}");
+
         //Now repeatedly check for actual overlaps indefinitely—or, rather, until disabled
         //  Note the interval; we don't actually need to check every frame
         CheckForOverlaps();
