@@ -1556,7 +1556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71f8d86428592374f8abf1a769763756, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenuUI: {fileID: 731994345}
+  pauseMenuUI: {fileID: 326321780}
   pauseActionRef: {fileID: 225231899232684990, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   playerReference: {fileID: 1469803695}
 --- !u!1 &339448799
@@ -3583,7 +3583,6 @@ GameObject:
   - component: {fileID: 839490670}
   - component: {fileID: 839490671}
   - component: {fileID: 839490672}
-  - component: {fileID: 839490673}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -3795,21 +3794,6 @@ MonoBehaviour:
   gameMode: 0
   desiredRotation: {x: 0, y: 0}
   realRotation: {x: 0, y: 0}
---- !u!114 &839490673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 839490667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71f8d86428592374f8abf1a769763756, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pauseMenuUI: {fileID: 326321780}
-  pauseActionRef: {fileID: 225231899232684990, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  playerReference: {fileID: 1469803695}
 --- !u!1 &863713764
 GameObject:
   m_ObjectHideFlags: 0

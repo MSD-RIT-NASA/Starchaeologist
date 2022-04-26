@@ -6,10 +6,16 @@ using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
+
+    //singleton
+    public static PauseMenu singleton;
+
+
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
     [SerializeField] private InputActionReference pauseActionRef;
     [SerializeField] GameObject playerReference;
+
 
     private void OnEnable()
     {
@@ -30,6 +36,18 @@ public class PauseMenu : MonoBehaviour
             Pause();
     }
 
+    private void Start()
+    {
+        if (singleton != null && singleton != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            singleton = this;
+        }
+    }
+
     private void UpdateMenuPosition()
     {
         GameObject tempPlayer = new GameObject();
@@ -39,7 +57,7 @@ public class PauseMenu : MonoBehaviour
         tempRotation.z = 0;
         tempPlayer.transform.rotation = tempRotation;
         Destroy(tempPlayer);
-        Vector3 spawnPos = playerReference.transform.position + (tempPlayer.transform.forward * 1.5f);
+        Vector3 spawnPos = playerReference.transform.position + (tempPlayer.transform.forward * 1.5f) + new Vector3(0,1,0);
         pauseMenuUI.transform.position = spawnPos;
     }
 
