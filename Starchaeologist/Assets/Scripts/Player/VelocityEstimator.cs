@@ -47,17 +47,10 @@ public class VelocityEstimator : MonoBehaviour
 
     private void FixedUpdate()
     {
-        DebugEntryManager.updateEntry?.Invoke("V Est Local Pos", $"<color=#FF0000>{velTransform.localPosition.x}</color>, " +
-            $"<color=#00FF00>{velTransform.localPosition.y}</color>, <color=#0000FF>{velTransform.localPosition.z}</color>", -1);
-
         if (estimating)
         {
             UpdateVelocityBank();
             CurrentAvgVelocity = GetAverageFromBank();
-
-            //if (currentAvgVel is Vector3 cAvg)
-            //    DebugEntryManager.updateEntry?.Invoke($"V Estimator", $"V = <color=#FF0000>{cAvg.x}</color>, " +
-            //        $"<color=#00FF00>{cAvg.y}</color>, <color=#0000FF>{cAvg.z}</color>", 3);
         }
 
         //After doing everything else, set previousPos to be the current pos (since it's about to be "previous")
