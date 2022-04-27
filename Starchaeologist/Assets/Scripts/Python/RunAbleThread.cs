@@ -1,5 +1,7 @@
 ﻿using System.Threading;
 
+//See: https://github.com/off99555/Unity3D-Python-Communication
+
 /// <summary>
 ///     The superclass that you should derive from. It provides Start() and Stop() method and Running property.
 ///     It will start the thread to run Run() when you call Start().

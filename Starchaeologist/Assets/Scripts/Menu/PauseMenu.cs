@@ -13,28 +13,7 @@ public class PauseMenu : MonoBehaviour
 
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
-    [SerializeField] private InputActionReference pauseActionRef;
     [SerializeField] GameObject playerReference;
-
-
-    private void OnEnable()
-    {
-        Debug.Log($"PauseMenu on {name}: pauseActionRef = {pauseActionRef}");
-        pauseActionRef.action.performed += OnPauseAction;
-    }
-    private void OnDisable()
-    {
-        pauseActionRef.action.performed -= OnPauseAction;
-    }
-
-    private void OnPauseAction(InputAction.CallbackContext ctx)
-    {
-        Debug.Log("pause action performed");
-        if (GameIsPaused)
-            Resume();
-        else
-            Pause();
-    }
 
     private void Start()
     {

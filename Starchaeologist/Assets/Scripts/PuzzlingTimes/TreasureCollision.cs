@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*DESCRIPTION
+ * 
+ * This script tells when the player has collected a piece of treasure
+ * 
+ */
+
 public class TreasureCollision : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)

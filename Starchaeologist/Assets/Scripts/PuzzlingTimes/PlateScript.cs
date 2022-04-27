@@ -2,6 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*DESCRIPTION
+ * 
+ *  This script pertains to all moving platforms within Puzzling Times. This will
+ *  be attached to each pressure plate (see prefab) and controls the movement of
+ *  the individual plates. 
+ *  
+ *  The script is called when the player teleports (collides) with the platform.
+ *  This activates depending on its trap status (set in PuzzlingBuilder). If the
+ *  platform is 'trapped', it will choose one of two rotation scripts to call and 
+ *  tell PuzzlingGame to set off a trap relative to its position. if not trapped 
+ *  then the game simply continues
+ *  
+ *  This script keeps track of the indeces of adjacent tiles and applicable traps.
+ *  When a plate is teleported onto it, it tells PuzzlingGame to deactivate all
+ *  active tiles to the player must endure the trap. Once Reactivate() is called
+ *  all recorded adjacent plates will be active for teleportation.
+ *  
+ *  This script is also attached to the start and end platforms simply for teleportation
+ *  locking reasons. Never make them 'trapped'.
+ * 
+ */
+
 public class PlateScript : MonoBehaviour
 {
     public Vector2 myPosition;

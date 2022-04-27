@@ -5,9 +5,28 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class PuzzlingBuilder : MonoBehaviour
 {
-    /*
-     TO DO:
-        
+    /*DESCRIPTION
+     * 
+     * The script is attached to the game manager and serves to build 
+     * the level upon entry.
+     * 
+     * The script takes in several prefabs which it uses to build the 
+     * temple room. It takes in the floor tile prefab, as well as the 
+     * four traps, and the interior walls. It builds the room in tile
+     * sets of 3 based on the roomLength variable. This can be set to
+     * lengthen or shorten the room via the Unity editor.
+     * 
+     * When each platform is placed, random tiles will be 'trapped', 
+     * causing them to set off on of the traps when the palyer comes
+     * in contact with them
+     * 
+     * Once everything is set the room will place each tile and trap. 
+     * Each tile will be given the nearby tiles and applicable traps
+     * for to store and use in-game.
+     * 
+     * This script will send the necessary data to PuzzlingGame then 
+     * delete itself once it has finished.
+     * 
      */
 
     //treasure variables

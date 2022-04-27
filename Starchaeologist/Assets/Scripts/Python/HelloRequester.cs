@@ -3,6 +3,8 @@ using NetMQ;
 using NetMQ.Sockets;
 using UnityEngine;
 
+//See: https://github.com/off99555/Unity3D-Python-Communication
+
 /// <summary>
 ///     Example of requester who only sends Hello. Very nice guy.
 ///     You can copy this class and modify Run() to suits your needs.

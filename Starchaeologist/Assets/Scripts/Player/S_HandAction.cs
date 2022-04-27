@@ -5,14 +5,41 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class S_HandAction : MonoBehaviour
 {
+    /*Description
+     
+     This script is used to create custom actions for the XR rig,
+    This will be attached to each hand of the XR rig
+     
+     */
+
     ActionBasedController controller;
     XRRayInteractor teleportRay;
     XRInteractorLineVisual teleportLine;
     GameObject teleportReticle;
     float activationThreshold = 0.2f;
     bool teleportActive = false;
+    //enable this if this script is attached to the left hand of the rig
+    //This is enabled automatically in the prefab
     public bool leftHand = false;
+    //leave alone in the editor
     public bool paused = false;
+
+    /*PLAYER CONTROLS
+
+    -teleport
+        -trigger
+    -whip
+        -right hand a button (primary action)
+        -hold (a), swing controller, release (a)
+    -Pause/menu
+        -left hand menu button
+        -changes hand rays to UI interactables
+    -menu interaction
+        -primary action (a/x) each hand
+    -grab
+        -grip button
+     
+     */
 
 
     // Start is called before the first frame update
@@ -50,7 +77,6 @@ public class S_HandAction : MonoBehaviour
             rightHand.paused = false;
             rightRay.SetActive(false);
             leftRay.SetActive(false);
-            //TO DO: deactivate the actual pause menu
         }
         else//open the pause menu
         {
@@ -60,7 +86,6 @@ public class S_HandAction : MonoBehaviour
             rightHand.paused = true;
             rightRay.SetActive(true);
             leftRay.SetActive(true);
-            //TO DO: activate the actual pause menu
         }
 
     }

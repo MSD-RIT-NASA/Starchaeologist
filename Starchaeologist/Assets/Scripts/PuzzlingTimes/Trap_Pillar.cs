@@ -2,6 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*DESCRIPTION
+ * 
+ * This script is attached to the prefab for the pillar trap.
+ * 
+ * This script extends the arm from the pillar, then swings 
+ * it around to hit the player, then retracts the arm.
+ * 
+ * Suspense() is used to give the player time to react
+ * 
+ */
+
+
 public class Trap_Pillar : MonoBehaviour
 {
     float pauseTimer = 0f;
@@ -73,7 +85,7 @@ public class Trap_Pillar : MonoBehaviour
                 ExtendRetract(true);
                 break;
             case 1://brief pause
-                Suspense(1.5f);
+                Suspense(2.5f);
                 pillar.Play();
                 break;
             case 2://swing blade

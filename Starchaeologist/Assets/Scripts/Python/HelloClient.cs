@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+//See: https://github.com/off99555/Unity3D-Python-Communication
+
 public class HelloClient : MonoBehaviour
 {
     private HelloRequester _helloRequester;

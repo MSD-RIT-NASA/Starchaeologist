@@ -5,6 +5,28 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class PuzzlingGame : MonoBehaviour
 {
+
+    /*DESCRIPTION
+     * 
+     * This script is the main gameplay managing script for Puzzling Times.
+     * Methods in this script are mostly called via other objects, since 
+     * player advances the gameplay/
+     * 
+     * When the player teleports to a new tile, PlateScript will call 
+     * DeactivatePlates() to keep them from escaping the plate rotation
+     * and trap early. Then depending on the trap status of the plate,
+     * it will then call ActivatePlates(), enabling telportation to 
+     * adjacent platforms. 
+     * 
+     * TrapTime() is also called by plate scripts and activates one of
+     * 4 traps that is relevent to the plate's position.
+     * 
+     * Communicate constantly sends the rotation of the current plate
+     * to PythonCommunicator and give the rotation of the real platform
+     * to the current platform
+     * 
+     */
+
     //singleton
     public static PuzzlingGame singleton;
 
@@ -137,26 +159,6 @@ public class PuzzlingGame : MonoBehaviour
     //python communication function
     void Communication()
     {
-        /*To DO
-        -This script is the link between the python script and the plate scripts
-        -get the desired rotation from the plate script
-        -send it to the python script
-        -grab the rotation of the real platform
-        -set the platform's rotation as such
-        -for now just send the desired rotation right into the platform's localRotation
-         */
-
-        //if (currentScript.trapped)
-        //{
-        //    currentScript.transform.localRotation = Quaternion.Euler(currentScript.desiredRotation);
-        //}
-
-        //currentScript.transform.localRotation = currentScript.desiredRotation;
-        //if(currentScript.trapped)
-        //{
-        //    Debug.Log(currentScript.desiredRotation.eulerAngles);
-        //}
-
         float desiredX = currentScript.desiredRotation.eulerAngles.x;
         float desiredZ = currentScript.desiredRotation.eulerAngles.z;
 
@@ -176,7 +178,6 @@ public class PuzzlingGame : MonoBehaviour
             Vector2 giveRotation = new Vector2(desiredX, desiredZ);
             communicateReference.desiredRotation = giveRotation;
             currentScript.transform.parent.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
-            //currentScript.transform.parent.transform.localRotation = currentScript.desiredRotation;
         }
         else
         {
@@ -187,12 +188,6 @@ public class PuzzlingGame : MonoBehaviour
     //called from the current platform to set off the trap
     public void TrapTime()
     {
-        /*TO DO
-         -This function will go through the process of setting off the trap once the
-            current plate tells it to
-        -set off the corresponding trap
-        -activate the adjacent platforms
-         */
         Debug.Log("Trap Time");
         int xIndex = (int)currentPosition.x;
         int yIndex = (int)currentPosition.y;

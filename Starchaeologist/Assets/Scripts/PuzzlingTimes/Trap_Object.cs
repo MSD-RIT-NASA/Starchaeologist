@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*DESCRIPTION
+ * 
+ * This script is attached to any player damaging object in PuzzlingTimes.
+ * 
+ * tells PuzzlingGame that the player has been hit and should record score 
+ * changes.
+ * 
+ */
 public class Trap_Object : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)

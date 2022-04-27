@@ -20,6 +20,20 @@ using System.Threading;
 //    -Send 'quit'
 //    -Receive 'quit'
 
+/*Description
+
+    This script is attached to the Game manager and handles communication with the 
+    external python server which communicates to the motion floor and back to this.
+    This will create a thread ~every frame which sends a message and tries to recieve
+    a message. For the most part this will be in the form of a rotation which will be
+    sent back to the relative platforms via the game manager script. There is also the 
+    intent to stop the game when the kill switch is hit, receive balance score data, 
+    and quit game signals. The killswitch/pause still needs full implementation.
+    This was put together with the help from a public GIT repository here:
+    https://github.com/off99555/Unity3D-Python-Communication
+ 
+ */
+
 public class PythonCommunicator : MonoBehaviour
 {
     //Game Mode
@@ -50,6 +64,7 @@ public class PythonCommunicator : MonoBehaviour
     //Quit game
     bool quitGame = false;
 
+    //stop the thread if the script is destroyed
     void OnDestroy()
     {
         Stop();
@@ -86,6 +101,7 @@ public class PythonCommunicator : MonoBehaviour
         communicateThread.Join();
     }
 
+    //this method will be threaded and handles sending, receiving, and reading messages with the python server
     void Communicate()
     {
         ForceDotNet.Force(); // this line is needed to prevent unity freeze after one use, not sure why yet
@@ -165,11 +181,15 @@ public class PythonCommunicator : MonoBehaviour
         NetMQConfig.Cleanup(); // this line is needed to prevent unity freeze after one use, not sure why yet
     }
 
+    //if the message isn't one of the one word commands, assume it's score or rotation and split it up
     void SplitMessage(string message)
     {
         //split the string into two floats
         string[] splitMessage = message.Split(' ');
 
+        /*TODO
+         -the final balance score will probably end up being multiple variables. read them accordingly
+         */
         if (splitMessage[0] == "calibrateStop")//get the score data back and do something with it
         {
             balanceScore = float.Parse(splitMessage[1], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);

@@ -2,6 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*DESCRIPTION
+ * 
+ * This script is attached to the prefab for the ceiling spike trap.
+ * 
+ * This script takes from 3 of the empty object children of the prefab,
+ * spawns spikes, then stabs them down at the player. The center point
+ * is always used, while the other two spikes spawn randomly around the 
+ * edges
+ * 
+ * Suspense() is used to give the player time to react
+ * 
+ */
+
 public class Trap_Ceiling : MonoBehaviour
 {
     public GameObject spearReference;

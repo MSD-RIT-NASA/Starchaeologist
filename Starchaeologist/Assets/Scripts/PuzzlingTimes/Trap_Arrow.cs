@@ -2,6 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*DESCRIPTION
+ * 
+ * This script is attached to the prefab for the wall trap.
+ * 
+ * Depending on which wall this trap is placed on, it will
+ * spawn and shoot arrow objects at the player, then delete
+ * the arrows.
+ * 
+ * Suspense() is used to give the player time to react
+ * 
+ */
+
 public class Trap_Arrow : MonoBehaviour
 {
     public GameObject arrowReference;

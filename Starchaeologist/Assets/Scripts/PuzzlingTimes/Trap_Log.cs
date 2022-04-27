@@ -2,6 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*DESCRIPTION
+ * 
+ * This script is attached to the prefab for the ceiling swing trap.
+ * 
+ * This trap starts slowly to signal to the player then swings down 
+ * quickly. This could be worked on to make the trap easier to read.
+ * At this time it's the hardest to tell it's happening
+ * 
+ * Suspense() is used to give the player time to react
+ * 
+ */
+
 public class Trap_Log : MonoBehaviour
 {
     //rightLerp = 1
