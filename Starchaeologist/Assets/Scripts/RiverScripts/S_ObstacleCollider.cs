@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*DESCRIPTION
+ * 
+ * This script tells when the player has been hit by a river obstacle
+ * 
+ */
+
+
 public class S_ObstacleCollider : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)

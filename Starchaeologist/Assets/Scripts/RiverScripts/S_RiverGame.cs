@@ -4,6 +4,20 @@ using System.Globalization;
 using UnityEngine;
 
 
+/*DESCRIPTION
+ * 
+ * This script is the main game managing script for River Ride. Once
+ * the river has been built this will be active and will control the
+ * movement of the raft. When the player teleports onto the river raft,
+ * this script will start accelerating the raft down the river and 
+ * increase the raft's range of rotation up to its max. 
+ * 
+ * Communicate() sends the raft's desired rotation to PythonCommunicator
+ * and also grabs the rig's actual rotation so the raft matches with the 
+ * real life platform.
+ * 
+ */
+
 public class S_RiverGame : MonoBehaviour
 {
     //singleton
@@ -25,22 +39,6 @@ public class S_RiverGame : MonoBehaviour
     bool playerAttached = false;
     int checkpointIndex = 0;
 
-    //python variables
-    /*
-    PYTHON COMMUNICATION FORMAT
-    Rotation
-    -Send: 'rotation rotation1(float) rotation2(float)'
-    -Receive: 'rotation rotation1(float) rotation2(float)'
-    Score Calibration 
-    -Send: 'calibrate gameScore(float)'
-    -Receive: 'calibrateStop balanceScore(float)'
-    Killswitch 
-    -Receive 'kill'
-    -Receive 'live'
-    Quit Game
-    -Send 'quit'
-    -Receive 'quit'
-    */
     //private HelloRequester pythonCommunicator;
     public float rotationX = 0f;
     public float rotationZ = 0f;
@@ -63,10 +61,8 @@ public class S_RiverGame : MonoBehaviour
             singleton = this;
         }
 
-        //pythonCommunicator = new HelloRequester();
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
         communicateReference = GetComponent<PythonCommunicator>();
-        //pythonCommunicator.Start();
     }
 
     // Update is called once per frame

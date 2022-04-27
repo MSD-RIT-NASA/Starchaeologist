@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
+
+/*DESCRIPTION
+ * 
+ * This script tells when the player has transported onto the raft.
+ * This contacts RiverGame and tells it to start moving down the river.
+ * 
+ */
+
 public class S_RaftCollision : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)
