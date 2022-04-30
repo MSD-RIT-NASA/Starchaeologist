@@ -13,6 +13,9 @@ import killswitch as KillSwitch
 from database.dbcalls import db
 
 class Controller:
+    """
+    Controller for the application's behavior
+    """
     def __init__(self, debug=False):
         self.db = db()
         
@@ -22,9 +25,12 @@ class Controller:
         self.plottingProcesses = []
         self.bPlotted = False
         self.gPlotted = False
+
+        # Port numbers; will need to be changed on different devices
         serverPort = "COM4"
         killSwitchPort = "COM3"
-        # Threads
+        
+        # Check port are open and connected to arduino before creating and running threads
         ports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
         for port in ports:
             if serverPort in port:
@@ -45,10 +51,10 @@ class Controller:
                     self.killSwitch = None
                     logging.error("KillSwitch not started: Arduino not connected to port " + killSwitchPort)
         
-        gameOneScores, gameTwoScores, gameThreeScores = self.db.getTopScores()
+        gameOneScores, gameTwoScores = self.db.getTopScores()
         
-        #Views
-        self.mainView = DefaultView.DefaultView(None, "Training System", gameOneScores, gameTwoScores, gameThreeScores)
+        #Create Views
+        self.mainView = DefaultView.DefaultView(None, "Training System", gameOneScores, gameTwoScores)
         self.hubView = HubView.HubView(None)
         self.loginView = LoginView.LoginView(None)
         self.statisticsView = StatisticsView.StatisticsView(None)
@@ -75,9 +81,15 @@ class Controller:
 
 
     def loginOpen(self):
+        """
+        Open login modal
+        """
         self.loginView.ShowModal()
 
     def loginAttempt(self, username, password):
+        """
+        Attempting to login with the given username and password
+        """
         logging.info("Attempting User Login")
         val = self.db.findUserID(username)
         if val is not None:
@@ -108,7 +120,7 @@ class Controller:
         else:
             logging.info("New User Logging In")
             val = self.db.addUser(username, password)
-            # New User Added Popup?
+            # New User Added Popup 
             resp = wx.MessageDialog(None,"New User Added to Database","Welcome to the Training System " + username + "!", wx.OK)
             resp.ShowModal()
             resp.Destroy()
@@ -117,10 +129,9 @@ class Controller:
             self.mainView.Show(False)
             self.loginView.Close()
                             
-            # Set statistics functon works
+            # Set statistics for the user
             self.bPlotted = False
             self.gPlotted = False
-
             proc1 = multiprocessing.Process(target=self.setUserGameStatistics(), args=())
             self.plottingProcesses.append(proc1)
             proc2 = multiprocessing.Process(target=self.setUserBalanceStatistics(), args=())
@@ -131,6 +142,9 @@ class Controller:
             self.hubView.Show(True) 
 
     def logoutOpen(self):
+        """
+        Open the logout option
+        """
         window = wx.MessageDialog(None, "Are you sure you want to logout?", "Logout" , wx.YES_NO|wx.YES_DEFAULT)
         resp = window.ShowModal()
         if resp == wx.ID_YES:
@@ -148,18 +162,24 @@ class Controller:
         window.Destroy()
     
     def setUserBalanceStatistics(self):
+        """
+        Plot the balance statistics for the current user
+        """
         bScore = self.db.getBalanceScore(self.currentUser)
         pub.sendMessage("statistics.balance", score=bScore)
         self.bPlotted = True
 
     def setUserGameStatistics(self):
+        """
+        Plot the game statistics for the current user
+        """
         gScore = self.db.getGameScore(self.currentUser)
         pub.sendMessage("statistics.game", score=gScore)
         self.gPlotted = True
 
     def statisticsOpen(self):
         """
-        Opens Statistics View. Displays loading message 
+        Opens Statistics View. Displays loading message if contents not loaded yet
         """
         logging.info("Opening Statistics View")
         dialog = wx.ProgressDialog("Loading Statistics", "", maximum=100, style=wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME)
@@ -176,27 +196,31 @@ class Controller:
 
 
     def addGameScore(self, score, gameID):
+        """
+        Add game score to database for the current user
+        """
         self.db.addGameScore(self.currentUser,gameID,score)
     
     def addBalanceScore(self, score, gameID, meanCOP, stdCOP, lengthCOP, centroidX, centroidY):
+        """
+        Add balance score to database for the current user
+        """
         self.db.addBalanceScore(self.currentUser,gameID,score,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
 
     def gameStart(self):
         """
-        Opens Unity Game through SteamVR
+        Create thread for running the current build of the VR Game. It will take some time to load
+        
         """
         logging.info("Starting Unity Game")
 
-        proc1 = multiprocessing.Process(target=self.runGame(), args=())
+        proc1 = multiprocessing.Process(target=subprocess.call("./Starchaeologist/builds/Starchaeologist.exe"), args=())
         th1 = threading.Thread(target=proc1.start)
         th1.start()        
-        # subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
-    def runGame(self):
-        subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
-
+    
     def closeApp(self):
         """
-        Close Entire Application, after user check
+        Close Entire Application, after final user verification
         """
         window = wx.MessageDialog(None, "Are you sure you want to quit?", "Close" , wx.YES_NO|wx.YES_DEFAULT)
         resp = window.ShowModal()
@@ -206,6 +230,8 @@ class Controller:
             self.hubView.Show(False)
             self.loginView.Show(False)
             self.statisticsView.Show(False)
+            logging.info("Closing Database")
+            self.db.closeConnection()
             logging.info("Closed All Views")
             if self.killSwitch != None:
                 pub.sendMessage('killswitch.end')
@@ -218,11 +244,3 @@ class Controller:
             exit(0)
         else:
             window.Destroy()
-
-if __name__ == '__main__':
-    logging.basicConfig(
-        format='%(asctime)s %(levelname)-8s %(message)s',
-        level=logging.INFO,
-        datefmt='%Y-%m-%d %H:%M:%S')
-    # subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
-    c = Controller()

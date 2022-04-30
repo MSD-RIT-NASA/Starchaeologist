@@ -64,7 +64,7 @@ class StatisticsView(wx.Frame):
    
    def plotBalanceScore(self, score):
       """
-      Plot Balance Score
+      Plot Balance Score in Statistics Panel
       """
       logging.info("Plotting Balance Score Statistics")
       if score[0] is not None and score[1] is not None:
@@ -75,7 +75,7 @@ class StatisticsView(wx.Frame):
    
    def plotGameScore(self, score):
       """
-      Plot Game Score
+      Plot Game Score in Statistics Panel
       """
       logging.info("Plotting Game Score Statistics")
       if score[0] is not None and score[1] is not None:
@@ -167,14 +167,17 @@ class ScorePanel(wx.Panel):
       self.axes.grid(True)
       self.axes.legend()
       if flag:
-         self.fig.canvas.mpl_connect("pick_event", self.onPick)
+         self.fig.canvas.mpl_connect("pick_event", self.onPickBalance)
       else:
          self.fig.canvas.mpl_connect("pick_event", self.onPickGame)
       self.fig.canvas.draw()
    
 
 
-   def onPick(self,event):
+   def onPickBalance(self,event):
+      """
+      Displays breakdown of balance score in score panel when plot is clicked
+      """
       ind = event.ind[0]
       thisline = event.artist
       date_time = thisline.get_xdata()[ind].strftime("%m/%d/%Y, %H:%M:%S")
@@ -202,6 +205,9 @@ class ScorePanel(wx.Panel):
          ).ShowModal()
    
    def onPickGame(self,event):
+      """
+      Displays breakdown of game score in score panel when plot is clicked
+      """
       ind = event.ind[0]
       thisline = event.artist
       date_time = thisline.get_xdata()[ind].strftime("%m/%d/%Y, %H:%M:%S")
@@ -220,20 +226,16 @@ class ScorePanel(wx.Panel):
                wx.OK | wx.CLOSE
          ).ShowModal()
 
+# Testing display of statistics view
 if __name__ == '__main__':
    app = wx.App()
    view = StatisticsView(None)
    
    bScore = [[(1648937325, 95, 80.0, 40.0, 30.0, 20.0, 10.0),(1648997325, 195, 80.0, 40.0, 30.0, 20.0, 10.0)], [(1648937325, 93, 12.675686465930625, 5.855042106763086, 22.91533792001619, -0.9545454545454546, 0.4090909090909091), (1648948277, 151.9689104732696, 12.675686465930625, 5.855042106763086, 22.91533792001619, -0.9545454545454546, 0.4090909090909091)]]
-   # gScore = [[(1646934163, 65), (1647012919, 56), (1647099955, 10)], [(1647012919, 15), (1647012919, 19), (1647012919, 15), (1647099955, 60)], [(1647012919, 18), (1647012919, 81), (1647099955, 30)]]
    gScore = [[(1646934163, 695, 0.0, 0.0, 0.0, 0.0, 0.0)], [(1646934163, 615, 0.0, 0.0, 0.0, 0.0, 0.0), (1646954163, 191, 0.0, 0.0, 0.0, 0.0, 0.0)]]
    
    view.plotGameScore(gScore)
    view.plotBalanceScore(bScore)
-   # bScore = [None, None, None]
-   # gScore = [None, None, None]
-   # view.plotBalanceScore(bScore)
-   # view.plotGameScore(gScore)
 
    view.Show()
 

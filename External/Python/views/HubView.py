@@ -1,7 +1,10 @@
 import wx
 from pubsub import pub
 
-class HubView(wx.Frame):             
+class HubView(wx.Frame): 
+    """
+    Constructor for the application hub
+    """            
     def __init__(self, parent): 
       super(HubView, self).__init__(parent, title = "Training System")  
       self.SetBackgroundColour('white')
@@ -39,13 +42,25 @@ class HubView(wx.Frame):
       
       
     def statisticsOpen(self, event):
+      """
+      Open Statistics View
+      """
       pub.sendMessage('statistics.open')
        
     def logoutOpen(self, event):
+      """
+      Open Logout Dialog
+      """
       pub.sendMessage('logout.open')
 
     def startGame(self, event):
+      """
+      Start Game
+      """
       pub.sendMessage('game.start')
 
     def onClose(self, event):
+      """
+      Close Application
+      """
       pub.sendMessage('app.end')

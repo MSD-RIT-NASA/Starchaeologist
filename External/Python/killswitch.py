@@ -11,6 +11,9 @@ from threading import Thread
 from pubsub import pub
 
 class KillSwitchMonitor(Thread):
+    """
+    Constructor for monitoring the status of the kill switch
+    """
     def __init__(self, port, debug=False):
         Thread.__init__(self)
         self.end = False
@@ -21,6 +24,9 @@ class KillSwitchMonitor(Thread):
         pub.subscribe(self.endThread, 'killswitch.end')
 
     def run(self):
+        """
+        Run the monitoring thread
+        """
         logging.info("Starting Kill Switch Thread")
         while not self.end:
             command = self.arduino.readline().decode("utf-8")
@@ -33,9 +39,15 @@ class KillSwitchMonitor(Thread):
             time.sleep(0.05)
 
     def endThread(self):
+        """
+        End the monitoring thread
+        """
         logging.info("Ending Kill Switch Thread")
         self.end = True
-            
+
+"""
+Test Case for Kill Switch Monitor
+"""
 if __name__ == '__main__':
     killSwitch = KillSwitchMonitor(False)
     killSwitch.start()

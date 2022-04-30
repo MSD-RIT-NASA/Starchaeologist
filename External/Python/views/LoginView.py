@@ -2,6 +2,9 @@ import wx
 from pubsub import pub
 
 class LoginView(wx.Dialog): 
+   """
+   Constructor for the Login Dialog
+   """
    def __init__(self, parent): 
       super(LoginView, self).__init__(parent, title = "Login") 
       panel = wx.Panel(self) 

@@ -20,7 +20,6 @@ from editpyxl import Workbook
 import logging
 import win32com.client
 
-import clr
 # from System.Runtime.InteropServices import Marshal
 import zmq
 import time
@@ -29,7 +28,6 @@ from scipy.stats import norm, chi2
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 import numpy as np
-import pyzdde.zdde as pyz
 from database.dbcalls import db
 import math
 
@@ -82,18 +80,11 @@ class Server(Thread):
         """
         logging.info("Started Gathering Info From Force Platform")
         time.sleep(1)
-        # self.arduinoWrite("3")
-        # time.sleep(1)
-        # self.arduinoWrite("8")
         balanceData = []
         dataEntry = []
         dataSet = False
         while True:
             data = self.arduinoRead()
-            print(data)
-            # self.arduinoWrite("3")
-            # data = self.arduinoRead()
-            # print(data)
             if data == "END":
                 break
             elif data == "Done recording":
@@ -147,7 +138,7 @@ class Server(Thread):
     
     def plotScore(self, points):
         """
-        Plot COP over time
+        Plot Center Of Pressure points over time
         """
         cov = np.cov(points, rowvar=False)
         mean_pos = points.mean(axis=0)
@@ -173,7 +164,6 @@ class Server(Thread):
 
     def cov_ellipse(self,points, cov, nstd):
         """
-        Source: http://stackoverflow.com/a/12321306/1391441
         """
 
         vals, vecs = self.eigsorted(cov)
@@ -184,9 +174,8 @@ class Server(Thread):
 
         return width, height, theta
 
-    def cov_ellipse2(self,points, cov, nstd):
+    def cov_ellipse2(self, cov, nstd):
         """
-        Source: https://stackoverflow.com/a/39749274/1391441
         """
 
         vals, vecs = self.eigsorted(cov)
@@ -201,46 +190,39 @@ class Server(Thread):
         return width, height, theta
 
     def dist(self, p1, p2):
+        """
+        Find the distance between two 2D points
+        """
         (x1, y1), (x2, y2) = p1, p2
         s1 = (abs(x2 - x1)) ** 2
         s2 = (abs(y2 - y1)) ** 2
         return math.sqrt(s2 + s1)
     
-    # TODO
     def setMotionFloor(self, angle1, angle2):
+        """
+        Set motion floor positions for the actuators based on the given angles 
+        """
         x1 = 1.096 * math.sin(math.radians(angle1))
-        
         pos1 = (-.125 - x1) * 100000
         x2 = 1.096 * math.sin(math.radians(angle2))
         pos2 = (-.125 + x2) * 100000
-        # clr.AddReference("Microsoft.Office.Interop.Excel")
         ExcelApp = win32com.client.GetActiveObject("Excel.Application")
         ExcelApp.Visible = True
-        # print("Hu")
         ExcelApp.Range("B4").Value = [pos1]
-        # print("Cool")
         ExcelApp.Range("B13").Value = [pos2]
-        # path = os.getcwd()
-
-        # if os.path.exists("External/Excel/OPC Data.xlsm"):
-        #     xl=win32com.client.Dispatch("Excel.Application")
-        #     os.path("External/Excel/OPC Data.xlsm")
-        #     xl.Workbooks.Open("External/Excel/OPC Data.xlsm")#, ReadOnly=1)
-        #     xl.Application.Run("External/Excel/OPC Data.xlsm!modulename.macroname")
-        ##    xl.Application.Save() # if you want to save then uncomment this line and change delete the ", ReadOnly=1" part from the open function.
-            # xl.Application.Quit() # Comment this out if your excel script closes
-            # del xl
-        
-
-        
-        return
 
     def unityRead(self):
+        """
+        Read data from unity
+        """
         message = self.socket.recv()
         decodedMessage = message.decode("utf-8")
         return decodedMessage
     
     def unityWrite(self, message):
+        """
+        Send message to unity
+        """
         if self.debug:
             logging.debug(message)
         else:
@@ -274,33 +256,37 @@ class Server(Thread):
                 logging.error("Arduino Not Properly Setup")
     
     def arduinoShutDown(self):
+        """
+        End constant reading mode in arduino
+        """
         self.arduinoWrite("STOP")
     
     def unityShutDown(self):
+        """
+        Inform UnityGame that the program is being shutdown
+        """
         self.unityWrite("quit")
 
     def run(self):
         """
-        Behavior for Python server
+        Behavior for the Python server
         """
         logging.info("Starting Server")
         time.sleep(1)
-        rotationCount = 0
         self.arduinoWrite("3")
         while True and not self.end:     
             if self.debug:
                 logging.info("Debug Mode: Server closed")
                 time.sleep(1)
                 break
+            # Constantly read message from Unity
             logging.info("Waiting For Message From Unity")
             decodedMessage = self.unityRead()
             logging.info("Message Recieved From Unity: " + decodedMessage)
             if(decodedMessage == "quit"): 
                 logging.info("End of Unity Game reached")
-                # pub.sendMessage("unityGameEnded")
                 self.unityShutDown()
-                self.arduinoShutDown()
-                
+                self.arduinoShutDown()                
                 break
             elif(decodedMessage.startsWith("calibrate")):
                 try:
@@ -347,149 +333,24 @@ class Server(Thread):
         """
         logging.info("Ending Server Thread")
         self.end = True
-        self.wb.close()
-        # subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
 
-def runGame():
-    subprocess.Popen(["./Starchaeologist/builds/Starchaeologist.exe"])
-
+# Testing for the server's motion control
 if __name__ == "__main__":
-    # port = "tcp://*:5555"
     server = Server(debug=False, port="COM4")
-    # server.con
     score = None
 
-    setupError = 0
-    
-    # logging.basicConfig(
-    #     format='%(asctime)s %(levelname)-8s %(message)s',
-    #     level=logging.INFO,
-    #     datefmt='%Y-%m-%d %H:%M:%S')
     
     logging.basicConfig(level=logging.INFO, 
-    format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-    # data = [
-    #     [950, 105.5, 103, 102, 101],
-    #     [955, 100, 105, 100, 100],
-    #     [960, 103, 102, 105, 101],
-    #     [965, 100, 100, 100, 105],
-    #     [970, 117, 100, 100, 100],
-    #     [975, 100, 110, 105, 110],
-    #     [980, 100, 100, 110, 102],
-    #     [985, 102, 100, 100, 110],
-    #     [990, 115, 100, 100, 100],
-    #     [995, 100, 115, 107, 106],
-    #     [1000, 100, 106, 115, 100]
-    # ]
-
-    # data2 = [
-    #     [950, 1006, 1034, 1027, 1023],
-    #     [955, 1000, 1055, 1003, 1003],
-    #     [960, 1003, 1026, 1051, 1015],
-    #     [965, 1000, 1000, 1003, 1057],
-    #     [970, 1170, 1000, 1009, 1001],
-    #     [975, 1000, 1100, 1056, 1102],
-    #     [980, 1000, 1000, 1109, 1023],
-    #     [985, 1020, 1000, 1006, 1104],
-    #     [990, 1150, 1000, 1003, 1005],
-    #     [995, 1000, 1150, 1072, 1065]
-    # ]
-
-    # data3 = [
-    #     [950, 1, 1, 1, 1],
-    #     [955, 1.2, 1.1, 1.1, 1.1],
-    #     [960, 1, 1, 1, 1],
-    #     [965, 1.2, 1.1, 1.1, 1.1],
-    #     [970, 1, 1, 1, 1],
-    #     [975, 1.2, 1.1, 1.1, 1.1],
-    #     [980, 1, 1, 1, 1],
-    #     [985, 1.2, 1.1, 1.1, 1.1],
-    #     [990, 1, 1, 1, 1],
-    #     [995, 1.2, 1.1, 1.1, 1.1]
-    # ]
-    # database = db()
-    # balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data)
-    # database.addBalanceScore(4,2,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
-    # balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data2)
-    # database.addBalanceScore(2,1,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
-    # balanceScore, meanCOP, stdCOP, lengthCOP, centroidX, centroidY = server.calculateBalanceScore(data3)
-    # database.addBalanceScore(1,2,balanceScore,meanCOP,stdCOP,lengthCOP,centroidX,centroidY)
-    
-    # random.uniform(-5, 5)	
+        format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
     for i in range(-5,5,1):
         print(i)
         server.setMotionFloor(i,i+0.1)
         time.sleep(0.01)
 
-    setupError = 1
-    if setupError == 1:
-        while True:
-            server.setMotionFloor(random.uniform(-5, 5),random.uniform(-5, 5))
-            # for i in range(-5,5,1):
-            #     print(i)
-            #     server.setMotionFloor(i,i+0.1)
-            #     time.sleep(0.01)
-            # for i in range(5,-5,1):
-            #     print(i)
-            #     server.setMotionFloor(i,i+0.1)
-            #     time.sleep(0.01)
-            time.sleep(0.01)
+    while True:
+        server.setMotionFloor(random.uniform(-5, 5),random.uniform(-5, 5))
+        time.sleep(0.01)
 
-    rotationCount =0
-    if setupError == 0:
-        logging.info("Starting Server")
-        time.sleep(3)
-        proc1 = multiprocessing.Process(target=runGame(), args=())
-        th1 = threading.Thread(target=proc1.start)
-        th1.start()        
-
-        # subprocess.call("./Starchaeologist/builds/Starchaeologist.exe")
-        # server.arduinoWrite("3")
-        # time.sleep(3)
-        while True :
-            
-            logging.info("Waiting For Message From Unity")
-            decodedMessage = server.unityRead()
-            # decodedMessage = "rotation 5 4"
-            logging.info("Message Recieved From Unity: " +decodedMessage)
-            if(decodedMessage == "endGame"):
-                logging.info("End of Mini-Game Reached")
-                # TODO: Send game score to unity
-                server.unityWrite(str(score))
-                logging.info("Score Sent To Unity: " + score)
-                score = None
-            elif(decodedMessage == "closeApp"): 
-                # TODO: Used for ending script
-                logging.info("End of application reached")
-                break
-            elif(decodedMessage == "readScore"):
-                # TODO: Read values from database
-                logging.info("Read Values From Force Plate")
-                
-                
-                balanceData = server.gatherBalanceData()
-                # Send message that data has been recieved so game can start again
-                server.unityWrite("ScoreGathered")
-                # Calculate Score algorithm 
-                score = server.calculateBalanceScore(balanceData)
-
-            elif(decodedMessage.startswith("rotation")):
-                try:
-                    # Get rotation values
-                    if (rotationCount == 5):
-                        rotationList = decodedMessage.split(" ")
-                        var1 = float(rotationList[1])
-                        var2 = float(rotationList[2])
-                        # Set Motion Floor Platform to these angles
-                        server.setMotionFloor(var1,var2)
-                        # Send angles back to Unity Game as confirmation
-                        rotationConfirmation = "rotation " + rotationList[1] + " " + rotationList[2]
-                        server.unityWrite(rotationConfirmation)
-                        rotationCount = 0
-                    rotationCount+=1
-                except:
-                    logging.error("Error occured while parsing data")
-                    server.unityWrite("error " + decodedMessage)
-            
+    

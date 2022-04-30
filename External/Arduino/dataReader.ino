@@ -1,3 +1,8 @@
+/*
+  Force Plate Data Reader
+  By: Vince Lobo
+*/
+
 #include "Arduino.h"
 #include "HX711.h"
 

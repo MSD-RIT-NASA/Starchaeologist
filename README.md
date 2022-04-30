@@ -8,4 +8,4 @@ To Start the Desktop Interface for the first time, run the following from the pr
     `pip install -r requirements.txt`
     `python .\External\Python\app.py`
 
-If errors running the Desktop Interface, email William Johnson (wcj7833@rit.edu) with your issues
+If errors running the Desktop Interface, email William Johnson (williamj1999@comcast.net) with your issues
