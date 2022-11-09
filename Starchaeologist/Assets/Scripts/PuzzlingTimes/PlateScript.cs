@@ -129,6 +129,9 @@ public class PlateScript : MonoBehaviour
             //if the platform is trapped starting wobbling, if not go straight to activating the adjacent tiles
             if (trapped)
             {
+                //Change color of tile to indicate trap is coming -- not implemented
+                //OR enable UI element to indicate direction of trap
+
                 enabled = true;
                 //randomly  choose a wobble patern
                 wobbling = true;
