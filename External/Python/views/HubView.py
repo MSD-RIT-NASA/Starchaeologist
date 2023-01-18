@@ -20,7 +20,9 @@ class HubView(wx.Frame):
       self.statistics.Bind(wx.EVT_BUTTON, self.statisticsOpen)
 
       fgs.AddSpacer(0)
-      self.logOut = wx.Button(panel, -1,"Logout")
+      # self.logOut = wx.Button(panel, -1,"Logout")
+      self.logOut = wx.Button(self, -1,"Logout")
+
       fgs.Add(self.logOut, 0, wx.EXPAND)
       self.logOut.Bind(wx.EVT_BUTTON, self.logoutOpen)
       fgs.AddSpacer(0)
