@@ -123,6 +123,7 @@ public class MineBuilder : MonoBehaviour
 
         i++;
         GameObject newSpawn = Instantiate(spawnThis, spawnedSegments[i].transform);
+        givePosition.x += Random.Range(-1, 2);
         newSpawn.transform.position = givePosition;
         newSpawn.transform.rotation = Quaternion.Euler(0, (Random.Range(0, 2) * 180), 0);
     }
