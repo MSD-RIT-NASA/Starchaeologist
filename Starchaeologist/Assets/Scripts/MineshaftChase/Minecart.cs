@@ -10,41 +10,66 @@ public class Minecart : MonoBehaviour
     private bool turningRight;
     private float tiltAngle;
 
+    public Camera mainCam;
+
     // Start is called before the first frame update
     void Start()
     {
         tiltAngle = 0f;
         turningLeft = false;
-        turningRight = false;
+        turningRight = true;
+        this.transform.forward = mainCam.transform.forward;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //turningLeft and turningRight should change values as the level progresses
+        if(turningLeft || turningRight)
+        {
+            FallOnTurn();
+        }
     }
 
+    //If the cart is riding on a curve, it will start to fall towards the outside of the curve.
+    //Right now, the cart stops leaning at a certain point, but eventually, the cart should fall or the player take damage
     public void FallOnTurn()
     {
         if (turningLeft)
         {
-            tiltAngle += 2f;
+            if (tiltAngle < 40f)
+            {
+                tiltAngle += .2f;
+            }
+            LeanRight();
         }
         else if (turningRight)
         {
-            tiltAngle -= 2f;
+            if (tiltAngle > -40f)
+            {
+                tiltAngle -= .2f;
+            }
+            LeanLeft();
         }
 
-        this.transform.Rotate(new Vector3(0f, 0f, tiltAngle));
+        this.transform.eulerAngles = new Vector3(0f, 0f, tiltAngle);
     }
 
+    //If headbox is rotated a certain number of degrees in the opposite direction, the cart leans back toward the center
     public void LeanLeft()
     {
-        //If headbox is rotated a certain number of degrees in the opposite direction, the cart leans back toward the center
+        if(mainCam.transform.rotation.z > .45f && tiltAngle < 0)
+        {
+            tiltAngle += .4f;
+        }
     }
 
+    //Same as above but the other way
     public void LeanRight()
     {
-        //Same as above but the other way
+        if (mainCam.transform.rotation.z < -.45f && tiltAngle > 0)
+        {
+            tiltAngle -= .4f;
+        }
     }
 }
