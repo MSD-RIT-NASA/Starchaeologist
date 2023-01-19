@@ -6,9 +6,11 @@ public class Minecart : MonoBehaviour
 {
     private const float SPEED = 0;//we dont know what the proper speed should be yet
 
-    private bool turningLeft;
-    private bool turningRight;
+    public bool turningLeft;
+    public bool turningRight;
     private float tiltAngle;
+    private float counterLean;
+
 
     public Camera mainCam;
 
@@ -17,8 +19,9 @@ public class Minecart : MonoBehaviour
     {
         tiltAngle = 0f;
         turningLeft = false;
-        turningRight = true;
+        turningRight = false;
         this.transform.forward = mainCam.transform.forward;
+        counterLean = 2f;
     }
 
     // Update is called once per frame
@@ -28,6 +31,10 @@ public class Minecart : MonoBehaviour
         if(turningLeft || turningRight)
         {
             FallOnTurn();
+        }
+        else if(!(turningRight || turningLeft))
+        {
+            FreeLean();
         }
     }
 
@@ -58,7 +65,7 @@ public class Minecart : MonoBehaviour
     //If headbox is rotated a certain number of degrees in the opposite direction, the cart leans back toward the center
     public void LeanLeft()
     {
-        if(mainCam.transform.rotation.z > .45f && tiltAngle < 0)
+        if(mainCam.transform.rotation.z > .35f && tiltAngle < 0)
         {
             tiltAngle += .4f;
         }
@@ -67,9 +74,40 @@ public class Minecart : MonoBehaviour
     //Same as above but the other way
     public void LeanRight()
     {
-        if (mainCam.transform.rotation.z < -.45f && tiltAngle > 0)
+        if (mainCam.transform.rotation.z < -.35f && tiltAngle > 0)
         {
             tiltAngle -= .4f;
         }
+    }
+
+    public void FreeLean()
+    {
+        if (mainCam.transform.rotation.z > .35f && tiltAngle < 40f)
+        {
+            tiltAngle += 2f;
+        }
+        else if (mainCam.transform.rotation.z < -.35f && tiltAngle > -40f)
+        {
+            tiltAngle -= 2f;
+        }
+        else if(mainCam.transform.rotation.z > -.35f && mainCam.transform.rotation.z < .35f/* && mainCam.transform.rotation.z < -0.15f && mainCam.transform.rotation.z > 0.15f*/)
+        {
+            if(mainCam.transform.rotation.z < 0)
+            {
+                tiltAngle += 2f;
+            }
+            else
+            {
+                tiltAngle -= 2f;
+            }
+
+            if (tiltAngle < 10f && tiltAngle > -10f)
+            {
+                tiltAngle = 0;
+            }
+        }
+        
+
+        this.transform.eulerAngles = new Vector3(0f, 0f, tiltAngle);
     }
 }
