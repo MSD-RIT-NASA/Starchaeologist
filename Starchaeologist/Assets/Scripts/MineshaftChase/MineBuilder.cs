@@ -56,7 +56,7 @@ public class MineBuilder : MonoBehaviour
             {
                 newSpawn.SetActive(false);
             }
-            spawnPosition = new Vector3(0,-1,newSpawn.transform.position.z+10);
+            spawnPosition = new Vector3(0, -1, newSpawn.transform.position.z+10);
 
             spawnedSegments.Add(newSpawn);
 
@@ -107,18 +107,15 @@ public class MineBuilder : MonoBehaviour
         {
             //choose a river segment to spawn on
             i = Random.Range(0, obstacleSpawns.Count);
-            Debug.Log(obstacleSpawns.Count);
             if (obstacleSpawns[i].Count != 0)
             {
                 //choose a checkpoint on said river to spawn at
                 int j = 0; //Random.Range(0, obstacleSpawns[i].Count);
                 givePosition = obstacleSpawns[i][j];
-                Debug.Log("check point at " + obstacleSpawns[i] + ", " + obstacleSpawns[i][j]);
                 obstacleSpawns[i].RemoveAt(j);
             }
             else
             {
-                Debug.Log("Removed " + obstacleSpawns[i]);
                 obstacleSpawns.RemoveAt(i);
             }
             
