@@ -62,11 +62,11 @@ public class MineBuilder : MonoBehaviour
 
             //record the positions available for spawning obstacles and artifacts
             obstacleSpawns.Add(new List<Vector3>());
-            obstacleSpawns[i].Add(new Vector3(0, 0, newSpawn.transform.position.z));
+            obstacleSpawns[i].Add(new Vector3(0, 1, newSpawn.transform.position.z));
             int j = 2;
             while (j < newSpawn.transform.childCount)
             {
-                obstacleSpawns[i].Add(new Vector3(0, 0, newSpawn.transform.position.z));
+                obstacleSpawns[i].Add(new Vector3(0, 1, newSpawn.transform.position.z));
                 j++;
             }
 

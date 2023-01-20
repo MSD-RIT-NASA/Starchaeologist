@@ -49,7 +49,7 @@ public class MineGame : MonoBehaviour
                 raftScript.tilting = true;
                 playerAttached = true;
                 playerReference.transform.parent = raftReference.transform;
-                playerReference.transform.position = raftReference.transform.GetChild(0).position;
+               // playerReference.transform.position = raftReference.transform.GetChild(0).position;
             }
             MoveRaft();
             //make the raft rotate
@@ -121,5 +121,5 @@ public class MineGame : MonoBehaviour
         //    }
         //}
     }
-
+   
 }
