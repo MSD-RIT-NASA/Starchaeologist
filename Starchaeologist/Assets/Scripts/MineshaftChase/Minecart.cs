@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Minecart : MonoBehaviour
 {
-    private const float SPEED = 0;//we dont know what the proper speed should be yet
+    private const float SPEED = 0.05f;//we dont know what the proper speed should be yet
 
     public bool turningLeft;
     public bool turningRight;
     private float tiltAngle;
     private float counterLean;
+
+    public GameObject player;
 
 
     public Camera mainCam;
@@ -31,11 +33,25 @@ public class Minecart : MonoBehaviour
         if(turningLeft || turningRight)
         {
             FallOnTurn();
+            if (turningLeft)
+                TurnLeft();
+            if (turningRight)
+                TurnRight();
         }
         else if(!(turningRight || turningLeft))
         {
             FreeLean();
         }
+
+        Move();
+        mainCam.transform.forward = this.transform.forward;
+    }
+
+    //The cart should move at a constant speed in the direction of the cart's forward vector
+    public void Move()
+    {
+        this.transform.position += this.transform.forward * SPEED;
+        player.transform.position += this.transform.forward * SPEED;
     }
 
     //If the cart is riding on a curve, it will start to fall towards the outside of the curve.
@@ -80,6 +96,7 @@ public class Minecart : MonoBehaviour
         }
     }
 
+    //Player can lean to either side without falling over while not turning
     public void FreeLean()
     {
         if (mainCam.transform.rotation.z > .35f && tiltAngle < 40f)
@@ -109,5 +126,38 @@ public class Minecart : MonoBehaviour
         
 
         this.transform.eulerAngles = new Vector3(0f, 0f, tiltAngle);
+    }
+
+
+    private void TurnLeft()
+    {
+        //this.transform.forward += 
+    }
+
+
+    private void TurnRight()
+    {
+        this.transform.Rotate(new Vector3(0f, 10f, 0f));
+    }
+
+
+    void OnCollisionEnter(Collision other)
+    {
+        Debug.Log("Something has collided with the minecart");
+        if (other.gameObject.tag == "StraightTrack")
+        {
+            turningLeft = false;
+            turningRight = false;
+        }
+        else if (other.gameObject.tag == "RightTrack")
+        {
+            turningLeft = true;
+            turningRight = false;
+        }
+        else if (other.gameObject.tag == "LeftTrack")
+        {
+            turningLeft = false;
+            turningRight = true;
+        }
     }
 }
