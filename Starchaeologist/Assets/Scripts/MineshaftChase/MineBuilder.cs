@@ -54,7 +54,7 @@ public class MineBuilder : MonoBehaviour
             newSpawn.transform.position = spawnPosition;
             newSpawn.transform.rotation = spawnRotation;
 
-            if (i >= 5)
+            if (i >= 2)
             {
                 newSpawn.SetActive(false);
             }

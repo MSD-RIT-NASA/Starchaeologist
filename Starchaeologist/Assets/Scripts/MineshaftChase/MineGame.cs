@@ -83,15 +83,15 @@ public class MineGame : MonoBehaviour
         else
         {
             currentDirection = Vector3.Normalize(currentDirection + (desiredDirection * Time.deltaTime * currentSpeed));
+            raftReference.transform.rotation = Quaternion.LookRotation(currentDirection);
         }
 
         ////move the raft
         raftReference.transform.position += currentDirection * Time.deltaTime * currentSpeed;
-
-
         //check if the raft has reach the checkpoint then go to the next one
-        if (Vector3.Distance(raftReference.transform.position, nextDestination) < 1f)
+        if (Vector3.Distance(raftReference.transform.position, nextDestination) < 5f)
         {
+            //Debug.Log("check for new checkpoing");
             checkpointIndex++;
 
             if (checkpointIndex == trackReferences.Count - 1)//if this is the last checkpoint to go to, start slowing down the raft
@@ -108,17 +108,18 @@ public class MineGame : MonoBehaviour
             }
             else//otherwise set the new destination tot he next checkpoint
             {
+                Debug.Log("New checkpoint");
                 nextDestination = trackReferences[checkpointIndex].transform.GetChild(1).transform.position;
             }
 
             //optimization
-            if (checkpointIndex - 5 >= 0)//disable river segments that are far behind the player
+            if (checkpointIndex - 2 >= 0)//disable river segments that are far behind the player
             {
-                trackReferences[checkpointIndex - 5].SetActive(false);
+                trackReferences[checkpointIndex - 2].SetActive(false);
             }
-            if (checkpointIndex + 5 < trackReferences.Count)//enable segments that are getting close to the player
+            if (checkpointIndex + 2 < trackReferences.Count)//enable segments that are getting close to the player
             {
-                trackReferences[checkpointIndex + 5].SetActive(true);
+                trackReferences[checkpointIndex + 2].SetActive(true);
             }
         }
 
