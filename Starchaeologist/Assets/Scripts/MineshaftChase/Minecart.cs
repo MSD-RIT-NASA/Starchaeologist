@@ -22,7 +22,6 @@ public class Minecart : MonoBehaviour
         tiltAngle = 0f;
         turningLeft = false;
         turningRight = false;
-        this.transform.forward = mainCam.transform.forward;
         counterLean = 2f;
     }
 
@@ -30,15 +29,17 @@ public class Minecart : MonoBehaviour
     void Update()
     {
         //turningLeft and turningRight should change values as the level progresses
-        if(turningLeft || turningRight)
+        if (turningLeft)
         {
+            TurnLeft();
             FallOnTurn();
-            if (turningLeft)
-                TurnLeft();
-            if (turningRight)
-                TurnRight();
         }
-        else if(!(turningRight || turningLeft))
+        else if (turningRight)
+        {
+            TurnRight();
+            FallOnTurn();
+        }
+        else if (!turningLeft && !turningRight)
         {
             FreeLean();
         }
@@ -58,7 +59,7 @@ public class Minecart : MonoBehaviour
     //Right now, the cart stops leaning at a certain point, but eventually, the cart should fall or the player take damage
     public void FallOnTurn()
     {
-        if (turningLeft)
+        if (turningRight)
         {
             if (tiltAngle < 40f)
             {
@@ -66,7 +67,7 @@ public class Minecart : MonoBehaviour
             }
             LeanRight();
         }
-        else if (turningRight)
+        else if (turningLeft)
         {
             if (tiltAngle > -40f)
             {
@@ -75,7 +76,8 @@ public class Minecart : MonoBehaviour
             LeanLeft();
         }
 
-        this.transform.eulerAngles = new Vector3(0f, 0f, tiltAngle);
+        Vector3 curAngles = this.transform.eulerAngles;
+        this.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, tiltAngle);
     }
 
     //If headbox is rotated a certain number of degrees in the opposite direction, the cart leans back toward the center
@@ -123,27 +125,32 @@ public class Minecart : MonoBehaviour
                 tiltAngle = 0;
             }
         }
-        
 
-        this.transform.eulerAngles = new Vector3(0f, 0f, tiltAngle);
+        Vector3 curAngles = this.transform.eulerAngles;
+        this.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, tiltAngle);
     }
 
 
     private void TurnLeft()
     {
-        //this.transform.forward += 
+        Vector3 curCartAngles = this.transform.eulerAngles;
+        this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y - .5f, curCartAngles.z);
+        Vector3 curCamAngle = player.transform.eulerAngles;
+        player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y - .5f, curCamAngle.z);
     }
 
 
     private void TurnRight()
     {
-        this.transform.Rotate(new Vector3(0f, 10f, 0f));
+        Vector3 curCartAngles = this.transform.eulerAngles;
+        this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y + .5f, curCartAngles.z);
+        Vector3 curCamAngle = player.transform.eulerAngles;
+        player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y + .5f, curCamAngle.z);
     }
 
 
-    void OnCollisionEnter(Collision other)
+    void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Something has collided with the minecart");
         if (other.gameObject.tag == "StraightTrack")
         {
             turningLeft = false;
@@ -151,13 +158,13 @@ public class Minecart : MonoBehaviour
         }
         else if (other.gameObject.tag == "RightTrack")
         {
-            turningLeft = true;
-            turningRight = false;
+            turningLeft = false;
+            turningRight = true;
         }
         else if (other.gameObject.tag == "LeftTrack")
         {
-            turningLeft = false;
-            turningRight = true;
+            turningLeft = true;
+            turningRight = false;
         }
     }
 }

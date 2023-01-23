@@ -136,7 +136,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 36074127}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 5.9921055, y: 0.2597294, z: 5.82045}
@@ -480,6 +480,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StraightTrack (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5884689559944148952, guid: 652adcf629a0bab458417e4aca35229b, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 652adcf629a0bab458417e4aca35229b, type: 3}
 --- !u!1 &890598855
@@ -742,6 +746,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StraightTrack (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5884689559944148952, guid: 652adcf629a0bab458417e4aca35229b, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 652adcf629a0bab458417e4aca35229b, type: 3}
 --- !u!20 &1688564839 stripped
@@ -937,11 +945,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3494994713485114326, guid: 75b07173c4bbbb046b8c06f88f3463bc, type: 3}
       propertyPath: m_IsTrigger
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3958104276059557557, guid: 75b07173c4bbbb046b8c06f88f3463bc, type: 3}
       propertyPath: m_IsTrigger
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5434760785949668818, guid: 75b07173c4bbbb046b8c06f88f3463bc, type: 3}
       propertyPath: m_IsTrigger
