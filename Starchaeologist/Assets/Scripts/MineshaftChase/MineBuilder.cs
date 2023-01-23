@@ -42,31 +42,35 @@ public class MineBuilder : MonoBehaviour
     private void SegmentSetup()
     {
         //spawn the amount of track requested
-        spawnedSegments.Add(GameObject.Find("Plane"));
+        spawnedSegments.Add(GameObject.Find("Track"));
 
-        Vector3 spawnPosition = new Vector3(0, -1, 5);
+        Vector3 spawnPosition = new Vector3(0, -1, 10);
+        Quaternion spawnRotation = new Quaternion(0, 0, 0, 0);
         int i = 0;
         while (i < segmentCount)
         {
             //choose one of the available segment prefabs and place it at the end of the last placed piece
             GameObject newSpawn = Instantiate(segmentArray[0][Random.Range(0, segmentArray[0].Count)]);
             newSpawn.transform.position = spawnPosition;
+            newSpawn.transform.rotation = spawnRotation;
 
             if (i >= 5)
             {
                 newSpawn.SetActive(false);
             }
-            spawnPosition = new Vector3(0, -1, newSpawn.transform.position.z+10);
+            spawnPosition = newSpawn.transform.GetChild(0).transform.position;
+            spawnRotation = newSpawn.transform.GetChild(0).transform.rotation;
 
             spawnedSegments.Add(newSpawn);
 
             //record the positions available for spawning obstacles and artifacts
             obstacleSpawns.Add(new List<Vector3>());
-            obstacleSpawns[i].Add(new Vector3(0, 1, newSpawn.transform.position.z));
+            obstacleSpawns[i].Add(newSpawn.transform.position);
             int j = 2;
             while (j < newSpawn.transform.childCount)
             {
-                obstacleSpawns[i].Add(new Vector3(0, 1, newSpawn.transform.position.z));
+                obstacleSpawns[i].Add(newSpawn.transform.GetChild(j).transform.position);
+                //obstacleSpawns[i].Add(new Vector3(0, 1, newSpawn.transform.position.z));
                 j++;
             }
 
