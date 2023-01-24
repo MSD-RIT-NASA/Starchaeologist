@@ -7,6 +7,7 @@ public class MineBuilder : MonoBehaviour
     public int segmentCount = 5;
 
     List<GameObject> spawnedSegments = new List<GameObject>();
+    List<Transform> spawnedTransforms = new List<Transform>();
 
     public List<GameObject> segmentPrefabs_2M = new List<GameObject>();
     public List<GameObject> obstaclePrefabs = new List<GameObject>();
@@ -22,6 +23,7 @@ public class MineBuilder : MonoBehaviour
         SegmentSetup();
 
         GetComponent<MineGame>().trackReferences = spawnedSegments;
+        GetComponent<MineGame>().routes = spawnedTransforms;
         //remove the script 
         Destroy(this);
     }
@@ -62,7 +64,7 @@ public class MineBuilder : MonoBehaviour
             spawnRotation = newSpawn.transform.GetChild(0).transform.rotation;
 
             spawnedSegments.Add(newSpawn);
-
+            spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
             //record the positions available for spawning obstacles and artifacts
             obstacleSpawns.Add(new List<Vector3>());
             obstacleSpawns[i].Add(newSpawn.transform.position);

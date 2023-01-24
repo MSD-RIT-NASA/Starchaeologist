@@ -16,11 +16,26 @@ public class MineGame : MonoBehaviour
     Vector3 currentDirection = new Vector3(0, 0, 1);
     public float cartAcceleration = 0.1f;
     public float cartSpeed = 3.0f;
-    float currentSpeed = 1f;
+    float currentSpeed = 2f;
     public bool timeToMove = true; //turned true the first time the player teleports to the raft from the S_RaftCollision script
     bool slowDown = false;
     bool playerAttached = false;
     int checkpointIndex = 0;
+
+
+    //[SerializeField]
+    public List<Transform> routes;
+
+    private int routeToGo;
+
+    private float tParam;
+
+    private Vector3 objectPosition;
+
+    private float speedModifier;
+
+    private bool coroutineAllowed;
+
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +49,10 @@ public class MineGame : MonoBehaviour
             singleton = this;
         }
 
-        raftScript = raftReference.transform.GetChild(1).GetComponent<S_MineCart>();
+        routeToGo = 0;
+        tParam = 0f;
+        speedModifier = 0.5f;
+        coroutineAllowed = true;
     }
 
     // Update is called once per frame
@@ -46,14 +64,20 @@ public class MineGame : MonoBehaviour
             //stick the player under the raft gameobject to help with movement
             if (!playerAttached)
             {
-                raftScript.tilting = true;
+                //raftScript.tilting = true;
                 playerAttached = true;
                 playerReference.transform.parent = raftReference.transform;
                // playerReference.transform.position = raftReference.transform.GetChild(0).position;
             }
-            MoveRaft();
+
+            if (coroutineAllowed)
+            {
+                StartCoroutine(GoByTheRoute(routeToGo));
+            }
+
+            //MoveRaft();
             //make the raft rotate
-            raftScript.Raft();
+            //raftScript.Raft();
         }
     }
     void MoveRaft()
@@ -83,11 +107,12 @@ public class MineGame : MonoBehaviour
         else
         {
             currentDirection = Vector3.Normalize(currentDirection + (desiredDirection * Time.deltaTime * currentSpeed));
-            raftReference.transform.rotation = Quaternion.LookRotation(currentDirection);
+            //raftReference.transform.rotation = Quaternion.LookRotation(currentDirection);
         }
 
         ////move the raft
         raftReference.transform.position += currentDirection * Time.deltaTime * currentSpeed;
+
         //check if the raft has reach the checkpoint then go to the next one
         if (Vector3.Distance(raftReference.transform.position, nextDestination) < 5f)
         {
@@ -124,5 +149,45 @@ public class MineGame : MonoBehaviour
         }
 
     }
+    private IEnumerator GoByTheRoute(int routeNum)
+    {
+        coroutineAllowed = false;
 
+        Vector3 p0 = routes[routeNum].GetChild(0).position;
+        Vector3 p1 = routes[routeNum].GetChild(1).position;
+        Vector3 p2 = routes[routeNum].GetChild(2).position;
+        Vector3 p3 = routes[routeNum].GetChild(3).position;
+        Debug.Log(routes[routeNum]);
+        while (tParam < 1)
+        {
+            tParam += Time.deltaTime * speedModifier;
+
+            objectPosition = Mathf.Pow(1 - tParam, 3) * p0 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p1 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p2 + Mathf.Pow(tParam, 3) * p3;
+
+            raftReference.transform.LookAt(objectPosition);
+            raftReference.transform.position = objectPosition;
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        tParam = 0;
+        speedModifier = speedModifier * 0.90f;
+        routeToGo += 1;
+
+        if (routeToGo > routes.Count - 1)
+        {
+            routeToGo = 0;
+        }
+        //optimization
+        if (routeToGo - 2 >= 0)//disable river segments that are far behind the player
+        {
+            trackReferences[routeToGo - 2].SetActive(false);
+        }
+        if (routeToGo + 2 < trackReferences.Count)//enable segments that are getting close to the player
+        {
+            trackReferences[routeToGo + 2].SetActive(true);
+        }
+        coroutineAllowed = true;
+
+    }
 }
