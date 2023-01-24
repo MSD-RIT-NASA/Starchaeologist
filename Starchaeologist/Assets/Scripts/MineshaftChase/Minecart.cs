@@ -16,6 +16,12 @@ public class Minecart : MonoBehaviour
 
     public Camera mainCam;
 
+    public Collider headHb;
+    public Collider bodyHb;
+    public Collider leftBodyHb;
+    public Collider rightBodyHb;
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -83,7 +89,7 @@ public class Minecart : MonoBehaviour
     //If headbox is rotated a certain number of degrees in the opposite direction, the cart leans back toward the center
     public void LeanLeft()
     {
-        if(mainCam.transform.rotation.z > .35f && tiltAngle < 0)
+        if(headHb.bounds.Intersects(leftBodyHb.bounds)/* && !(headHb.bounds.Intersects(bodyHb.bounds)) */&& tiltAngle < 0f)
         {
             tiltAngle += .4f;
         }
@@ -92,7 +98,7 @@ public class Minecart : MonoBehaviour
     //Same as above but the other way
     public void LeanRight()
     {
-        if (mainCam.transform.rotation.z < -.35f && tiltAngle > 0)
+        if (headHb.bounds.Intersects(rightBodyHb.bounds)/* && !(headHb.bounds.Intersects(bodyHb.bounds))*/ && tiltAngle > 0f)
         {
             tiltAngle -= .4f;
         }
@@ -101,17 +107,17 @@ public class Minecart : MonoBehaviour
     //Player can lean to either side without falling over while not turning
     public void FreeLean()
     {
-        if (mainCam.transform.rotation.z > .35f && tiltAngle < 40f)
+        if (headHb.bounds.Intersects(leftBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle < 40f)
         {
             tiltAngle += 2f;
         }
-        else if (mainCam.transform.rotation.z < -.35f && tiltAngle > -40f)
+        else if (headHb.bounds.Intersects(rightBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle > -40f)
         {
             tiltAngle -= 2f;
         }
-        else if(mainCam.transform.rotation.z > -.35f && mainCam.transform.rotation.z < .35f/* && mainCam.transform.rotation.z < -0.15f && mainCam.transform.rotation.z > 0.15f*/)
+        else if (headHb.bounds.Intersects(bodyHb.bounds))
         {
-            if(mainCam.transform.rotation.z < 0)
+            if (tiltAngle < 0f)
             {
                 tiltAngle += 2f;
             }
@@ -122,7 +128,7 @@ public class Minecart : MonoBehaviour
 
             if (tiltAngle < 10f && tiltAngle > -10f)
             {
-                tiltAngle = 0;
+                tiltAngle = 0f;
             }
         }
 
@@ -156,6 +162,7 @@ public class Minecart : MonoBehaviour
             turningLeft = false;
             turningRight = false;
             this.transform.eulerAngles = other.transform.eulerAngles;
+            player.transform.eulerAngles = other.transform.eulerAngles;
         }
         else if (other.gameObject.tag == "RightTrack")
         {
