@@ -134,18 +134,18 @@ public class Minecart : MonoBehaviour
     private void TurnLeft()
     {
         Vector3 curCartAngles = this.transform.eulerAngles;
-        this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y - .5f, curCartAngles.z);
+        this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y - .48f, curCartAngles.z);
         Vector3 curCamAngle = player.transform.eulerAngles;
-        player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y - .5f, curCamAngle.z);
+        player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y - .48f, curCamAngle.z);
     }
 
 
     private void TurnRight()
     {
         Vector3 curCartAngles = this.transform.eulerAngles;
-        this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y + .5f, curCartAngles.z);
+        this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y + .48f, curCartAngles.z);
         Vector3 curCamAngle = player.transform.eulerAngles;
-        player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y + .5f, curCamAngle.z);
+        player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y + .48f, curCamAngle.z);
     }
 
 
@@ -155,6 +155,7 @@ public class Minecart : MonoBehaviour
         {
             turningLeft = false;
             turningRight = false;
+            this.transform.eulerAngles = other.transform.eulerAngles;
         }
         else if (other.gameObject.tag == "RightTrack")
         {
