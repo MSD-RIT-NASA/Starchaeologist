@@ -16,13 +16,18 @@ public class Minecart : MonoBehaviour
 
     public Camera mainCam;
 
+    public Collider headHb;
+    public Collider bodyHb;
+    public Collider leftBodyHb;
+    public Collider rightBodyHb;
+    
+
     // Start is called before the first frame update
     void Start()
     {
         tiltAngle = 0f;
         turningLeft = false;
         turningRight = false;
-        this.transform.forward = mainCam.transform.forward;
         counterLean = 2f;
     }
 
@@ -30,15 +35,17 @@ public class Minecart : MonoBehaviour
     void Update()
     {
         //turningLeft and turningRight should change values as the level progresses
-        if(turningLeft || turningRight)
+        if (turningLeft)
         {
+            TurnLeft();
             FallOnTurn();
-            if (turningLeft)
-                TurnLeft();
-            if (turningRight)
-                TurnRight();
         }
-        else if(!(turningRight || turningLeft))
+        else if (turningRight)
+        {
+            TurnRight();
+            FallOnTurn();
+        }
+        else if (!turningLeft && !turningRight)
         {
             FreeLean();
         }
@@ -58,7 +65,7 @@ public class Minecart : MonoBehaviour
     //Right now, the cart stops leaning at a certain point, but eventually, the cart should fall or the player take damage
     public void FallOnTurn()
     {
-        if (turningLeft)
+        if (turningRight)
         {
             if (tiltAngle < 40f)
             {
@@ -66,7 +73,7 @@ public class Minecart : MonoBehaviour
             }
             LeanRight();
         }
-        else if (turningRight)
+        else if (turningLeft)
         {
             if (tiltAngle > -40f)
             {
@@ -75,13 +82,14 @@ public class Minecart : MonoBehaviour
             LeanLeft();
         }
 
-        this.transform.eulerAngles = new Vector3(0f, 0f, tiltAngle);
+        Vector3 curAngles = this.transform.eulerAngles;
+        this.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, tiltAngle);
     }
 
     //If headbox is rotated a certain number of degrees in the opposite direction, the cart leans back toward the center
     public void LeanLeft()
     {
-        if(mainCam.transform.rotation.z > .35f && tiltAngle < 0)
+        if(headHb.bounds.Intersects(leftBodyHb.bounds)/* && !(headHb.bounds.Intersects(bodyHb.bounds)) */&& tiltAngle < 0f)
         {
             tiltAngle += .4f;
         }
@@ -90,7 +98,7 @@ public class Minecart : MonoBehaviour
     //Same as above but the other way
     public void LeanRight()
     {
-        if (mainCam.transform.rotation.z < -.35f && tiltAngle > 0)
+        if (headHb.bounds.Intersects(rightBodyHb.bounds)/* && !(headHb.bounds.Intersects(bodyHb.bounds))*/ && tiltAngle > 0f)
         {
             tiltAngle -= .4f;
         }
@@ -99,17 +107,17 @@ public class Minecart : MonoBehaviour
     //Player can lean to either side without falling over while not turning
     public void FreeLean()
     {
-        if (mainCam.transform.rotation.z > .35f && tiltAngle < 40f)
+        if (headHb.bounds.Intersects(leftBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle < 40f)
         {
             tiltAngle += 2f;
         }
-        else if (mainCam.transform.rotation.z < -.35f && tiltAngle > -40f)
+        else if (headHb.bounds.Intersects(rightBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle > -40f)
         {
             tiltAngle -= 2f;
         }
-        else if(mainCam.transform.rotation.z > -.35f && mainCam.transform.rotation.z < .35f/* && mainCam.transform.rotation.z < -0.15f && mainCam.transform.rotation.z > 0.15f*/)
+        else if (headHb.bounds.Intersects(bodyHb.bounds))
         {
-            if(mainCam.transform.rotation.z < 0)
+            if (tiltAngle < 0f)
             {
                 tiltAngle += 2f;
             }
@@ -120,44 +128,51 @@ public class Minecart : MonoBehaviour
 
             if (tiltAngle < 10f && tiltAngle > -10f)
             {
-                tiltAngle = 0;
+                tiltAngle = 0f;
             }
         }
-        
 
-        this.transform.eulerAngles = new Vector3(0f, 0f, tiltAngle);
+        Vector3 curAngles = this.transform.eulerAngles;
+        this.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, tiltAngle);
     }
 
 
     private void TurnLeft()
     {
-        //this.transform.forward += 
+        Vector3 curCartAngles = this.transform.eulerAngles;
+        this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y - .48f, curCartAngles.z);
+        Vector3 curCamAngle = player.transform.eulerAngles;
+        player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y - .48f, curCamAngle.z);
     }
 
 
     private void TurnRight()
     {
-        this.transform.Rotate(new Vector3(0f, 10f, 0f));
+        Vector3 curCartAngles = this.transform.eulerAngles;
+        this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y + .48f, curCartAngles.z);
+        Vector3 curCamAngle = player.transform.eulerAngles;
+        player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y + .48f, curCamAngle.z);
     }
 
 
-    void OnCollisionEnter(Collision other)
+    void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Something has collided with the minecart");
         if (other.gameObject.tag == "StraightTrack")
         {
             turningLeft = false;
             turningRight = false;
+            this.transform.eulerAngles = other.transform.eulerAngles;
+            player.transform.eulerAngles = other.transform.eulerAngles;
         }
         else if (other.gameObject.tag == "RightTrack")
         {
-            turningLeft = true;
-            turningRight = false;
+            turningLeft = false;
+            turningRight = true;
         }
         else if (other.gameObject.tag == "LeftTrack")
         {
-            turningLeft = false;
-            turningRight = true;
+            turningLeft = true;
+            turningRight = false;
         }
     }
 }

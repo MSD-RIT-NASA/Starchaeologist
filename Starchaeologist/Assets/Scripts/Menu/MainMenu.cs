@@ -20,6 +20,12 @@ public class MainMenu : MonoBehaviour
         btn2.onClick.AddListener(Level2);
     }
 
+    public void LoadMenu()
+    {
+        buttonClick.PlayOneShot(click);
+        SceneManager.LoadScene(0);
+    }
+
     public void Level1()
     {
         buttonClick.PlayOneShot(click);
