@@ -64,6 +64,12 @@ public class PythonCommunicator : MonoBehaviour
     //Quit game
     bool quitGame = false;
 
+    //to give to the score script
+    public float BalanceScore
+    {
+        get { return balanceScore; }
+    }
+
     //stop the thread if the script is destroyed
     void OnDestroy()
     {
