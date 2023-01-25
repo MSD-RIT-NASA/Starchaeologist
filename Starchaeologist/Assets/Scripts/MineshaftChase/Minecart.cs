@@ -50,7 +50,7 @@ public class Minecart : MonoBehaviour
             FreeLean();
         }
 
-        Move();
+        // Move();
         mainCam.transform.forward = this.transform.forward;
     }
 
