@@ -167,17 +167,15 @@ public class MineGame : MonoBehaviour
             raftReference.transform.LookAt(objectPosition);
             raftReference.transform.position = objectPosition;
 
-            yield return new WaitForEndOfFrame();
+            //yield return new WaitForEndOfFrame();
+            yield return 0;
         }
 
         tParam = 0;
         speedModifier = speedModifier * 0.90f;
         routeToGo += 1;
 
-        if (routeToGo > routes.Count - 1)
-        {
-            routeToGo = 0;
-        }
+        
         //optimization
         if (routeToGo - 2 >= 0)//disable river segments that are far behind the player
         {

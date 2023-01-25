@@ -45,6 +45,7 @@ public class MineBuilder : MonoBehaviour
     {
         //spawn the amount of track requested
         spawnedSegments.Add(GameObject.Find("Track"));
+        spawnedTransforms.Add(GameObject.Find("Track").transform.GetChild(2).transform);
 
         Vector3 spawnPosition = new Vector3(0, -1, 10);
         Quaternion spawnRotation = new Quaternion(0, 0, 0, 0);
@@ -129,6 +130,7 @@ public class MineBuilder : MonoBehaviour
 
         i++;
         GameObject newSpawn = Instantiate(spawnThis, spawnedSegments[i].transform);
+        givePosition.y += 1;
         givePosition.x += Random.Range(-1, 2);
         newSpawn.transform.position = givePosition;
         newSpawn.transform.rotation = Quaternion.Euler(0, (Random.Range(0, 2) * 180), 0);

@@ -32,6 +32,7 @@ public class Follow : MonoBehaviour
     {
         if (coroutineAllowed)
         {
+            Debug.Log("booga");
             StartCoroutine(GoByTheRoute(routeToGo));
         }
     }
@@ -47,6 +48,7 @@ public class Follow : MonoBehaviour
 
         while (tParam < 1)
         {
+            Debug.Log("oooga");
             tParam += Time.deltaTime * speedModifier;
 
             objectPosition = Mathf.Pow(1 - tParam, 3) * p0 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p1 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p2 + Mathf.Pow(tParam, 3) * p3;
