@@ -187,7 +187,7 @@ MonoBehaviour:
   raftReference: {fileID: 1585818842}
   trackReferences: []
   cartAcceleration: 0.1
-  cartSpeed: 3
+  cartSpeed: 10
   timeToMove: 1
   routes: []
 --- !u!114 &149083207
@@ -231,6 +231,10 @@ PrefabInstance:
     - target: {fileID: 592314195188165061, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
       propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Name
       value: Directional Anchor Rotation
+      objectReference: {fileID: 0}
+    - target: {fileID: 1684082261559941217, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5312394
       objectReference: {fileID: 0}
     - target: {fileID: 6562315777389843750, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
       propertyPath: m_IsActive
@@ -307,6 +311,14 @@ PrefabInstance:
     - target: {fileID: 7865517849157600120, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
       propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Name
       value: Directional Anchor Rotation
+      objectReference: {fileID: 0}
+    - target: {fileID: 8721719400277989007, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.61234
+      objectReference: {fileID: 0}
+    - target: {fileID: 8721719400277989007, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.038766
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
@@ -412,7 +424,7 @@ GameObject:
   - component: {fileID: 878549566}
   - component: {fileID: 878549565}
   m_Layer: 0
-  m_Name: BodyHitbox (2)
+  m_Name: RightBodyHb
   m_TagString: PlayerBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -439,8 +451,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 878549564}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.75, y: 0, z: 0}
-  m_LocalScale: {x: 0.2461, y: 1, z: 1}
+  m_LocalPosition: {x: 0.58551, y: 0, z: 0}
+  m_LocalScale: {x: 0.20871003, y: 1, z: 1.5454}
   m_Children: []
   m_Father: {fileID: 523096630}
   m_RootOrder: 4
@@ -694,6 +706,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6137735424931039153, guid: 3c699aae85193a14ab54064b0553b026, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2024253681076809639, guid: 3c699aae85193a14ab54064b0553b026, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3c699aae85193a14ab54064b0553b026, type: 3}
@@ -942,7 +958,7 @@ GameObject:
   - component: {fileID: 1837836326}
   - component: {fileID: 1837836327}
   m_Layer: 0
-  m_Name: BodyHitbox (1)
+  m_Name: LeftBodyHb
   m_TagString: PlayerBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -956,8 +972,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1837836325}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.8, y: 0, z: 0}
-  m_LocalScale: {x: 0.2461, y: 1, z: 1}
+  m_LocalPosition: {x: -0.61451, y: 0, z: 0}
+  m_LocalScale: {x: 0.20871003, y: 1, z: 1.5454}
   m_Children: []
   m_Father: {fileID: 523096630}
   m_RootOrder: 3

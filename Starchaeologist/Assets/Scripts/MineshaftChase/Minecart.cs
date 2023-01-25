@@ -109,10 +109,12 @@ public class Minecart : MonoBehaviour
     {
         if (headHb.bounds.Intersects(leftBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle < 40f)
         {
+            Debug.Log("Free Lean Left");
             tiltAngle += 2f;
         }
         else if (headHb.bounds.Intersects(rightBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle > -40f)
         {
+            Debug.Log("Free Lean Right");
             tiltAngle -= 2f;
         }
         else if (headHb.bounds.Intersects(bodyHb.bounds))
@@ -141,8 +143,8 @@ public class Minecart : MonoBehaviour
     {
         Vector3 curCartAngles = this.transform.eulerAngles;
         this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y - .48f, curCartAngles.z);
-        Vector3 curCamAngle = player.transform.eulerAngles;
-        player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y - .48f, curCamAngle.z);
+        // Vector3 curCamAngle = player.transform.eulerAngles;
+        // player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y - .48f, curCamAngle.z);
     }
 
 
@@ -150,8 +152,8 @@ public class Minecart : MonoBehaviour
     {
         Vector3 curCartAngles = this.transform.eulerAngles;
         this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y + .48f, curCartAngles.z);
-        Vector3 curCamAngle = player.transform.eulerAngles;
-        player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y + .48f, curCamAngle.z);
+        // Vector3 curCamAngle = player.transform.eulerAngles;
+        // player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y + .48f, curCamAngle.z);
     }
 
 
@@ -162,7 +164,7 @@ public class Minecart : MonoBehaviour
             turningLeft = false;
             turningRight = false;
             this.transform.eulerAngles = other.transform.eulerAngles;
-            player.transform.eulerAngles = other.transform.eulerAngles;
+            // player.transform.eulerAngles = other.transform.eulerAngles;
         }
         else if (other.gameObject.tag == "RightTrack")
         {
