@@ -5,6 +5,8 @@ using UnityEngine;
 public class EndCollision : MonoBehaviour
 {
     public GameObject canvasRef;
+    public GameObject rightHandRay;
+    public GameObject leftHandRay;
     
 
     void OnTriggerEnter(Collider other)
@@ -13,6 +15,8 @@ public class EndCollision : MonoBehaviour
         if (other.gameObject.CompareTag("PlayerFoot"))
         {
             canvasRef.SetActive(true);
+            rightHandRay.SetActive(true);
+            leftHandRay.SetActive(true);
             Destroy(this);
         }
     }

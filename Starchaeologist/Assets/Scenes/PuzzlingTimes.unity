@@ -1423,6 +1423,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasRef: {fileID: 731994345}
+  rightHandRay: {fileID: 1469803699}
+  leftHandRay: {fileID: 1469803698}
 --- !u!1 &271078688
 GameObject:
   m_ObjectHideFlags: 0
@@ -5297,9 +5299,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: MainMenu
+      - m_Target: {fileID: 1553079654}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: LoadMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7042,6 +7044,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 145473973529334207, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Id
+      value: cc799f37-6734-46ab-8092-e0fa7c2b7c0b
+      objectReference: {fileID: 0}
+    - target: {fileID: 145473973529334207, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Name
+      value: Directional Anchor Rotation
+      objectReference: {fileID: 0}
+    - target: {fileID: 592314195188165061, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Id
+      value: 7bc3de94-3569-490a-93fe-320e83d1a379
+      objectReference: {fileID: 0}
+    - target: {fileID: 592314195188165061, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Name
+      value: Directional Anchor Rotation
+      objectReference: {fileID: 0}
     - target: {fileID: 7865517848709632932, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -7110,6 +7128,16 @@ Transform:
 --- !u!4 &1469803697 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8721719400277989007, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+  m_PrefabInstance: {fileID: 1469803693}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1469803698 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7723398612174249244, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+  m_PrefabInstance: {fileID: 1469803693}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1469803699 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7387500812606649294, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
   m_PrefabInstance: {fileID: 1469803693}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1474379797

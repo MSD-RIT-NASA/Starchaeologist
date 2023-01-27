@@ -8,7 +8,7 @@ public class MineGame : MonoBehaviour
     public static MineGame singleton;
 
     [SerializeField] GameObject playerReference;
-    [SerializeField] GameObject raftReference;
+    [SerializeField] Minecart raftReference;
     S_MineCart raftScript;
 
     public List<GameObject> trackReferences = new List<GameObject>(); //populated with positions while the river is being built from the S_RiverBuilder script
@@ -66,7 +66,7 @@ public class MineGame : MonoBehaviour
             {
                 //raftScript.tilting = true;
                 playerAttached = true;
-                playerReference.transform.parent = raftReference.transform;
+                //playerReference.transform.parent = raftReference.transform;
                // playerReference.transform.position = raftReference.transform.GetChild(0).position;
             }
 
@@ -112,6 +112,7 @@ public class MineGame : MonoBehaviour
 
         ////move the raft
         raftReference.transform.position += currentDirection * Time.deltaTime * currentSpeed;
+        playerReference.transform.position += currentDirection * Time.deltaTime * currentSpeed;
 
         //check if the raft has reach the checkpoint then go to the next one
         if (Vector3.Distance(raftReference.transform.position, nextDestination) < 5f)
@@ -163,8 +164,13 @@ public class MineGame : MonoBehaviour
             tParam += Time.deltaTime * speedModifier;
             objectPosition = Mathf.Pow(1 - tParam, 3) * p0 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p1 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p2 + Mathf.Pow(tParam, 3) * p3;
 
-            raftReference.transform.LookAt(objectPosition);
+            Vector3 curAngles = raftReference.transform.eulerAngles;
+            raftReference.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, raftReference.TiltAngle);
+            Vector3 upVec = raftReference.transform.up;
+            raftReference.transform.LookAt(objectPosition, upVec);
             raftReference.transform.position = objectPosition;
+            playerReference.transform.LookAt(objectPosition);
+            playerReference.transform.position = objectPosition;
 
             //yield return new WaitForEndOfFrame();
             yield return 0;
