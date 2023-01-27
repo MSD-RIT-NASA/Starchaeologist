@@ -40,13 +40,13 @@ public class Hand : MonoBehaviour
     {
         if(gripCurrent != gripTarget)
         {
-            gripCurrent += Mathf.MoveTowards(gripCurrent, gripTarget, Time.deltaTime * speed);
+            gripCurrent = Mathf.MoveTowards(gripCurrent, gripTarget, Time.deltaTime * speed);
             animator.SetFloat("Grip", gripCurrent);
         }
-        if(triggerCurrent != triggerTarget)
-        {
-            triggerCurrent += Mathf.MoveTowards(triggerCurrent, triggerTarget, Time.deltaTime * speed);
-            animator.SetFloat("Trigger", triggerCurrent);
-        }
+        //if(triggerCurrent != triggerTarget)
+        //{
+        //    triggerCurrent = Mathf.MoveTowards(triggerCurrent, triggerTarget, Time.deltaTime * speed);
+        //    animator.SetFloat("Trigger", triggerCurrent);
+        //}
     }
 }
