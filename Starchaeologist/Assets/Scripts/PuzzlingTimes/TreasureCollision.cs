@@ -13,16 +13,15 @@ public class TreasureCollision : MonoBehaviour
     //void OnTriggerEnter(Collider other)
     //{
     //    //when the player hits the obstacle, tell the game manager to deduct points
-    //    if (other.gameObject.CompareTag("PlayerBody"))
+    //    if (other.gameObject.CompareTag("PlayerHand"))
     //    {
-    //        Debug.Log("Gathered Treasure");
-    //        Destroy(gameObject);
+    //        //Destroy(gameObject);
     //    }
     //}
 
-    void OnCollisionEnded(Collider other)
+    void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("PlayerBody"))
+        if (other.gameObject.CompareTag("PlayerHand"))
         {
             Debug.Log("Gathered Treasure");
             Destroy(gameObject);
