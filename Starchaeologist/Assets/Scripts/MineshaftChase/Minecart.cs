@@ -115,11 +115,7 @@ public class Minecart : MonoBehaviour
         {
             tiltAngle -= 2f;
         }
-<<<<<<< Updated upstream
         else if (headHb.bounds.Intersects(bodyHb.bounds))
-=======
-        else if(headHb.bounds.Intersects(bodyHb.bounds))
->>>>>>> Stashed changes
         {
             if (tiltAngle < 0f)
             {
