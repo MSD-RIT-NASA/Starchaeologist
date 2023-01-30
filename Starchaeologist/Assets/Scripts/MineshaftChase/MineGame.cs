@@ -134,18 +134,18 @@ public class MineGame : MonoBehaviour
             }
             else//otherwise set the new destination tot he next checkpoint
             {
-                Debug.Log("New checkpoint");
+                Debug.Log("New checkpoint" + checkpointIndex);
                 nextDestination = trackReferences[checkpointIndex].transform.GetChild(1).transform.position;
             }
 
             //optimization
-            if (checkpointIndex - 2 >= 0)//disable river segments that are far behind the player
+            if (checkpointIndex - 3 >= 0)//disable river segments that are far behind the player
             {
-                trackReferences[checkpointIndex - 2].SetActive(false);
+                trackReferences[checkpointIndex - 3].SetActive(false);
             }
-            if (checkpointIndex + 2 < trackReferences.Count)//enable segments that are getting close to the player
+            if (checkpointIndex + 1 < trackReferences.Count)//enable segments that are getting close to the player
             {
-                trackReferences[checkpointIndex + 2].SetActive(true);
+                trackReferences[checkpointIndex + 1].SetActive(true);
             }
         }
 
@@ -169,9 +169,9 @@ public class MineGame : MonoBehaviour
             Vector3 upVec = raftReference.transform.up;
             raftReference.transform.LookAt(objectPosition, upVec);
             raftReference.transform.position = objectPosition;
+            objectPosition.y += 3;
             playerReference.transform.LookAt(objectPosition);
             playerReference.transform.position = objectPosition;
-
             //yield return new WaitForEndOfFrame();
             yield return 0;
         }
@@ -186,9 +186,9 @@ public class MineGame : MonoBehaviour
         {
             trackReferences[routeToGo - 2].SetActive(false);
         }
-        if (routeToGo + 2 < trackReferences.Count)//enable segments that are getting close to the player
+        if (routeToGo + 1 < trackReferences.Count)//enable segments that are getting close to the player
         {
-            trackReferences[routeToGo + 2].SetActive(true);
+            trackReferences[routeToGo + 1].SetActive(true);
         }
         coroutineAllowed = true;
 
