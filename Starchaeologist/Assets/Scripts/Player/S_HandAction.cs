@@ -11,7 +11,7 @@ public class S_HandAction : MonoBehaviour
     This will be attached to each hand of the XR rig
      
      */
-
+    public Hand hand;
     ActionBasedController controller;
     XRRayInteractor teleportRay;
     XRInteractorLineVisual teleportLine;
@@ -65,8 +65,8 @@ public class S_HandAction : MonoBehaviour
     {
         //grab references
         S_HandAction rightHand =  transform.parent.GetChild(2).GetComponent<S_HandAction>();
-        GameObject rightRay =  transform.parent.GetChild(5).gameObject;
-        GameObject leftRay =  transform.parent.GetChild(6).gameObject;
+        GameObject rightRay =  transform.parent.GetChild(6).gameObject;
+        GameObject leftRay =  transform.parent.GetChild(7).gameObject;
 
         //close the pause menu
         if (paused)
@@ -112,7 +112,9 @@ public class S_HandAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(teleportRay && teleportLine)
+        hand.SetGrip(controller.selectAction.action.ReadValue<float>());
+        hand.SetTrigger(controller.selectAction.action.ReadValue<float>());
+        if (teleportRay && teleportLine)
         {
             teleportLine.enabled = teleportActive;
             teleportRay.enabled = teleportActive;
