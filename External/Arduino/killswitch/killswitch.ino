@@ -6,10 +6,10 @@
   
 */
 
-int aliveOutputPin = 37; 
-int aliveInputPin = 39;
-int killOutputPin = 35;
-int killInputPin = 41;
+int aliveOutputPin = 37; // purple
+int aliveInputPin = 39;  // red 
+int killOutputPin = 35;  // brown
+int killInputPin = 41;   // black
 int kill = 0;      // variable to store the read value
 int alive = 0;      // variable to store the read value
 int readingAlive = 1;
@@ -33,9 +33,9 @@ void loop(){
     delay(1);
     alive = digitalRead(aliveInputPin);   // reads the alive input pin
     if(alive == 1){
-      Serial.print("alive 2 ");
+      Serial.print("2");
     } else{
-      Serial.print("alive 1 ");
+      Serial.print("1");
       readingAlive = 0;
     }
     digitalWrite(aliveOutputPin, LOW);
@@ -45,9 +45,9 @@ void loop(){
     delay(1);
     kill = digitalRead(killInputPin);   // reads the kill input pin
     if(kill == 1){
-      Serial.print("kill 1 ");
+      Serial.print("1");
     } else{
-      Serial.print("kill 2 ");
+      Serial.print("2");
       readingAlive = 1;
     }
     digitalWrite(killOutputPin, LOW);

@@ -1,8 +1,3 @@
-/*
-  Force Plate Data Reader
-  By: Vince Lobo
-*/
-
 #include "Arduino.h"
 #include "HX711.h"
 
@@ -10,12 +5,10 @@
 #define SCALE_1_PIN_CLK 48
 #define SCALE_2_PIN_DAT 46
 #define SCALE_2_PIN_CLK 44
-#define SCALE_3_PIN_DAT 51
-#define SCALE_3_PIN_CLK 49
-#define SCALE_4_PIN_DAT 47
-#define SCALE_4_PIN_CLK 45
-
-HX711 scale_sensor1, scale_sensor2, scale_sensor3, scale_sensor4;
+#define SCALE_3_PIN_DAT 42
+#define SCALE_3_PIN_CLK 40
+#define SCALE_4_PIN_DAT 38
+#define SCALE_4_PIN_CLK 36
 
 
 //typedef struct{
@@ -52,45 +45,22 @@ long scale_2Units = 0;
 long scale_3Units = 0;
 long scale_4Units = 0;
 
-//void setup() {
-//  Serial.begin(115200);
-//  while (!Serial) ;
-//  Serial.println();
-//  Serial.println("serial connection made");
-//  scale_1.set_scale(calibration_factor); 
-//  scale_1.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
-//  scale_2.set_scale(calibration_factor); 
-//  scale_2.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
-//  scale_3.set_scale(calibration_factor); 
-//  scale_3.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
-//  scale_4.set_scale(calibration_factor); 
-//  scale_4.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
-  
-//  mode = wait;
-//}
-
 void setup() {
   Serial.begin(115200);
-  while (!Serial);
-
-  scale_sensor1.begin(SCALE_1_PIN_DAT, SCALE_1_PIN_CLK);
-  scale_sensor2.begin(SCALE_2_PIN_DAT, SCALE_2_PIN_CLK);
-  scale_sensor3.begin(SCALE_3_PIN_DAT, SCALE_3_PIN_CLK);
-  scale_sensor4.begin(SCALE_4_PIN_DAT, SCALE_4_PIN_CLK);
-
-  scale_sensor1.set_scale(-21350); //This value is obtained by using the SparkFun_HX711_Calibration sketch
-  scale_sensor2.set_scale(-20850); //This value is obtained by using the SparkFun_HX711_Calibration sketch
-  scale_sensor3.set_scale(-22700); //This value is obtained by using the SparkFun_HX711_Calibration sketch
-  scale_sensor4.set_scale(-22700); //This value is obtained by using the SparkFun_HX711_Calibration sketch
-
-  scale_sensor1.tare();  //Assuming there is no weight on the scale at start up, reset the scale to 0
-  scale_sensor2.tare();  //Assuming there is no weight on the scale at start up, reset the scale to 0
-  scale_sensor3.tare();  //Assuming there is no weight on the scale at start up, reset the scale to 0
-  scale_sensor4.tare();  //Assuming there is no weight on the scale at start up, reset the scale to 0
-
-  Serial.println("Readings:");
+  while (!Serial) ;
+//  Serial.println();
+  Serial.println("serial connection made");
+  scale_1.set_scale(calibration_factor); 
+  scale_1.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
+  scale_2.set_scale(calibration_factor); 
+  scale_2.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
+  scale_3.set_scale(calibration_factor); 
+  scale_3.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
+  scale_4.set_scale(calibration_factor); 
+  scale_4.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
+  
+//  mode = wait;
 }
-
 
 void loop() {
   Serial.println(mode);

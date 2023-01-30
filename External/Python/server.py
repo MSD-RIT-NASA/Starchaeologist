@@ -11,12 +11,12 @@ import serial
 import multiprocessing
 import threading
 import random
-import openpyxl
+# import openpyxl
 from _thread import *;
 import matlab.engine
 import os, os.path
 import ctypes
-from editpyxl import Workbook
+#from editpyxl import Workbook
 import logging
 import win32com.client
 
@@ -131,7 +131,7 @@ class Server(Thread):
         score = 5 * (meanCOP+stdCOP+lengthCOP)/(abs(centroid[0]) + abs(centroid[1]))
         
         # # Plotting
-        # self.plotScore(np.array(points, dtype="int64"))
+        self.plotScore(np.array(points, dtype="int64"))
 
         logging.info("Finished Calculating Balance Score")
         return score, meanCOP, stdCOP, lengthCOP, centroid[0], centroid[1]
