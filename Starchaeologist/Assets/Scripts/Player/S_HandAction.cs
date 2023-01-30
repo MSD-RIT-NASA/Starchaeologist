@@ -24,6 +24,16 @@ public class S_HandAction : MonoBehaviour
     //leave alone in the editor
     public bool paused = false;
 
+
+    //Animation variables
+    Animator animator;
+
+    public float speed;
+
+    public float gripTarget;
+    public float triggerTarget;
+    public float gripCurrent;
+    public float triggerCurrent;
     /*PLAYER CONTROLS
 
     -teleport
@@ -45,6 +55,7 @@ public class S_HandAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //animator = GetComponent<Animator>();
         controller = GetComponent<ActionBasedController>();
         teleportRay = GetComponent<XRRayInteractor>();
         teleportLine = GetComponent<XRInteractorLineVisual>();
@@ -107,11 +118,35 @@ public class S_HandAction : MonoBehaviour
         }
     }
 
+    //  internal void SetGrip(float v)
+    // {
+    //     gripTarget = v;
+    // }
+
+    // internal void SetTrigger(float v)
+    // {
+    //     triggerTarget = v;
+    // }
+
+    // void AnimateHand()
+    // {
+    //     if(gripCurrent != gripTarget)
+    //     {
+    //         gripCurrent = Mathf.MoveTowards(gripCurrent, gripTarget, Time.deltaTime * speed);
+    //         animator.SetFloat("Grip", gripCurrent);
+    //     }
+    //     //if(triggerCurrent != triggerTarget)
+    //     //{
+    //     //    triggerCurrent = Mathf.MoveTowards(triggerCurrent, triggerTarget, Time.deltaTime * speed);
+    //     //    animator.SetFloat("Trigger", triggerCurrent);
+    //     //}
+    // }
     
 
     // Update is called once per frame
     void Update()
     {
+        //AnimateHand();
         if(teleportRay && teleportLine)
         {
             teleportLine.enabled = teleportActive;

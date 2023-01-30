@@ -293,6 +293,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3d397c5fbc53db748b8ba4dbacb8a337, type: 3}
   m_PrefabInstance: {fileID: 21828746}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &29172997 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7865517849034610671, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+  m_PrefabInstance: {fileID: 1606384972}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &97469237
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,11 +1419,11 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1606384974}
+    m_TransformParent: {fileID: 29172997}
     m_Modifications:
     - target: {fileID: 4874788803148257815, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4874788803148257815, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1426,7 +1431,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4874788803148257815, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1
+      value: -0.100000024
       objectReference: {fileID: 0}
     - target: {fileID: 4874788803148257815, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2994,7 +2999,7 @@ MonoBehaviour:
   riverWater: {fileID: 477218227}
   riverReferences: []
   raftAcceleration: 0.0175
-  raftSpeed: 2
+  raftSpeed: 6
   timeToMove: 0
   rotationX: 0
   rotationZ: 0
@@ -3006,7 +3011,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 915549101}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04a4d4b21f28d6f4faf34a56a5b97215, type: 3}
   m_Name: 
@@ -5787,9 +5792,33 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 145473973529334207, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Id
+      value: 69a36a86-e0f6-4191-826f-3c03e6c67e3d
+      objectReference: {fileID: 0}
+    - target: {fileID: 145473973529334207, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Name
+      value: Directional Anchor Rotation
+      objectReference: {fileID: 0}
+    - target: {fileID: 890100591387315649, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_Mass
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 890100591387315649, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6562315777389843750, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7865517847283870599, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Id
+      value: a3d736ba-0ca8-428a-aede-bed9a37a9220
+      objectReference: {fileID: 0}
+    - target: {fileID: 7865517847283870599, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
+      propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Name
+      value: Directional Anchor Rotation
       objectReference: {fileID: 0}
     - target: {fileID: 7865517848709632932, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
       propertyPath: m_RootOrder
@@ -5844,11 +5873,6 @@ PrefabInstance:
 --- !u!20 &1606384973 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 7865517847723088716, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
-  m_PrefabInstance: {fileID: 1606384972}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1606384974 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7865517847283870595, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
   m_PrefabInstance: {fileID: 1606384972}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1606384975 stripped

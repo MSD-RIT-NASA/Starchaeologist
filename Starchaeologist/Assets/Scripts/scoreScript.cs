@@ -8,6 +8,8 @@ public class scoreScript : MonoBehaviour
 {
     public static scoreScript singleton;
 
+    public static scoreScript Instance{ get {return singleton;}}
+
     private Text txt;
     private Text txtBlip;
     private Text txtMenu;
@@ -68,10 +70,11 @@ public class scoreScript : MonoBehaviour
     public void hitScore()
     {
         Score -= 10;
-        txtVisual(10);
+        Debug.Log("lower the score");
+        //txtVisual(10);
         //enable vignette
-        vignetteOn();
-        Invoke("vignetteOff", 3.0f); //set inactive after 3 seconds have passed
+        //vignetteOn();
+        //Invoke("vignetteOff", 3.0f); //set inactive after 3 seconds have passed
     }
 
     void vignetteOn()
