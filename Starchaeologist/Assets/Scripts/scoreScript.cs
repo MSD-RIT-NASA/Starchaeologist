@@ -6,9 +6,7 @@ using UnityEngine.UI;
 
 public class scoreScript : MonoBehaviour
 {
-    public static scoreScript singleton;
-
-    public static scoreScript Instance{ get {return singleton;}}
+    public static scoreScript Instance{ get; private set;}
 
     private Text txt;
     private Text txtBlip;
@@ -25,38 +23,41 @@ public class scoreScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (singleton != null && singleton != this)
+
+        if (Instance != null && Instance != this)
         {
             Destroy(this);
         }
         else
         {
-            singleton = this;
+            Debug.Log("Instance Set");
+            Instance = this;
         }
 
         Score = 0;
-        txt= GameObject.Find("Score").GetComponentInChildren<Text>();
-        txt.enabled = false;
+        // txt= GameObject.Find("Score").GetComponentInChildren<Text>();
+        // txt.enabled = false;
         txtBlip= GameObject.Find("ScoreBlip").GetComponentInChildren<Text>();
         txtBlip.enabled = false;
-        txtMenu= GameObject.Find("ScoreMenu").GetComponent<Text>();
-        txtMenu.enabled = false;
-        txtCalibration= GameObject.Find("CalibrationMsg").GetComponent<Text>();
-        txtCalibration.enabled = false;
+        // txtMenu= GameObject.Find("ScoreMenu").GetComponent<Text>();
+        // txtMenu.enabled = false;
+        // txtCalibration= GameObject.Find("CalibrationMsg").GetComponent<Text>();
+        // txtCalibration.enabled = false;
     }
 
     // Update is called once per frame
-    void Update()
-    {        
-        if(txtBlip.enabled && (Time.time >= hideTime)&& !scoreMenu)
-        {
-            txtBlip.enabled = false;
-        }
-        if(scoreMenu){ //set to true when playerFoot collides with "finish" tag
-            txtMenu.enabled = true;
-        }
+    // void Update()
+    // {        
+    //     if(txtBlip.enabled && (Time.time >= hideTime)&& !scoreMenu)
+    //     {
+    //         txtBlip.enabled = false;
+    //     }
+    //     if(scoreMenu){ //set to true when playerFoot collides with "finish" tag
+    //         txtMenu.enabled = true;
+    //     }
         
-    }
+    // }
+    
     public void artifactScore()
     {
         Score += 100;

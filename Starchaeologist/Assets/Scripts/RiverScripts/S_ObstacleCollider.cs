@@ -12,7 +12,7 @@ public class S_ObstacleCollider : MonoBehaviour
 
             
             GameObject.Find("Game Manager").GetComponent<S_RiverGame>().ObstacleHit();
-            scoreScript.singleton.hitScore();
+            scoreScript.Instance.hitScore();
             Debug.Log(scoreScript.Score);
             Debug.Log("score updated");
 
