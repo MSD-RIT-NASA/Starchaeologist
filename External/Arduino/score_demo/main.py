@@ -7,47 +7,31 @@
 import logging
 import serial
 import time
-import string
+import math
 
 # Main funtion to receive data
 def main():
     """ Main program """
     
-    # # set up the serial line
+    # set up the serial line
     ser = serial.Serial('COM10', 9600)
     time.sleep(2)
 
     # show the data
     data = getdata(ser)
     
-    for line in data:
-        print(line)
-
-    print("\nCONVERSIONNNNNNNNNNNNNNNNN\n")
-
-    ndata = convert_kg_to_N(data)
-    for line in ndata:
-        print(line)
-    
-    #balance_score = getscore(data)
-    #print()
-
-    #print("Final score: " + balance_score)
+    balance_score = getscore(data)
+    print("Final Score: " + str(balance_score))
 
     return 0
 
 
 # Receive game data
+"""
+    Grab sensor data from the arduino
+"""
 def getdata(ser):
     
-    # move this evenutally to main
-    # set up the serial line
-    #ser = serial.Serial('COM10', 9600)
-    #time.sleep(2)
-
-    """
-        Grab sensor data from the arduino
-    """
     logging.info("Started Gathering Info From Force Platform")
 
     balanceData = []
@@ -55,20 +39,17 @@ def getdata(ser):
     # dataSet = False
     for i in range(1000):
         #while True:
-                data = ser.readline().decode("ISO-8859-1").strip()                  # read a byte string
+                data = ser.readline().decode("ISO-8859-1").strip()       # read a byte string
                 if data == "END":
-                    #print(i)
                     balanceData.append(dataEntry)
                     dataEntry = []
+                elif data == '':
+                    continue
                 else:
                     dataEntry.append(float(data))
     logging.info("Gathered Balance Data")
 
     ser.close()
-
-
-
-
     return balanceData
 
 #
@@ -88,28 +69,43 @@ def convert_kg_to_N(data):
     return data
 
 
-    # # Read and record the data
-    # data =[]                       # empty list to store the data
-    # for i in range(50):
-    #     b = ser.readline()         # read a byte string
-    #     string_n = b.decode()      # decode byte string into Unicode  
-    #     string = string_n.rstrip() # remove \n and \r
-    #     flt = float(string)        # convert string to float
-    #     print(flt)
-    #     data.append(flt)           # add to the end of data list
-    #     time.sleep(0.1)            # wait (sleep) 0.1 seconds
-        
-    #ser.close()
-
-    #return data
-
 # calculate balnace score
 def getscore(data):
+    ndata = convert_kg_to_N(data)
+    score_calc_array = []
+    ravg = 0
 
-    #for i in range(0, len(data), 1):
+    # Assume forceplate and sensors are in a square
+    # L = length of plate = 0.5381625
+    plate_len = 0.5381625
 
+    for i in range(0, len(ndata), 1):
+        FnegX = ndata[i][0] + ndata[i][2]
+        FposX = ndata[i][1] + ndata[i][3]
+        FnegY = ndata[i][2] + ndata[i][3]
+        FposY = ndata[i][0] + ndata[i][1]
 
-   return 0
+        if (2 * (FposX + FnegX)) == 0 or (2 * (FposY + FnegY)) == 0:
+            x = 0
+            y = 0
+        else:
+            x = (plate_len * (FposX - FnegX)) / (2 * (FposX + FnegX))
+            y = (plate_len * (FposY - FnegY)) / (2 * (FposY + FnegY))
+
+        r = math.sqrt( ((x*x) + (y*y)) )
+        score_calc_array.append(r)
+
+    # get the average of r
+    for j in score_calc_array:  
+        ravg += j
+    ravg /= len(score_calc_array)
+
+    print("Average r: " + str(ravg))
+
+    score = 1 - ((2 * ravg) / (math.sqrt(2) * plate_len))
+
+    return score
+
 
 if __name__ == "__main__":
     main()
