@@ -12,6 +12,8 @@ public class scoreScript : MonoBehaviour
     private Text txtBlip;
     private Text txtMenu;
     private Text txtCalibration;
+
+    
     private float showTime = 1f;
     private float hideTime = 0f;
     private float calibrateOn = 30f;
@@ -34,7 +36,6 @@ public class scoreScript : MonoBehaviour
             Instance = this;
         }
 
-        Score = 0;
         // txt= GameObject.Find("Score").GetComponentInChildren<Text>();
         // txt.enabled = false;
         txtBlip= GameObject.Find("ScoreBlip").GetComponentInChildren<Text>();
