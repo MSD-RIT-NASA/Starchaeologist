@@ -7,33 +7,43 @@
 import logging
 import serial
 import time
+import string
 
 # Main funtion to receive data
 def main():
     """ Main program """
     
     # # set up the serial line
-    # ser = serial.Serial('COM10', 9600)
-    # time.sleep(2)
+    ser = serial.Serial('COM10', 9600)
+    time.sleep(2)
 
     # show the data
-    data = getdata()
+    data = getdata(ser)
+    
     for line in data:
+        print(line)
+
+    print("\nCONVERSIONNNNNNNNNNNNNNNNN\n")
+
+    ndata = convert_kg_to_N(data)
+    for line in ndata:
         print(line)
     
     #balance_score = getscore(data)
+    #print()
+
     #print("Final score: " + balance_score)
 
     return 0
 
 
 # Receive game data
-def getdata():
+def getdata(ser):
     
     # move this evenutally to main
     # set up the serial line
-    ser = serial.Serial('COM10', 9600)
-    time.sleep(2)
+    #ser = serial.Serial('COM10', 9600)
+    #time.sleep(2)
 
     """
         Grab sensor data from the arduino
@@ -43,11 +53,11 @@ def getdata():
     balanceData = []
     dataEntry = []
     # dataSet = False
-    for i in range(3000):
+    for i in range(1000):
         #while True:
                 data = ser.readline().decode("ISO-8859-1").strip()                  # read a byte string
                 if data == "END":
-                    print(i+1)
+                    #print(i)
                     balanceData.append(dataEntry)
                     dataEntry = []
                 else:
@@ -55,7 +65,27 @@ def getdata():
     logging.info("Gathered Balance Data")
 
     ser.close()
+
+
+
+
     return balanceData
+
+#
+#   Convert the kg data to Newtons
+#   N = kg * (m/s)^2
+#   N = kg * 9.81
+#
+def convert_kg_to_N(data):
+
+    for i in range(0, len(data), 1):
+        for j in range(4):
+            if data[i][j] > 0:
+                data[i][j] *= 9.81
+            else:
+                data[i][j] = 0.0
+                
+    return data
 
 
     # # Read and record the data
@@ -73,8 +103,10 @@ def getdata():
 
     #return data
 
-# calculate blanace score
+# calculate balnace score
 def getscore(data):
+
+    #for i in range(0, len(data), 1):
 
 
    return 0
