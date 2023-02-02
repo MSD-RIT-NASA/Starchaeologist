@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerData : MonoBehaviour
+public struct PlayerData
 {
-    private string name;
+    private string playerName;
     private string date;
     private float score;
 
     public PlayerData(string name, string date, float score)
     {
-        this.name = name;
+        this.playerName = name;
         this.date = date;
         this.score = score;
     }
@@ -19,5 +19,15 @@ public class PlayerData : MonoBehaviour
     public float Score
     {
         get { return score; }
+    }
+
+    public string PlayerName
+    {
+        get { return playerName; }
+    }
+
+    public string Date
+    {
+        get { return date; }
     }
 }

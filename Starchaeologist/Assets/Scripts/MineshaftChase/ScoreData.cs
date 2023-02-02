@@ -9,21 +9,29 @@ public class ScoreData : MonoBehaviour
 {
     public Canvas scoreCanvas;
     public Canvas leaderBoard;
-    public TextMeshPro score;
-    public TMP_InputField playerName;
-    public TMP_InputField date;
+    public Canvas playerDataCanvas;
+    public TMP_Text score;
+    public TMP_Text playerName;
+    public TMP_Text date;
+    public TMP_Text playerDataBox;
+    public List<TMP_Text> leaderboardEntries;
 
     private StreamReader reader;
     private StreamWriter writer;
 
     private List<PlayerData> players;
     private List<PlayerData> leaders;
+    private List<PlayerData> singlePlayerData;
 
     // Start is called before the first frame update
     void Start()
     {
         scoreCanvas.enabled = false;
         players = new List<PlayerData>();
+        leaders = new List<PlayerData>();
+        singlePlayerData = new List<PlayerData>();
+
+        //PopulatePlayers();
     }
 
     // Update is called once per frame
@@ -47,16 +55,21 @@ public class ScoreData : MonoBehaviour
         leaderBoard.enabled = isActive;
     }
 
+    public void SetPlayerCanvas(bool isActive)
+    {
+        playerDataCanvas.enabled = isActive;
+    }
+
 
     /// <summary>
     /// Writes new score data to an external file to store for the leaderboard
     /// </summary>
     public void StorePlayerData()
     {
-        writer = new StreamWriter("TestFile.txt", true);
+        writer = new StreamWriter("ScoreData.txt", true);
 
-        float pScoreNum = float.Parse(score.text, CultureInfo.InvariantCulture.NumberFormat);
-        players.Add(new PlayerData(playerName.text, date.text, pScoreNum));
+        //float pScoreNum = float.Parse(score.text, CultureInfo.InvariantCulture.NumberFormat);
+        //players.Add(new PlayerData(playerName.text, date.text, pScoreNum));
 
         writer.WriteLine("Player: " + playerName.text);
         writer.WriteLine("Date: " + date.text);
@@ -72,7 +85,7 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void PopulatePlayers()
     {
-        reader = new StreamReader("TestFile.txt");
+        reader = new StreamReader("ScoreData.txt");
 
         string newLine = reader.ReadLine();
         while(newLine != null)
@@ -103,16 +116,35 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void DisplayLeaderboard()
     {
+        if (players.Count == 0)
+        {
+            PopulatePlayers();
+        }
+
         leaders.Clear();
 
         SortPlayers();
 
-        for(int i = 0; i < 10; i++)
+        if (players.Count >= 10)//Just take the top 10 scores
         {
-            leaders.Add(players[i]);
+            for (int i = 0; i < 10; i++)
+            {
+                leaders.Add(players[i]);
+            }
+        }
+        else//If there are less than 10 scores, just take whatever is there
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                leaders.Add(players[i]);
+            }
         }
 
         //Display the contents of leaders on the leaderboard canvas
+        for(int i = 0; i < leaders.Count; i++)
+        {
+            leaderboardEntries[i].text = (i + 1) + " - " + leaders[i].PlayerName + ": " + leaders[i].Score + " " + leaders[i].Date;
+        }
     }
 
 
@@ -120,9 +152,33 @@ public class ScoreData : MonoBehaviour
     /// Reads score data from the external file regarding a single user determined by their name/username
     /// </summary>
     /// <param name="name"></param>
-    public void ShowPlayerData(string name)
+    public void ShowPlayerData(TMP_Text name)
     {
-        
+        if (players.Count == 0)
+        {
+            PopulatePlayers();
+        }
+
+        singlePlayerData.Clear();
+
+        for(int i = 0; i < players.Count; i++)
+        {
+            if(players[i].PlayerName == name.text)
+            {
+                singlePlayerData.Add(players[i]);
+            }
+        }
+
+        string dataText = "";
+
+        //Display contents of the single player's game data
+        for(int i = 0; i < singlePlayerData.Count; i++)
+        {
+            dataText += singlePlayerData[i].Date + " - " + singlePlayerData[i].PlayerName + ": " + singlePlayerData[i].Score + "\n";
+        }
+        Debug.Log(dataText);
+
+        playerDataBox.text = dataText;
     }
 
 
