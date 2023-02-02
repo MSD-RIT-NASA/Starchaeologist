@@ -9,7 +9,7 @@ public class S_ObstacleCollider : MonoBehaviour
 
     void Start()
     {
-        scoreText = GameObject.Find("TestingText").GetComponentInChildren<Text>();
+        scoreText = GameObject.Find("ScoreText").GetComponentInChildren<Text>();
         scoreText.text = "Score: " + 0;
     }
     void OnTriggerEnter(Collider other)
