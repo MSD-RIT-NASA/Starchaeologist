@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MineBuilder : MonoBehaviour
 {
+    [SerializeField] GameObject shadowReference;
     public int segmentCount = 5;
 
     List<GameObject> spawnedSegments = new List<GameObject>();
@@ -47,7 +48,7 @@ public class MineBuilder : MonoBehaviour
         spawnedSegments.Add(GameObject.Find("Track"));
         spawnedTransforms.Add(GameObject.Find("Track").transform.GetChild(2).transform);
 
-        Vector3 spawnPosition = new Vector3(0, -1, 10);
+        Vector3 spawnPosition = new Vector3(0, -1, 20);
         Quaternion spawnRotation = new Quaternion(0, 0, 0, 0);
         int i = 0;
         while (i < segmentCount)
@@ -57,7 +58,7 @@ public class MineBuilder : MonoBehaviour
             newSpawn.transform.position = spawnPosition;
             newSpawn.transform.rotation = spawnRotation;
 
-            if (i >= 1)
+            if (i >= 2)
             {
                 newSpawn.SetActive(false);
             }
@@ -79,6 +80,17 @@ public class MineBuilder : MonoBehaviour
 
             i++;
         }
+
+        GameObject endReference = GameObject.Find("TrackEnd");
+        endReference.transform.position = spawnPosition;
+        endReference.transform.rotation = spawnRotation;
+        endReference.SetActive(false);
+        spawnedSegments.Add(endReference);
+        spawnedTransforms.Add(endReference.transform.GetChild(2).transform);
+
+        //place shadow 
+        shadowReference.transform.position = spawnedSegments[1].transform.GetChild(0).transform.position;
+        shadowReference.transform.rotation = spawnedSegments[1].transform.GetChild(0).transform.rotation;
 
         //spawn artifact pieces, treasure, and obstacles along the river
         i = 0;
