@@ -71,7 +71,11 @@ void setup() {
   scale_sensor3.tare();  //Assuming there is no weight on the scale at start up, reset the scale to 0
   scale_sensor4.tare();  //Assuming there is no weight on the scale at start up, reset the scale to 0
 
-  //Serial.println("Readings:");
+  String myCmd = "";
+  Serial.println("Calibration completed");
+  while(Serial.available() == 0){}
+  myCmd = Serial.readString();
+  while(myCmd != "y"){}
 }
 
 void loop() {

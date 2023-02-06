@@ -11,25 +11,39 @@ import math
 
 # Main funtion to receive data
 def main():
-    """ Main program """
-    
+
     # set up the serial line
     ser = serial.Serial('COM10', 9600)
     time.sleep(2)
 
-    # show the data
+    # reading if calibration was complete
+    if ser.readline().decode("ISO-8859-1").strip() == "Calibration completed" :
+        print("Calibration completed\n")
+        val = input("Step on sensor and type 'y' to begin or anykey to quit: ")
+        if val == "y":
+            ser.write(val.encode())
+            pass
+
+        else:
+            return print("Exiting program")
+
+    else:
+        print("recalibrating\n")
+        #ser.close()
+        main()
+
+    # gather the data
     data = getdata(ser)
+    ser.close()
     
+    # calculate score
     balance_score = getscore(data)
     print("Final Score: " + str(balance_score))
 
     return 0
 
 
-# Receive game data
-"""
-    Grab sensor data from the arduino
-"""
+# Grab sensor data from the arduino
 def getdata(ser):
     
     logging.info("Started Gathering Info From Force Platform")
@@ -43,24 +57,23 @@ def getdata(ser):
                 if data == "END":
                     balanceData.append(dataEntry)
                     dataEntry = []
-                elif data == '':
+                elif data == '' or data == "Calibration completed":
                     continue
                 else:
                     dataEntry.append(float(data))
     logging.info("Gathered Balance Data")
 
-    ser.close()
     return balanceData
 
-#
+
 #   Convert the kg data to Newtons
 #   N = kg * (m/s)^2
 #   N = kg * 9.81
-#
 def convert_kg_to_N(data):
 
     for i in range(0, len(data), 1):
         for j in range(4):
+            #TODO: Fix / catch occasional out of index error
             if data[i][j] > 0:
                 data[i][j] *= 9.81
             else:
@@ -74,12 +87,14 @@ def getscore(data):
     ndata = convert_kg_to_N(data)
     score_calc_array = []
     cords = []
-    #cordData = []
     ravg = 0
 
     # Assume forceplate and sensors are in a square
     # L = length of plate = 0.5381625
     plate_len = 0.5381625
+
+    # clear data.txt of old data
+    # TODO: will later change to export data based on profile name and date
     with open('data.txt', 'w') as f:
         f.write("")
 
@@ -101,24 +116,21 @@ def getscore(data):
         cords.append(x)
         cords.append(y)
         cords.append(r)
-        #cordData.append(cords)
+        
+        # save coordinate data to txt file for matlab plotting
         with open('data.txt', 'a') as f:
             for item in cords:
                 f.write(str(item) + " ")
             f.write("\n")
         cords = []
-        
-
 
     # get the average of r
     for j in score_calc_array:  
         ravg += j
     ravg /= len(score_calc_array)
 
-    print("Average r: " + str(ravg))
-
+    # calculate ratio of r
     score = 1 - ((2 * ravg) / (math.sqrt(2) * plate_len))
-
 
     return score
 
