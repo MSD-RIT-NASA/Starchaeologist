@@ -74,12 +74,14 @@ def getscore(data):
     ndata = convert_kg_to_N(data)
     score_calc_array = []
     cords = []
-    cordData = []
+    #cordData = []
     ravg = 0
 
     # Assume forceplate and sensors are in a square
     # L = length of plate = 0.5381625
     plate_len = 0.5381625
+    with open('data.txt', 'w') as f:
+        f.write("")
 
     for i in range(0, len(ndata), 1):
         FnegX = ndata[i][0] + ndata[i][2]
@@ -99,10 +101,13 @@ def getscore(data):
         cords.append(x)
         cords.append(y)
         cords.append(r)
-        cordData.append(cords)
+        #cordData.append(cords)
+        with open('data.txt', 'a') as f:
+            for item in cords:
+                f.write(str(item) + " ")
+            f.write("\n")
         cords = []
-        with open('data.txt', 'w') as f:
-            f.write(str(cordData))
+        
 
 
     # get the average of r
