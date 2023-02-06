@@ -7,9 +7,9 @@ using System.Globalization;
 
 public class ScoreData : MonoBehaviour
 {
-    public Canvas scoreCanvas;
-    public Canvas leaderBoard;
-    public Canvas playerDataCanvas;
+    public GameObject scoreCanvas;
+    public GameObject leaderBoard;
+    public GameObject playerDataCanvas;
     public TMP_Text score;
     public TMP_Text playerName;
     public TMP_Text date;
@@ -26,7 +26,6 @@ public class ScoreData : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        scoreCanvas.enabled = false;
         players = new List<PlayerData>();
         leaders = new List<PlayerData>();
         singlePlayerData = new List<PlayerData>();
@@ -47,17 +46,17 @@ public class ScoreData : MonoBehaviour
     /// <param name="isActive"></param>
     public void SetScoreCanvasActive(bool isActive)
     {
-        scoreCanvas.enabled = isActive;
+        scoreCanvas.SetActive(isActive);
     }
 
     public void SetLBCanvasActive(bool isActive)
     {
-        leaderBoard.enabled = isActive;
+        leaderBoard.SetActive(isActive);
     }
 
     public void SetPlayerCanvas(bool isActive)
     {
-        playerDataCanvas.enabled = isActive;
+        playerDataCanvas.SetActive(isActive);
     }
 
 
