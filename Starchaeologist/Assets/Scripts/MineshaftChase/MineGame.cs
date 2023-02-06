@@ -95,7 +95,7 @@ public class MineGame : MonoBehaviour
         Vector3 p22 = routes[routeNum].GetChild(2).position;
         Vector3 p32 = routes[routeNum].GetChild(3).position;
 
-        if (routeToGo < trackReferences.Count - 3)
+        if (routeToGo < trackReferences.Count - 1)
         {
             //make sure the shadow has a place to be put
             p02 = routes[routeNum + 1].GetChild(0).position;
@@ -118,7 +118,7 @@ public class MineGame : MonoBehaviour
             playerReference.transform.LookAt(objectPosition);
             playerReference.transform.position = objectPosition;
 
-            if (routeToGo < trackReferences.Count - 3)
+            if (routeToGo < trackReferences.Count - 1)
             {
                 //Put the shadow in front of the player
                 objectPosition = Mathf.Pow(1 - tParam, 3) * p02 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p12 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p22 + Mathf.Pow(tParam, 3) * p32;
