@@ -23,6 +23,7 @@ public class TreasureCollision : MonoBehaviour
     {
         if (other.gameObject.CompareTag("PlayerHand"))
         {
+            Debug.Log("Gathered Treasure");
             Destroy(gameObject);
         }
     }

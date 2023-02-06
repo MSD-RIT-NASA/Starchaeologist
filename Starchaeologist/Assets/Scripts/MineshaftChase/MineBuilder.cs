@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MineBuilder : MonoBehaviour
 {
-    [SerializeField] GameObject shadowReference;
     public int segmentCount = 5;
 
     List<GameObject> spawnedSegments = new List<GameObject>();
@@ -48,7 +47,7 @@ public class MineBuilder : MonoBehaviour
         spawnedSegments.Add(GameObject.Find("Track"));
         spawnedTransforms.Add(GameObject.Find("Track").transform.GetChild(2).transform);
 
-        Vector3 spawnPosition = new Vector3(0, -1, 20);
+        Vector3 spawnPosition = new Vector3(0, -1, 10);
         Quaternion spawnRotation = new Quaternion(0, 0, 0, 0);
         int i = 0;
         while (i < segmentCount)
@@ -58,7 +57,7 @@ public class MineBuilder : MonoBehaviour
             newSpawn.transform.position = spawnPosition;
             newSpawn.transform.rotation = spawnRotation;
 
-            if (i >= 2)
+            if (i >= 1)
             {
                 newSpawn.SetActive(false);
             }
@@ -69,29 +68,17 @@ public class MineBuilder : MonoBehaviour
             spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
             //record the positions available for spawning obstacles and artifacts
             obstacleSpawns.Add(new List<Vector3>());
-            int j = 3;
-            while (j < 6)
+            obstacleSpawns[i].Add(newSpawn.transform.position);
+            int j = 2;
+            while (j < newSpawn.transform.childCount)
             {
-                obstacleSpawns[i].Add(newSpawn.transform.GetChild(j).transform.localPosition);
-            
-                //obstacleSpawns[i].Add(newSpawn.transform.position);
-               // Debug.Log(obstacleSpawns.Count);
+                obstacleSpawns[i].Add(newSpawn.transform.GetChild(j).transform.position);
                 //obstacleSpawns[i].Add(new Vector3(0, 1, newSpawn.transform.position.z));
                 j++;
             }
+
             i++;
         }
-
-        GameObject endReference = GameObject.Find("TrackEnd");
-        endReference.transform.position = spawnPosition;
-        endReference.transform.rotation = spawnRotation;
-        endReference.SetActive(false);
-        spawnedSegments.Add(endReference);
-        spawnedTransforms.Add(endReference.transform.GetChild(2).transform);
-
-        //place shadow 
-        shadowReference.transform.position = spawnedSegments[1].transform.GetChild(0).transform.position;
-        shadowReference.transform.rotation = spawnedSegments[1].transform.GetChild(0).transform.rotation;
 
         //spawn artifact pieces, treasure, and obstacles along the river
         i = 0;
@@ -109,49 +96,43 @@ public class MineBuilder : MonoBehaviour
             // PlaceThings(treasurePrefabs[Random.Range(0, treasurePrefabs.Count)]);
 
             //obstacle spawner
-            PlaceThings(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Count)], i);
+            PlaceThings(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Count)]);
+
+
             i++;
         }
 
     }
 
     //choose a location from the list to place the item
-    private void PlaceThings(GameObject spawnThis, int segment)
+    private void PlaceThings(GameObject spawnThis)
     {
-        //spawn 0-2 obstacles per segment
-       // Random.InitState(Time.frameCount);
-        int obstacles = Random.Range(1, 3);
-       while (obstacles > 0)
+        //see if there is a location to spawn at
+        Vector3 givePosition = Vector3.zero;
+        int i = -1;
+        while (givePosition == Vector3.zero)
         {
-            //see if there is a location to spawn at
-            Vector3 givePosition = Vector3.zero;
-            int i = 0;
-            while (givePosition == Vector3.zero)
+            //choose a river segment to spawn on
+            i = Random.Range(0, obstacleSpawns.Count);
+            if (obstacleSpawns[i].Count != 0)
             {
-                //choose a river segment to spawn on
-                //i = Random.Range(0, obstacleSpawns.Count);
-                if (obstacleSpawns[i].Count != 0)
-                {
-                    //choose a checkpoint on said river to spawn at
-                    int j = Random.Range(0, obstacleSpawns[i].Count);
-                    givePosition = obstacleSpawns[i][j];
-                    obstacleSpawns[i].RemoveAt(j);
-                }
-                if (obstacleSpawns[i].Count == 0)
-                {
-                    obstacleSpawns.RemoveAt(i);
-                }
+                //choose a checkpoint on said river to spawn at
+                int j = 0; //Random.Range(0, obstacleSpawns[i].Count);
+                givePosition = obstacleSpawns[i][j];
+                obstacleSpawns[i].RemoveAt(j);
             }
-            obstacles--;
-
-            i++;
-            //Debug.Log(spawnedSegments[segment].name);
-            GameObject newSpawn = Instantiate(spawnThis, spawnedSegments[segment].transform);
-            givePosition.y += 1;
-            //givePosition.x += Random.Range(-1, 2);
-            Debug.Log(givePosition);
-            newSpawn.transform.localPosition = givePosition;
-            //newSpawn.transform.rotation = Quaternion.Euler(0, (Random.Range(0, 2) * 180), 0);
+            else
+            {
+                obstacleSpawns.RemoveAt(i);
+            }
+            
         }
+
+        i++;
+        GameObject newSpawn = Instantiate(spawnThis, spawnedSegments[i].transform);
+        givePosition.y += 1;
+        givePosition.x += Random.Range(-1, 2);
+        newSpawn.transform.position = givePosition;
+        newSpawn.transform.rotation = Quaternion.Euler(0, (Random.Range(0, 2) * 180), 0);
     }
 }

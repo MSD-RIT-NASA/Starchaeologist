@@ -97,7 +97,7 @@ public class S_RiverBuilder : MonoBehaviour
         spawnedSegments.Add(GameObject.Find("RiverStart"));
 
         Vector3 spawnPosition = new Vector3(0, 0, 0);
-       // bool beginCave = true;
+        bool beginCave = true;
         int bankHeight = 0;
         int i = 0;
         while (i < segmentCount)
