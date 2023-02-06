@@ -36,7 +36,7 @@ def getdata(ser):
 
     balanceData = []
     dataEntry = []
-    # dataSet = False
+
     for i in range(1000):
         #while True:
                 data = ser.readline().decode("ISO-8859-1").strip()       # read a byte string
@@ -69,10 +69,12 @@ def convert_kg_to_N(data):
     return data
 
 
-# calculate balnace score
+# calculate balance score
 def getscore(data):
     ndata = convert_kg_to_N(data)
     score_calc_array = []
+    cords = []
+    cordData = []
     ravg = 0
 
     # Assume forceplate and sensors are in a square
@@ -94,6 +96,14 @@ def getscore(data):
 
         r = math.sqrt( ((x*x) + (y*y)) )
         score_calc_array.append(r)
+        cords.append(x)
+        cords.append(y)
+        cords.append(r)
+        cordData.append(cords)
+        cords = []
+        with open('data.txt', 'w') as f:
+            f.write(str(cordData))
+
 
     # get the average of r
     for j in score_calc_array:  
@@ -103,6 +113,7 @@ def getscore(data):
     print("Average r: " + str(ravg))
 
     score = 1 - ((2 * ravg) / (math.sqrt(2) * plate_len))
+
 
     return score
 
