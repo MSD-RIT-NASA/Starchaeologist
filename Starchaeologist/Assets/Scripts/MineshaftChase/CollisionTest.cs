@@ -7,6 +7,7 @@ public class CollisionTest : MonoBehaviour
 {
     private Text txt;
     private Text txtBlip;
+    private GameObject Healthbar;
     private float showTime = 1f;
     private float hideTime = 0f;
     private float calibrateOn = 30f;
@@ -18,6 +19,7 @@ public class CollisionTest : MonoBehaviour
     void Start()
     {
         Score = 0;
+        Healthbar = this.transform.Find("Health").gameObject;
         txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
         txt.text = "Score: " + Score;
         //txt.enabled = false;
@@ -54,6 +56,10 @@ public class CollisionTest : MonoBehaviour
         //Invoke("vignetteOff", 3.0f); //set inactive after 3 seconds have passed
     }
 
+    public void healthScore()
+    {
+        
+    }
     //void vignetteOn()
     //{
     //    vignette.SetActive(true);
