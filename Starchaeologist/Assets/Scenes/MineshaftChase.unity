@@ -419,7 +419,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 295434579}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
         m_MethodName: ShowPlayerData
         m_Mode: 2
@@ -638,7 +638,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 295434579}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
         m_MethodName: StorePlayerData
         m_Mode: 1
@@ -697,7 +697,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 295434580}
-  - component: {fileID: 295434579}
   m_Layer: 0
   m_Name: ScoreDataManager
   m_TagString: Untagged
@@ -705,36 +704,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &295434579
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 295434578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1b6532ff41830143a7b65c216e9a38c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreCanvas: {fileID: 730563011}
-  leaderBoard: {fileID: 1364817519}
-  playerDataCanvas: {fileID: 1250763089}
-  score: {fileID: 904132888}
-  playerName: {fileID: 770043041}
-  date: {fileID: 697560798}
-  playerDataBox: {fileID: 500633652}
-  leaderboardEntries:
-  - {fileID: 113547383}
-  - {fileID: 512399566}
-  - {fileID: 1933260318}
-  - {fileID: 759184459}
-  - {fileID: 1863138055}
-  - {fileID: 1908379598}
-  - {fileID: 1671793937}
-  - {fileID: 1902152299}
-  - {fileID: 1802595800}
-  - {fileID: 1343560210}
 --- !u!4 &295434580
 Transform:
   m_ObjectHideFlags: 0
@@ -1413,7 +1382,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 295434579}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
         m_MethodName: SetLBCanvasActive
         m_Mode: 6
@@ -1425,7 +1394,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 295434579}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
         m_MethodName: SetScoreCanvasActive
         m_Mode: 6
@@ -1437,7 +1406,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 295434579}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
         m_MethodName: PopulatePlayers
         m_Mode: 1
@@ -1449,7 +1418,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 295434579}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
         m_MethodName: DisplayLeaderboard
         m_Mode: 1
@@ -3242,7 +3211,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 295434579}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
         m_MethodName: SetScoreCanvasActive
         m_Mode: 6
@@ -3254,7 +3223,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 295434579}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
         m_MethodName: SetPlayerCanvas
         m_Mode: 6
@@ -3775,7 +3744,7 @@ GameObject:
   - component: {fileID: 1436335076}
   - component: {fileID: 1436335075}
   m_Layer: 5
-  m_Name: Score_s
+  m_Name: Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
