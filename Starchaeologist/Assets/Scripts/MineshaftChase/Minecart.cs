@@ -126,7 +126,7 @@ public class Minecart : MonoBehaviour
             Debug.Log("Free Lean Right");
             tiltAngle -= 5f;
         }
-        else
+        else if(headHb.bounds.Intersects(bodyHb.bounds))
         {
             if (tiltAngle < 0f)
             {
