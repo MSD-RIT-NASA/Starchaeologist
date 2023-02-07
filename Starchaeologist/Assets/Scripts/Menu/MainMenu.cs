@@ -38,12 +38,6 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(2);
     }
 
-    public void Level3()
-    {
-        buttonClick.PlayOneShot(click);
-        SceneManager.LoadScene(3);
-    }
-
     public void QuitGame()
     {
         buttonClick.PlayOneShot(click);
