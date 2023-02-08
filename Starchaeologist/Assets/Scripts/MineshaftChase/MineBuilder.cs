@@ -13,9 +13,8 @@ public class MineBuilder : MonoBehaviour
 
     public List<GameObject> segmentPrefabs_2M = new List<GameObject>();
     public List<GameObject> obstaclePrefabs = new List<GameObject>();
-    
-    public List<List<Vector3>> obstacleSpawns = new List<List<Vector3>>();
-    
+    public List<GameObject> treasurePrefabs = new List<GameObject>();
+
     List<GameObject>[] segmentArray;
 
 
@@ -39,7 +38,6 @@ public class MineBuilder : MonoBehaviour
 
     private void DataSetup()
     {
-        obstacleSpawns = new List<List<Vector3>>(segmentCount);
         segmentArray = new List<GameObject>[1];
         segmentArray[0] = segmentPrefabs_2M;
     }
@@ -50,14 +48,6 @@ public class MineBuilder : MonoBehaviour
         spawnedSegments.Add(GameObject.Find("Track"));
         spawnedTransforms.Add(GameObject.Find("Track").transform.GetChild(2).transform);
 
-        //obstacleSpawns.Add(new List<Vector3>());
-        //int j = 3;
-        //while (j < 6)
-        //{
-        //    obstacleSpawns[0].Add(spawnedSegments[0].transform.GetChild(j).transform.localPosition);
-        //    Debug.Log(0 + "," + (j - 3) + obstacleSpawns[0][j - 3]);
-        //    j++;
-        //}
 
         Vector3 spawnPosition = new Vector3(0, -1, 20);
         Quaternion spawnRotation = new Quaternion(0, 0, 0, 0);
@@ -80,7 +70,8 @@ public class MineBuilder : MonoBehaviour
             spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
             
             //spawn objects on the segment
-            PlaceObjects(spawnedSegments[i]);
+            PlaceObjects(spawnedSegments[i], obstaclePrefabs);
+            PlaceObjects(spawnedSegments[i], treasurePrefabs);
             i++;
         }
 
@@ -90,8 +81,8 @@ public class MineBuilder : MonoBehaviour
         endReference.SetActive(false);
         spawnedSegments.Add(endReference);
         spawnedTransforms.Add(endReference.transform.GetChild(2).transform);
-        PlaceObjects(spawnedSegments[i]);
-        PlaceObjects(spawnedSegments[i+1]);
+        PlaceObjects(spawnedSegments[i], obstaclePrefabs);
+        PlaceObjects(spawnedSegments[i+1], obstaclePrefabs);
         //place shadow 
         shadowReference.transform.position = spawnedSegments[1].transform.GetChild(0).transform.position;
         shadowReference.transform.rotation = spawnedSegments[1].transform.GetChild(0).transform.rotation;
@@ -99,7 +90,7 @@ public class MineBuilder : MonoBehaviour
     }
 
     //choose a location from the list of positions to place the item
-    private void PlaceObjects(GameObject segment)
+    private void PlaceObjects(GameObject segment, List<GameObject> objects)
     {
         List<GameObject> placements = new List<GameObject>();
         for(int i = 0; i < 3; i++)
@@ -111,7 +102,7 @@ public class MineBuilder : MonoBehaviour
         int place = Random.Range(0, 3);
         while(count>0)
         {
-            Instantiate(obstaclePrefabs[0], placements[place].transform);
+            Instantiate(objects[0], placements[place].transform);
             placements.Remove(placements[place]);
             place = Random.Range(0, 2);
             count--;
