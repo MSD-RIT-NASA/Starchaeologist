@@ -23,7 +23,7 @@ public class S_HandAction : MonoBehaviour
     public bool leftHand = false;
     //leave alone in the editor
     public bool paused = false;
-
+    public Hand hand;
     /*PLAYER CONTROLS
 
     -teleport
@@ -122,5 +122,7 @@ public class S_HandAction : MonoBehaviour
             }
             //teleportReticle.SetActive(isActive);
         }
+        hand.SetGrip(controller.selectAction.action.ReadValue<float>());
+        hand.SetTrigger(controller.selectAction.action.ReadValue<float>());
     }
 }

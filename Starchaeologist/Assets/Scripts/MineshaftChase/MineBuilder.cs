@@ -91,7 +91,7 @@ public class MineBuilder : MonoBehaviour
 
         //spawn artifact pieces, treasure, and obstacles along the river
         i = 0;
-        while (i < segmentCount)
+        while (i < segmentCount+1)
         {
             ////artifacts spawner
             //if (i < artifactPieces)
@@ -120,29 +120,27 @@ public class MineBuilder : MonoBehaviour
         {
             //see if there is a location to spawn at
             Vector3 givePosition = Vector3.zero;
-            int i = 0;
+            //int i = 0;
             while (givePosition == Vector3.zero)
             {
                 //choose a river segment to spawn on
-                if (obstacleSpawns[i].Count != 0)
+                if (obstacleSpawns[segment].Count != 0)
                 {
                     //choose a checkpoint on said river to spawn at
-                    int j = Random.Range(0, obstacleSpawns[i].Count);
-                    givePosition = obstacleSpawns[i][j];
-                    obstacleSpawns[i].RemoveAt(j);
+                    int j = Random.Range(0, obstacleSpawns[segment].Count);
+                    givePosition = obstacleSpawns[segment][j];
+                    obstacleSpawns[segment].RemoveAt(j);
                 }
-                if (obstacleSpawns[i].Count == 0)
+                if (obstacleSpawns[segment].Count == 0)
                 {
-                    obstacleSpawns.RemoveAt(i);
+                    obstacleSpawns.RemoveAt(segment);
                 }
             }
             obstacles--;
 
-            i++;
+            //i++;
             GameObject newSpawn = Instantiate(spawnThis, spawnedSegments[segment].transform);
-            givePosition.y += 1;
             newSpawn.transform.localPosition = givePosition;
-            //newSpawn.transform.rotation = Quaternion.Euler(0, (Random.Range(0, 2) * 180), 0);
         }
     }
 }
