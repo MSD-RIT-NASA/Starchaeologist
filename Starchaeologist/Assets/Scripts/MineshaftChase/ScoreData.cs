@@ -71,9 +71,6 @@ public class ScoreData : MonoBehaviour
         string fileName = currentScene + ".txt";
         writer = new StreamWriter(fileName, true);
 
-        //float pScoreNum = float.Parse(score.text, CultureInfo.InvariantCulture.NumberFormat);
-        //players.Add(new PlayerData(playerName.text, date.text, pScoreNum));
-
         writer.WriteLine("Player: " + playerName.text);
         writer.WriteLine("Date: " + date.text);
         writer.WriteLine("Score: " + score.text);
