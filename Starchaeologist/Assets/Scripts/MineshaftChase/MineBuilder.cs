@@ -98,12 +98,14 @@ public class MineBuilder : MonoBehaviour
             placements.Add(segment.transform.GetChild(i + 3).gameObject);
         }
 
+        int objectToPlace = Random.Range(0, objects.Count);
         int count = Random.Range(1, 3);
         int place = Random.Range(0, 3);
         while(count>0)
         {
-            Instantiate(objects[0], placements[place].transform);
+            Instantiate(objects[objectToPlace], placements[place].transform);
             placements.Remove(placements[place]);
+            objectToPlace = Random.Range(0, objects.Count);
             place = Random.Range(0, 2);
             count--;
         }
