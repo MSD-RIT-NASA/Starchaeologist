@@ -6,24 +6,23 @@ public class S_RiverBuilder : MonoBehaviour
 {
 
     public int segmentCount = 10;
-    public int artifactPieces = 4;
     //Vector3 spawnPosition = new Vector3(0,0,0);
     
     List<GameObject> spawnedSegments = new List<GameObject>();
     //GameObject newSpawn;
 
-    public List<GameObject> segmentPrefabs_2M = new List<GameObject>();
-    public List<GameObject> segmentPrefabs_3M = new List<GameObject>();
-    public List<GameObject> segmentPrefabs_4M = new List<GameObject>();
-    public List<GameObject> segmentPrefabs_5M = new List<GameObject>();
-    public List<GameObject> transitionPrefabs_to_2M = new List<GameObject>();
-    public List<GameObject> transitionPrefabs_to_3M = new List<GameObject>();
-    public List<GameObject> transitionPrefabs_to_4M = new List<GameObject>();
-    public List<GameObject> transitionPrefabs_to_5M = new List<GameObject>();
+    [SerializeField] List<GameObject> segmentPrefabs_2M = new List<GameObject>();
+    [SerializeField] List<GameObject> segmentPrefabs_3M = new List<GameObject>();
+    [SerializeField] List<GameObject> segmentPrefabs_4M = new List<GameObject>();
+    [SerializeField] List<GameObject> segmentPrefabs_5M = new List<GameObject>();
+    [SerializeField] List<GameObject> transitionPrefabs_to_2M = new List<GameObject>();
+    [SerializeField] List<GameObject> transitionPrefabs_to_3M = new List<GameObject>();
+    [SerializeField] List<GameObject> transitionPrefabs_to_4M = new List<GameObject>();
+    [SerializeField] List<GameObject> transitionPrefabs_to_5M = new List<GameObject>();
 
-    public List<GameObject> obstaclePrefabs = new List<GameObject>();
-    public List<GameObject> treasurePrefabs = new List<GameObject>();
-    public List<GameObject> artifactPrefabs = new List<GameObject>();
+    [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
+    [SerializeField] List<GameObject> treasurePrefabs = new List<GameObject>();
+    [SerializeField] List<GameObject> artifactPrefabs = new List<GameObject>();
 
     List<GameObject>[] segmentArray;
     List<GameObject>[] transitionArray;
@@ -71,24 +70,16 @@ public class S_RiverBuilder : MonoBehaviour
         spawnedSegments.Add(GameObject.Find("RiverStart"));
 
         Vector3 spawnPosition = new Vector3(0, 0, 0);
-        bool beginCave = true;
-        int bankHeight = 0;
         int i = 0;
         while (i < segmentCount)
         {
-            //record the current height of the river banks and choose a height for the new segment
-            int oldHeight = bankHeight;
-
-            //the new height can only be within 2 height differences because there is no 2-5 incline given
-            bankHeight = Mathf.Clamp(bankHeight + Random.Range(-2, 3), 0, segmentArray.Length - 1);
-
             //place the transition piece
-            GameObject transitionPiece = Instantiate(transitionArray[bankHeight][oldHeight]);
+            GameObject transitionPiece = Instantiate(transitionArray[0][0]);
             transitionPiece.transform.position = spawnPosition;
             spawnPosition = transitionPiece.transform.GetChild(1).transform.position;
 
             //choose one of the available segment prefabs and place it at the end of the last placed piece
-            GameObject newSpawn = Instantiate(segmentArray[bankHeight][Random.Range(0, segmentArray[bankHeight].Count)]);
+            GameObject newSpawn = Instantiate(segmentArray[0][Random.Range(0, segmentArray[0].Count)]);
             newSpawn.transform.position = spawnPosition;
             if (i >= 5)
             {
