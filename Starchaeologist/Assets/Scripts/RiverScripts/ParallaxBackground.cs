@@ -24,7 +24,7 @@ public class ParallaxBackground : MonoBehaviour
         transform.position = new Vector3(transform.position.x, transform.position.y, startpos + distance);
 
         //
-        if (relative > (startpos + 60 + length))
+        if (relative > (startpos + 90 + length))
         {
             startpos += length;
         }
