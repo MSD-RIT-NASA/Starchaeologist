@@ -19,20 +19,20 @@ public class ParallaxBackground : MonoBehaviour
     void Update()
     {
         float relative = (cam.transform.position.z + (float)60.84773) * (1 - parallaxEffect);
-        //Debug.Log("Relative: " + relative);
         //how far we have moved in world space
         float distance = ((cam.transform.position.z+ (float)60.84773) * parallaxEffect);
         transform.position = new Vector3(transform.position.x, transform.position.y, startpos + distance);
 
-        if (relative > (startpos + 120 + length))
+        //
+        if (relative > (startpos + 60 + length))
         {
-            Debug.Log("Param" + startpos + " + " + length + " = " + (startpos + length));
             startpos += length;
         }
-        else if (relative < (startpos - length + 60))
-        {
-            Debug.Log("Repeat 2.0");
-            startpos -= length;
-        }
+        //if we go backwards
+        //else if (relative < (startpos - length + 60))
+        //{
+        //    Debug.Log("Repeat 2.0");
+        //    startpos -= length;
+        //}
     }
 }
