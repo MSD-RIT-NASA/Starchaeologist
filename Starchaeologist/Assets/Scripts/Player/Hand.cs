@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -43,10 +44,11 @@ public class Hand : MonoBehaviour
             gripCurrent = Mathf.MoveTowards(gripCurrent, gripTarget, Time.deltaTime * speed);
             animator.SetFloat("Grip", gripCurrent);
         }
-        //if(triggerCurrent != triggerTarget)
-        //{
-        //    triggerCurrent = Mathf.MoveTowards(triggerCurrent, triggerTarget, Time.deltaTime * speed);
-        //    animator.SetFloat("Trigger", triggerCurrent);
-        //}
+        if (triggerCurrent != triggerTarget)
+        {
+            UnityEngine.Debug.Log("Trigger");
+            triggerCurrent = Mathf.MoveTowards(triggerCurrent, triggerTarget, Time.deltaTime * speed);
+            animator.SetFloat("Trigger", triggerCurrent);
+        }
     }
 }
