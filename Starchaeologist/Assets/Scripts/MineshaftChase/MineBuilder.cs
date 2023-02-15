@@ -103,7 +103,16 @@ public class MineBuilder : MonoBehaviour
         int place = Random.Range(0, 3);
         while(count>0)
         {
+            if(placements[place].name == "ObstaclePointMid")
+            {
+                objectToPlace = 1;
+            }
+            else
+            {
+                objectToPlace = 0;
+            }
             Instantiate(objects[objectToPlace], placements[place].transform);
+            Debug.Log("Placed Item at: " + placements[place].transform);
             placements.Remove(placements[place]);
             objectToPlace = Random.Range(0, objects.Count);
             place = Random.Range(0, 2);
