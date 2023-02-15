@@ -10,14 +10,16 @@ using UnityEngine;
 
 public class TreasureCollision : MonoBehaviour
 {
-    //void OnTriggerEnter(Collider other)
-    //{
-    //    //when the player hits the obstacle, tell the game manager to deduct points
-    //    if (other.gameObject.CompareTag("PlayerHand"))
-    //    {
-    //        //Destroy(gameObject);
-    //    }
-    //}
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("collides with " + other.gameObject.tag);
+        //when the player hits the obstacle, tell the game manager to deduct points
+        if (other.gameObject.CompareTag("PlayerHand"))
+        {
+            //Destroy(gameObject);
+            Debug.Log("Touched Treasure");
+        }
+    }
 
     void OnTriggerExit(Collider other)
     {
