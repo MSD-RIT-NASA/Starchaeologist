@@ -46,7 +46,6 @@ public class Hand : MonoBehaviour
         }
         if (triggerCurrent != triggerTarget)
         {
-            UnityEngine.Debug.Log("Trigger");
             triggerCurrent = Mathf.MoveTowards(triggerCurrent, triggerTarget, Time.deltaTime * speed);
             animator.SetFloat("Trigger", triggerCurrent);
         }

@@ -123,6 +123,6 @@ public class S_HandAction : MonoBehaviour
             //teleportReticle.SetActive(isActive);
         }
         hand.SetGrip(controller.selectAction.action.ReadValue<float>());
-        hand.SetTrigger(controller.selectAction.action.ReadValue<float>());
+        hand.SetTrigger(controller.activateAction.action.ReadValue<float>());
     }
 }
