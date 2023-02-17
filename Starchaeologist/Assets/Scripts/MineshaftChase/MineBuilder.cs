@@ -6,7 +6,7 @@ using UnityEngine;
 public class MineBuilder : MonoBehaviour
 {
     [SerializeField] GameObject shadowReference;
-    public int segmentCount = 5;
+    public int segmentCount = 6;
 
     List<GameObject> spawnedSegments = new List<GameObject>();
     List<Transform> spawnedTransforms = new List<Transform>();
@@ -112,7 +112,6 @@ public class MineBuilder : MonoBehaviour
                 objectToPlace = 0;
             }
             Instantiate(objects[objectToPlace], placements[place].transform);
-            Debug.Log("Placed Item at: " + placements[place].transform);
             placements.Remove(placements[place]);
             objectToPlace = Random.Range(0, objects.Count);
             place = Random.Range(0, 2);
