@@ -60,6 +60,7 @@ public class S_HandAction : MonoBehaviour
         }
     }
 
+    //------CURRENTLY BREAKS HANDS------//
     //pause the game when the menu button is pressed (left hand only)
     //private void Action_Pause(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     //{
@@ -122,6 +123,7 @@ public class S_HandAction : MonoBehaviour
             }
             //teleportReticle.SetActive(isActive);
         }
+        //set the animation of the hands
         hand.SetGrip(controller.selectAction.action.ReadValue<float>());
         hand.SetTrigger(controller.activateAction.action.ReadValue<float>());
     }

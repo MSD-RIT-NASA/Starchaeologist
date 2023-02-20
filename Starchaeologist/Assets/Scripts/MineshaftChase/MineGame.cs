@@ -110,11 +110,12 @@ public class MineGame : MonoBehaviour
 
 
             Vector3 curAngles = raftReference.transform.eulerAngles;
+            objectPosition.y += 1;
             raftReference.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, raftReference.TiltAngle);
             Vector3 upVec = raftReference.transform.up;
             raftReference.transform.LookAt(objectPosition, upVec);
             raftReference.transform.position = objectPosition;
-            objectPosition.y += 2;
+            objectPosition.y += 1;
             playerReference.transform.LookAt(objectPosition);
             playerReference.transform.position = objectPosition;
 
