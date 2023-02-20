@@ -23,6 +23,13 @@ public class MineGame : MonoBehaviour
     bool playerAttached = false;
     int checkpointIndex = 0;
 
+    public AudioSource soundfxSource;
+    public AudioClip railGrinding_SFX;
+    public AudioClip explosion_SFX;
+    public AudioClip bats_SFX;
+    public AudioClip treasure_SFX;
+    public AudioClip obstacleHit_SFX;
+
 
     //[SerializeField]
     public List<Transform> routes;
