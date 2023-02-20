@@ -13,7 +13,7 @@ import math
 def main():
 
     # set up the serial line
-    ser = serial.Serial('COM10', 9600)
+    ser = serial.Serial('COM10', 9600) # will possibly need to change COM # per device
     time.sleep(2)
 
     # reading if calibration was complete
@@ -45,8 +45,6 @@ def main():
 
 # Grab sensor data from the arduino
 def getdata(ser):
-    
-    logging.info("Started Gathering Info From Force Platform")
 
     balanceData = []
     dataEntry = []
@@ -61,7 +59,6 @@ def getdata(ser):
                     continue
                 else:
                     dataEntry.append(float(data))
-    logging.info("Gathered Balance Data")
 
     return balanceData
 
