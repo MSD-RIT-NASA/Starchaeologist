@@ -5,15 +5,17 @@ using UnityEngine;
 
 public class MineBuilder : MonoBehaviour
 {
+
+    [SerializeField] GameObject sensorySegment;
     [SerializeField] GameObject shadowReference;
-    public int segmentCount = 5;
+    [SerializeField] int segmentCount = 5;
 
     List<GameObject> spawnedSegments = new List<GameObject>();
     List<Transform> spawnedTransforms = new List<Transform>();
 
-    public List<GameObject> segmentPrefabs_2M = new List<GameObject>();
-    public List<GameObject> obstaclePrefabs = new List<GameObject>();
-    public List<GameObject> treasurePrefabs = new List<GameObject>();
+    [SerializeField] List<GameObject> segmentPrefabs_2M = new List<GameObject>();
+    [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
+    [SerializeField] List<GameObject> treasurePrefabs = new List<GameObject>();
 
     List<GameObject>[] segmentArray;
 
@@ -75,16 +77,23 @@ public class MineBuilder : MonoBehaviour
             i++;
         }
 
+        //add track for sensory deprevation
+        //loop through track to place the individual tracks
+
+        //add end of track
         GameObject endReference = GameObject.Find("TrackEnd");
         endReference.transform.position = spawnPosition;
         endReference.transform.rotation = spawnRotation;
         endReference.SetActive(false);
         spawnedSegments.Add(endReference);
         spawnedTransforms.Add(endReference.transform.GetChild(2).transform);
+
+        //place objects on the end track
         PlaceObjects(spawnedSegments[i], obstaclePrefabs);
         PlaceObjects(spawnedSegments[i+1], obstaclePrefabs);
         PlaceObjects(spawnedSegments[i], treasurePrefabs);
         PlaceObjects(spawnedSegments[i+1], treasurePrefabs);
+
         //place shadow 
         shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
         shadowReference.transform.rotation = spawnedSegments[0].transform.GetChild(0).transform.rotation;
