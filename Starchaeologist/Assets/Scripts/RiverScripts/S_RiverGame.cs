@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
-
+using Unity.XR.CoreUtils;
 
 public class S_RiverGame : MonoBehaviour
 {
+
+
+
     //singleton
     public static S_RiverGame singleton;
 
@@ -13,6 +16,10 @@ public class S_RiverGame : MonoBehaviour
     [SerializeField] GameObject raftReference;
     [SerializeField] GameObject riverWater;
     S_Raft raftScript;
+
+    [SerializeField] Camera vrCamera;
+    [SerializeField] GameObject raftObject;
+    private Quaternion vrCameraRotation;
 
     public List<GameObject> riverReferences = new List<GameObject>(); //populated with positions while the river is being built from the S_RiverBuilder script
     Vector3 nextDestination = new Vector3(0, 0, 0);
@@ -66,6 +73,7 @@ public class S_RiverGame : MonoBehaviour
         //pythonCommunicator = new HelloRequester();
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
         communicateReference = GetComponent<PythonCommunicator>();
+        vrCameraRotation = vrCamera.transform.rotation;
         //pythonCommunicator.Start();
     }
 
@@ -87,7 +95,7 @@ public class S_RiverGame : MonoBehaviour
             //make the raft rotate
             raftScript.Raft();
         }
-
+        Debug.Log("Z Rotation:"+vrCamera.transform.rotation.z);
         //python communication
         Communication();
 
@@ -114,22 +122,41 @@ public class S_RiverGame : MonoBehaviour
         raftScript.tiltRange = Mathf.Clamp(raftScript.tiltRange, 0.25f, raftScript.maxRange);
 
         //Direct the raft to the next checkpoint
-        Vector3 desiredDirection = Vector3.Normalize(nextDestination - raftReference.transform.position);
-        if (Mathf.Abs(Vector3.Angle(desiredDirection, currentDirection)) < 1f)
+        //Vector3 desiredDirection = Vector3.Normalize(nextDestination - raftReference.transform.position);
+        /*if (Mathf.Abs(Vector3.Angle(desiredDirection, currentDirection)) < 1f)
         {
             currentDirection = desiredDirection;
         }
         else
         {
             currentDirection = Vector3.Normalize(currentDirection + (desiredDirection * Time.deltaTime * currentSpeed));
+        }*/
+        Vector3 desiredDirection;
+        if (raftObject.transform.localPosition.x > 7.0f)
+        {
+            desiredDirection = new Vector3(-0.5f, 0, 1);
         }
+        else if (raftObject.transform.localPosition.x < -7.0f)
+        {
+            desiredDirection = new Vector3(0.5f, 0, 1);
+        }
+        else
+        {
+            desiredDirection = new Vector3(-vrCamera.transform.rotation.z, 0, 1);
+        }
+
+        currentDirection= desiredDirection;
 
         //move the raft
         raftReference.transform.position += currentDirection * Time.deltaTime * currentSpeed;
         riverWater.transform.position = new Vector3(0, 0, raftReference.transform.position.z);
 
         //check if the raft has reach the checkpoint then go to the next one
-        if (Vector3.Distance(raftReference.transform.position, nextDestination) < 1f)
+       /* Debug.Log("Distance:"+Vector3.Distance(raftReference.transform.position, nextDestination));
+
+        Debug.Log("Z:" + Mathf.Abs((raftReference.transform.position.z - nextDestination.z)));*/
+
+        if (Mathf.Abs((raftReference.transform.position.z - nextDestination.z)) < 1f)
         {
             checkpointIndex++;
 

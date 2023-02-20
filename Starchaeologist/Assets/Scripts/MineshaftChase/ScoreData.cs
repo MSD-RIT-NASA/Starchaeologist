@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using TMPro;
 using System.Globalization;
+using UnityEngine.SceneManagement;
 
 public class ScoreData : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class ScoreData : MonoBehaviour
     private List<PlayerData> leaders;
     private List<PlayerData> singlePlayerData;
 
+    private string currentScene;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +39,7 @@ public class ScoreData : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        currentScene = SceneManager.GetActiveScene().name + "Scores";
     }
 
 
@@ -65,10 +68,8 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void StorePlayerData()
     {
-        writer = new StreamWriter("ScoreData.txt", true);
-
-        //float pScoreNum = float.Parse(score.text, CultureInfo.InvariantCulture.NumberFormat);
-        //players.Add(new PlayerData(playerName.text, date.text, pScoreNum));
+        string fileName = currentScene + ".txt";
+        writer = new StreamWriter(fileName, true);
 
         writer.WriteLine("Player: " + playerName.text);
         writer.WriteLine("Date: " + date.text);
@@ -84,7 +85,8 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void PopulatePlayers()
     {
-        reader = new StreamReader("ScoreData.txt");
+        string fileName = currentScene + ".txt";
+        reader = new StreamReader(fileName);
 
         string newLine = reader.ReadLine();
         while(newLine != null)
