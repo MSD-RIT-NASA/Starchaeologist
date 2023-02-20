@@ -95,7 +95,6 @@ public class S_RiverGame : MonoBehaviour
             //make the raft rotate
             raftScript.Raft();
         }
-        Debug.Log("Z Rotation:"+vrCamera.transform.rotation.z);
         //python communication
         Communication();
 

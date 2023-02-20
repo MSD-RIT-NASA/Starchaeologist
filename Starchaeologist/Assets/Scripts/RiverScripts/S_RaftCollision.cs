@@ -14,7 +14,8 @@ public class S_RaftCollision : MonoBehaviour
             GameObject startReference = GameObject.Find("RiverStart");
             for (int i = 0; i < startReference.transform.childCount; i++)
             {
-                if(startReference.transform.GetChild(i).GetComponent<TeleportationArea>())
+                TeleportationArea test = startReference.transform.GetChild(i).GetComponent<TeleportationArea>();
+                if (startReference.transform.GetChild(i).GetComponent<TeleportationArea>())
                 {
                     Destroy(startReference.transform.GetChild(i).GetComponent<TeleportationArea>());
                     //startReference.transform.GetChild(i).GetComponent<TeleportationArea>().enabled = false;
