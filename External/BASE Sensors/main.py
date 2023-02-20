@@ -13,7 +13,7 @@ import math
 def main():
 
     # set up the serial line
-    ser = serial.Serial('COM10', 9600) # will possibly need to change COM # per device
+    ser = serial.Serial('COM10', 9600) # will need to change COM # per device
     time.sleep(2)
 
     # reading if calibration was complete
@@ -49,6 +49,7 @@ def getdata(ser):
     balanceData = []
     dataEntry = []
 
+    # TODO: Change this loop to continue for however long the game lasts. 
     for i in range(1000):
         #while True:
                 data = ser.readline().decode("ISO-8859-1").strip()       # read a byte string
