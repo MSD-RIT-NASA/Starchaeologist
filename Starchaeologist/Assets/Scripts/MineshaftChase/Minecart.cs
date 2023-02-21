@@ -43,12 +43,12 @@ public class Minecart : MonoBehaviour
         //turningLeft and turningRight should change values as the level progresses
         if (turningLeft)
         {
-            TurnLeft();
+            //TurnLeft();
             FallOnTurn();
         }
         else if (turningRight)
         {
-            TurnRight();
+            //TurnRight();
             FallOnTurn();
         }
         else if (!turningLeft && !turningRight)
@@ -102,6 +102,13 @@ public class Minecart : MonoBehaviour
         {
             tiltAngle += .4f;
         }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        /*
+         * Sensor System Pseudocode
+         * 
+         *if(sensor angle is within the safe zone between certain angles) 
+         *     tilt the minecart into the turn
+         */
     }
 
     //Same as above but the other way
@@ -111,6 +118,14 @@ public class Minecart : MonoBehaviour
         {
             tiltAngle -= .4f;
         }
+
+        //----------------------------------------------------------------------------------------------------------------------------------
+        /*
+         * Sensor System Pseudocode
+         * 
+         *if(sensor angle is within the safe zone between certain angles) 
+         *     tilt the minecart into the turn
+         */
     }
 
     //Player can lean to either side without falling over while not turning
@@ -145,25 +160,36 @@ public class Minecart : MonoBehaviour
 
         Vector3 curAngles = this.transform.eulerAngles;
         this.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, tiltAngle);
+
+        //----------------------------------------------------------------------------------------------------------------------------------
+        /*
+         * Sensor System Pseudocode
+         * 
+         * float sensorAngle = data from board sensors
+         * angle of minecart = sensorAngle
+         * if(angle of minecart is between -10 and 10 degrees)
+         *     don't rotate minecart
+         * 
+        */
     }
 
 
-    private void TurnLeft()
-    {
-        //Vector3 curCartAngles = this.transform.eulerAngles;
-        //this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y - .1f, curCartAngles.z);
-        //Vector3 curCamAngle = player.transform.eulerAngles;
-        //player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y - .48f, curCamAngle.z);
-    }
+    //private void TurnLeft()
+    //{
+    //    //Vector3 curCartAngles = this.transform.eulerAngles;
+    //    //this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y - .1f, curCartAngles.z);
+    //    //Vector3 curCamAngle = player.transform.eulerAngles;
+    //    //player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y - .48f, curCamAngle.z);
+    //}
 
 
-    private void TurnRight()
-    {
-        //Vector3 curCartAngles = this.transform.eulerAngles;
-        //this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y + .1f, curCartAngles.z);
-        //Vector3 curCamAngle = player.transform.eulerAngles;
-        //player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y + .48f, curCamAngle.z);
-    }
+    //private void TurnRight()
+    //{
+    //    //Vector3 curCartAngles = this.transform.eulerAngles;
+    //    //this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y + .1f, curCartAngles.z);
+    //    //Vector3 curCamAngle = player.transform.eulerAngles;
+    //    //player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y + .48f, curCamAngle.z);
+    //}
 
 
     void OnTriggerEnter(Collider other)
