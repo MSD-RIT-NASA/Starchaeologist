@@ -10,9 +10,6 @@ public class S_RiverBuilder : MonoBehaviour
     [SerializeField] GameObject RiverPlaysection;
     [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
     [SerializeField] List<GameObject> treasurePrefabs = new List<GameObject>();
-    //[SerializeField] List<GameObject> artifactPrefabs = new List<GameObject>();
-
-    List<List<Vector3>> obstacleSpawns;
     System.Random rand = new System.Random();
 
     // Start is called before the first frame update
@@ -24,7 +21,6 @@ public class S_RiverBuilder : MonoBehaviour
         BuildRiver();
 
         //give the game script the list of river pieces
-        GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
         GetComponent<PythonCommunicator>().gameMode = 1;
 
         //remove this script
@@ -44,35 +40,94 @@ public class S_RiverBuilder : MonoBehaviour
                 GameObject randomObstacle2 = obstaclePrefabs[rand.Next(0, 2)];
                 GameObject randomTreasure = treasurePrefabs[rand.Next(0, 8)];
                 int randomTreasurePos = rand.Next(0, 3);
+                int randomRot1 = rand.Next(0, 3);
+                int randomRot2 = rand.Next(0, 3);
 
 
                 GameObject objPoint1 = RiverPlaysection.transform.GetChild(x).GetChild(2).gameObject;
-                float point1Z = RiverPlaysection.transform.GetChild(x).GetChild(2).gameObject.transform.position.z;
+                float point1Z = RiverPlaysection.transform.GetChild(x).GetChild(2).gameObject.transform.localPosition.z;
 
                 GameObject objPoint2 = RiverPlaysection.transform.GetChild(x).GetChild(3).gameObject;
-                float point2Z = RiverPlaysection.transform.GetChild(x).GetChild(3).gameObject.transform.position.z;
+                float point2Z = RiverPlaysection.transform.GetChild(x).GetChild(3).gameObject.transform.localPosition.z;
 
                 GameObject objPoint3 = RiverPlaysection.transform.GetChild(x).GetChild(4).gameObject;
-                float point3Z = RiverPlaysection.transform.GetChild(x).GetChild(4).gameObject.transform.position.z;
+                float point3Z = RiverPlaysection.transform.GetChild(x).GetChild(4).gameObject.transform.localPosition.z;
 
                 //objPoint1.transform.position.Set();
                 if (randomTreasurePos == 0)
                 {
-                    objPoint1.transform.localPosition = new Vector3(rand.Next(-6, 9), randomTreasure.transform.position.y, randomTreasure.transform.position.z);
+                    objPoint1.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point1Z);
+
+                    if (randomObstacle1.name == "Obstacle_Pillar")
+                    {
+                        objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point2Z);
+                    }
+                    else
+                    {
+                        objPoint2.transform.Rotate(objPoint2.transform.position, rand.Next(-70,71));
+                    }
+
+                    if (randomObstacle2.name == "Obstacle_Pillar")
+                    {
+                        objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point3Z);
+                    }
+                    else
+                    {
+                        objPoint3.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
+                    }
+
                     GameObject tresure = Instantiate(randomTreasure,objPoint1.transform);
                     GameObject ob1 = Instantiate(randomObstacle1, objPoint2.transform);
                     GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
                 }
                 else if (randomTreasurePos == 1)
                 {
-                    objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 9), randomTreasure.transform.position.y, randomTreasure.transform.position.z);
+                    objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point2Z);
+
+                    Debug.Log(objPoint2.transform.localPosition);
+                    if (randomObstacle1.name == "Obstacle_Pillar")
+                    {
+                        objPoint1.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point1Z);
+                    }
+                    else
+                    {
+                        objPoint1.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
+                    }
+                    if (randomObstacle2.name == "Obstacle_Pillar")
+                    {
+                        objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point3Z);
+                    }
+                    else
+                    {
+                        objPoint3.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
+                    }
+
                     GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
                     GameObject tresure = Instantiate(randomTreasure, objPoint2.transform);
                     GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
                 }
                 else
                 {
-                    objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 9), randomTreasure.transform.position.y, randomTreasure.transform.position.z);
+                    objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point3Z);
+
+                    Debug.Log(objPoint3.transform.localPosition);
+                    if (randomObstacle1.name == "Obstacle_Pillar")
+                    {
+                        objPoint1.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point1Z);
+                    }
+                    else
+                    {
+                        objPoint1.transform.Rotate(objPoint1.transform.position, rand.Next(-70, 71));
+                    }
+                    if (randomObstacle2.name == "Obstacle_Pillar")
+                    {
+                        objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point2Z);
+                    }
+                    else
+                    {
+                        objPoint2.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
+                    }
+
                     GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
                     GameObject ob2 = Instantiate(randomObstacle2, objPoint2.transform);
                     GameObject tresure = Instantiate(randomTreasure, objPoint3.transform);
@@ -86,12 +141,5 @@ public class S_RiverBuilder : MonoBehaviour
         //spawn the amount of river segemnts requested
         spawnedSegments.Add(GameObject.Find("RiverStart"));
 
-        PlaceThings(spawnedSegments[0]);
-    }
-
-    //choose a location from the list to place the item
-    private void PlaceThings(GameObject spawnThis)
-    {
-        GameObject newSpawn = Instantiate(spawnThis, spawnedSegments[0].transform);
     }
 }

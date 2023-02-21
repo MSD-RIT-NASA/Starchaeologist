@@ -21,8 +21,8 @@ public class S_RiverGame : MonoBehaviour
     [SerializeField] GameObject raftObject;
     private Quaternion vrCameraRotation;
 
-    public List<GameObject> riverReferences = new List<GameObject>(); //populated with positions while the river is being built from the S_RiverBuilder script
-    Vector3 nextDestination = new Vector3(0, 0, 0);
+    public List<GameObject> riverReferences; //populated with positions while the river is being built from the S_RiverBuilder script
+    Vector3 nextDestination;
     Vector3 currentDirection = new Vector3(0, 0, 1);
     public float raftAcceleration = 0.1f;
     public float raftSpeed = 3.0f;
@@ -74,6 +74,7 @@ public class S_RiverGame : MonoBehaviour
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
         communicateReference = GetComponent<PythonCommunicator>();
         vrCameraRotation = vrCamera.transform.rotation;
+        nextDestination = riverReferences[0].transform.position;
         //pythonCommunicator.Start();
     }
 
@@ -120,16 +121,6 @@ public class S_RiverGame : MonoBehaviour
         currentSpeed = Mathf.Clamp(currentSpeed, 0.25f, raftSpeed);
         raftScript.tiltRange = Mathf.Clamp(raftScript.tiltRange, 0.25f, raftScript.maxRange);
 
-        //Direct the raft to the next checkpoint
-        //Vector3 desiredDirection = Vector3.Normalize(nextDestination - raftReference.transform.position);
-        /*if (Mathf.Abs(Vector3.Angle(desiredDirection, currentDirection)) < 1f)
-        {
-            currentDirection = desiredDirection;
-        }
-        else
-        {
-            currentDirection = Vector3.Normalize(currentDirection + (desiredDirection * Time.deltaTime * currentSpeed));
-        }*/
         Vector3 desiredDirection;
         if (raftObject.transform.localPosition.x > 7.0f)
         {
@@ -159,7 +150,7 @@ public class S_RiverGame : MonoBehaviour
         {
             checkpointIndex++;
 
-            if (checkpointIndex == riverReferences.Count - 1)//if this is the last checkpoint to go to, start slowing down the raft
+            if (checkpointIndex == riverReferences.Count-1)//if this is the last checkpoint to go to, start slowing down the raft
             {
                 slowDown = true;
                 nextDestination = riverReferences[checkpointIndex].transform.GetChild(1).transform.position;
