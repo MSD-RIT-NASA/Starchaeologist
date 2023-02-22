@@ -1,6 +1,6 @@
 #
 #  server.py
-#  Created by: William Johnson
+#  Authors: Angela Hudak & Corey Sheirden
 
 from threading import Thread
 from pubsub import pub
