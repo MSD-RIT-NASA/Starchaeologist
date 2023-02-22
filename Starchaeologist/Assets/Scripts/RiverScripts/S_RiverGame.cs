@@ -19,8 +19,11 @@ public class S_RiverGame : MonoBehaviour
 
     [SerializeField] Camera vrCamera;
     [SerializeField] GameObject raftObject;
+    
+
     private Quaternion vrCameraRotation;
 
+    [SerializeField] GameObject raftEndPoint;
     public List<GameObject> riverReferences; //populated with positions while the river is being built from the S_RiverBuilder script
     Vector3 nextDestination;
     Vector3 currentDirection = new Vector3(0, 0, 1);
@@ -31,6 +34,9 @@ public class S_RiverGame : MonoBehaviour
     bool slowDown = false;
     bool playerAttached = false;
     int checkpointIndex = 0;
+    
+
+
 
     //python variables
     /*
@@ -104,18 +110,20 @@ public class S_RiverGame : MonoBehaviour
 
     void MoveRaft()
     {
-
         //accelerate or decelerate the raft
         if (currentSpeed != raftSpeed && !slowDown)
         {
+            
             currentSpeed = currentSpeed + (raftAcceleration * Time.deltaTime * raftSpeed * 5f);
 
             raftScript.tiltRange = raftScript.tiltRange + (raftAcceleration * Time.deltaTime * raftScript.maxRange * 5f);
         }
         else if (slowDown)
         {
+            raftAcceleration = Mathf.Abs((0 - currentSpeed) / (Mathf.Abs(2 * (raftObject.transform.position.z - raftEndPoint.transform.position.z))));
+            Debug.Log("Current Acceleration:" + raftAcceleration);
             currentSpeed = currentSpeed - (raftAcceleration * Time.deltaTime * raftSpeed);
-
+            Debug.Log("Current Speed:"+currentSpeed);
             raftScript.tiltRange = raftScript.tiltRange - (raftAcceleration * Time.deltaTime * raftScript.maxRange);
         }
         currentSpeed = Mathf.Clamp(currentSpeed, 0.25f, raftSpeed);
