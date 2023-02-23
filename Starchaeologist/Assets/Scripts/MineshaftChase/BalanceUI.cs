@@ -53,14 +53,14 @@ public class BalanceUI : MonoBehaviour
             safeZone.transform.eulerAngles = new Vector3(
                 safeZone.transform.eulerAngles.x,
                 safeZone.transform.eulerAngles.y,
-                -10f);
+                -20f);
         }
         else if (other.gameObject.tag == "LeftTrack")
         {
             safeZone.transform.eulerAngles = new Vector3(
                 safeZone.transform.eulerAngles.x,
                 safeZone.transform.eulerAngles.y,
-                10f);
+                20f);
         }
     }
 }
