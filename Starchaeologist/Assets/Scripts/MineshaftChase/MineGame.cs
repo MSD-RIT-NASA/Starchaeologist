@@ -25,7 +25,10 @@ public class MineGame : MonoBehaviour
 
     public AudioSource soundfxSource;
     public AudioClip railGrinding_SFX;
-    public AudioClip explosion_SFX;
+    public AudioClip railRiding_SFX;
+    public AudioClip explosion1_SFX;
+    public AudioClip explosion2_SFX;
+    public AudioClip explosion3_SFX;
     public AudioClip bats_SFX;
     public AudioClip treasure_SFX;
     public AudioClip obstacleHit_SFX;
@@ -69,6 +72,7 @@ public class MineGame : MonoBehaviour
         //start the game by moving the raft
         if (timeToMove)
         {
+            soundfxSource.PlayOneShot(railRiding_SFX);
             //stick the player under the raft gameobject to help with movement
             if (!playerAttached)
             {
