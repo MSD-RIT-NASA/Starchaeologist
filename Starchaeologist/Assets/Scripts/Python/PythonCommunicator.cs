@@ -41,6 +41,7 @@ public class PythonCommunicator : MonoBehaviour
      * Main Menu = 0
      * River Ride = 1
      * Puzzling Times = 2
+     * Minecart Chase = 3
      */
     public int gameMode = 0;
 

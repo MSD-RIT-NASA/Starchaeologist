@@ -19,9 +19,8 @@ public class SpawnBats : MonoBehaviour
     void Start()
     {
         numBats = 0;
-        batSpeed = 0.05f;
+        batSpeed = 0.075f;
         bats = new List<GameObject>();
-        InvokeRepeating("BatSpawn", 0.0f, 0.3f);
     }
 
     // Update is called once per frame
@@ -29,14 +28,21 @@ public class SpawnBats : MonoBehaviour
     {
         for(int i = 0; i < numBats; i++)
         {
-            bats[i].transform.position += bats[i].transform.up * batSpeed;
+            if (bats[i] != null)
+            {
+                bats[i].transform.position += bats[i].transform.up * batSpeed;
+            }
         }
     }
 
 
-    public void RepeatBat()
+    private void OnTriggerEnter(Collider other)
     {
-        //Invoke("BatSpawn", 0.2f);
+        if (other.gameObject.tag == "Player")
+        {
+            Debug.Log("Spawn the bats");
+            InvokeRepeating("BatSpawn", 0.0f, 0.3f);
+        }
     }
 
 
@@ -53,6 +59,15 @@ public class SpawnBats : MonoBehaviour
         if(numBats > 10)
         {
             CancelInvoke("BatSpawn");
+        }
+    }
+
+    public void DeleteBats()
+    {
+        for (int i = 0; i < bats.Count; i++)
+        {
+            Destroy(bats[i]);
+            bats[i] = null;
         }
     }
 }
