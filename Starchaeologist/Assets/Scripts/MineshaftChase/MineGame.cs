@@ -15,8 +15,8 @@ public class MineGame : MonoBehaviour
     public List<GameObject> trackReferences = new List<GameObject>(); //populated with positions while the mine is being built from the S_MineBuilder script
     Vector3 nextDestination = new Vector3(0, 0, 0);
     Vector3 currentDirection = new Vector3(0, 0, 1);
-    public float cartAcceleration = 0.1f;
-    public float cartSpeed = 3.0f;
+   // public float cartAcceleration = 0.1f;
+   // public float cartSpeed = 3.0f;
     float currentSpeed = 2f;
     public bool timeToMove = true; //turned true the first time the player teleports to the raft from the S_RaftCollision script
     bool slowDown = false;
@@ -70,6 +70,10 @@ public class MineGame : MonoBehaviour
             //go along the route on the track 
             if (coroutineAllowed && routeToGo < trackReferences.Count)
             {
+                if (trackReferences[routeToGo].transform.parent != null)
+                {
+                    speedModifier = 0.43f;
+                }
                 StartCoroutine(GoByTheRoute(routeToGo));
             }
             //if it's the end of the track then stop moving 
@@ -115,17 +119,18 @@ public class MineGame : MonoBehaviour
             Vector3 upVec = raftReference.transform.up;
             raftReference.transform.LookAt(objectPosition, upVec);
             raftReference.transform.position = objectPosition;
-            objectPosition.y += 1;
+            objectPosition.y += 1.5f;
             playerReference.transform.LookAt(objectPosition);
             playerReference.transform.position = objectPosition;
 
-            if (routeToGo < trackReferences.Count - 1)
-            {
-                //Put the shadow in front of the player
-                objectPosition = Mathf.Pow(1 - tParam, 3) * p02 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p12 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p22 + Mathf.Pow(tParam, 3) * p32;
-                shadowReference.transform.LookAt(objectPosition);
-                shadowReference.transform.position = objectPosition;
-            }
+            //SHADOW CODE
+            //if (routeToGo < trackReferences.Count - 1)
+            //{
+            //    //Put the shadow in front of the player
+            //    objectPosition = Mathf.Pow(1 - tParam, 3) * p02 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p12 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p22 + Mathf.Pow(tParam, 3) * p32;
+            //    shadowReference.transform.LookAt(objectPosition);
+            //    shadowReference.transform.position = objectPosition;
+            //}
             yield return 0;
         }
 

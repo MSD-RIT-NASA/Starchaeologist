@@ -70,15 +70,60 @@ public class MineBuilder : MonoBehaviour
 
             spawnedSegments.Add(newSpawn);
             spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
-            
             //spawn objects on the segment
             PlaceObjects(spawnedSegments[i], obstaclePrefabs);
             PlaceObjects(spawnedSegments[i], treasurePrefabs);
             i++;
         }
 
-        //add track for sensory deprevation
-        //loop through track to place the individual tracks
+       
+        //add track for sensory overload
+        GameObject newpawn = Instantiate(sensorySegment);
+        newpawn.transform.position = spawnPosition;
+        newpawn.transform.rotation = spawnRotation;
+        //loop through track to get the route on each
+        for (int x = 0; x < sensorySegment.transform.childCount; x++)
+        {
+            if(i >= 2)
+            {
+                newpawn.transform.GetChild(x).gameObject.SetActive(false);
+            }
+            for (int y = 9; y < 13; y++)
+            {
+                GameObject light = newpawn.transform.GetChild(x).gameObject.transform.GetChild(y).transform.gameObject;
+                if (light.tag == "Light")
+                {
+                    light.AddComponent(typeof(FlickeringLights));
+                }
+            }
+            spawnedSegments.Add(newpawn.transform.GetChild(x).gameObject);
+            spawnedTransforms.Add(newpawn.transform.GetChild(x).gameObject.transform.GetChild(2).transform);
+        }
+
+        spawnPosition = newpawn.transform.GetChild(sensorySegment.transform.childCount-1).GetChild(0).transform.position;
+        spawnRotation = newpawn.transform.GetChild(sensorySegment.transform.childCount-1).GetChild(0).transform.rotation;
+
+        //add track for sensory depervation
+        for(int x = 0; x < 3; x ++)
+        {
+            newpawn = Instantiate(segmentArray[0][0]);
+            newpawn.transform.position = spawnPosition;
+            newpawn.transform.rotation = spawnRotation;
+            for(int y = 9; y< 13; y++)
+            {
+                newpawn.transform.GetChild(y).transform.gameObject.SetActive(false);
+            }
+            if (i >= 2)
+            {
+                newpawn.SetActive(false);
+            }
+            spawnPosition = newpawn.transform.GetChild(0).transform.position;
+            spawnRotation = newpawn.transform.GetChild(0).transform.rotation;
+
+            spawnedSegments.Add(newpawn);
+            spawnedTransforms.Add(newpawn.transform.GetChild(2).transform);
+        }
+
 
         //add end of track
         GameObject endReference = GameObject.Find("TrackEnd");
@@ -89,10 +134,9 @@ public class MineBuilder : MonoBehaviour
         spawnedTransforms.Add(endReference.transform.GetChild(2).transform);
 
         //place objects on the end track
+       
         PlaceObjects(spawnedSegments[i], obstaclePrefabs);
-        PlaceObjects(spawnedSegments[i+1], obstaclePrefabs);
         PlaceObjects(spawnedSegments[i], treasurePrefabs);
-        PlaceObjects(spawnedSegments[i+1], treasurePrefabs);
 
         //place shadow 
         shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
