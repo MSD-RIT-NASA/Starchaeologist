@@ -72,7 +72,7 @@ public class MineGame : MonoBehaviour
         //start the game by moving the raft
         if (timeToMove)
         {
-            soundfxSource.PlayOneShot(railRiding_SFX);
+            //soundfxSource.PlayOneShot(railRiding_SFX);
             //stick the player under the raft gameobject to help with movement
             if (!playerAttached)
             {
