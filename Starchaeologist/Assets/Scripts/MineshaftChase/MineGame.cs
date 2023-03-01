@@ -147,7 +147,12 @@ public class MineGame : MonoBehaviour
         //optimization
         if (routeToGo - 2 >= 0)//disable track segments that are far behind the player
         {
-            trackReferences[routeToGo - 2].SetActive(false);
+            if (trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track(Clone)" &&
+                trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Right" && trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Left")
+            {
+                Debug.Log(trackReferences[routeToGo - 2].gameObject.name);
+                trackReferences[routeToGo - 2].SetActive(false);
+            }
         }
         if (routeToGo + 2 < trackReferences.Count)//enable segments that are getting close to the player
         {

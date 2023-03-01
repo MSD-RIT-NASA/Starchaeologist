@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44444633, g: 0.5292651, b: 0.57107574, a: 1}
+  m_IndirectSpecularColor: {r: 0.4443031, g: 0.5292234, b: 0.5711157, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4993,7 +4993,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   segmentCount: 5
-  artifactPieces: 4
   segmentPrefabs_2M:
   - {fileID: 8334820370785465784, guid: 33cc587a27f0a52449eeb1d0d0a24514, type: 3}
   - {fileID: 8334820370785465784, guid: aca9b1efba05bad41b39718dd1c05117, type: 3}
@@ -5026,15 +5025,6 @@ MonoBehaviour:
   - {fileID: 8334820370785465784, guid: bd882f62833009b428df797943af7199, type: 3}
   - {fileID: 8334820370785465784, guid: 0cc662535edc6644485e882e1c0c88ca, type: 3}
   - {fileID: 8334820370785465784, guid: 432f0ac7b35e7344e9ec5bfacddc03d1, type: 3}
-  caveEntrance: {fileID: 0}
-  cavePrefabs_2M: []
-  cavePrefabs_3M: []
-  cavePrefabs_4M: []
-  cavePrefabs_5M: []
-  caveTransitions_to_2M: []
-  caveTransitions_to_3M: []
-  caveTransitions_to_4M: []
-  caveTransitions_to_5M: []
   obstaclePrefabs:
   - {fileID: 356747112033410129, guid: 2414e1e2736b2de459356e7969baba87, type: 3}
   - {fileID: 8729715428549575470, guid: a1067955b624c8341a352b677a52a114, type: 3}
@@ -5065,6 +5055,8 @@ MonoBehaviour:
   playerReference: {fileID: 1315855801}
   raftReference: {fileID: 1671069995}
   riverWater: {fileID: 477218227}
+  vrCamera: {fileID: 0}
+  raftObject: {fileID: 0}
   riverReferences: []
   raftAcceleration: 0.0175
   raftSpeed: 2
@@ -5079,7 +5071,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 915549101}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04a4d4b21f28d6f4faf34a56a5b97215, type: 3}
   m_Name: 

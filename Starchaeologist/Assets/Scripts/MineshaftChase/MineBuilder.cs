@@ -55,7 +55,8 @@ public class MineBuilder : MonoBehaviour
         while (i < segmentCount-1)
         {
             //choose one of the available segment prefabs and place it at the end of the last placed piece
-            GameObject newSpawn = Instantiate(segmentArray[0][Random.Range(0, segmentArray[0].Count)]);
+            int randIndex = (int)Random.Range(0, segmentArray[0].Count);
+            GameObject newSpawn = Instantiate(segmentArray[0][randIndex]);
             newSpawn.transform.position = spawnPosition;
             newSpawn.transform.rotation = spawnRotation;
 
@@ -68,6 +69,20 @@ public class MineBuilder : MonoBehaviour
 
             spawnedSegments.Add(newSpawn);
             spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
+            if(segmentArray[0][randIndex].gameObject.name == "RepeatedTurns_Track")
+            {
+                for (int j = 11; j < 16; j++)
+                {
+                    newSpawn.transform.GetChild(j).gameObject.transform.position = spawnPosition;
+                    newSpawn.transform.GetChild(j).gameObject.transform.rotation = spawnRotation;
+                    spawnPosition = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.position;
+                    spawnRotation = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.rotation;
+
+                    spawnedSegments.Add(newSpawn.transform.GetChild(j).gameObject);
+                    spawnedTransforms.Add(newSpawn.transform.GetChild(j).transform.GetChild(2).transform);
+                    i++;
+                }
+            }
             
             //spawn objects on the segment
             PlaceObjects(spawnedSegments[i], obstaclePrefabs);
