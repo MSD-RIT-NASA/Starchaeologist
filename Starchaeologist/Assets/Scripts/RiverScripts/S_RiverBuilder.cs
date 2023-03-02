@@ -10,6 +10,7 @@ public class S_RiverBuilder : MonoBehaviour
     [SerializeField] GameObject RiverPlaysection;
     [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
     [SerializeField] List<GameObject> treasurePrefabs = new List<GameObject>();
+    [SerializeField] List<GameObject> attackAnimals = new List<GameObject>();
     System.Random rand = new System.Random();
 
     // Start is called before the first frame update
@@ -36,9 +37,10 @@ public class S_RiverBuilder : MonoBehaviour
             if (RiverPlaysection.transform.GetChild(x).childCount > 2)
             {
                 //randomization of obsicaleType,placement, and position/rotation
-                GameObject randomObstacle1 = obstaclePrefabs[rand.Next(0,2)];
-                GameObject randomObstacle2 = obstaclePrefabs[rand.Next(0, 2)];
+                GameObject randomObstacle1 = obstaclePrefabs[rand.Next(0,1)];
+                GameObject randomObstacle2 = obstaclePrefabs[rand.Next(0, 1)];
                 GameObject randomTreasure = treasurePrefabs[rand.Next(0, 8)];
+                GameObject randomAttackAnimal = attackAnimals[rand.Next(0, 2)];
                 int randomTreasurePos = rand.Next(0, 3);
                 int randomRot1 = rand.Next(0, 3);
                 int randomRot2 = rand.Next(0, 3);
@@ -53,7 +55,9 @@ public class S_RiverBuilder : MonoBehaviour
                 GameObject objPoint3 = RiverPlaysection.transform.GetChild(x).GetChild(4).gameObject;
                 float point3Z = RiverPlaysection.transform.GetChild(x).GetChild(4).gameObject.transform.localPosition.z;
 
-                //objPoint1.transform.position.Set();
+                GameObject attackAnimalPoint = RiverPlaysection.transform.GetChild(x).GetChild(5).gameObject;
+
+                //treasure can either be in object points 1-3 when chosen the other 2 points will be obstcales
                 if (randomTreasurePos == 0)
                 {
                     objPoint1.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point1Z);
@@ -76,6 +80,7 @@ public class S_RiverBuilder : MonoBehaviour
                         objPoint3.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
                     }
 
+                    Instantiate(randomAttackAnimal, attackAnimalPoint.transform);
                     GameObject tresure = Instantiate(randomTreasure,objPoint1.transform);
                     GameObject ob1 = Instantiate(randomObstacle1, objPoint2.transform);
                     GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
@@ -101,7 +106,7 @@ public class S_RiverBuilder : MonoBehaviour
                     {
                         objPoint3.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
                     }
-
+                    Instantiate(randomAttackAnimal, attackAnimalPoint.transform);
                     GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
                     GameObject tresure = Instantiate(randomTreasure, objPoint2.transform);
                     GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
@@ -127,7 +132,7 @@ public class S_RiverBuilder : MonoBehaviour
                     {
                         objPoint2.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
                     }
-
+                    Instantiate(randomAttackAnimal, attackAnimalPoint.transform);
                     GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
                     GameObject ob2 = Instantiate(randomObstacle2, objPoint2.transform);
                     GameObject tresure = Instantiate(randomTreasure, objPoint3.transform);

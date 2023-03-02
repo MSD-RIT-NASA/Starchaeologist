@@ -38,8 +38,8 @@ public class scoreScript : MonoBehaviour
 
         // txt= GameObject.Find("Score").GetComponentInChildren<Text>();
         // txt.enabled = false;
-        txtBlip= GameObject.Find("ScoreBlip").GetComponentInChildren<Text>();
-        txtBlip.enabled = false;
+        /*txtBlip= GameObject.Find("ScoreBlip").GetComponentInChildren<Text>();
+        txtBlip.enabled = false;*/
         // txtMenu= GameObject.Find("ScoreMenu").GetComponent<Text>();
         // txtMenu.enabled = false;
         // txtCalibration= GameObject.Find("CalibrationMsg").GetComponent<Text>();

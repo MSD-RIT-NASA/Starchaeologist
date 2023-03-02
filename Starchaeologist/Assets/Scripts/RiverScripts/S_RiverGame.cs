@@ -120,8 +120,18 @@ public class S_RiverGame : MonoBehaviour
         }
         else if (slowDown)
         {
-            raftAcceleration = Mathf.Abs((0 - currentSpeed) / (Mathf.Abs(2 * (raftObject.transform.position.z - raftEndPoint.transform.position.z))));
+            if (currentSpeed <= 0.25f)
+            {
+                //after the user reaches a certain speed we will begin to speed up deceleration
+                raftAcceleration = 25;
+            }
+            else
+            {
+                //using the distance and the current speed of the raft we can calcuate how great our acceleration vector needs to be to come to a stop
+                raftAcceleration = Mathf.Abs((0 - currentSpeed) / (Mathf.Abs(2 * (raftObject.transform.position.z - raftEndPoint.transform.position.z))));
+            }
             Debug.Log("Current Acceleration:" + raftAcceleration);
+
             currentSpeed = currentSpeed - (raftAcceleration * Time.deltaTime * raftSpeed);
             Debug.Log("Current Speed:"+currentSpeed);
             raftScript.tiltRange = raftScript.tiltRange - (raftAcceleration * Time.deltaTime * raftScript.maxRange);
@@ -140,7 +150,7 @@ public class S_RiverGame : MonoBehaviour
         }
         else
         {
-            desiredDirection = new Vector3(-vrCamera.transform.rotation.z, 0, 1);
+            desiredDirection = new Vector3(vrCamera.transform.rotation.z, 0, 1);
         }
 
         currentDirection= desiredDirection;
