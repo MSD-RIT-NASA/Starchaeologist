@@ -8,7 +8,7 @@ public class MineBuilder : MonoBehaviour
 
     [SerializeField] GameObject sensorySegment;
     [SerializeField] GameObject shadowReference;
-    [SerializeField] int segmentCount = 5;
+    public int segmentCount = 6;
 
     List<GameObject> spawnedSegments = new List<GameObject>();
     List<Transform> spawnedTransforms = new List<Transform>();
@@ -57,7 +57,8 @@ public class MineBuilder : MonoBehaviour
         while (i < segmentCount-1)
         {
             //choose one of the available segment prefabs and place it at the end of the last placed piece
-            GameObject newSpawn = Instantiate(segmentArray[0][Random.Range(0, segmentArray[0].Count)]);
+            int randIndex = (int)Random.Range(0, segmentArray[0].Count);
+            GameObject newSpawn = Instantiate(segmentArray[0][randIndex]);
             newSpawn.transform.position = spawnPosition;
             newSpawn.transform.rotation = spawnRotation;
 
@@ -70,6 +71,21 @@ public class MineBuilder : MonoBehaviour
 
             spawnedSegments.Add(newSpawn);
             spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
+            if(segmentArray[0][randIndex].gameObject.name == "RepeatedTurns_Track")
+            {
+                for (int j = 11; j < 16; j++)
+                {
+                    newSpawn.transform.GetChild(j).gameObject.transform.position = spawnPosition;
+                    newSpawn.transform.GetChild(j).gameObject.transform.rotation = spawnRotation;
+                    spawnPosition = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.position;
+                    spawnRotation = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.rotation;
+
+                    spawnedSegments.Add(newSpawn.transform.GetChild(j).gameObject);
+                    spawnedTransforms.Add(newSpawn.transform.GetChild(j).transform.GetChild(2).transform);
+                    i++;
+                }
+            }
+            
             //spawn objects on the segment
             PlaceObjects(spawnedSegments[i], obstaclePrefabs);
             PlaceObjects(spawnedSegments[i], treasurePrefabs);
@@ -158,6 +174,14 @@ public class MineBuilder : MonoBehaviour
         int place = Random.Range(0, 3);
         while(count>0)
         {
+            if(placements[place].name == "ObstaclePointMid")
+            {
+                objectToPlace = 1;
+            }
+            else
+            {
+                objectToPlace = 0;
+            }
             Instantiate(objects[objectToPlace], placements[place].transform);
             placements.Remove(placements[place]);
             objectToPlace = Random.Range(0, objects.Count);
