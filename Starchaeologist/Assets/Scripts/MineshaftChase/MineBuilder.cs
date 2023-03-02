@@ -99,8 +99,8 @@ public class MineBuilder : MonoBehaviour
         PlaceObjects(spawnedSegments[i], obstaclePrefabs);
         PlaceObjects(spawnedSegments[i+1], obstaclePrefabs);
         //place shadow 
-        shadowReference.transform.position = spawnedSegments[1].transform.GetChild(0).transform.position;
-        shadowReference.transform.rotation = spawnedSegments[1].transform.GetChild(0).transform.rotation;
+        shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
+        shadowReference.transform.rotation = spawnedSegments[0].transform.GetChild(0).transform.rotation;
 
     }
 

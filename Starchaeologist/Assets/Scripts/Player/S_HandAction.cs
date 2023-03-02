@@ -23,17 +23,7 @@ public class S_HandAction : MonoBehaviour
     public bool leftHand = false;
     //leave alone in the editor
     public bool paused = false;
-
-
-    //Animation variables
-    Animator animator;
-
-    public float speed;
-
-    public float gripTarget;
-    public float triggerTarget;
-    public float gripCurrent;
-    public float triggerCurrent;
+    public Hand hand;
     /*PLAYER CONTROLS
 
     -teleport
@@ -55,7 +45,6 @@ public class S_HandAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //animator = GetComponent<Animator>();
         controller = GetComponent<ActionBasedController>();
         teleportRay = GetComponent<XRRayInteractor>();
         teleportLine = GetComponent<XRInteractorLineVisual>();
@@ -65,41 +54,42 @@ public class S_HandAction : MonoBehaviour
         controller.selectActionValue.action.performed += Action_Selec_Value;
         if(leftHand)
         {
-            controller.activateAction.action.performed += Action_Pause;
+            //controller.activateAction.action.performed += Action_Pause;
             transform.parent.GetChild(5).gameObject.SetActive(false);
             transform.parent.GetChild(6).gameObject.SetActive(false);
         }
     }
 
+    //------CURRENTLY BREAKS HANDS------//
     //pause the game when the menu button is pressed (left hand only)
-    private void Action_Pause(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        //grab references
-        S_HandAction rightHand =  transform.parent.GetChild(2).GetComponent<S_HandAction>();
-        GameObject rightRay =  transform.parent.GetChild(5).gameObject;
-        GameObject leftRay =  transform.parent.GetChild(6).gameObject;
+    //private void Action_Pause(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    //{
+    //    //grab references
+    //    S_HandAction rightHand =  transform.parent.GetChild(2).GetComponent<S_HandAction>();
+    //    GameObject rightRay =  transform.parent.GetChild(5).gameObject;
+    //    GameObject leftRay =  transform.parent.GetChild(6).gameObject;
 
-        //close the pause menu
-        if (paused)
-        {
-            Debug.Log("Unpause");
-            paused = false;
-            PauseMenu.singleton.Resume();
-            rightHand.paused = false;
-            rightRay.SetActive(false);
-            leftRay.SetActive(false);
-        }
-        else//open the pause menu
-        {
-            Debug.Log("Pause");
-            paused = true;
-            PauseMenu.singleton.Pause();
-            rightHand.paused = true;
-            rightRay.SetActive(true);
-            leftRay.SetActive(true);
-        }
+    //    //close the pause menu
+    //    if (paused)
+    //    {
+    //        Debug.Log("Unpause");
+    //        paused = false;
+    //        PauseMenu.singleton.Resume();
+    //        rightHand.paused = false;
+    //        rightRay.SetActive(false);
+    //        leftRay.SetActive(false);
+    //    }
+    //    else//open the pause menu
+    //    {
+    //        Debug.Log("Pause");
+    //        paused = true;
+    //        PauseMenu.singleton.Pause();
+    //        rightHand.paused = true;
+    //        rightRay.SetActive(true);
+    //        leftRay.SetActive(true);
+    //    }
 
-    }
+    //}
 
     //when the player presses the trigger, read the value
     private void Action_Selec_Value(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -118,35 +108,11 @@ public class S_HandAction : MonoBehaviour
         }
     }
 
-    //  internal void SetGrip(float v)
-    // {
-    //     gripTarget = v;
-    // }
-
-    // internal void SetTrigger(float v)
-    // {
-    //     triggerTarget = v;
-    // }
-
-    // void AnimateHand()
-    // {
-    //     if(gripCurrent != gripTarget)
-    //     {
-    //         gripCurrent = Mathf.MoveTowards(gripCurrent, gripTarget, Time.deltaTime * speed);
-    //         animator.SetFloat("Grip", gripCurrent);
-    //     }
-    //     //if(triggerCurrent != triggerTarget)
-    //     //{
-    //     //    triggerCurrent = Mathf.MoveTowards(triggerCurrent, triggerTarget, Time.deltaTime * speed);
-    //     //    animator.SetFloat("Trigger", triggerCurrent);
-    //     //}
-    // }
     
 
     // Update is called once per frame
     void Update()
     {
-        //AnimateHand();
         if(teleportRay && teleportLine)
         {
             teleportLine.enabled = teleportActive;
@@ -157,5 +123,8 @@ public class S_HandAction : MonoBehaviour
             }
             //teleportReticle.SetActive(isActive);
         }
+        //set the animation of the hands
+        hand.SetGrip(controller.selectAction.action.ReadValue<float>());
+        hand.SetTrigger(controller.activateAction.action.ReadValue<float>());
     }
 }

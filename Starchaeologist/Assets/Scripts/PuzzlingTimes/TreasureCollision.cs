@@ -12,19 +12,38 @@ public class TreasureCollision : MonoBehaviour
 {
     //void OnTriggerEnter(Collider other)
     //{
+    //    Debug.Log("collides with " + other.gameObject.tag);
     //    //when the player hits the obstacle, tell the game manager to deduct points
     //    if (other.gameObject.CompareTag("PlayerHand"))
     //    {
-    //        //Destroy(gameObject);
+    //        Destroy(gameObject);
+    //        Debug.Log("Touched Treasure");
     //    }
     //}
 
-    void OnTriggerExit(Collider other)
+    //void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("PlayerHand"))
+    //    {
+    //        Debug.Log("Gathered Treasure");
+    //        Destroy(gameObject);
+    //        Debug.Log("Deleted");
+    //    }
+    //}
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.CompareTag("PlayerHand"))
+        if (collision.collider.gameObject.CompareTag("PlayerHand"))
+        {
+            Debug.Log("Toucing Treasure");
+        }
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.collider.gameObject.CompareTag("PlayerHand"))
         {
             Debug.Log("Gathered Treasure");
             Destroy(gameObject);
+            Debug.Log("Deleted");
         }
     }
 }
