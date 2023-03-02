@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class MineGame : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class MineGame : MonoBehaviour
     [SerializeField] GameObject playerReference;
     [SerializeField] GameObject shadowReference;
     [SerializeField] Minecart raftReference;
+    [SerializeField] Timer timer;
     S_MineCart raftScript;
 
     public List<GameObject> trackReferences = new List<GameObject>(); //populated with positions while the mine is being built from the S_MineBuilder script
@@ -22,6 +24,11 @@ public class MineGame : MonoBehaviour
     bool slowDown = false;
     bool playerAttached = false;
     int checkpointIndex = 0;
+
+    [SerializeField]
+    private GameObject countdown;
+    [SerializeField]
+    private TMP_Text countdownText;
 
     public AudioSource soundfxSource;
     public AudioClip railGrinding_SFX;
@@ -69,6 +76,15 @@ public class MineGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (timer.TimeRemaining > 0) {
+            countdownText.text = "" + ((int)timer.TimeRemaining + 1);
+        }
+        else
+        {
+            countdown.SetActive(false);
+            timeToMove = true;
+        }
+
         //start the game by moving the raft
         if (timeToMove)
         {
