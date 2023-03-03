@@ -41,8 +41,6 @@ public class MineGame : MonoBehaviour
     public AudioClip obstacleHit_SFX;
 
     private Vector3 playerFallPos;
-
-    [SerializeField]
     private Vector3 playerFallVel;
     private Vector3 playerFallAccel;
 
@@ -100,7 +98,10 @@ public class MineGame : MonoBehaviour
         //start the game by moving the raft
         if (timeToMove)
         {
-            //soundfxSource.PlayOneShot(railRiding_SFX);
+            if (!soundfxSource.isPlaying)
+            {
+                soundfxSource.PlayOneShot(railRiding_SFX);
+            }
             //stick the player under the raft gameobject to help with movement
             if (!playerAttached)
             {
@@ -157,6 +158,7 @@ public class MineGame : MonoBehaviour
             objectPosition.y += 1;
             playerReference.transform.LookAt(objectPosition);
             playerReference.transform.position = objectPosition;
+            this.transform.position = objectPosition;
 
             if (routeToGo < trackReferences.Count - 1)
             {
