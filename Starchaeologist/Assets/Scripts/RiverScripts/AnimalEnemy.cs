@@ -45,6 +45,7 @@ public class AnimalEnemy : MonoBehaviour
         {
             chaseEnded = true;
             isAttacking = false;
+            scoreScript.Instance.hitScore();
         }
         //if the animal was attacking but the player moved out of the way disable the creature
         if (hasEntered && raft.GetComponent<BoxCollider>().bounds.Intersects(transform.GetComponent<SphereCollider>().bounds) == false)
@@ -60,6 +61,7 @@ public class AnimalEnemy : MonoBehaviour
             Vector3 direction = Vector3.Normalize(raft.transform.position - transform.position);
             //move towards the player
             transform.position += velocity * direction * Time.deltaTime;
+            transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(-direction), Time.deltaTime * 40f);
             isAttacking = true;
         }
     }
