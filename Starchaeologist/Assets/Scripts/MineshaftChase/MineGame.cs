@@ -76,7 +76,7 @@ public class MineGame : MonoBehaviour
 
         routeToGo = 0;
         tParam = 0f;
-        speedModifier = 0.4f;
+        speedModifier = 0.55f;
         coroutineAllowed = true;
     }
 
@@ -171,7 +171,7 @@ public class MineGame : MonoBehaviour
         }
 
         tParam = 0;
-        speedModifier = speedModifier * 0.90f;
+        //speedModifier = speedModifier * 0.90f;
         routeToGo += 1;
 
 
