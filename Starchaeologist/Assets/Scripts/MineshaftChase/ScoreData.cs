@@ -17,6 +17,8 @@ public class ScoreData : MonoBehaviour
     public TMP_Text playerDataBox;
     public List<TMP_Text> leaderboardEntries;
 
+    private TouchScreenKeyboard keyboard;
+
     private StreamReader reader;
     private StreamWriter writer;
 
@@ -182,7 +184,9 @@ public class ScoreData : MonoBehaviour
         playerDataBox.text = dataText;
     }
 
-
+    /// <summary>
+    /// Puts the player data in order by score
+    /// </summary>
     private void SortPlayers()
     {
         int topScorerIndex = 0;
@@ -202,5 +206,10 @@ public class ScoreData : MonoBehaviour
             players[o] = players[topScorerIndex];
             players[topScorerIndex] = tempPlayer;
         }
+    }
+
+    public void ShowKeyboard()
+    {
+        keyboard = TouchScreenKeyboard.Open(playerName.text, TouchScreenKeyboardType.Default);
     }
 }
