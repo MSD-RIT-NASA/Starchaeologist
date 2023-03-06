@@ -41,6 +41,7 @@ public class PythonCommunicator : MonoBehaviour
      * Main Menu = 0
      * River Ride = 1
      * Puzzling Times = 2
+     * Minecart = 3
      */
     public int gameMode = 0;
 
@@ -51,11 +52,14 @@ public class PythonCommunicator : MonoBehaviour
     //rotation
     public Vector2 desiredRotation = new Vector2(0, 0);
     public Vector2 realRotation = new Vector2(0, 0);
+    // getMovement
+    // sendMovement
+
 
     //score
-    bool transferScore = false;
-    float gameScore = -1f;
-    float balanceScore = -1f;
+    bool isCalibrated = false;
+    public bool calibrateRig = false;
+    float getBalanceScore = -1f;
 
     //killswitch
     bool killIt = false;
@@ -63,6 +67,11 @@ public class PythonCommunicator : MonoBehaviour
 
     //Quit game
     bool quitGame = false;
+    bool gameOver = false;
+    bool gameStart = false;
+    bool gamePaused = false;
+    bool txPlatformMovement = false;
+    //string gameProfiles = null;
 
     //stop the thread if the script is destroyed
     void OnDestroy()
@@ -101,6 +110,8 @@ public class PythonCommunicator : MonoBehaviour
         communicateThread.Join();
     }
 
+
+
     //this method will be threaded and handles sending, receiving, and reading messages with the python server
     void Communicate()
     {
@@ -112,30 +123,90 @@ public class PythonCommunicator : MonoBehaviour
             if (threadRunning)
             {
                 //send messages
-                if(quitGame)//the game is quitting
+
+                // if(quitGame)//the game is quitting
+                // {
+                //     quitGame = false;
+                //     Debug.Log("Quit Game");
+                //     NetMQConfig.Cleanup();
+                //     //TO DO
+                //     //quit the game
+                //     Application.Quit();
+                //     return;
+                // }
+
+                if(gameStart) // the game starts
                 {
-                    quitGame = false;
-                    Debug.Log("Quit Game");
-                    threadRunning = false;
+                    // for levels 1 and 2 this must be called AFTER confirmation of calibration
+                    //
+                    // start collecting balance data 
+                    
+                }
+
+                else if(gameOver) // the game ends
+                {
+                    Debug.Log("Game Over");
                     NetMQConfig.Cleanup();
-                    //TO DO
-                    //quit the game
+                    // stop acctuators
+                    // get the balance score
+                    // end the game
+                    // close the server,,,,, i think
+
+
                     Application.Quit();
+
                     return;
                 }
-                else if(transferScore)//send the score
+
+                // when the game is paused, it must pause receiving / collecting sensor data, 
+                // then recalibrate, then start collecting agin
+                else if(gamePaused)
                 {
-                    Debug.Log("Sending Score");
-                    transferScore = false;
-                    string giveScore = "calibrate " + gameScore + " " + gameMode;
-                    client.SendFrame(giveScore);
+                    return;
                 }
-                else//send the desired rotation
+
+                // // for getting and naming the .txt file of sensor data collection
+                // else if(gameProfiles)
+                // {
+                //     return;
+                // }
+
+                else if(txPlatformMovement) // Game 2 when sending different floor movements
                 {
-                    //Debug.Log("Sending Rotation");
-                    string giveRotation = "rotation " + desiredRotation.x + " " + desiredRotation.y;
-                    client.SendFrame(giveRotation);
+
+                    return;
                 }
+
+
+                else if(calibrateRig) 
+                {
+                    Debug.Log("startCalibrating");
+                    string msg = "startCalibrating";
+                    client.SendFrame(msg);
+                    //client.Send("startCalibrating");
+                
+
+                    // transferScore = false;
+                    // string giveScore = "calibrate " + gameScore + " " + gameMode;
+                    // client.SendFrame(giveScore);
+                    return;
+                }
+
+                // else if(gameMode)
+                // {
+                //     //send over the game mode
+                //     return;
+                // }
+
+                
+
+                // else//send the desired rotation
+                // {
+                //     //Debug.Log("Sending Rotation");
+                //     string giveRotation = "rotation " + desiredRotation.x + " " + desiredRotation.y;
+                //     client.SendFrame(giveRotation);
+                // }
+
 
 
                 //receive messages
@@ -169,8 +240,31 @@ public class PythonCommunicator : MonoBehaviour
                             NetMQConfig.Cleanup();
                             Application.Quit();
                             return;
+                        case "calibratedRigsuccess":
+                            // when the message calibrated is received then 
+                            Debug.Log("Sensors calibrated");
+                            isCalibrated = true;
+                            // then allow user to step on platform
+                            //game start AFTER isCalibrated is true
+                            break;
+                        case "calibratedRigFailed":
+                            Debug.Log("Sensors not calibrated");
+                            isCalibrated = false;
+                            break;
+                        
+                        case "balanceScore":
+                            Debug.Log("Collecting balance score");
+                            // somehow collect the balance score?
+                            //getBalanceScore = 
+                            break;
+
+                        case "boardMove":
+                            Debug.Log("board moved!");
+                            //collect board data
+                            break;
+
                         default://the message is either about score or rotation
-                            SplitMessage(message);
+                            //SplitMessage(message);
                             break;
                     }
                 }
@@ -181,38 +275,38 @@ public class PythonCommunicator : MonoBehaviour
         NetMQConfig.Cleanup(); // this line is needed to prevent unity freeze after one use, not sure why yet
     }
 
-    //if the message isn't one of the one word commands, assume it's score or rotation and split it up
-    void SplitMessage(string message)
-    {
-        //split the string into two floats
-        string[] splitMessage = message.Split(' ');
+    // //if the message isn't one of the one word commands, assume it's score or rotation and split it up
+    // void SplitMessage(string message)
+    // {
+    //     //split the string into two floats
+    //     string[] splitMessage = message.Split(' ');
 
-        /*TODO
-         -the final balance score will probably end up being multiple variables. read them accordingly
-         */
-        if (splitMessage[0] == "calibrateStop")//get the score data back and do something with it
-        {
-            balanceScore = float.Parse(splitMessage[1], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-        }
-        else if(splitMessage[0] == "rotation")//get the rotation back and set it
-        {
-            float xRotation = float.Parse(splitMessage[1], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-            float zRotation = float.Parse(splitMessage[2], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+    //     /*TODO
+    //      -the final balance score will probably end up being multiple variables. read them accordingly
+    //      */
+    //     if (splitMessage[0] == "calibrateStop")//get the score data back and do something with it
+    //     {
+    //         balanceScore = float.Parse(splitMessage[1], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+    //     }
+    //     else if(splitMessage[0] == "rotation")//get the rotation back and set it
+    //     {
+    //         float xRotation = float.Parse(splitMessage[1], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+    //         float zRotation = float.Parse(splitMessage[2], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
 
-            //The python sends negatives back as larger angles, this turns them back to negatives
-            if (xRotation > 180f)
-            {
-                xRotation = xRotation - 360f;
-            }
-            if (zRotation > 180f)
-            {
-                zRotation = zRotation - 360f;
-            }
+    //         //The python sends negatives back as larger angles, this turns them back to negatives
+    //         if (xRotation > 180f)
+    //         {
+    //             xRotation = xRotation - 360f;
+    //         }
+    //         if (zRotation > 180f)
+    //         {
+    //             zRotation = zRotation - 360f;
+    //         }
 
-            //set the rotation of the raft to the given rotation
-            realRotation = new Vector2(xRotation, zRotation);
+    //         //set the rotation of the raft to the given rotation
+    //         realRotation = new Vector2(xRotation, zRotation);
 
-            Debug.Log("Received: " + "xRotation(" + xRotation + "), zRotation(" + zRotation + ")");
-        }
-    }
+    //         Debug.Log("Received: " + "xRotation(" + xRotation + "), zRotation(" + zRotation + ")");
+    //    }
+//    }
 }

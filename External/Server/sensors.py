@@ -8,60 +8,47 @@ import logging
 import serial
 import time
 import math
+#from Server.server import server
 
-# Main funtion to receive data
-def main():
+import sys
+sys.path.insert(0, 'C:/Users/angel/Desktop/GPBA/External/Server')
+#from server import unityRead, unityWrite
 
-    # set up the serial line
-    ser = serial.Serial('COM10', 9600) # will need to change COM # per device
-    time.sleep(2)
+# # Main funtion to receive data
+# def main():
 
-    # reading if calibration was complete
-    if ser.readline().decode("ISO-8859-1").strip() == "Calibration completed" :
-        print("Calibration completed\n")
-        val = input("Step on sensor and type 'y' to begin or anykey to quit: ")
-        if val == "y":
-            ser.write(val.encode())
-            pass
+#     # set up the serial line
+#     ser = serial.Serial('COM10', 9600) # will need to change COM # per device
+#     time.sleep(2)
 
-        else:
-            return print("Exiting program")
+#     # reading if calibration was complete
+#     if ser.readline().decode("ISO-8859-1").strip() == "Calibration completed" :
+#         print("Calibration completed\n")
+#         val = input("Step on sensor and type 'y' to begin or anykey to quit: ")
+#         if val == "y":
+#             ser.write(val.encode()) #arduino code waits for 'y' to start collecting data
+#             pass
 
-    else:
-        print("recalibrating\n")
-        #ser.close()
-        main()
+#         else:
+#             return print("Exiting program")
 
-    # gather the data
-    data = getdata(ser)
-    ser.close()
+#     else:
+#         print("recalibrating\n")
+#         #ser.close()
+#         main()
+
+#     # gather the data
+#     data = getdata(ser)
+#     ser.close()
     
-    # calculate score
-    balance_score = getscore(data)
-    print("Final Score: " + str(balance_score))
+#     # calculate score
+#     balance_score = getscore(data)
+#     print("Final Score: " + str(balance_score))
 
-    return 0
+#     return 0
 
 
-# Grab sensor data from the arduino
-def getdata(ser):
 
-    balanceData = []
-    dataEntry = []
-
-    # TODO: Change this loop to continue for however long the game lasts. 
-    for i in range(1000):
-        #while True:
-                data = ser.readline().decode("ISO-8859-1").strip()       # read a byte string
-                if data == "END":
-                    balanceData.append(dataEntry)
-                    dataEntry = []
-                elif data == '' or data == "Calibration completed":
-                    continue
-                else:
-                    dataEntry.append(float(data))
-
-    return balanceData
 
 
 #   Convert the kg data to Newtons
@@ -133,5 +120,5 @@ def getscore(data):
     return score
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
