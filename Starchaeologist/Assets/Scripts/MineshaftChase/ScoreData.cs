@@ -11,13 +11,12 @@ public class ScoreData : MonoBehaviour
     public GameObject scoreCanvas;
     public GameObject leaderBoard;
     public GameObject playerDataCanvas;
+    [SerializeField] private KeyInput keyboardCanvas;
     public TMP_Text score;
-    public TMP_Text playerName;
-    public TMP_Text date;
+    public TMP_InputField playerName;
+    public TMP_InputField date;
     public TMP_Text playerDataBox;
     public List<TMP_Text> leaderboardEntries;
-
-    private TouchScreenKeyboard keyboard;
 
     private StreamReader reader;
     private StreamWriter writer;
@@ -42,6 +41,8 @@ public class ScoreData : MonoBehaviour
     void Update()
     {
         currentScene = SceneManager.GetActiveScene().name + "Scores";
+        playerName.text = keyboardCanvas.NameEdit;
+        date.text = keyboardCanvas.DateEdit;
     }
 
 
@@ -210,6 +211,16 @@ public class ScoreData : MonoBehaviour
 
     public void ShowKeyboard()
     {
-        keyboard = TouchScreenKeyboard.Open(playerName.text, TouchScreenKeyboardType.Default);
+        keyboardCanvas.gameObject.SetActive(true);
+    }
+
+    public void EditingName()
+    {
+        keyboardCanvas.EditingName = true;
+    }
+
+    public void EditingDate()
+    {
+        keyboardCanvas.EditingName = false;
     }
 }
