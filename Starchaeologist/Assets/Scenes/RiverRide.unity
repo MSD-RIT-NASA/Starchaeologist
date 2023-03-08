@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44444633, g: 0.5292651, b: 0.57107574, a: 1}
+  m_IndirectSpecularColor: {r: 0.4443034, g: 0.52922374, b: 0.5711163, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2825,7 +2825,7 @@ GameObject:
   - component: {fileID: 915549102}
   - component: {fileID: 915549103}
   - component: {fileID: 915549104}
-  - component: {fileID: 915549105}
+  - component: {fileID: 915549106}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -2939,7 +2939,7 @@ MonoBehaviour:
   rotationX: 0
   rotationZ: 0
   rotationChanged: 0
---- !u!114 &915549105
+--- !u!114 &915549106
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2948,12 +2948,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 915549101}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04a4d4b21f28d6f4faf34a56a5b97215, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d3783994fbea2a40957f325ae162a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameMode: 0
+  gameMode: 1
   desiredRotation: {x: 0, y: 0}
   realRotation: {x: 0, y: 0}
+  calibrateRig: 1
+  isTxStarted: 0
+  IP: 127.0.0.1
+  rxPort: 8000
+  txPort: 8001
 --- !u!1 &938760415
 GameObject:
   m_ObjectHideFlags: 0

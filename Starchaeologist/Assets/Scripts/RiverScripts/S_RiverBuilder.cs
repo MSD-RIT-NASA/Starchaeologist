@@ -54,10 +54,10 @@ public class S_RiverBuilder : MonoBehaviour
 
         //give the game script the list of river pieces
         GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
-        GetComponent<PythonCommunicator>().gameMode = 1;
+        //GetComponent<PythonCommunicator>().gameMode = 1; 
 
         //remove this script
-        Destroy(this);
+        Destroy(this); 
     }
 
     private void DataSetup()

@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        buttonClick = GetComponent<AudioSource>();
+        buttonClick = GetComponent<AudioSource>(); 
 
         Button btn1 = GameObject.Find("RiverRide").GetComponent<Button>();
         btn1.onClick.AddListener(Level1);
