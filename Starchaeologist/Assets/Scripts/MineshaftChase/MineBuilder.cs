@@ -120,13 +120,46 @@ public class MineBuilder : MonoBehaviour
         {
             if(placements[place].name == "ObstaclePointMid")
             {
-                objectToPlace = (int)Random.Range(0, 6);
+                objectToPlace = (int)Random.Range(0, 3);
             }
             else
             {
-                objectToPlace = (int)Random.Range(6, 8);
+                objectToPlace = (int)Random.Range(3, 5);
             }
-            Instantiate(objects[objectToPlace], placements[place].transform);
+            GameObject obst = Instantiate(objects[objectToPlace], placements[place].transform);
+
+
+            //Rotate, scale up, and move signs down
+            if (objectToPlace >= 3 && objectToPlace < 5)
+            {
+                obst.transform.localScale = new Vector3(
+                    obst.transform.localScale.x * 1f,
+                    obst.transform.localScale.y * 1.5f,
+                    obst.transform.localScale.z * 2.5f
+                );
+
+                obst.transform.position = new Vector3(
+                    obst.transform.position.x,
+                    obst.transform.position.y - 3f,
+                    obst.transform.position.z
+                    );
+
+                obst.transform.eulerAngles = new Vector3(
+                    obst.transform.eulerAngles.x,
+                    obst.transform.eulerAngles.y + 90,
+                    obst.transform.eulerAngles.z
+                    );
+            }
+            else
+            {
+                //Scale up stalactites
+                obst.transform.localScale = new Vector3(
+                    obst.transform.localScale.x * 1.5f,
+                    obst.transform.localScale.y * 1.5f,
+                    obst.transform.localScale.z * 1.5f
+                    );
+            }
+
             placements.Remove(placements[place]);
             objectToPlace = Random.Range(0, objects.Count);
             place = Random.Range(0, 2);
