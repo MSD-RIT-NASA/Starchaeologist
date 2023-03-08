@@ -14,6 +14,10 @@ public class MineBuilder : MonoBehaviour
     public List<GameObject> segmentPrefabs_2M = new List<GameObject>();
     public List<GameObject> obstaclePrefabs = new List<GameObject>();
     public List<GameObject> treasurePrefabs = new List<GameObject>();
+    [SerializeField]
+    private List<GameObject> supports = new List<GameObject>();
+    [SerializeField]
+    private List<GameObject> sceneryObjects = new List<GameObject>();
 
     List<GameObject>[] segmentArray;
 
@@ -69,9 +73,11 @@ public class MineBuilder : MonoBehaviour
 
             spawnedSegments.Add(newSpawn);
             spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
+
+            //If the track is a repeating turns track, add each turn as its own segment
             if(segmentArray[0][randIndex].gameObject.name == "RepeatedTurns_Track")
             {
-                for (int j = 11; j < 16; j++)
+                for (int j = 12; j < 17; j++)
                 {
                     newSpawn.transform.GetChild(j).gameObject.transform.position = spawnPosition;
                     newSpawn.transform.GetChild(j).gameObject.transform.rotation = spawnRotation;
@@ -80,6 +86,7 @@ public class MineBuilder : MonoBehaviour
 
                     spawnedSegments.Add(newSpawn.transform.GetChild(j).gameObject);
                     spawnedTransforms.Add(newSpawn.transform.GetChild(j).transform.GetChild(2).transform);
+                    PlaceSupports(spawnedSegments[i], supports);
                     i++;
                 }
             }
@@ -87,9 +94,10 @@ public class MineBuilder : MonoBehaviour
             //spawn objects on the segment
             PlaceObjects(spawnedSegments[i], obstaclePrefabs);
             PlaceObjects(spawnedSegments[i], treasurePrefabs);
+            PlaceSupports(spawnedSegments[i], supports);
             i++;
         }
-
+        
         GameObject endReference = GameObject.Find("TrackEnd");
         endReference.transform.position = spawnPosition;
         endReference.transform.rotation = spawnRotation;
@@ -98,6 +106,8 @@ public class MineBuilder : MonoBehaviour
         spawnedTransforms.Add(endReference.transform.GetChild(2).transform);
         PlaceObjects(spawnedSegments[i], obstaclePrefabs);
         PlaceObjects(spawnedSegments[i+1], obstaclePrefabs);
+        PlaceSupports(spawnedSegments[i], supports);
+        PlaceSupports(spawnedSegments[i+1], supports);
         //place shadow 
         shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
         shadowReference.transform.rotation = spawnedSegments[0].transform.GetChild(0).transform.rotation;
@@ -108,7 +118,8 @@ public class MineBuilder : MonoBehaviour
     private void PlaceObjects(GameObject segment, List<GameObject> objects)
     {
         List<GameObject> placements = new List<GameObject>();
-        for(int i = 0; i < 3; i++)
+
+        for (int i = 0; i < 3; i++)
         {
             placements.Add(segment.transform.GetChild(i + 3).gameObject);
         }
@@ -118,6 +129,7 @@ public class MineBuilder : MonoBehaviour
         int place = Random.Range(0, 3);
         while(count>0)
         {
+            //Put the stalactites in the middle
             if(placements[place].name == "ObstaclePointMid")
             {
                 objectToPlace = (int)Random.Range(0, 3);
@@ -165,5 +177,27 @@ public class MineBuilder : MonoBehaviour
             place = Random.Range(0, 2);
             count--;
         }
+    }
+
+    /// <summary>
+    /// Places one of three support models at the support point position in each track segment
+    /// </summary>
+    /// <param name="segment"></param>
+    /// <param name="beams"></param>
+    private void PlaceSupports(GameObject segment, List<GameObject> beams)
+    {
+        Transform placement = segment.transform.GetChild(6).gameObject.transform;
+
+        int randBeam = (int)Random.Range(0, 3);
+
+        GameObject obst = Instantiate(beams[randBeam], placement);
+
+
+        //Scale Supports correctly
+        obst.transform.localScale = new Vector3(
+            obst.transform.localScale.x,
+            0.005f,
+            obst.transform.localScale.z
+        );
     }
 }

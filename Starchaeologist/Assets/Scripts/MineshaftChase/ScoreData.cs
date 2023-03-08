@@ -16,6 +16,7 @@ public class ScoreData : MonoBehaviour
     public TMP_InputField playerName;
     public TMP_InputField date;
     public TMP_Text playerDataBox;
+    [SerializeField] private TMP_Text rank;
     public List<TMP_Text> leaderboardEntries;
 
     private StreamReader reader;
@@ -77,6 +78,7 @@ public class ScoreData : MonoBehaviour
         writer.WriteLine("Player: " + playerName.text);
         writer.WriteLine("Date: " + date.text);
         writer.WriteLine("Score: " + score.text);
+        writer.WriteLine("Rank: " + rank.text);
 
         writer.Close();
     }
@@ -106,7 +108,11 @@ public class ScoreData : MonoBehaviour
             string pScore = data[1];
             float pScoreNum = float.Parse(pScore, CultureInfo.InvariantCulture.NumberFormat);
 
-            players.Add(new PlayerData(pName, pDate, pScoreNum));
+            newLine = reader.ReadLine();
+            data = newLine.Split(' ');
+            string pRank = data[1];
+
+            players.Add(new PlayerData(pName, pDate, pScoreNum, pRank));
 
             newLine = reader.ReadLine();
         }
