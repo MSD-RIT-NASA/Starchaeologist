@@ -11,6 +11,8 @@ public class VehicleController : MonoBehaviour
 
     public Rigidbody carBody;
 
+    public bool inControl = true;
+
     //Car Acceleration and Braking stats
     public float xTiltValue;
     public float zTiltValue;
@@ -32,15 +34,25 @@ public class VehicleController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Headset tilt values from main camera 
-        xTiltValue = PlayerCam.transform.localRotation.x;
-        zTiltValue = -PlayerCam.transform.localRotation.z;
+        if(inControl)
+        {
+            //Headset tilt values from main camera 
+            xTiltValue = PlayerCam.transform.localRotation.x;
+            zTiltValue = -PlayerCam.transform.localRotation.z;
 
-        currentAccel = acccel * xTiltValue + 175f;
+            currentAccel = acccel * xTiltValue + 175f;
 
 
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Time.deltaTime * zTiltValue * turnPower * 10f, 0f));
-        transform.position = carBody.transform.position;
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Time.deltaTime * zTiltValue * turnPower * 10f, 0f));
+            transform.position = carBody.transform.position;
+        }
+        else
+        {
+            //Slow to a stop
+            currentAccel *= .05f;
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Time.deltaTime * zTiltValue * turnPower * 10f, 0f));
+            transform.position = carBody.transform.position;
+        }
     }
 
     private void FixedUpdate()
@@ -53,6 +65,10 @@ public class VehicleController : MonoBehaviour
         if (collision.gameObject.tag == "Obstacle")
         {
             Debug.Log("Behind");
+        }
+        if (collision.gameObject.name == "RaceFinish")
+        {
+            inControl = false;
         }
     }
 }
