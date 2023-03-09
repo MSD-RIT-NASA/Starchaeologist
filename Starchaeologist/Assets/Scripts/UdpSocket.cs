@@ -98,6 +98,7 @@ public class UdpSocket : MonoBehaviour
     private void ProcessInput(string input)
     {
         // PROCESS INPUT RECEIVED STRING HERE
+        //Depending on how input is received, parse it here as rotation data/filepaths for images
 
         if (!isTxStarted) // First data arrived so tx started
         {

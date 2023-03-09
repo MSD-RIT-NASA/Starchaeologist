@@ -186,18 +186,29 @@ public class MineBuilder : MonoBehaviour
     /// <param name="beams"></param>
     private void PlaceSupports(GameObject segment, List<GameObject> beams)
     {
-        Transform placement = segment.transform.GetChild(6).gameObject.transform;
+        List<Transform> placements = new List<Transform>();
+        for(int i = 6; i < 9; i++)
+        {
+            if (segment.transform.GetChild(i).gameObject.tag == "SupportPoint")
+            {
+                placements.Add(segment.transform.GetChild(i).gameObject.transform);
+            }
+        }
 
-        int randBeam = (int)Random.Range(0, 3);
+        for (int i = 0; i < placements.Count; i++)
+        {
+            int randBeam = (int)Random.Range(0, 3);
 
-        GameObject obst = Instantiate(beams[randBeam], placement);
+            //Place support beams
+            GameObject obst = Instantiate(beams[randBeam], placements[i]);
 
 
-        //Scale Supports correctly
-        obst.transform.localScale = new Vector3(
-            obst.transform.localScale.x,
-            0.005f,
-            obst.transform.localScale.z
-        );
+            //Scale Supports correctly
+            obst.transform.localScale = new Vector3(
+                obst.transform.localScale.x,
+                0.005f,
+                obst.transform.localScale.z
+            );
+        }
     }
 }
