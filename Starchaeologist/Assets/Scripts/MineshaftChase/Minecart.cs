@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Minecart : MonoBehaviour
 {
@@ -26,6 +27,15 @@ public class Minecart : MonoBehaviour
     private AudioClip railGrind;
     [SerializeField]
     private AudioClip railRide;
+
+    private Text txt;
+    private Text txtBlip;
+    private float showTime = 1f;
+    private float hideTime = 0f;
+    private float calibrateOn = 30f;
+    private float calibrateOff = 0f;
+    public static int Score;
+    public static bool scoreMenu = false;
 
     public float TiltAngle
     {
@@ -106,6 +116,15 @@ public class Minecart : MonoBehaviour
         {
             tiltAngle += .4f;
         }
+
+        /*
+         * if(tiltAngle > safeMax || tiltAngle < safeMin){
+         *     score += 50;
+         * }else{
+         *     score += 5;
+         * }
+        */
+
         //----------------------------------------------------------------------------------------------------------------------------------
         /*
          * Sensor System Pseudocode
@@ -122,6 +141,14 @@ public class Minecart : MonoBehaviour
         {
             tiltAngle -= .4f;
         }
+
+        /*
+         * if(tiltAngle > safeMax || tiltAngle < safeMin){
+         *     score += 50;
+         * }else{
+         *     score += 5;
+         * }
+        */
 
         //----------------------------------------------------------------------------------------------------------------------------------
         /*
