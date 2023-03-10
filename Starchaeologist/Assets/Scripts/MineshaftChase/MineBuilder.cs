@@ -18,6 +18,8 @@ public class MineBuilder : MonoBehaviour
     private List<GameObject> supports = new List<GameObject>();
     [SerializeField]
     private List<GameObject> sceneryObjects = new List<GameObject>();
+    [SerializeField]
+    private List<GameObject> planks = new List<GameObject>();
 
     List<GameObject>[] segmentArray;
 
@@ -209,6 +211,39 @@ public class MineBuilder : MonoBehaviour
                 0.005f,
                 obst.transform.localScale.z
             );
+        }
+
+        placements.Clear();
+
+        if (segment.transform.GetChild(9).gameObject.tag == "PlankPointList")
+        {
+            GameObject plankPointList = segment.transform.GetChild(9).gameObject;
+            for (int i = 0; i < 8; i++)
+            {
+                placements.Add(plankPointList.transform.GetChild(i).gameObject.transform);
+            }
+
+            for (int i = 0; i < placements.Count; i++)
+            {
+                float randChance = Random.Range(0, 2);
+                if (randChance < 1f)
+                {
+                    int randPlank = (int)Random.Range(0, 3);
+                    GameObject plank = Instantiate(planks[randPlank], placements[i]);
+
+                    plank.transform.localScale = new Vector3(
+                        plank.transform.localScale.x * 1.3f,
+                        plank.transform.localScale.y * 1.3f,
+                        plank.transform.localScale.z * 1.3f
+                    );
+
+                    plank.transform.eulerAngles = new Vector3(
+                        0f,
+                        plank.transform.eulerAngles.y,
+                        plank.transform.eulerAngles.z
+                    );
+                }
+            }
         }
     }
 }

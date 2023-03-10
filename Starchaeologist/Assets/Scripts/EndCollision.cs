@@ -7,6 +7,9 @@ public class EndCollision : MonoBehaviour
     public GameObject canvasRef;
     public GameObject rightHandRay;
     public GameObject leftHandRay;
+
+    [SerializeField]
+    private AudioSource audSrc;
     
 
     void OnTriggerEnter(Collider other)
@@ -17,6 +20,7 @@ public class EndCollision : MonoBehaviour
             canvasRef.SetActive(true);
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
+            audSrc.Stop();
             Destroy(this);
         }
     }
