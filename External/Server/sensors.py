@@ -4,51 +4,7 @@
 # Balance Score calculation demo
 # Reading the sensor output of 4 sensors and calculating the Blance Score
 
-import logging
-import serial
-import time
 import math
-#from Server.server import server
-
-import sys
-sys.path.insert(0, 'C:/Users/angel/Desktop/GPBA/External/Server')
-#from server import unityRead, unityWrite
-
-# # Main funtion to receive data
-# def main():
-
-#     # set up the serial line
-#     ser = serial.Serial('COM10', 9600) # will need to change COM # per device
-#     time.sleep(2)
-
-#     # reading if calibration was complete
-#     if ser.readline().decode("ISO-8859-1").strip() == "Calibration completed" :
-#         print("Calibration completed\n")
-#         val = input("Step on sensor and type 'y' to begin or anykey to quit: ")
-#         if val == "y":
-#             ser.write(val.encode()) #arduino code waits for 'y' to start collecting data
-#             pass
-
-#         else:
-#             return print("Exiting program")
-
-#     else:
-#         print("recalibrating\n")
-#         #ser.close()
-#         main()
-
-#     # gather the data
-#     data = getdata(ser)
-#     ser.close()
-    
-#     # calculate score
-#     balance_score = getscore(data)
-#     print("Final Score: " + str(balance_score))
-
-#     return 0
-
-
-
 
 
 #   Convert the kg data to Newtons

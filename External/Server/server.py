@@ -8,6 +8,9 @@
 
 # Example of a Python UDP server
 
+# NASA x RIT author: Angela Hudak
+
+
 import UdpComms as U
 import time
 import logging

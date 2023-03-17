@@ -12,6 +12,8 @@ Youssef Elashry 12/2020 (replaced obsolete functions and improved further - work
 Based on older work by Sandra Fang 2016 - Unity3D to MATLAB UDP communication - [url]http://msdn.microsoft.com/de-de/library/bb979228.aspx#ID0E3BAC[/url]
 */
 
+// NASA x RIT author: Angela Hudak
+
 using UnityEngine;
 using System.Collections;
 using System;
@@ -23,7 +25,6 @@ using System.Threading;
 
 public class UdpSocket : MonoBehaviour
 {
-
         //Game Mode
     /*
      * Main Menu = 0
@@ -31,6 +32,7 @@ public class UdpSocket : MonoBehaviour
      * Puzzling Times = 2
      * Minecart = 3
      */
+
     public int gameMode = 0;
 
     //thread
@@ -38,10 +40,9 @@ public class UdpSocket : MonoBehaviour
     Thread communicateThread;
 
     //rotation
-    public Vector2 desiredRotation = new Vector2(0, 0);
-    public Vector2 realRotation = new Vector2(0, 0);
-    // getMovement
-    // sendMovement
+
+    // int getMovement
+    // int sendMovement
 
 
     //score
@@ -51,10 +52,8 @@ public class UdpSocket : MonoBehaviour
 
     //killswitch
     bool killIt = false;
-    bool comeBack = false;
 
     //Quit game
-    bool quitGame = false;
     bool gameOver = false;
     bool gameStart = false;
     bool gamePaused = false;
@@ -67,22 +66,10 @@ public class UdpSocket : MonoBehaviour
     [SerializeField] int rxPort = 8000; // port to receive data from Python on
     [SerializeField] int txPort = 8001; // port to send data to Python on
 
-    //int i = 0; // DELETE THIS: Added to show sending data from Unity to Python via UDP
-
     // Create necessary UdpClient objects
     UdpClient client;
     IPEndPoint remoteEndPoint;
     Thread receiveThread; // Receiving Thread
-
-    // IEnumerator SendDataCoroutine() // DELETE THIS: Added to show sending data from Unity to Python via UDP
-    // {
-    //     while (true)
-    //     {
-    //         SendData("Sent from Unity: " + i.ToString());
-    //         i++;
-    //         yield return new WaitForSeconds(1f);
-    //     }
-    // }
 
     public void SendData(string message) // Use to send data to Python
     {
@@ -120,7 +107,6 @@ public class UdpSocket : MonoBehaviour
         // Initialize (seen in comments window)
         print("UDP Comms Initialised");
 
-        //StartCoroutine(SendDataCoroutine()); // DELETE THIS: Added to show sending data from Unity to Python via UDP
     }
 
     // Receive data, update packets received
@@ -143,6 +129,7 @@ public class UdpSocket : MonoBehaviour
         }
     }
 
+    //this method will be threaded and handles reading messages with the python server
     private void ProcessInput(string input)
     {
         // PROCESS INPUT RECEIVED STRING HERE
@@ -164,7 +151,7 @@ public class UdpSocket : MonoBehaviour
                 if(killIt)
                 {
                     killIt = false;
-                    comeBack = true;
+                    //comeBack = true;
                 }
                 break;
             case "quit":
@@ -196,8 +183,8 @@ public class UdpSocket : MonoBehaviour
                 //collect board data
                 break;
 
-            default://the message is either about score or rotation
-                //SplitMessage(message);
+            default:
+                
                 break;
         }
             
@@ -212,33 +199,21 @@ public class UdpSocket : MonoBehaviour
         client.Close();
     }
 
-    //this method will be threaded and handles sending, receiving, and reading messages with the python server
+    //this method will be threaded and handles sending messages with the python server
     void Communicate()
     {
-        //ForceDotNet.Force(); // this line is needed to prevent unity freeze after one use, not sure why yet
-        //using (RequestSocket client = new RequestSocket())
-        //{
-            //client.Connect("tcp://localhost:5678");
+
 
             if (threadRunning)
             {
                 //send messages
 
-                // if(quitGame)//the game is quitting
-                // {
-                //     quitGame = false;
-                //     Debug.Log("Quit Game");
-                //     NetMQConfig.Cleanup();
-                //     //TO DO
-                //     //quit the game
-                //     Application.Quit();
-                //     return;
-                // }
 
                 if(gameStart) // the game starts
                 {
                     // for levels 1 and 2 this must be called AFTER confirmation of calibration
                     //
+                    // send over gameProfile data so MATLAB data is correctly labeled
                     // start collecting balance data 
                     
                 }
@@ -246,11 +221,10 @@ public class UdpSocket : MonoBehaviour
                 else if(gameOver) // the game ends
                 {
                     Debug.Log("Game Over");
-                    //NetMQConfig.Cleanup();
                     // stop acctuators
                     // get the balance score
-                    // end the game
                     // close the server,,,,, i think
+                    // end the game
 
 
                     Application.Quit();
@@ -264,12 +238,6 @@ public class UdpSocket : MonoBehaviour
                 {
                     return;
                 }
-
-                // // for getting and naming the .txt file of sensor data collection
-                // else if(gameProfiles)
-                // {
-                //     return;
-                // }
 
                 else if(txPlatformMovement) // Game 2 when sending different floor movements
                 {
@@ -301,22 +269,15 @@ public class UdpSocket : MonoBehaviour
                 //     string giveRotation = "rotation " + desiredRotation.x + " " + desiredRotation.y;
                 //     client.SendFrame(giveRotation);
                 // }
-
-
-
-                //receive messages
-                //string message = null;
               
-                //ReceiveData(); // this returns true if it's successful
             
                 
             }
             threadRunning = false;
         
             
-        //}
+        
 
-        //NetMQConfig.Cleanup(); // this line is needed to prevent unity freeze after one use, not sure why yet
     }
 
 

@@ -1,9 +1,3 @@
-import serial
-import time
-import logging
-
-
-
 # Created by Youssef Elashry to allow two-way communication between Python3 and Unity to send and receive strings
 
 # Feel free to use this in your individual or commercial projects BUT make sure to reference me as: Two-way communication between Python 3 and Unity (C#) - Y. T. Elashry
@@ -11,6 +5,11 @@ import logging
 
 # Use at your own risk
 # Use under the Apache License 2.0
+
+# NASA x RIT author: Angela Hudak
+
+import serial
+import time
 
 # Grab sensor data from the arduino
 def getdata(ser):
@@ -145,7 +144,12 @@ class UdpComms():
     
     def sensorCalibration():
         # set up the serial line
-        ser = serial.Serial('COM10', 9600) # will need to change COM # per device
+        try:
+            ser = serial.Serial('COM10', 9600) # will need to change COM # per device
+        except Exception:
+            return 0 # game will stop the game and retry to calibrate the sensors
+            
+        
         time.sleep(2)
 
         # reading if calibration was complete
