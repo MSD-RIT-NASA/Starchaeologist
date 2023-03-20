@@ -6,10 +6,10 @@ public class RoadBuilder : MonoBehaviour
 {
     [SerializeField] GameObject roadPiece;
     [SerializeField] GameObject currentRoad;
-    [SerializeField] GameObject currentObstacle;
     [SerializeField] GameObject finishLine;
     [SerializeField] List<GameObject> roadSegments;
     [SerializeField] List<GameObject> vehicleObstacles;
+    [SerializeField] List<GameObject> availableObstacles;
 
     public int distance = 13;
 
@@ -18,8 +18,6 @@ public class RoadBuilder : MonoBehaviour
     void Start()
     {
         BuildRoad();
-
-        PlaceObstacles();
     }
 
     private void BuildRoad()
@@ -42,6 +40,7 @@ public class RoadBuilder : MonoBehaviour
             roadSegments.Add(nextPiece);
             nextPiece.transform.parent = currentRoad.transform;
             nextPiece.transform.position = spawnPosition;
+            PlaceObstacles(nextPiece);
 
             spawnPosition = nextPiece.transform.GetChild(1).transform.position;
 
@@ -52,10 +51,11 @@ public class RoadBuilder : MonoBehaviour
         roadSegments.Add(finishLine);
     }
 
-    private void PlaceObstacles()
+    private void PlaceObstacles(GameObject placedPiece)
     {
-        currentObstacle = GameObject.Find("Obstacles");
+        GameObject currentObstacle = GameObject.Find("Obstacles");
 
+        /*
         int i = 0;
         while(i < distance)
         {
@@ -70,13 +70,28 @@ public class RoadBuilder : MonoBehaviour
                 List<GameObject> possibleSpawns = new List<GameObject>();
                 for (int j = 0; j < 5; j++)
                 {
-                    possibleSpawns.Add(segment.transform.GetChild(i + 2).gameObject);
+                    possibleSpawns.Add(segment.transform.GetChild(j + 2).gameObject);
                 }
 
                 GameObject newObstacle = Instantiate(currentObstacle, possibleSpawns[Random.Range(0, possibleSpawns.Count)].transform);
                 vehicleObstacles.Add(newObstacle);
+                //newObstacle.transform.parent = currentObstacle.transform;
             }
             i++;
         }
+        */
+
+        //Spawn obstacles on road piece
+        List<GameObject> possibleSpawns = new List<GameObject>();
+        for (int j = 0; j < 5; j++)
+        {
+            possibleSpawns.Add(placedPiece.transform.GetChild(j + 2).gameObject);
+        }
+
+        //Pick an obstacle and place it
+        int obst = Random.Range(0, availableObstacles.Count);
+        GameObject newObstacle = Instantiate(availableObstacles[obst], possibleSpawns[Random.Range(0, possibleSpawns.Count)].transform);
+        vehicleObstacles.Add(newObstacle);
+        newObstacle.transform.parent = currentObstacle.transform;
     }
 }

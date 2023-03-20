@@ -64,7 +64,8 @@ public class VehicleController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Obstacle")
         {
-            Debug.Log("Behind");
+            Debug.Log("I Collided");
+            carBody.velocity *= .05f;
         }
         if (collision.gameObject.name == "RaceFinish")
         {

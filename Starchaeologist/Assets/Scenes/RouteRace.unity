@@ -197,11 +197,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f7781e73b47a9e642aefba6d4486ca5e, type: 3}
---- !u!1 &538437671 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3124166195395587532, guid: 81d49022e3940cd4f94c7bcbf36781be, type: 3}
-  m_PrefabInstance: {fileID: 2107640126}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &538437672 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3124166195395587531, guid: 81d49022e3940cd4f94c7bcbf36781be, type: 3}
@@ -238,10 +233,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roadPiece: {fileID: 8487474079369812660, guid: f7781e73b47a9e642aefba6d4486ca5e, type: 3}
   currentRoad: {fileID: 1286172624}
-  currentObstacle: {fileID: 538437671}
   finishLine: {fileID: 1072669949}
   roadSegments: []
   vehicleObstacles: []
+  availableObstacles:
+  - {fileID: 4174533215810852221, guid: 45cc6349713c96745b5ac720ff9baa59, type: 3}
+  - {fileID: 3124166195395587532, guid: 81d49022e3940cd4f94c7bcbf36781be, type: 3}
   distance: 13
 --- !u!4 &809086563
 Transform:
