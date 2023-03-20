@@ -62,6 +62,10 @@ public class PuzzlingGame : MonoBehaviour
 
     private Vector3 activeTrapPos;
 
+    public GameObject UIManager;
+
+    private Vector3 activeTrapPos;
+
     void Start()
     {
         if(singleton != null && singleton != this)

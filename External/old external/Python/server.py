@@ -198,18 +198,18 @@ class Server(Thread):
         s2 = (abs(y2 - y1)) ** 2
         return math.sqrt(s2 + s1)
     
-    def setMotionFloor(self, angle1, angle2):
-        """
-        Set motion floor positions for the actuators based on the given angles 
-        """
-        x1 = 1.096 * math.sin(math.radians(angle1))
-        pos1 = (-.125 - x1) * 100000
-        x2 = 1.096 * math.sin(math.radians(angle2))
-        pos2 = (-.125 + x2) * 100000
-        ExcelApp = win32com.client.GetActiveObject("Excel.Application")
-        ExcelApp.Visible = True
-        ExcelApp.Range("B4").Value = [pos1]
-        ExcelApp.Range("B13").Value = [pos2]
+    #def setMotionFloor(self, angle1, angle2):
+    #    """
+    #    Set motion floor positions for the actuators based on the given angles 
+    #    """
+    #    x1 = 1.096 * math.sin(math.radians(angle1))
+    #    pos1 = (-.125 - x1) * 100000
+    #    x2 = 1.096 * math.sin(math.radians(angle2))
+    #    pos2 = (-.125 + x2) * 100000
+    #    ExcelApp = win32com.client.GetActiveObject("Excel.Application")
+    #    ExcelApp.Visible = True
+    #    ExcelApp.Range("B4").Value = [pos1]
+    #    ExcelApp.Range("B13").Value = [pos2]
 
     def unityRead(self):
         """
@@ -316,7 +316,7 @@ class Server(Thread):
                     if (rotationCount == 5):
                         rotationList = decodedMessage.split(" ")
                         # Set Motion Floor Platform to these angles
-                        self.setMotionFloor(float(rotationList[1]),float(rotationList[2]))
+                        #self.setMotionFloor(float(rotationList[1]),float(rotationList[2]))
                         
                         # Send angles back to Unity Game as confirmation
                         rotationConfirmation = "rotation " + str(rotationList[1]) + " " + str(rotationList[1]) 
@@ -346,11 +346,12 @@ if __name__ == "__main__":
     )
     for i in range(-5,5,1):
         print(i)
-        server.setMotionFloor(i,i+0.1)
+        #server.setMotionFloor(i,i+0.1)
         time.sleep(0.01)
+
+    Server.start(server)
 
     while True:
-        server.setMotionFloor(random.uniform(-5, 5),random.uniform(-5, 5))
+        #server.setMotionFloor(random.uniform(-5, 5),random.uniform(-5, 5))
         time.sleep(0.01)
-
     

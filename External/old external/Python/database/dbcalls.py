@@ -7,7 +7,7 @@ class db:
         """
         Connect to database connection
         """
-        self.conn = sqlite3.connect("./External/Python/database/Training_System.db",check_same_thread=False)
+        self.conn = sqlite3.connect("C:/Users/p2201/Downloads/GPBA-main/External/Python/database/Training_System.db",check_same_thread=False)
 
     def closeConnection(self):
         """
