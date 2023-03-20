@@ -56,7 +56,11 @@ public class PuzzlingGame : MonoBehaviour
     public GameObject vignetteWarning;
     public GameObject vignetteHit;
 
-    PythonCommunicator communicateReference;
+    //PythonCommunicator communicateReference;
+
+    public GameObject UIManager;
+
+    private Vector3 activeTrapPos;
 
     public GameObject UIManager;
 
@@ -74,7 +78,7 @@ public class PuzzlingGame : MonoBehaviour
         }
 
         trap_warning = GetComponent<AudioSource>();
-        communicateReference = GetComponent<PythonCommunicator>();
+        //communicateReference = GetComponent<PythonCommunicator>();
     }
 
     // Start is called before the first frame update
@@ -181,12 +185,12 @@ public class PuzzlingGame : MonoBehaviour
         if (currentScript.trapped)
         {
             Vector2 giveRotation = new Vector2(desiredX, desiredZ);
-            communicateReference.desiredRotation = giveRotation;
-            currentScript.transform.parent.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
+            //communicateReference.desiredRotation = giveRotation;
+            //currentScript.transform.parent.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
         }
         else
         {
-            communicateReference.desiredRotation = new Vector2(0, 0);
+            //communicateReference.desiredRotation = new Vector2(0, 0);
         }
     }
 

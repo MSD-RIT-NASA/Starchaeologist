@@ -39,7 +39,8 @@ public class S_RiverBuilder : MonoBehaviour
 
         //give the game script the list of river pieces
         GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
-        GetComponent<PythonCommunicator>().gameMode = 1;
+        GetComponent<UdpSocket>().gameMode = 1;
+        //GetComponent<UdpSocket>().calibrateRig = true; 
 
         //remove this script
         Destroy(this);
