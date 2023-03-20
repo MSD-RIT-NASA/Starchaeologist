@@ -59,86 +59,121 @@ public class MineBuilder : MonoBehaviour
             //choose one of the available segment prefabs and place it at the end of the last placed piece
             int randIndex = (int)Random.Range(0, segmentArray[0].Count);
             GameObject newSpawn = Instantiate(segmentArray[0][randIndex]);
-            newSpawn.transform.position = spawnPosition;
-            newSpawn.transform.rotation = spawnRotation;
-
-            if (i >= 2)
+            if (segmentArray[0][randIndex].gameObject.name == "RepeatedTurns_Track")
             {
-                newSpawn.SetActive(false);
-            }
-            spawnPosition = newSpawn.transform.GetChild(0).transform.position;
-            spawnRotation = newSpawn.transform.GetChild(0).transform.rotation;
-
-            spawnedSegments.Add(newSpawn);
-            spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
-            if(segmentArray[0][randIndex].gameObject.name == "RepeatedTurns_Track")
-            {
-                for (int j = 11; j < 16; j++)
+                for (int j = 0; j <= 5; j++)
                 {
                     newSpawn.transform.GetChild(j).gameObject.transform.position = spawnPosition;
                     newSpawn.transform.GetChild(j).gameObject.transform.rotation = spawnRotation;
+                    if (i >= 2)
+                    {
+                        newSpawn.transform.GetChild(j).gameObject.SetActive(false);
+                    }
+                    for (int y = 9; y < 13; y++)
+                    {
+                        GameObject light = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(y).transform.gameObject;
+                        if (light.tag == "Light")
+                        {
+                            light.AddComponent(typeof(FlickeringLights));
+                        }
+                    }
                     spawnPosition = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.position;
                     spawnRotation = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.rotation;
 
                     spawnedSegments.Add(newSpawn.transform.GetChild(j).gameObject);
                     spawnedTransforms.Add(newSpawn.transform.GetChild(j).transform.GetChild(2).transform);
-                    i++;
                 }
+                i += 5;
             }
-            
+            if (segmentArray[0][randIndex].gameObject.name == "SensoryDeprevation_Track")
+            {
+                for (int j = 0; j <= 2; j++)
+                {
+                    newSpawn.transform.GetChild(j).gameObject.transform.position = spawnPosition;
+                    newSpawn.transform.GetChild(j).gameObject.transform.rotation = spawnRotation;
+                    if (i >= 2)
+                    {
+                        newSpawn.transform.GetChild(j).gameObject.SetActive(false);
+                    }
+                    spawnPosition = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.position;
+                    spawnRotation = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.rotation;
+
+                    spawnedSegments.Add(newSpawn.transform.GetChild(j).gameObject);
+                    spawnedTransforms.Add(newSpawn.transform.GetChild(j).transform.GetChild(2).transform);
+                }
+                i += 2;
+            }
+            if(segmentArray[0][randIndex].gameObject.name != "SensoryDeprevation_Track" && segmentArray[0][randIndex].gameObject.name != "RepeatedTurns_Track")
+            {
+                newSpawn.transform.position = spawnPosition;
+                newSpawn.transform.rotation = spawnRotation;
+
+                if (i >= 2)
+                {
+                    newSpawn.SetActive(false);
+                }
+                spawnPosition = newSpawn.transform.GetChild(0).transform.position;
+                spawnRotation = newSpawn.transform.GetChild(0).transform.rotation;
+
+                spawnedSegments.Add(newSpawn);
+                spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
+            }
+            //Debug.Log("spanwed segments: "+spawnedSegments.Count);
+            //Debug.Log("i: "+ i);
             //spawn objects on the segment
             PlaceObjects(spawnedSegments[i], obstaclePrefabs);
             PlaceObjects(spawnedSegments[i], treasurePrefabs);
             i++;
+
         }
 
        
         //add track for sensory overload
-        GameObject newpawn = Instantiate(sensorySegment);
-        newpawn.transform.position = spawnPosition;
-        newpawn.transform.rotation = spawnRotation;
-        //loop through track to get the route on each
-        for (int x = 0; x < sensorySegment.transform.childCount; x++)
-        {
-            if(i >= 2)
-            {
-                newpawn.transform.GetChild(x).gameObject.SetActive(false);
-            }
-            for (int y = 9; y < 13; y++)
-            {
-                GameObject light = newpawn.transform.GetChild(x).gameObject.transform.GetChild(y).transform.gameObject;
-                if (light.tag == "Light")
-                {
-                    light.AddComponent(typeof(FlickeringLights));
-                }
-            }
-            spawnedSegments.Add(newpawn.transform.GetChild(x).gameObject);
-            spawnedTransforms.Add(newpawn.transform.GetChild(x).gameObject.transform.GetChild(2).transform);
-        }
+        //GameObject newpawn = Instantiate(sensorySegment);
+        //newpawn.transform.position = spawnPosition;
+        //newpawn.transform.rotation = spawnRotation;
+        ////loop through track to get the route on each
+        //for (int x = 0; x < sensorySegment.transform.childCount; x++)
+        //{
+        //    if(i >= 2)
+        //    {
+        //        newpawn.transform.GetChild(x).gameObject.SetActive(false);
+        //    }
+        //    for (int y = 9; y < 13; y++)
+        //    {
+        //        GameObject light = newpawn.transform.GetChild(x).gameObject.transform.GetChild(y).transform.gameObject;
+        //        if (light.tag == "Light")
+        //        {
+        //            light.AddComponent(typeof(FlickeringLights));
+        //        }
+        //    }
+        //    spawnedSegments.Add(newpawn.transform.GetChild(x).gameObject);
+        //    spawnedTransforms.Add(newpawn.transform.GetChild(x).gameObject.transform.GetChild(2).transform);
+        //}
 
-        spawnPosition = newpawn.transform.GetChild(sensorySegment.transform.childCount-1).GetChild(0).transform.position;
-        spawnRotation = newpawn.transform.GetChild(sensorySegment.transform.childCount-1).GetChild(0).transform.rotation;
+        //spawnPosition = newpawn.transform.GetChild(sensorySegment.transform.childCount-1).GetChild(0).transform.position;
+        //spawnRotation = newpawn.transform.GetChild(sensorySegment.transform.childCount-1).GetChild(0).transform.rotation;
 
         //add track for sensory depervation
-        for(int x = 0; x < 3; x ++)
-        {
-            newpawn = Instantiate(segmentArray[0][0]);
-            newpawn.transform.position = spawnPosition;
-            newpawn.transform.rotation = spawnRotation;
-            for(int y = 9; y< 13; y++)
-            {
-                newpawn.transform.GetChild(y).transform.gameObject.SetActive(false);
-            }
-            if (i >= 2)
-            {
-                newpawn.SetActive(false);
-            }
-            spawnPosition = newpawn.transform.GetChild(0).transform.position;
-            spawnRotation = newpawn.transform.GetChild(0).transform.rotation;
+        //for(int x = 0; x < 3; x ++)
+        //{
+        //    newpawn = Instantiate(segmentArray[0][0]);
+        //    newpawn.transform.position = spawnPosition;
+        //    newpawn.transform.rotation = spawnRotation;
+        //    for(int y = 9; y< 13; y++)
+        //    {
+        //        newpawn.transform.GetChild(y).transform.gameObject.SetActive(false);
+        //    }
+        //    if (i >= 2)
+        //    {
+        //        newpawn.SetActive(false);
+        //    }
+        //    spawnPosition = newpawn.transform.GetChild(0).transform.position;
+        //    spawnRotation = newpawn.transform.GetChild(0).transform.rotation;
 
-            spawnedSegments.Add(newpawn);
-            spawnedTransforms.Add(newpawn.transform.GetChild(2).transform);
-        }
+        //    spawnedSegments.Add(newpawn);
+        //    spawnedTransforms.Add(newpawn.transform.GetChild(2).transform);
+        //}
 
 
         //add end of track
@@ -155,8 +190,8 @@ public class MineBuilder : MonoBehaviour
         PlaceObjects(spawnedSegments[i], treasurePrefabs);
 
         //place shadow 
-        shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
-        shadowReference.transform.rotation = spawnedSegments[0].transform.GetChild(0).transform.rotation;
+        //shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
+        //shadowReference.transform.rotation = spawnedSegments[0].transform.GetChild(0).transform.rotation;
 
     }
 

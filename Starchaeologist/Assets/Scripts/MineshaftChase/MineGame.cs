@@ -97,10 +97,6 @@ public class MineGame : MonoBehaviour
             //go along the route on the track 
             if (coroutineAllowed && routeToGo < trackReferences.Count)
             {
-                if (trackReferences[routeToGo].transform.parent != null)
-                {
-                    speedModifier = 0.43f;
-                }
                 StartCoroutine(GoByTheRoute(routeToGo));
             }
             //if it's the end of the track then stop moving 
@@ -120,20 +116,7 @@ public class MineGame : MonoBehaviour
         Vector3 p2 = routes[routeNum].GetChild(2).position;
         Vector3 p3 = routes[routeNum].GetChild(3).position;
 
-        //for the shadow
-        Vector3 p02 = routes[routeNum].GetChild(0).position;
-        Vector3 p12 = routes[routeNum].GetChild(1).position;
-        Vector3 p22 = routes[routeNum].GetChild(2).position;
-        Vector3 p32 = routes[routeNum].GetChild(3).position;
-
-        if (routeToGo < trackReferences.Count - 1)
-        {
-            //make sure the shadow has a place to be put
-            p02 = routes[routeNum + 1].GetChild(0).position;
-            p12 = routes[routeNum + 1].GetChild(1).position;
-            p22 = routes[routeNum + 1].GetChild(2).position;
-            p32 = routes[routeNum + 1].GetChild(3).position;
-        }
+        
         while (tParam < 1)
         {
             tParam += Time.deltaTime * speedModifier;
@@ -172,7 +155,7 @@ public class MineGame : MonoBehaviour
             if (trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track(Clone)" &&
                 trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Right" && trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Left")
             {
-                Debug.Log(trackReferences[routeToGo - 2].gameObject.name);
+               // Debug.Log(trackReferences[routeToGo - 2].gameObject.name);
                 trackReferences[routeToGo - 2].SetActive(false);
             }
         }
