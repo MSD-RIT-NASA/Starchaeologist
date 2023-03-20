@@ -40,9 +40,6 @@ public class MineGame : MonoBehaviour
     public AudioClip treasure_SFX;
     public AudioClip obstacleHit_SFX;
 
-    private Vector3 playerFallPos;
-    private Vector3 playerFallVel;
-    private Vector3 playerFallAccel;
 
     //[SerializeField]
     public List<Transform> routes;
@@ -61,10 +58,6 @@ public class MineGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerFallPos = playerReference.transform.position;
-        playerFallVel = new Vector3(0f, -50f, 0f);
-        playerFallAccel = new Vector3(0f, -10f, 0f);
-
         if (singleton != null && singleton != this)
         {
             Destroy(this);
@@ -76,7 +69,7 @@ public class MineGame : MonoBehaviour
 
         routeToGo = 0;
         tParam = 0f;
-        speedModifier = 0.55f;
+        speedModifier = 0.4f;
         coroutineAllowed = true;
     }
 
@@ -85,9 +78,6 @@ public class MineGame : MonoBehaviour
     {
         if (timer.TimeRemaining > 0) {
             countdownText.text = "" + ((int)timer.TimeRemaining + 1);
-            playerFallVel += playerFallAccel * timer.GetTime;
-            playerFallPos += playerFallVel * timer.GetTime;
-            playerReference.transform.position = new Vector3(playerFallPos.x, playerFallPos.y, playerFallPos.z);
         }
         else
         {
@@ -98,10 +88,7 @@ public class MineGame : MonoBehaviour
         //start the game by moving the raft
         if (timeToMove)
         {
-            if (!soundfxSource.isPlaying)
-            {
-                soundfxSource.PlayOneShot(railRiding_SFX);
-            }
+            //soundfxSource.PlayOneShot(railRiding_SFX);
             //stick the player under the raft gameobject to help with movement
             if (!playerAttached)
             {
@@ -145,7 +132,6 @@ public class MineGame : MonoBehaviour
             objectPosition.y += 1.5f;
             playerReference.transform.LookAt(objectPosition);
             playerReference.transform.position = objectPosition;
-            this.transform.position = objectPosition;
 
             //SHADOW CODE
             //if (routeToGo < trackReferences.Count - 1)
@@ -159,7 +145,7 @@ public class MineGame : MonoBehaviour
         }
 
         tParam = 0;
-        //speedModifier = speedModifier * 0.90f;
+        speedModifier = speedModifier * 0.90f;
         routeToGo += 1;
 
 

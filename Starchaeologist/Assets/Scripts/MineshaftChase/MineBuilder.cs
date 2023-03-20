@@ -13,15 +13,9 @@ public class MineBuilder : MonoBehaviour
     List<GameObject> spawnedSegments = new List<GameObject>();
     List<Transform> spawnedTransforms = new List<Transform>();
 
-    public List<GameObject> segmentPrefabs_2M = new List<GameObject>();
-    public List<GameObject> obstaclePrefabs = new List<GameObject>();
-    public List<GameObject> treasurePrefabs = new List<GameObject>();
-    [SerializeField]
-    private List<GameObject> supports = new List<GameObject>();
-    [SerializeField]
-    private List<GameObject> sceneryObjects = new List<GameObject>();
-    [SerializeField]
-    private List<GameObject> planks = new List<GameObject>();
+    [SerializeField] List<GameObject> segmentPrefabs_2M = new List<GameObject>();
+    [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
+    [SerializeField] List<GameObject> treasurePrefabs = new List<GameObject>();
 
     List<GameObject>[] segmentArray;
 
@@ -67,18 +61,7 @@ public class MineBuilder : MonoBehaviour
             GameObject newSpawn = Instantiate(segmentArray[0][randIndex]);
             if (segmentArray[0][randIndex].gameObject.name == "RepeatedTurns_Track")
             {
-                newSpawn.SetActive(false);
-            }
-            spawnPosition = newSpawn.transform.GetChild(0).transform.position;
-            spawnRotation = newSpawn.transform.GetChild(0).transform.rotation;
-
-            spawnedSegments.Add(newSpawn);
-            spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
-
-            //If the track is a repeating turns track, add each turn as its own segment
-            if(segmentArray[0][randIndex].gameObject.name == "RepeatedTurns_Track")
-            {
-                for (int j = 12; j < 17; j++)
+                for (int j = 0; j <= 5; j++)
                 {
                     newSpawn.transform.GetChild(j).gameObject.transform.position = spawnPosition;
                     newSpawn.transform.GetChild(j).gameObject.transform.rotation = spawnRotation;
@@ -99,9 +82,6 @@ public class MineBuilder : MonoBehaviour
 
                     spawnedSegments.Add(newSpawn.transform.GetChild(j).gameObject);
                     spawnedTransforms.Add(newSpawn.transform.GetChild(j).transform.GetChild(2).transform);
-                    PlaceSupports(spawnedSegments[i], supports);
-                    PlaceScenery(spawnedSegments[i], sceneryObjects);
-                    i++;
                 }
                 i += 5;
             }
@@ -143,12 +123,60 @@ public class MineBuilder : MonoBehaviour
             //spawn objects on the segment
             PlaceObjects(spawnedSegments[i], obstaclePrefabs);
             PlaceObjects(spawnedSegments[i], treasurePrefabs);
-            PlaceSupports(spawnedSegments[i], supports);
-            PlaceScenery(spawnedSegments[i], sceneryObjects);
             i++;
 
         }
-        
+
+       
+        //add track for sensory overload
+        //GameObject newpawn = Instantiate(sensorySegment);
+        //newpawn.transform.position = spawnPosition;
+        //newpawn.transform.rotation = spawnRotation;
+        ////loop through track to get the route on each
+        //for (int x = 0; x < sensorySegment.transform.childCount; x++)
+        //{
+        //    if(i >= 2)
+        //    {
+        //        newpawn.transform.GetChild(x).gameObject.SetActive(false);
+        //    }
+        //    for (int y = 9; y < 13; y++)
+        //    {
+        //        GameObject light = newpawn.transform.GetChild(x).gameObject.transform.GetChild(y).transform.gameObject;
+        //        if (light.tag == "Light")
+        //        {
+        //            light.AddComponent(typeof(FlickeringLights));
+        //        }
+        //    }
+        //    spawnedSegments.Add(newpawn.transform.GetChild(x).gameObject);
+        //    spawnedTransforms.Add(newpawn.transform.GetChild(x).gameObject.transform.GetChild(2).transform);
+        //}
+
+        //spawnPosition = newpawn.transform.GetChild(sensorySegment.transform.childCount-1).GetChild(0).transform.position;
+        //spawnRotation = newpawn.transform.GetChild(sensorySegment.transform.childCount-1).GetChild(0).transform.rotation;
+
+        //add track for sensory depervation
+        //for(int x = 0; x < 3; x ++)
+        //{
+        //    newpawn = Instantiate(segmentArray[0][0]);
+        //    newpawn.transform.position = spawnPosition;
+        //    newpawn.transform.rotation = spawnRotation;
+        //    for(int y = 9; y< 13; y++)
+        //    {
+        //        newpawn.transform.GetChild(y).transform.gameObject.SetActive(false);
+        //    }
+        //    if (i >= 2)
+        //    {
+        //        newpawn.SetActive(false);
+        //    }
+        //    spawnPosition = newpawn.transform.GetChild(0).transform.position;
+        //    spawnRotation = newpawn.transform.GetChild(0).transform.rotation;
+
+        //    spawnedSegments.Add(newpawn);
+        //    spawnedTransforms.Add(newpawn.transform.GetChild(2).transform);
+        //}
+
+
+        //add end of track
         GameObject endReference = GameObject.Find("TrackEnd");
         endReference.transform.position = spawnPosition;
         endReference.transform.rotation = spawnRotation;
@@ -159,10 +187,8 @@ public class MineBuilder : MonoBehaviour
         //place objects on the end track
        
         PlaceObjects(spawnedSegments[i], obstaclePrefabs);
-        PlaceObjects(spawnedSegments[i+1], obstaclePrefabs);
-        PlaceSupports(spawnedSegments[i], supports);
-        PlaceSupports(spawnedSegments[i+1], supports);
-        PlaceScenery(spawnedSegments[i], sceneryObjects);
+        PlaceObjects(spawnedSegments[i], treasurePrefabs);
+
         //place shadow 
         //shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
         //shadowReference.transform.rotation = spawnedSegments[0].transform.GetChild(0).transform.rotation;
@@ -173,8 +199,7 @@ public class MineBuilder : MonoBehaviour
     private void PlaceObjects(GameObject segment, List<GameObject> objects)
     {
         List<GameObject> placements = new List<GameObject>();
-
-        for (int i = 0; i < 3; i++)
+        for(int i = 0; i < 3; i++)
         {
             placements.Add(segment.transform.GetChild(i + 3).gameObject);
         }
@@ -184,141 +209,19 @@ public class MineBuilder : MonoBehaviour
         int place = Random.Range(0, 3);
         while(count>0)
         {
-            //Put the stalactites in the middle
             if(placements[place].name == "ObstaclePointMid")
             {
-                objectToPlace = (int)Random.Range(0, 3);
+                objectToPlace = 1;
             }
             else
             {
-                objectToPlace = (int)Random.Range(3, 5);
+                objectToPlace = 0;
             }
-            GameObject obst = Instantiate(objects[objectToPlace], placements[place].transform);
-
-
-            //Rotate, scale up, and move signs down
-            if (objectToPlace >= 3 && objectToPlace < 5)
-            {
-                obst.transform.localScale = new Vector3(
-                    obst.transform.localScale.x * 1f,
-                    obst.transform.localScale.y * 1.5f,
-                    obst.transform.localScale.z * 2.5f
-                );
-
-                obst.transform.position = new Vector3(
-                    obst.transform.position.x,
-                    obst.transform.position.y - 3f,
-                    obst.transform.position.z
-                    );
-
-                obst.transform.eulerAngles = new Vector3(
-                    obst.transform.eulerAngles.x,
-                    obst.transform.eulerAngles.y + 90,
-                    obst.transform.eulerAngles.z
-                    );
-            }
-            else
-            {
-                //Scale up stalactites
-                obst.transform.localScale = new Vector3(
-                    obst.transform.localScale.x * 1.5f,
-                    obst.transform.localScale.y * 1.5f,
-                    obst.transform.localScale.z * 1.5f
-                    );
-            }
-
+            Instantiate(objects[objectToPlace], placements[place].transform);
             placements.Remove(placements[place]);
             objectToPlace = Random.Range(0, objects.Count);
             place = Random.Range(0, 2);
             count--;
-        }
-    }
-
-    /// <summary>
-    /// Places one of three support models at the support point positions in each track segment along with possible connector planks
-    /// </summary>
-    /// <param name="segment"></param>
-    /// <param name="beams"></param>
-    private void PlaceSupports(GameObject segment, List<GameObject> beams)
-    {
-        List<Transform> placements = new List<Transform>();
-        for(int i = 6; i < 9; i++)
-        {
-            if (segment.transform.GetChild(i).gameObject.tag == "SupportPoint")
-            {
-                placements.Add(segment.transform.GetChild(i).gameObject.transform);
-            }
-        }
-
-        for (int i = 0; i < placements.Count; i++)
-        {
-            int randBeam = (int)Random.Range(0, 3);
-
-            //Place support beams
-            GameObject obst = Instantiate(beams[randBeam], placements[i]);
-
-
-            //Scale Supports correctly
-            obst.transform.localScale = new Vector3(
-                obst.transform.localScale.x,
-                0.005f,
-                obst.transform.localScale.z
-            );
-        }
-
-        placements.Clear();
-
-        if (segment.transform.GetChild(9).gameObject.tag == "PlankPointList")
-        {
-            GameObject plankPointList = segment.transform.GetChild(9).gameObject;
-            for (int i = 0; i < 8; i++)
-            {
-                placements.Add(plankPointList.transform.GetChild(i).gameObject.transform);
-            }
-
-            for (int i = 0; i < placements.Count; i++)
-            {
-                float randChance = Random.Range(0, 2);
-                if (randChance < 1f)
-                {
-                    int randPlank = (int)Random.Range(0, 3);
-                    GameObject plank = Instantiate(planks[randPlank], placements[i]);
-
-                    plank.transform.localScale = new Vector3(
-                        plank.transform.localScale.x * 1.3f,
-                        plank.transform.localScale.y * 1.3f,
-                        plank.transform.localScale.z * 1.3f
-                    );
-
-                    plank.transform.eulerAngles = new Vector3(
-                        0f,
-                        plank.transform.eulerAngles.y,
-                        plank.transform.eulerAngles.z
-                    );
-                }
-            }
-        }
-    }
-
-
-    private void PlaceScenery(GameObject segment, List<GameObject> objs)
-    {
-        List<Transform> placements = new List<Transform>();
-        for (int i = 7; i < 11; i++)
-        {
-            if (segment.transform.GetChild(i).gameObject.tag == "SceneryPointList")
-            {
-                for (int j = 0; j < 6; j++)
-                {
-                    placements.Add(segment.transform.GetChild(i).gameObject.transform.GetChild(j).gameObject.transform);
-                }
-            }
-        }
-
-        for(int i = 0; i < placements.Count; i++)
-        {
-            int randObj = (int)Random.Range(0, 8);
-            Instantiate(objs[randObj], placements[i]);
         }
     }
 }
