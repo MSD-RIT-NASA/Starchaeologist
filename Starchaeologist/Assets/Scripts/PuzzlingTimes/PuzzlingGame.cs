@@ -58,6 +58,10 @@ public class PuzzlingGame : MonoBehaviour
 
     //PythonCommunicator communicateReference;
 
+    public GameObject UIManager;
+
+    private Vector3 activeTrapPos;
+
     void Start()
     {
         if(singleton != null && singleton != this)
@@ -94,6 +98,7 @@ public class PuzzlingGame : MonoBehaviour
     //called by the plate the player lands on to activate teleportation for adjacent plates
     public void ActivatePlates(List<Vector2> getAdjacent)
     {
+        UIManager.GetComponent<Trap_Indicator>().SetTrapActive(false);
         //activate plates based on the given list
         for (int i = 0; i < getAdjacent.Count; i++)
         {
@@ -197,6 +202,8 @@ public class PuzzlingGame : MonoBehaviour
         vignetteOn();
         Invoke("vignetteOff", 3.0f); //set inactive after 3 seconds have passed
 
+        
+
         //set up the trap list
         //0 = ceiling spikes
         //1 = arrows
@@ -209,6 +216,8 @@ public class PuzzlingGame : MonoBehaviour
                 Debug.Log("Ceiling Spikes!");
                 ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().enabled = true;
                 ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().DataSetup(currentScript);
+                activeTrapPos = ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().transform.position;
+                activeTrapPos.y += 1000;
                 break;
             case 1:
                 trap_warning.PlayOneShot(trap_warning2);
@@ -216,12 +225,14 @@ public class PuzzlingGame : MonoBehaviour
                 int thisSide = Random.Range(0, 2);
                 wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().enabled = true;
                 wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().DataSetup(currentScript);
+                activeTrapPos = wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().transform.position;
                 break;
             case 2:
                 trap_warning.PlayOneShot(trap_warning3);
                 Debug.Log("Log Swing!");
                 swingList[yIndex].GetComponent<Trap_Log>().enabled = true;
                 swingList[yIndex].GetComponent<Trap_Log>().DataSetup(currentScript);
+                activeTrapPos = swingList[yIndex].GetComponent<Trap_Log>().transform.position;
                 break;
             case 3:
                 trap_warning.PlayOneShot(trap_warning4);
@@ -235,10 +246,14 @@ public class PuzzlingGame : MonoBehaviour
                 int pillarDepth = yIndex / 3;
                 pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().enabled = true;
                 pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().DataSetup(currentScript);
+                activeTrapPos = pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().transform.position;
                 break;
             default:
                 break;
         }
+        Debug.Log("Got to the Trap_Indicaor Setters");
+        UIManager.GetComponent<Trap_Indicator>().SetTrapActive(true);
+        UIManager.GetComponent<Trap_Indicator>().SetTarget(activeTrapPos);
     }
 
     //a method called by obstacles when the player hits them which will increment points

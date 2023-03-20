@@ -6,12 +6,14 @@ using UnityEngine.UI;
 
 public class scoreScript : MonoBehaviour
 {
-    public static scoreScript singleton;
+    public static scoreScript Instance{ get; private set;}
 
     private Text txt;
     private Text txtBlip;
     private Text txtMenu;
     private Text txtCalibration;
+
+    
     private float showTime = 1f;
     private float hideTime = 0f;
     private float calibrateOn = 30f;
@@ -19,41 +21,44 @@ public class scoreScript : MonoBehaviour
     public static int Score;
     public static bool scoreMenu=false;
     public GameObject vignette;
+    //public PythonCommunicator pythCom;
     // Start is called before the first frame update
     void Start()
     {
-        if (singleton != null && singleton != this)
+
+        if (Instance != null && Instance != this)
         {
             Destroy(this);
         }
         else
         {
-            singleton = this;
+            Debug.Log("Instance Set");
+            Instance = this;
         }
 
-        Score = 0;
-        txt= GameObject.Find("Score").GetComponentInChildren<Text>();
-        txt.enabled = false;
+        // txt= GameObject.Find("Score").GetComponentInChildren<Text>();
+        // txt.enabled = false;
         txtBlip= GameObject.Find("ScoreBlip").GetComponentInChildren<Text>();
         txtBlip.enabled = false;
-        txtMenu= GameObject.Find("ScoreMenu").GetComponent<Text>();
-        txtMenu.enabled = false;
-        txtCalibration= GameObject.Find("CalibrationMsg").GetComponent<Text>();
-        txtCalibration.enabled = false;
+        // txtMenu= GameObject.Find("ScoreMenu").GetComponent<Text>();
+        // txtMenu.enabled = false;
+        // txtCalibration= GameObject.Find("CalibrationMsg").GetComponent<Text>();
+        // txtCalibration.enabled = false;
     }
 
     // Update is called once per frame
-    void Update()
-    {        
-        if(txtBlip.enabled && (Time.time >= hideTime)&& !scoreMenu)
-        {
-            txtBlip.enabled = false;
-        }
-        if(scoreMenu){ //set to true when playerFoot collides with "finish" tag
-            txtMenu.enabled = true;
-        }
+    // void Update()
+    // {        
+    //     if(txtBlip.enabled && (Time.time >= hideTime)&& !scoreMenu)
+    //     {
+    //         txtBlip.enabled = false;
+    //     }
+    //     if(scoreMenu){ //set to true when playerFoot collides with "finish" tag
+    //         txtMenu.enabled = true;
+    //     }
         
-    }
+    // }
+    
     public void artifactScore()
     {
         Score += 100;
@@ -67,10 +72,11 @@ public class scoreScript : MonoBehaviour
     public void hitScore()
     {
         Score -= 10;
-        txtVisual(10);
+        Debug.Log("lower the score");
+        //txtVisual(10);
         //enable vignette
-        vignetteOn();
-        Invoke("vignetteOff", 3.0f); //set inactive after 3 seconds have passed
+        //vignetteOn();
+        //Invoke("vignetteOff", 3.0f); //set inactive after 3 seconds have passed
     }
 
     void vignetteOn()
@@ -132,7 +138,7 @@ public class scoreScript : MonoBehaviour
         txtCalibration.enabled=false;
         scoreMenu = true;
         for(int s=0;s<Score;s++){
-            txt.text = s.ToString();//+communication player score
+            txt.text = s.ToString(); //+ pythCom.BalanceScore;//+communication player score
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.XR.CoreUtils;
 
 public class S_Raft : MonoBehaviour
 {
@@ -9,7 +10,6 @@ public class S_Raft : MonoBehaviour
     public float tiltSpeed = 1.0f;
     public bool tilting = false;
     public Vector3 plannedRotation;
-
     Quaternion newTilt;
     Quaternion oldTilt;
     float tiltRatio = 1.0f;
@@ -19,7 +19,6 @@ public class S_Raft : MonoBehaviour
     {
         newTilt = Quaternion.Euler(0, -45, 0);
         oldTilt = Quaternion.Euler(0, -45, 0);
-
         plannedRotation = new Vector3(0, -45, 0);
     }
 
