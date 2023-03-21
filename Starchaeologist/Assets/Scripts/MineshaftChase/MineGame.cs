@@ -9,6 +9,8 @@ public class MineGame : MonoBehaviour
     public static MineGame singleton;
 
     [SerializeField] GameObject playerReference;
+    [SerializeField] GameObject rightHandRay;
+    [SerializeField] GameObject leftHandRay;
     [SerializeField] GameObject shadowReference;
     [SerializeField] Minecart raftReference;
     [SerializeField] Timer timer;
@@ -27,6 +29,8 @@ public class MineGame : MonoBehaviour
 
     [SerializeField]
     private GameObject countdown;
+    [SerializeField]
+    private GameObject readyToStart;
     [SerializeField]
     private TMP_Text countdownText;
 
@@ -56,6 +60,9 @@ public class MineGame : MonoBehaviour
     private float speedModifier;
 
     private bool coroutineAllowed;
+
+    private float deadTimeStart;
+    private float deadTime;
 
 
     // Start is called before the first frame update
@@ -91,13 +98,17 @@ public class MineGame : MonoBehaviour
         }
         else
         {
+            deadTimeStart = timer.GetTime;
             countdown.SetActive(false);
-            timeToMove = true;
+            readyToStart.SetActive(true);
+            rightHandRay.SetActive(true);
+            leftHandRay.SetActive(true);
         }
 
         //start the game by moving the raft
         if (timeToMove)
         {
+            readyToStart.SetActive(false);
             if (!soundfxSource.isPlaying)
             {
                 soundfxSource.PlayOneShot(railRiding_SFX);
@@ -191,5 +202,13 @@ public class MineGame : MonoBehaviour
         }
         coroutineAllowed = true;
 
+    }
+
+    public void TimeToMove()
+    {
+        timeToMove = true;
+        deadTime = timer.GetTime - deadTimeStart;
+        rightHandRay.SetActive(false);
+        leftHandRay.SetActive(false);
     }
 }

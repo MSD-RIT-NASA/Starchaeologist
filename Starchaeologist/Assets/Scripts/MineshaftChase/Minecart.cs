@@ -37,6 +37,9 @@ public class Minecart : MonoBehaviour
     public static int Score;
     public static bool scoreMenu = false;
 
+    [SerializeField]
+    private UdpSocket server;
+
     public float TiltAngle
     {
         get { return tiltAngle; }
@@ -54,15 +57,14 @@ public class Minecart : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //turningLeft and turningRight should change values as the level progresses
         if (turningLeft)
         {
-            //TurnLeft();
             FallOnTurn();
         }
         else if (turningRight)
         {
-            //TurnRight();
             FallOnTurn();
         }
         else if (!turningLeft && !turningRight)
@@ -70,17 +72,14 @@ public class Minecart : MonoBehaviour
             isTilting = false;
             FreeLean();
         }
-
-        // Move();
-        //mainCam.transform.forward = this.transform.forward;
     }
 
     //The cart should move at a constant speed in the direction of the cart's forward vector
-    public void Move()
-    {
-        this.transform.position += this.transform.forward * SPEED;
-        player.transform.position += this.transform.forward * SPEED;
-    }
+    //public void Move()
+    //{
+    //    this.transform.position += this.transform.forward * SPEED;
+    //    player.transform.position += this.transform.forward * SPEED;
+    //}
 
     //If the cart is riding on a curve, it will start to fall towards the outside of the curve.
     //Right now, the cart stops leaning at a certain point, but eventually, the cart should fall or the player take damage
@@ -88,7 +87,7 @@ public class Minecart : MonoBehaviour
     {
         if (turningRight)
         {
-            if (tiltAngle < 40f)
+            if (tiltAngle/*server.boardRotation*/ < 40f)
             {
                 isTilting = true;
                 tiltAngle += .2f;
@@ -97,7 +96,7 @@ public class Minecart : MonoBehaviour
         }
         else if (turningLeft)
         {
-            if (tiltAngle > -40f)
+            if (tiltAngle/*server.boardRotation*/ > -40f)
             {
                 isTilting = true;
                 tiltAngle -= .2f;
@@ -118,7 +117,8 @@ public class Minecart : MonoBehaviour
         }
 
         /*
-         * if(tiltAngle > safeMax || tiltAngle < safeMin){
+         * if(server.boardRotation > safeMax || server.boardRotation < safeMin){
+         *     tiltAngle += .4f;
          *     score += 50;
          * }else{
          *     score += 5;
@@ -143,7 +143,8 @@ public class Minecart : MonoBehaviour
         }
 
         /*
-         * if(tiltAngle > safeMax || tiltAngle < safeMin){
+         * if(server.boardRotation > safeMax || server.boardRotation < safeMin){
+         *     tiltAngle -= .4f;
          *     score += 50;
          * }else{
          *     score += 5;
@@ -162,17 +163,17 @@ public class Minecart : MonoBehaviour
     //Player can lean to either side without falling over while not turning
     public void FreeLean()
     {
-        if (headHb.bounds.Intersects(leftBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle < 40f)
+        if (headHb.bounds.Intersects(leftBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle < 40f/*server.boardRotation < 40f*/)
         {
             Debug.Log("Free Lean Left");
             tiltAngle += 5f;
         }
-        else if (headHb.bounds.Intersects(rightBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle > -40f)
+        else if (headHb.bounds.Intersects(rightBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle > -40f /*server.boardRotation > -40f*/)
         {
             Debug.Log("Free Lean Right");
             tiltAngle -= 5f;
         }
-        else if(headHb.bounds.Intersects(bodyHb.bounds))
+        else if(headHb.bounds.Intersects(bodyHb.bounds)/*nothing*/)
         {
             if (tiltAngle < 0f)
             {
@@ -183,7 +184,7 @@ public class Minecart : MonoBehaviour
                 tiltAngle -= 2f;
             }
 
-            if (tiltAngle < 10f && tiltAngle > -10f)
+            if (tiltAngle/*server.boardRotation*/ < 10f && tiltAngle/*server.boardRotation*/ > -10f)
             {
                 tiltAngle = 0f;
             }
