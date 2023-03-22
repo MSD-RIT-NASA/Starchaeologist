@@ -11,10 +11,12 @@ public class ScoreData : MonoBehaviour
     public GameObject scoreCanvas;
     public GameObject leaderBoard;
     public GameObject playerDataCanvas;
+    [SerializeField] private KeyInput keyboardCanvas;
     public TMP_Text score;
-    public TMP_Text playerName;
-    public TMP_Text date;
+    public TMP_InputField playerName;
+    public TMP_InputField date;
     public TMP_Text playerDataBox;
+    [SerializeField] private TMP_Text rank;
     public List<TMP_Text> leaderboardEntries;
 
     private StreamReader reader;
@@ -40,6 +42,8 @@ public class ScoreData : MonoBehaviour
     void Update()
     {
         currentScene = SceneManager.GetActiveScene().name + "Scores";
+        playerName.text = keyboardCanvas.NameEdit;
+        date.text = keyboardCanvas.DateEdit;
     }
 
 
@@ -74,6 +78,7 @@ public class ScoreData : MonoBehaviour
         writer.WriteLine("Player: " + playerName.text);
         writer.WriteLine("Date: " + date.text);
         writer.WriteLine("Score: " + score.text);
+        writer.WriteLine("Rank: " + rank.text);
 
         writer.Close();
     }
@@ -103,7 +108,11 @@ public class ScoreData : MonoBehaviour
             string pScore = data[1];
             float pScoreNum = float.Parse(pScore, CultureInfo.InvariantCulture.NumberFormat);
 
-            players.Add(new PlayerData(pName, pDate, pScoreNum));
+            newLine = reader.ReadLine();
+            data = newLine.Split(' ');
+            string pRank = data[1];
+
+            players.Add(new PlayerData(pName, pDate, pScoreNum, pRank));
 
             newLine = reader.ReadLine();
         }
@@ -182,7 +191,9 @@ public class ScoreData : MonoBehaviour
         playerDataBox.text = dataText;
     }
 
-
+    /// <summary>
+    /// Puts the player data in order by score
+    /// </summary>
     private void SortPlayers()
     {
         int topScorerIndex = 0;
@@ -202,5 +213,20 @@ public class ScoreData : MonoBehaviour
             players[o] = players[topScorerIndex];
             players[topScorerIndex] = tempPlayer;
         }
+    }
+
+    public void ShowKeyboard()
+    {
+        keyboardCanvas.gameObject.SetActive(true);
+    }
+
+    public void EditingName()
+    {
+        keyboardCanvas.EditingName = true;
+    }
+
+    public void EditingDate()
+    {
+        keyboardCanvas.EditingName = false;
     }
 }
