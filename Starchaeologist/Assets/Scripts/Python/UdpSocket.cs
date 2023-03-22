@@ -16,6 +16,7 @@ Based on older work by Sandra Fang 2016 - Unity3D to MATLAB UDP communication - 
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Net;
@@ -55,7 +56,7 @@ public class UdpSocket : MonoBehaviour
 
     //Quit game
     bool gameOver = false;
-    bool gameStart = false;
+    private bool gameStart = false;
     bool gamePaused = false;
     bool txPlatformMovement = false;
     //string gameProfiles = null;
@@ -70,6 +71,17 @@ public class UdpSocket : MonoBehaviour
     UdpClient client;
     IPEndPoint remoteEndPoint;
     Thread receiveThread; // Receiving Thread
+
+    public bool GameStart
+    {
+        get { return gameStart; }
+        set { gameStart = value; }
+    }
+    public bool GameOver
+    {
+        get { return gameOver; }
+        set { gameOver = value; }
+    }
 
     public void SendData(string message) // Use to send data to Python
     {

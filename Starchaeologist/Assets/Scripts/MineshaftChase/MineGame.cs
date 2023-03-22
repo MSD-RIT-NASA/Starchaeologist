@@ -14,6 +14,7 @@ public class MineGame : MonoBehaviour
     [SerializeField] GameObject shadowReference;
     [SerializeField] Minecart raftReference;
     [SerializeField] Timer timer;
+    [SerializeField] UdpSocket server;
     S_MineCart raftScript;
 
     public List<GameObject> trackReferences = new List<GameObject>(); //populated with positions while the mine is being built from the S_MineBuilder script
@@ -127,6 +128,8 @@ public class MineGame : MonoBehaviour
             else if (routeToGo == trackReferences.Count)
             {
                 timeToMove = false;
+                //Tell python the game is not running
+                //server.GameStart = false;
             }
         }
     }
@@ -206,6 +209,9 @@ public class MineGame : MonoBehaviour
 
     public void TimeToMove()
     {
+        //Tells the python server the game has started
+        //server.GameStart = true;
+
         timeToMove = true;
         deadTime = timer.GetTime - deadTimeStart;
         rightHandRay.SetActive(false);
