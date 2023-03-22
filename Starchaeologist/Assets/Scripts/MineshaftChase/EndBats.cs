@@ -7,8 +7,6 @@ public class EndBats : MonoBehaviour
     [SerializeField]
     private SpawnBats batSpawner;
 
-    [SerializeField]
-    private AudioSource audSrc;
 
     void Start()
     {
@@ -19,7 +17,6 @@ public class EndBats : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            audSrc.Stop();
             batSpawner.DeleteBats();
         }
     }

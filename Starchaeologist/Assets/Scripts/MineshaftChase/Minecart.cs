@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Minecart : MonoBehaviour
 {
@@ -14,28 +13,15 @@ public class Minecart : MonoBehaviour
 
     public GameObject player;
 
+
     public Camera mainCam;
 
     public Collider headHb;
     public Collider bodyHb;
     public Collider leftBodyHb;
     public Collider rightBodyHb;
+    
 
-    [SerializeField]
-    private AudioSource audSrc;
-    [SerializeField]
-    private AudioClip railGrind;
-    [SerializeField]
-    private AudioClip railRide;
-
-    private Text txt;
-    private Text txtBlip;
-    private float showTime = 1f;
-    private float hideTime = 0f;
-    private float calibrateOn = 30f;
-    private float calibrateOff = 0f;
-    public static int Score;
-    public static bool scoreMenu = false;
 
     [SerializeField]
     private UdpSocket server;
@@ -205,12 +191,29 @@ public class Minecart : MonoBehaviour
         */
     }
 
+
+    //private void TurnLeft()
+    //{
+    //    //Vector3 curCartAngles = this.transform.eulerAngles;
+    //    //this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y - .1f, curCartAngles.z);
+    //    //Vector3 curCamAngle = player.transform.eulerAngles;
+    //    //player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y - .48f, curCamAngle.z);
+    //}
+
+
+    //private void TurnRight()
+    //{
+    //    //Vector3 curCartAngles = this.transform.eulerAngles;
+    //    //this.transform.eulerAngles = new Vector3(curCartAngles.x, curCartAngles.y + .1f, curCartAngles.z);
+    //    //Vector3 curCamAngle = player.transform.eulerAngles;
+    //    //player.transform.eulerAngles = new Vector3(curCamAngle.x, curCamAngle.y + .48f, curCamAngle.z);
+    //}
+
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "StraightTrack")
         {
-            audSrc.Stop();
-            audSrc.PlayOneShot(railRide);
             turningLeft = false;
             turningRight = false;
             //this.transform.eulerAngles = other.transform.eulerAngles;
@@ -218,13 +221,11 @@ public class Minecart : MonoBehaviour
         }
         else if (other.gameObject.tag == "RightTrack")
         {
-            audSrc.PlayOneShot(railGrind);
             turningLeft = false;
             turningRight = true;
         }
         else if (other.gameObject.tag == "LeftTrack")
         {
-            audSrc.PlayOneShot(railGrind);
             turningLeft = true;
             turningRight = false;
         }

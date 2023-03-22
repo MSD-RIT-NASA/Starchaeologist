@@ -19,8 +19,8 @@ public class MineGame : MonoBehaviour
     public List<GameObject> trackReferences = new List<GameObject>(); //populated with positions while the mine is being built from the S_MineBuilder script
     Vector3 nextDestination = new Vector3(0, 0, 0);
     Vector3 currentDirection = new Vector3(0, 0, 1);
-    public float cartAcceleration = 0.1f;
-    public float cartSpeed = 3.0f;
+   // public float cartAcceleration = 0.1f;
+   // public float cartSpeed = 3.0f;
     float currentSpeed = 2f;
     public bool timeToMove = true; //turned true the first time the player teleports to the raft from the S_RaftCollision script
     bool slowDown = false;
@@ -44,9 +44,6 @@ public class MineGame : MonoBehaviour
     public AudioClip treasure_SFX;
     public AudioClip obstacleHit_SFX;
 
-    private Vector3 playerFallPos;
-    private Vector3 playerFallVel;
-    private Vector3 playerFallAccel;
 
     //[SerializeField]
     public List<Transform> routes;
@@ -68,10 +65,6 @@ public class MineGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerFallPos = playerReference.transform.position;
-        playerFallVel = new Vector3(0f, -50f, 0f);
-        playerFallAccel = new Vector3(0f, -10f, 0f);
-
         if (singleton != null && singleton != this)
         {
             Destroy(this);
@@ -83,7 +76,7 @@ public class MineGame : MonoBehaviour
 
         routeToGo = 0;
         tParam = 0f;
-        speedModifier = 0.55f;
+        speedModifier = 0.4f;
         coroutineAllowed = true;
     }
 
@@ -92,9 +85,6 @@ public class MineGame : MonoBehaviour
     {
         if (timer.TimeRemaining > 0) {
             countdownText.text = "" + ((int)timer.TimeRemaining + 1);
-            playerFallVel += playerFallAccel * timer.GetTime;
-            playerFallPos += playerFallVel * timer.GetTime;
-            playerReference.transform.position = new Vector3(playerFallPos.x, playerFallPos.y, playerFallPos.z);
         }
         else
         {
@@ -140,20 +130,7 @@ public class MineGame : MonoBehaviour
         Vector3 p2 = routes[routeNum].GetChild(2).position;
         Vector3 p3 = routes[routeNum].GetChild(3).position;
 
-        //for the shadow
-        Vector3 p02 = routes[routeNum].GetChild(0).position;
-        Vector3 p12 = routes[routeNum].GetChild(1).position;
-        Vector3 p22 = routes[routeNum].GetChild(2).position;
-        Vector3 p32 = routes[routeNum].GetChild(3).position;
-
-        if (routeToGo < trackReferences.Count - 1)
-        {
-            //make sure the shadow has a place to be put
-            p02 = routes[routeNum + 1].GetChild(0).position;
-            p12 = routes[routeNum + 1].GetChild(1).position;
-            p22 = routes[routeNum + 1].GetChild(2).position;
-            p32 = routes[routeNum + 1].GetChild(3).position;
-        }
+        
         while (tParam < 1)
         {
             tParam += Time.deltaTime * speedModifier;
@@ -166,23 +143,23 @@ public class MineGame : MonoBehaviour
             Vector3 upVec = raftReference.transform.up;
             raftReference.transform.LookAt(objectPosition, upVec);
             raftReference.transform.position = objectPosition;
-            objectPosition.y += 1;
+            objectPosition.y += 1.5f;
             playerReference.transform.LookAt(objectPosition);
             playerReference.transform.position = objectPosition;
-            this.transform.position = objectPosition;
 
-            if (routeToGo < trackReferences.Count - 1)
-            {
-                //Put the shadow in front of the player
-                objectPosition = Mathf.Pow(1 - tParam, 3) * p02 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p12 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p22 + Mathf.Pow(tParam, 3) * p32;
-                shadowReference.transform.LookAt(objectPosition);
-                shadowReference.transform.position = objectPosition;
-            }
+            //SHADOW CODE
+            //if (routeToGo < trackReferences.Count - 1)
+            //{
+            //    //Put the shadow in front of the player
+            //    objectPosition = Mathf.Pow(1 - tParam, 3) * p02 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p12 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p22 + Mathf.Pow(tParam, 3) * p32;
+            //    shadowReference.transform.LookAt(objectPosition);
+            //    shadowReference.transform.position = objectPosition;
+            //}
             yield return 0;
         }
 
         tParam = 0;
-        //speedModifier = speedModifier * 0.90f;
+        speedModifier = speedModifier * 0.90f;
         routeToGo += 1;
 
 
@@ -192,7 +169,7 @@ public class MineGame : MonoBehaviour
             if (trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track(Clone)" &&
                 trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Right" && trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Left")
             {
-                Debug.Log(trackReferences[routeToGo - 2].gameObject.name);
+               // Debug.Log(trackReferences[routeToGo - 2].gameObject.name);
                 trackReferences[routeToGo - 2].SetActive(false);
             }
         }

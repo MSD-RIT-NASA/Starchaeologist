@@ -71,6 +71,11 @@ public class UdpSocket : MonoBehaviour
     IPEndPoint remoteEndPoint;
     Thread receiveThread; // Receiving Thread
 
+    //public float TiltRotation
+    //{
+    //    get { return platformRot.z; }
+    //}
+
     public void SendData(string message) // Use to send data to Python
     {
         try
