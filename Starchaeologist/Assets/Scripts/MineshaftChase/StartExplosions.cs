@@ -13,6 +13,11 @@ public class StartExplosions : MonoBehaviour
     [SerializeField]
     private GameObject rockPrefab;
 
+    [SerializeField]
+    private AudioSource audSrc;
+    [SerializeField]
+    private AudioClip explosion3;
+
     private List<GameObject> rocks;
     private int rocksSpawned;
 
@@ -52,7 +57,8 @@ public class StartExplosions : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        audSrc.PlayOneShot(explosion3);
+        if (other.gameObject.tag == "PlayerHead")
         {
             for(int i = 0; i < explosions.Count; i++)
             {
