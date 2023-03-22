@@ -10,11 +10,6 @@ using UnityEngine;
 
 public class TreasureCollision : MonoBehaviour
 {
-    [SerializeField]
-    private AudioSource audSrc;
-    [SerializeField]
-    private AudioClip treasureCollect;
-
     //void OnTriggerEnter(Collider other)
     //{
     //    Debug.Log("collides with " + other.gameObject.tag);
@@ -46,7 +41,6 @@ public class TreasureCollision : MonoBehaviour
     {
         if (collision.collider.gameObject.CompareTag("PlayerHand"))
         {
-            audSrc.PlayOneShot(treasureCollect);
             Debug.Log("Gathered Treasure");
             Destroy(gameObject);
             Debug.Log("Deleted");

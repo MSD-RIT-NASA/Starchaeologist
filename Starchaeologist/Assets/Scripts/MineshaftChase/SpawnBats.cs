@@ -10,11 +10,6 @@ public class SpawnBats : MonoBehaviour
     [SerializeField]
     private List<GameObject> spawnPoints;
 
-    [SerializeField]
-    private AudioSource audSrc;
-    [SerializeField]
-    private AudioClip batChirp;
-
     private int numBats;
     private float batSpeed;
 
@@ -43,10 +38,9 @@ public class SpawnBats : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
-        if (other.gameObject.tag == "PlayerHead")
+        if (other.gameObject.tag == "Player")
         {
-            audSrc.PlayOneShot(batChirp);
+            Debug.Log("Spawn the bats");
             InvokeRepeating("BatSpawn", 0.0f, 0.3f);
         }
     }
