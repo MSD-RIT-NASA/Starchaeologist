@@ -17,10 +17,10 @@ public class RoadBuilder : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        BuildRoad();
+        
     }
 
-    private void BuildRoad()
+    public void BuildRoad()
     {
         //Build a road as long as the distance
         currentRoad = GameObject.Find("Road Segments");
@@ -83,7 +83,7 @@ public class RoadBuilder : MonoBehaviour
 
         //Spawn obstacles on road piece
         List<GameObject> possibleSpawns = new List<GameObject>();
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < 8; j++)
         {
             possibleSpawns.Add(placedPiece.transform.GetChild(j + 2).gameObject);
         }
