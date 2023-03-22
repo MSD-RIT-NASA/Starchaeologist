@@ -14,21 +14,26 @@
 import UdpComms as U
 import time
 import logging
-import socket
+# import socket
+
+# UDP_IP= "192.168.4.4"
+# UDP_PORT = 4210
+# MESSAGE = "Hello, World!"
 
 
 # Create UDP socket to use for sending (and receiving)
 sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
 
-# # Create a datagram socket
 
-# UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+# boardSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-# # Bind to address and ip
+# boardSock.sendto(bytes(MESSAGE, "utf-8"), (UDP_IP, UDP_PORT))
 
-# UDPServerSocket.bind(("192.168.4.4", "4210"))
+# boardMsg = 0
+# boardSock.recvfrom(8)
+# print("\n\n 2. Server received: ", boardSock.decode('utf-8'), "\n\n")
 
-# boardSock = socket.socket()
+
 
 
 logging.basicConfig(level=logging.INFO, 
