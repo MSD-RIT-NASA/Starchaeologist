@@ -1,3 +1,5 @@
+//NASA x RIT authors: Deen Grey and Noah Flanders
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

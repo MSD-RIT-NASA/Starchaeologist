@@ -1,3 +1,6 @@
+//NASA x RIT author: Noah Flanders
+
+//Cleans up the unnecessary bat models in the scene to improve performace
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

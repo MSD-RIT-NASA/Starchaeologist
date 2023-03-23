@@ -1,3 +1,5 @@
+//NASA x RIT author: Noah Flanders
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +30,7 @@ public class Minecart : MonoBehaviour
     [SerializeField]
     private AudioClip railRide;
 
+    //For score display
     private Text txt;
     private Text txtBlip;
     private float showTime = 1f;
@@ -74,13 +77,6 @@ public class Minecart : MonoBehaviour
         }
     }
 
-    //The cart should move at a constant speed in the direction of the cart's forward vector
-    //public void Move()
-    //{
-    //    this.transform.position += this.transform.forward * SPEED;
-    //    player.transform.position += this.transform.forward * SPEED;
-    //}
-
     //If the cart is riding on a curve, it will start to fall towards the outside of the curve.
     //Right now, the cart stops leaning at a certain point, but eventually, the cart should fall or the player take damage
     public void FallOnTurn()
@@ -104,11 +100,12 @@ public class Minecart : MonoBehaviour
             LeanLeft();
         }
 
+        //The rotation is applied here
         Vector3 curAngles = this.transform.eulerAngles;
         this.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, tiltAngle);
     }
 
-    //If headbox is rotated a certain number of degrees in the opposite direction, the cart leans back toward the center
+    //If headbox(soon to be balance board) is rotated a certain number of degrees in the opposite direction, the cart leans back toward the center
     public void LeanLeft()
     {
         if(headHb.bounds.Intersects(leftBodyHb.bounds)/* && !(headHb.bounds.Intersects(bodyHb.bounds)) */&& tiltAngle < 0f)
@@ -161,18 +158,23 @@ public class Minecart : MonoBehaviour
     }
 
     //Player can lean to either side without falling over while not turning
+    //This provides a visual indicator to the player as to how generally well they
+    //are balancing on straight tracks
+    //Original idea was to have broken rails where the player had to lean to avoid them like obstacles
     public void FreeLean()
     {
-        if (headHb.bounds.Intersects(leftBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle < 40f/*server.boardRotation < 40f*/)
+        //If player leans far enough one way, they will sit at a 40deg angle in that direction
+        if (headHb.bounds.Intersects(leftBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds))/*server.boardRotation < 40f*/ && tiltAngle < 40f)
         {
             Debug.Log("Free Lean Left");
             tiltAngle += 5f;
         }
-        else if (headHb.bounds.Intersects(rightBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds)) && tiltAngle > -40f /*server.boardRotation > -40f*/)
+        else if (headHb.bounds.Intersects(rightBodyHb.bounds) && !(headHb.bounds.Intersects(bodyHb.bounds))/*server.boardRotation > -40f*/ && tiltAngle > -40f)
         {
             Debug.Log("Free Lean Right");
             tiltAngle -= 5f;
         }
+        //If they aren't leaning far enough, they will remain at 0 tilt
         else if(headHb.bounds.Intersects(bodyHb.bounds)/*nothing*/)
         {
             if (tiltAngle < 0f)
@@ -190,6 +192,7 @@ public class Minecart : MonoBehaviour
             }
         }
 
+        //The rotation is applied here
         Vector3 curAngles = this.transform.eulerAngles;
         this.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, tiltAngle);
 
@@ -205,6 +208,10 @@ public class Minecart : MonoBehaviour
         */
     }
 
+    /// <summary>
+    /// Each track has differently tagged colliders so that the cart knows when to tilt
+    /// </summary>
+    /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "StraightTrack")

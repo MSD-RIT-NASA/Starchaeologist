@@ -1,3 +1,9 @@
+//NASA x RIT author: Noah Flanders
+
+//This script displays the rotation of the balance board the player
+//is standing on and the "ideal zone" in which the balance board should
+//be within
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,7 +44,7 @@ public class BalanceUI : MonoBehaviour
             );
     }
 
-
+    //The ideal zone changes depending on if the player is turning or not
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "StraightTrack")

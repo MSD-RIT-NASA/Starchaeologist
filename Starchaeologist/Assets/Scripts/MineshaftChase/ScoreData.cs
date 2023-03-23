@@ -1,3 +1,6 @@
+//NASA x RIT author: Noah Flanders
+
+//This script interacts with the text files that store the game score data
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,8 +37,6 @@ public class ScoreData : MonoBehaviour
         players = new List<PlayerData>();
         leaders = new List<PlayerData>();
         singlePlayerData = new List<PlayerData>();
-
-        //PopulatePlayers();
     }
 
     // Update is called once per frame
@@ -56,11 +57,13 @@ public class ScoreData : MonoBehaviour
         scoreCanvas.SetActive(isActive);
     }
 
+    //Leaderboard Canvas
     public void SetLBCanvasActive(bool isActive)
     {
         leaderBoard.SetActive(isActive);
     }
 
+    //Individual Player Data Canvas
     public void SetPlayerCanvas(bool isActive)
     {
         playerDataCanvas.SetActive(isActive);
@@ -112,6 +115,7 @@ public class ScoreData : MonoBehaviour
             data = newLine.Split(' ');
             string pRank = data[1];
 
+            //Creates new instance of PlayerData object
             players.Add(new PlayerData(pName, pDate, pScoreNum, pRank));
 
             newLine = reader.ReadLine();
@@ -126,6 +130,7 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void DisplayLeaderboard()
     {
+        //If the list hasn't been populated, read the data from the score file
         if (players.Count == 0)
         {
             PopulatePlayers();
@@ -133,7 +138,7 @@ public class ScoreData : MonoBehaviour
 
         leaders.Clear();
 
-        SortPlayers();
+        SortPlayers();//Orders the list of players
 
         if (players.Count >= 10)//Just take the top 10 scores
         {
@@ -171,6 +176,7 @@ public class ScoreData : MonoBehaviour
 
         singlePlayerData.Clear();
 
+        //Finds all data with the player name that matches the one being searched
         for(int i = 0; i < players.Count; i++)
         {
             if(players[i].PlayerName == name.text)
