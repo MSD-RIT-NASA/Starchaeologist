@@ -16,6 +16,7 @@ Based on older work by Sandra Fang 2016 - Unity3D to MATLAB UDP communication - 
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Net;
@@ -39,7 +40,7 @@ public class UdpSocket : MonoBehaviour
     bool threadRunning = false;
     Thread communicateThread;
 
-    //rotation
+    private float boardRotation;
 
     // int getMovement
     // int sendMovement
@@ -55,7 +56,7 @@ public class UdpSocket : MonoBehaviour
 
     //Quit game
     bool gameOver = false;
-    bool gameStart = false;
+    private bool gameStart = false;
     bool gamePaused = false;
     bool txPlatformMovement = false;
     //string gameProfiles = null;
@@ -75,10 +76,20 @@ public class UdpSocket : MonoBehaviour
     IPEndPoint remoteEndPoint;
     Thread receiveThread; // Receiving Thread
 
-    //public float TiltRotation
-    //{
-    //    get { return platformRot.z; }
-    //}
+    public bool GameStart
+    {
+        get { return gameStart; }
+        set { gameStart = value; }
+    }
+    public bool GameOver
+    {
+        get { return gameOver; }
+        set { gameOver = value; }
+    }
+    public float BoardRotation
+    {
+        get { return boardRotation; }
+    }
 
     public void SendData(string message) // Use to send data to Python
     {
@@ -194,6 +205,9 @@ public class UdpSocket : MonoBehaviour
             case "boardMove":
                 Debug.Log("board moved!");
                 //collect board data
+
+                //If multiple sensor values will be read in as parts of a single string,
+                //split the messageat whitespace and assign sensorLRot and sensorRRot respectively
                 break;
             case "testingPython":
                 fltTest = float.Parse(splitMessage[1]);

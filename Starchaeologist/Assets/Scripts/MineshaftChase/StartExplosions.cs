@@ -1,3 +1,6 @@
+//NASA x RIT author: Noah Flanders
+
+//Handles the explosion animations and the falling rock spawns
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +15,11 @@ public class StartExplosions : MonoBehaviour
 
     [SerializeField]
     private GameObject rockPrefab;
+
+    [SerializeField]
+    private AudioSource audSrc;
+    [SerializeField]
+    private AudioClip explosion3;
 
     private List<GameObject> rocks;
     private int rocksSpawned;
@@ -31,6 +39,7 @@ public class StartExplosions : MonoBehaviour
     {
         for(int i = 0; i < rocks.Count; i++)
         {
+            //Moves rocks if they exist
             if (rocks[i] != null)
             {
                 rocks[i].transform.position = new Vector3(
@@ -50,9 +59,14 @@ public class StartExplosions : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Starts explosion animations and falling rocks once the player enters the TNTTrack
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        audSrc.PlayOneShot(explosion3);
+        if (other.gameObject.tag == "PlayerHead")
         {
             for(int i = 0; i < explosions.Count; i++)
             {
@@ -63,6 +77,7 @@ public class StartExplosions : MonoBehaviour
         }
     }
 
+    //Deletes the rocks when the player exits the TNTTrack
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
@@ -75,12 +90,17 @@ public class StartExplosions : MonoBehaviour
         }
     }
 
+    //Drops new rocks in each possible spawn location (not twice in one spot)
     private void DropRock()
     {
         int randIndex = (int)Random.Range(0, 10);
+
+        //If a rock has spawned in one location, pick a different one
         while (rockSpawns[randIndex].Spawned)
         {
             randIndex = (int)Random.Range(0, 10);
+
+            //Spawns 10 rocks
             if(rocksSpawned >= 10)
             {
                 CancelInvoke("DropRock");
@@ -88,6 +108,7 @@ public class StartExplosions : MonoBehaviour
             }
         }
 
+        //New rock instance with random size
         rocks.Add(Instantiate(rockPrefab, rockSpawns[randIndex].transform));
         float randScale = Random.Range(0f, 10f);
         rocks[rocksSpawned].transform.localScale = new Vector3(
