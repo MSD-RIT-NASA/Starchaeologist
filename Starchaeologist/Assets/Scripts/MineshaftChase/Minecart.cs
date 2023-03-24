@@ -60,6 +60,7 @@ public class Minecart : MonoBehaviour
         isTilting = false;
         safeMax = 3f;
         safeMin = -3f;
+        boardRot = 0f;
     }
 
     // Update is called once per frame
@@ -80,7 +81,8 @@ public class Minecart : MonoBehaviour
         else if (!turningLeft && !turningRight)
         {
             isTilting = false;
-            FreeLean();
+            //FreeLean();
+            tiltAngle = 0f;
         }
     }
 
