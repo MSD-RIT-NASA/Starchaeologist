@@ -40,11 +40,8 @@ public class UdpSocket : MonoBehaviour
     bool threadRunning = false;
     Thread communicateThread;
 
-    private float boardRotation;
-
     // int getMovement
     // int sendMovement
-
 
     //score
     bool isCalibrated = false;
@@ -64,6 +61,10 @@ public class UdpSocket : MonoBehaviour
     // TESTING
     public bool test = false;
     float fltTest = -1f;
+
+    // ROTATION BOARD SENSOR
+    //public bool getRotation = false;
+    private float boardRotation;
 
     [HideInInspector] public bool isTxStarted = false;
 
@@ -203,8 +204,10 @@ public class UdpSocket : MonoBehaviour
                 break;
 
             case "boardMove":
-                Debug.Log("board moved!");
+                //Debug.Log("board moved!");
                 //collect board data
+                boardRotation = float.Parse(splitMessage[1]);
+                //Debug.Log(boardRotation.ToString());
 
                 //If multiple sensor values will be read in as parts of a single string,
                 //split the messageat whitespace and assign sensorLRot and sensorRRot respectively
@@ -239,11 +242,6 @@ public class UdpSocket : MonoBehaviour
             StartThread();
         }
 
-        // if(comeBack)
-        // {
-        //     /*TO DO*/
-        //     //allow the game to be unpaused after it's been killed
-        // }
     }
 
     void StartThread()
@@ -324,6 +322,8 @@ public class UdpSocket : MonoBehaviour
                     SendData(msg);
                     return;
                 }
+
+
 
                 
 

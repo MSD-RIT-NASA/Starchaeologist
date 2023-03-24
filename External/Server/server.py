@@ -14,27 +14,20 @@
 import UdpComms as U
 import time
 import logging
-# import socket
+import socket
+import math
 
-# UDP_IP= "192.168.4.4"
-# UDP_PORT = 4210
-# MESSAGE = "Hello, World!"
+UDP_IP= "192.168.4.4"
+UDP_PORT = 4210
+MESSAGE = "Hello, World!"
 
 
 # Create UDP socket to use for sending (and receiving)
 sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
 
 
-# boardSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-# boardSock.sendto(bytes(MESSAGE, "utf-8"), (UDP_IP, UDP_PORT))
-
-# boardMsg = 0
-# boardSock.recvfrom(8)
-# print("\n\n 2. Server received: ", boardSock.decode('utf-8'), "\n\n")
-
-
-
+boardSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+boardSock.sendto(bytes(MESSAGE, "utf-8"), (UDP_IP, UDP_PORT))
 
 logging.basicConfig(level=logging.INFO, 
     format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
@@ -49,6 +42,15 @@ while True:
     #logging.info("Waiting For Message From Unity")
     decodedMessage = sock.ReadReceivedData() # read data
     print(decodedMessage)
+    boardMsg = boardSock.recvfrom(16)
+    value = boardMsg[0].decode('utf-8')
+    try:
+        newval = float(value.replace('\U00002013', '-'))*360/math.pi
+        sock.SendData("boardMove " + str(newval))
+        print(newval)
+    except ValueError:
+        print ("Not a float")
+        pass
     if(decodedMessage == "quit"):
         logging.info("End of Unity Game reached")
         sock.unityShutDown()               
