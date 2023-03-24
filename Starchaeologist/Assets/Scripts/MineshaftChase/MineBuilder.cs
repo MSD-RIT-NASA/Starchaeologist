@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class MineBuilder : MonoBehaviour
 {
-
-    [SerializeField] GameObject sensorySegment;
     [SerializeField] GameObject shadowReference;
     public int segmentCount = 6;
 
@@ -65,7 +63,10 @@ public class MineBuilder : MonoBehaviour
             //choose one of the available segment prefabs and place it at the end of the last placed piece
             int randIndex = (int)Random.Range(0, segmentArray[0].Count);
             GameObject newSpawn = Instantiate(segmentArray[0][randIndex]);
-            if (segmentArray[0][randIndex].gameObject.name == "RepeatedTurns_Track")
+            newSpawn.transform.position = spawnPosition;
+            newSpawn.transform.rotation = spawnRotation;
+
+            if (i >= 2)
             {
                 newSpawn.SetActive(false);
             }
@@ -82,18 +83,6 @@ public class MineBuilder : MonoBehaviour
                 {
                     newSpawn.transform.GetChild(j).gameObject.transform.position = spawnPosition;
                     newSpawn.transform.GetChild(j).gameObject.transform.rotation = spawnRotation;
-                    if (i >= 2)
-                    {
-                        newSpawn.transform.GetChild(j).gameObject.SetActive(false);
-                    }
-                    for (int y = 9; y < 13; y++)
-                    {
-                        GameObject light = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(y).transform.gameObject;
-                        if (light.tag == "Light")
-                        {
-                            light.AddComponent(typeof(FlickeringLights));
-                        }
-                    }
                     spawnPosition = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.position;
                     spawnRotation = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.rotation;
 
@@ -103,50 +92,14 @@ public class MineBuilder : MonoBehaviour
                     PlaceScenery(spawnedSegments[i], sceneryObjects);
                     i++;
                 }
-                i += 5;
             }
-            if (segmentArray[0][randIndex].gameObject.name == "SensoryDeprevation_Track")
-            {
-                for (int j = 0; j <= 2; j++)
-                {
-                    newSpawn.transform.GetChild(j).gameObject.transform.position = spawnPosition;
-                    newSpawn.transform.GetChild(j).gameObject.transform.rotation = spawnRotation;
-                    if (i >= 2)
-                    {
-                        newSpawn.transform.GetChild(j).gameObject.SetActive(false);
-                    }
-                    spawnPosition = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.position;
-                    spawnRotation = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.rotation;
-
-                    spawnedSegments.Add(newSpawn.transform.GetChild(j).gameObject);
-                    spawnedTransforms.Add(newSpawn.transform.GetChild(j).transform.GetChild(2).transform);
-                }
-                i += 2;
-            }
-            if(segmentArray[0][randIndex].gameObject.name != "SensoryDeprevation_Track" && segmentArray[0][randIndex].gameObject.name != "RepeatedTurns_Track")
-            {
-                newSpawn.transform.position = spawnPosition;
-                newSpawn.transform.rotation = spawnRotation;
-
-                if (i >= 2)
-                {
-                    newSpawn.SetActive(false);
-                }
-                spawnPosition = newSpawn.transform.GetChild(0).transform.position;
-                spawnRotation = newSpawn.transform.GetChild(0).transform.rotation;
-
-                spawnedSegments.Add(newSpawn);
-                spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
-            }
-            //Debug.Log("spanwed segments: "+spawnedSegments.Count);
-            //Debug.Log("i: "+ i);
+            
             //spawn objects on the segment
             PlaceObjects(spawnedSegments[i], obstaclePrefabs);
             PlaceObjects(spawnedSegments[i], treasurePrefabs);
             PlaceSupports(spawnedSegments[i], supports);
             PlaceScenery(spawnedSegments[i], sceneryObjects);
             i++;
-
         }
         
         GameObject endReference = GameObject.Find("TrackEnd");
@@ -155,17 +108,14 @@ public class MineBuilder : MonoBehaviour
         endReference.SetActive(false);
         spawnedSegments.Add(endReference);
         spawnedTransforms.Add(endReference.transform.GetChild(2).transform);
-
-        //place objects on the end track
-       
         PlaceObjects(spawnedSegments[i], obstaclePrefabs);
         PlaceObjects(spawnedSegments[i+1], obstaclePrefabs);
         PlaceSupports(spawnedSegments[i], supports);
         PlaceSupports(spawnedSegments[i+1], supports);
         PlaceScenery(spawnedSegments[i], sceneryObjects);
         //place shadow 
-        //shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
-        //shadowReference.transform.rotation = spawnedSegments[0].transform.GetChild(0).transform.rotation;
+        shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
+        shadowReference.transform.rotation = spawnedSegments[0].transform.GetChild(0).transform.rotation;
 
     }
 

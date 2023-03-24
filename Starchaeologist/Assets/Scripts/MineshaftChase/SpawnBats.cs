@@ -1,3 +1,6 @@
+//NASA x RIT author: Noah Flanders
+
+//Spawns and moves bat objects when a player is on the BatTrack
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +12,11 @@ public class SpawnBats : MonoBehaviour
 
     [SerializeField]
     private List<GameObject> spawnPoints;
+
+    [SerializeField]
+    private AudioSource audSrc;
+    [SerializeField]
+    private AudioClip batChirp;
 
     private int numBats;
     private float batSpeed;
@@ -38,9 +46,10 @@ public class SpawnBats : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        
+        if (other.gameObject.tag == "PlayerHead")
         {
-            Debug.Log("Spawn the bats");
+            audSrc.PlayOneShot(batChirp);
             InvokeRepeating("BatSpawn", 0.0f, 0.3f);
         }
     }
@@ -51,17 +60,16 @@ public class SpawnBats : MonoBehaviour
         //Spawn bat at a random spawnpoint chosen from the list
         int randIndex = (int)Random.Range(0.0f, 5.0f);
         bats.Add(Instantiate(batPrefab, spawnPoints[randIndex].transform));
-
-        //
-        //bats[numBats].transform.Rotate((5f * numBats), 0.0f, 0.0f, Space.Self);
         numBats++;
 
+        //Spawns 10 bats
         if(numBats > 10)
         {
             CancelInvoke("BatSpawn");
         }
     }
 
+    //Deletes bats once the player has left the BatTrack
     public void DeleteBats()
     {
         for (int i = 0; i < bats.Count; i++)

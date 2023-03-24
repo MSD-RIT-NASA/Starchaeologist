@@ -1,3 +1,6 @@
+//NASA x RIT author: Noah Flanders
+
+//This script interacts with the text files that store the game score data
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,10 +14,12 @@ public class ScoreData : MonoBehaviour
     public GameObject scoreCanvas;
     public GameObject leaderBoard;
     public GameObject playerDataCanvas;
+    [SerializeField] private KeyInput keyboardCanvas;
     public TMP_Text score;
-    public TMP_Text playerName;
-    public TMP_Text date;
+    public TMP_InputField playerName;
+    public TMP_InputField date;
     public TMP_Text playerDataBox;
+    [SerializeField] private TMP_Text rank;
     public List<TMP_Text> leaderboardEntries;
 
     private StreamReader reader;
@@ -32,14 +37,14 @@ public class ScoreData : MonoBehaviour
         players = new List<PlayerData>();
         leaders = new List<PlayerData>();
         singlePlayerData = new List<PlayerData>();
-
-        //PopulatePlayers();
     }
 
     // Update is called once per frame
     void Update()
     {
         currentScene = SceneManager.GetActiveScene().name + "Scores";
+        playerName.text = keyboardCanvas.NameEdit;
+        date.text = keyboardCanvas.DateEdit;
     }
 
 
@@ -52,11 +57,13 @@ public class ScoreData : MonoBehaviour
         scoreCanvas.SetActive(isActive);
     }
 
+    //Leaderboard Canvas
     public void SetLBCanvasActive(bool isActive)
     {
         leaderBoard.SetActive(isActive);
     }
 
+    //Individual Player Data Canvas
     public void SetPlayerCanvas(bool isActive)
     {
         playerDataCanvas.SetActive(isActive);
@@ -74,6 +81,7 @@ public class ScoreData : MonoBehaviour
         writer.WriteLine("Player: " + playerName.text);
         writer.WriteLine("Date: " + date.text);
         writer.WriteLine("Score: " + score.text);
+        writer.WriteLine("Rank: " + rank.text);
 
         writer.Close();
     }
@@ -103,7 +111,12 @@ public class ScoreData : MonoBehaviour
             string pScore = data[1];
             float pScoreNum = float.Parse(pScore, CultureInfo.InvariantCulture.NumberFormat);
 
-            players.Add(new PlayerData(pName, pDate, pScoreNum));
+            newLine = reader.ReadLine();
+            data = newLine.Split(' ');
+            string pRank = data[1];
+
+            //Creates new instance of PlayerData object
+            players.Add(new PlayerData(pName, pDate, pScoreNum, pRank));
 
             newLine = reader.ReadLine();
         }
@@ -117,6 +130,7 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void DisplayLeaderboard()
     {
+        //If the list hasn't been populated, read the data from the score file
         if (players.Count == 0)
         {
             PopulatePlayers();
@@ -124,7 +138,7 @@ public class ScoreData : MonoBehaviour
 
         leaders.Clear();
 
-        SortPlayers();
+        SortPlayers();//Orders the list of players
 
         if (players.Count >= 10)//Just take the top 10 scores
         {
@@ -162,6 +176,7 @@ public class ScoreData : MonoBehaviour
 
         singlePlayerData.Clear();
 
+        //Finds all data with the player name that matches the one being searched
         for(int i = 0; i < players.Count; i++)
         {
             if(players[i].PlayerName == name.text)
@@ -182,7 +197,9 @@ public class ScoreData : MonoBehaviour
         playerDataBox.text = dataText;
     }
 
-
+    /// <summary>
+    /// Puts the player data in order by score
+    /// </summary>
     private void SortPlayers()
     {
         int topScorerIndex = 0;
@@ -202,5 +219,20 @@ public class ScoreData : MonoBehaviour
             players[o] = players[topScorerIndex];
             players[topScorerIndex] = tempPlayer;
         }
+    }
+
+    public void ShowKeyboard()
+    {
+        keyboardCanvas.gameObject.SetActive(true);
+    }
+
+    public void EditingName()
+    {
+        keyboardCanvas.EditingName = true;
+    }
+
+    public void EditingDate()
+    {
+        keyboardCanvas.EditingName = false;
     }
 }
