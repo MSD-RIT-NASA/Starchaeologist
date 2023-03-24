@@ -103,9 +103,13 @@ public class MineGame : MonoBehaviour
         {
             deadTimeStart = timer.GetTime;
             countdown.SetActive(false);
-            readyToStart.SetActive(true);
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
+            if (timeToMove)
+            {
+                readyToStart.SetActive(true);
+            }
+            readyToStart.SetActive(true);
         }
 
         //start the game by moving the raft

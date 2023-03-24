@@ -22,7 +22,8 @@ public class MineBuilder : MonoBehaviour
     private List<GameObject> planks = new List<GameObject>();
 
     List<GameObject>[] segmentArray;
-
+    private List<int> usedSegments = new List<int>();
+    private bool hasBeenUsed;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +33,9 @@ public class MineBuilder : MonoBehaviour
 
         GetComponent<MineGame>().trackReferences = spawnedSegments;
         GetComponent<MineGame>().routes = spawnedTransforms;
+
+        hasBeenUsed = false;
+
         //remove the script 
         Destroy(this);
     }
@@ -60,8 +64,38 @@ public class MineBuilder : MonoBehaviour
         int i = 0;
         while (i < segmentCount-1)
         {
+            hasBeenUsed = false;
+
             //choose one of the available segment prefabs and place it at the end of the last placed piece
             int randIndex = (int)Random.Range(0, segmentArray[0].Count);
+
+            for(int j = 0; j < usedSegments.Count; j++)
+            {
+                if(usedSegments[j] == randIndex)
+                {
+                    hasBeenUsed = true;
+                    break;
+                }
+            }
+            while (hasBeenUsed)
+            {
+                if(usedSegments.Count >= 8)
+                {
+                    usedSegments.Clear();
+                }
+                hasBeenUsed = false;
+                randIndex = (int)Random.Range(0, segmentArray[0].Count);
+
+                for (int j = 0; j < usedSegments.Count; j++)
+                {
+                    if (usedSegments[j] == randIndex)
+                    {
+                        hasBeenUsed = true;
+                        break;
+                    }
+                }
+            }
+
             GameObject newSpawn = Instantiate(segmentArray[0][randIndex]);
             newSpawn.transform.position = spawnPosition;
             newSpawn.transform.rotation = spawnRotation;
@@ -93,8 +127,23 @@ public class MineBuilder : MonoBehaviour
                     i++;
                 }
             }
-            
+
             //spawn objects on the segment
+            if (spawnedSegments[i].name != "TNTTrack(Clone)" || spawnedSegments[i].name != "BatTrack(Clone)")
+            {
+                PlaceObjects(spawnedSegments[i], obstaclePrefabs);
+                PlaceObjects(spawnedSegments[i], treasurePrefabs);
+            }
+            
+            PlaceSupports(spawnedSegments[i], supports);
+            PlaceScenery(spawnedSegments[i], sceneryObjects);
+            i++;
+
+            usedSegments.Add(randIndex);
+
+            Transform newSpawnTrans = SpawnTrack(spawnPosition, spawnRotation, i);
+            spawnPosition = newSpawnTrans.position;
+            spawnRotation = newSpawnTrans.rotation;
             PlaceObjects(spawnedSegments[i], obstaclePrefabs);
             PlaceObjects(spawnedSegments[i], treasurePrefabs);
             PlaceSupports(spawnedSegments[i], supports);
@@ -132,10 +181,11 @@ public class MineBuilder : MonoBehaviour
         int objectToPlace = Random.Range(0, objects.Count);
         int count = Random.Range(1, 3);
         int place = Random.Range(0, 3);
-        while(count>0)
+        while (count > 0)
         {
+            
             //Put the stalactites in the middle
-            if(placements[place].name == "ObstaclePointMid")
+            if (placements[place].name == "ObstaclePointMid")
             {
                 objectToPlace = (int)Random.Range(0, 3);
             }
@@ -181,13 +231,14 @@ public class MineBuilder : MonoBehaviour
                     obst.transform.position.y + 0.6f,
                     obst.transform.position.z
                     );
+                
             }
-
             placements.Remove(placements[place]);
             objectToPlace = Random.Range(0, objects.Count);
             place = Random.Range(0, 2);
             count--;
         }
+        
     }
 
     /// <summary>
@@ -276,5 +327,20 @@ public class MineBuilder : MonoBehaviour
             int randObj = (int)Random.Range(0, 8);
             Instantiate(objs[randObj], placements[i]);
         }
+    }
+
+    private Transform SpawnTrack(Vector3 spawnPos, Quaternion spawnRot, int curSeg)
+    {
+        GameObject newSpawn = Instantiate(segmentArray[0][0]);
+        newSpawn.transform.position = spawnPos;
+        newSpawn.transform.rotation = spawnRot;
+
+        if (curSeg >= 2)
+        {
+            newSpawn.SetActive(false);
+        }
+        spawnedSegments.Add(newSpawn);
+        spawnedTransforms.Add(newSpawn.transform.GetChild(2).transform);
+        return newSpawn.transform.GetChild(0).transform;
     }
 }
