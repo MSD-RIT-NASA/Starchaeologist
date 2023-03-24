@@ -40,7 +40,7 @@ public class UdpSocket : MonoBehaviour
     bool threadRunning = false;
     Thread communicateThread;
 
-    //rotation
+    private float boardRotation;
 
     // int getMovement
     // int sendMovement
@@ -81,6 +81,10 @@ public class UdpSocket : MonoBehaviour
     {
         get { return gameOver; }
         set { gameOver = value; }
+    }
+    public float BoardRotation
+    {
+        get { return boardRotation; }
     }
 
     public void SendData(string message) // Use to send data to Python
@@ -193,6 +197,9 @@ public class UdpSocket : MonoBehaviour
             case "boardMove":
                 Debug.Log("board moved!");
                 //collect board data
+
+                //If multiple sensor values will be read in as parts of a single string,
+                //split the messageat whitespace and assign sensorLRot and sensorRRot respectively
                 break;
 
             default:

@@ -21,12 +21,9 @@ public class BalanceUI : MonoBehaviour
 
     private float balanceRot;
 
-    /*
-     * [SerializeField]
-     * private SensorData sens1;
-     * [SerializeField]
-     * private SensorData sens2;
-    */
+    [SerializeField]
+    private UdpSocket server;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +33,7 @@ public class BalanceUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        balanceRot = cart.transform.eulerAngles.z;
+        balanceRot = server.BoardRotation;
         balanceBar.transform.eulerAngles = new Vector3(
             balanceBar.transform.eulerAngles.x,
             balanceBar.transform.eulerAngles.y,
