@@ -175,6 +175,12 @@ public class MineBuilder : MonoBehaviour
                     obst.transform.localScale.y * 1.5f,
                     obst.transform.localScale.z * 1.5f
                     );
+                //Move Up 
+                obst.transform.position = new Vector3(
+                    obst.transform.position.x,
+                    obst.transform.position.y + 0.6f,
+                    obst.transform.position.z
+                    );
             }
 
             placements.Remove(placements[place]);

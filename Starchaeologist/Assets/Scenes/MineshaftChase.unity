@@ -1392,7 +1392,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7865517848709632932, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 378.67
+      value: 377
       objectReference: {fileID: 0}
     - target: {fileID: 7865517848709632932, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6855,6 +6855,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cart: {fileID: 1585818845}
+  main: {fileID: 523096633}
   balanceBar: {fileID: 618558252}
   safeZone: {fileID: 1665565917}
   server: {fileID: 149083204}
@@ -9745,6 +9746,14 @@ PrefabInstance:
       propertyPath: shadowReference
       value: 
       objectReference: {fileID: 568055621}
+    - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: segmentPrefabs_2M.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: segmentPrefabs_2M.Array.data[6]
+      value: 
+      objectReference: {fileID: 8978804571354781825, guid: a5263fd39b0c60049b30d4c4210b8f2c, type: 3}
     - target: {fileID: 2061620862234433719, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
       propertyPath: server
       value: 
