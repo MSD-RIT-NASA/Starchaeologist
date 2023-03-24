@@ -75,7 +75,13 @@ public class PuzzlingBuilder : MonoBehaviour
         GetComponent<PuzzlingGame>().DataSetup();
         DataSetup();
         GetComponent<UdpSocket>().gameMode = 2;
-        GetComponent<UdpSocket>().calibrateRig = true; 
+        // GetComponent<UdpSocket>().calibrateRig = true; 
+        // testing
+        GetComponent<UdpSocket>().test = true; 
+        //GetComponent<UdpSocket>().Communicate().test = true;
+        //UdpSocket.Communicate();
+        //Debug.Log("is this happening?");
+
 
         int lengthValue = (roomLength * 3);
 
