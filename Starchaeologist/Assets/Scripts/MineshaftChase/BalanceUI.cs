@@ -13,6 +13,8 @@ public class BalanceUI : MonoBehaviour
 {
     [SerializeField]
     private Minecart cart;
+    [SerializeField]
+    private Camera main;
 
     [SerializeField]
     private Image balanceBar;
@@ -20,6 +22,7 @@ public class BalanceUI : MonoBehaviour
     private Image safeZone;
 
     private float balanceRot;
+    private float headsetOffset;
 
     [SerializeField]
     private UdpSocket server;
@@ -27,17 +30,19 @@ public class BalanceUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        headsetOffset = 0f;
         balanceRot = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        headsetOffset = main.transform.eulerAngles.z;
         balanceRot = server.BoardRotation;
         balanceBar.transform.eulerAngles = new Vector3(
             balanceBar.transform.eulerAngles.x,
             balanceBar.transform.eulerAngles.y,
-            balanceRot
+            balanceRot + headsetOffset
             );
     }
 
