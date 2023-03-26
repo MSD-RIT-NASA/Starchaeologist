@@ -23,7 +23,7 @@ public class MineGame : MonoBehaviour
     Vector3 nextDestination = new Vector3(0, 0, 0);
     Vector3 currentDirection = new Vector3(0, 0, 1);
     public float cartAcceleration = 0.1f;
-    public float cartSpeed = 3.0f;
+    public float cartSpeed = 1.0f;
     float currentSpeed = 2f;
     public bool timeToMove = true; //turned true the first time the player teleports to the raft from the S_RaftCollision script
     bool slowDown = false;
@@ -86,7 +86,7 @@ public class MineGame : MonoBehaviour
 
         routeToGo = 0;
         tParam = 0f;
-        speedModifier = 0.55f;
+        speedModifier = 0.3f;
         coroutineAllowed = true;
     }
 

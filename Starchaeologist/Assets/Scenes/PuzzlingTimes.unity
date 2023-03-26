@@ -2496,7 +2496,6 @@ MonoBehaviour:
   canvasRef: {fileID: 731994345}
   rightHandRay: {fileID: 1469803699}
   leftHandRay: {fileID: 1469803698}
-  audSrc: {fileID: 0}
 --- !u!1 &271078688
 GameObject:
   m_ObjectHideFlags: 0
@@ -6447,7 +6446,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameMode: 2
-  calibrateRig: 1
+  calibrateRig: 0
+  test: 0
   isTxStarted: 0
   IP: 127.0.0.1
   rxPort: 8000
