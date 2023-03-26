@@ -28,6 +28,7 @@ sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, su
 
 boardSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 boardSock.sendto(bytes(MESSAGE, "utf-8"), (UDP_IP, UDP_PORT))
+boardSock.setblocking(0) # allows the program to pass the blocking recvfrom() for the board
 
 logging.basicConfig(level=logging.INFO, 
     format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
@@ -42,19 +43,33 @@ while True:
     #logging.info("Waiting For Message From Unity")
     decodedMessage = sock.ReadReceivedData() # read data
     print(decodedMessage)
-    boardMsg = boardSock.recvfrom(16)
-    value = boardMsg[0].decode('utf-8')
-    try:
-        newval = float(value.replace('\U00002013', '-'))*360/math.pi
-        sock.SendData("boardMove " + str(newval))
-        print(newval)
-    except ValueError:
-        print ("Not a float")
+
+    # For checking for the board sensor in the minecart level
+    # then sends board data
+    try: 
+        boardMsg = boardSock.recvfrom(16)
+        value = boardMsg[0].decode('utf-8')
+        try:
+            newval = float(value.replace('\U00002013', '-'))*360/math.pi
+            sock.SendData("boardMove " + str(newval))
+            print(newval)
+        except ValueError:
+            print ("Not a float")
+            pass
+    except socket.timeout: 
+        #print("timeout!!")
         pass
+    except BlockingIOError: # when board sensor is not connected
+        #print("blocked!!")
+        pass
+    
+
+    # decode message from unity
     if(decodedMessage == "quit"):
         logging.info("End of Unity Game reached")
         sock.unityShutDown()               
         break
+
     elif(decodedMessage == "startCalibrating"):
         print("Game is trying to calibrate")
         getCalibration = U.UdpComms.sensorCalibration()
@@ -62,9 +77,8 @@ while True:
             sock.SendData("calibratedRigsuccess")
         else:
             sock.SendData("calibratedRigFailed")
-        
+
     elif(decodedMessage == "testing"):
         print("Testing the communication")
         sock.SendData("testingPython 5555.00")
-        
-            
+          
