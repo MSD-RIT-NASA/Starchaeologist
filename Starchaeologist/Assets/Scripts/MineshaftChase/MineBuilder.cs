@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MineBuilder : MonoBehaviour
 {
-    //[SerializeField] GameObject shadowReference;
+    [SerializeField] GameObject shadowReference;
     public int segmentCount = 6;
 
     List<GameObject> spawnedSegments = new List<GameObject>();
@@ -114,8 +114,8 @@ public class MineBuilder : MonoBehaviour
         PlaceSupports(spawnedSegments[i+1], supports);
         PlaceScenery(spawnedSegments[i], sceneryObjects);
         //place shadow 
-       // shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
-        //shadowReference.transform.rotation = spawnedSegments[0].transform.GetChild(0).transform.rotation;
+        shadowReference.transform.position = spawnedSegments[0].transform.GetChild(0).transform.position;
+        shadowReference.transform.rotation = spawnedSegments[0].transform.GetChild(0).transform.rotation;
 
     }
 
