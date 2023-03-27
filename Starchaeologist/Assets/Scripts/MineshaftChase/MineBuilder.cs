@@ -129,10 +129,15 @@ public class MineBuilder : MonoBehaviour
             }
 
             //spawn objects on the segment
-            if (spawnedSegments[i].name != "TNTTrack(Clone)" || spawnedSegments[i].name != "BatTrack(Clone)")
+            if (spawnedSegments[i].GetComponent<SpawnObstacles>().ShouldObstSpawn)
             {
+                Debug.Log(spawnedSegments[i].gameObject.name + "should spawn obstacles: " + spawnedSegments[i].GetComponent<SpawnObstacles>().ShouldObstSpawn);
                 PlaceObjects(spawnedSegments[i], obstaclePrefabs);
                 PlaceObjects(spawnedSegments[i], treasurePrefabs);
+            }
+            else
+            {
+                Debug.Log(spawnedSegments[i].gameObject.name + "did not yield obstacles");
             }
             
             PlaceSupports(spawnedSegments[i], supports);
@@ -144,8 +149,12 @@ public class MineBuilder : MonoBehaviour
             Transform newSpawnTrans = SpawnTrack(spawnPosition, spawnRotation, i);
             spawnPosition = newSpawnTrans.position;
             spawnRotation = newSpawnTrans.rotation;
-            PlaceObjects(spawnedSegments[i], obstaclePrefabs);
-            PlaceObjects(spawnedSegments[i], treasurePrefabs);
+            if (spawnedSegments[i].GetComponent<SpawnObstacles>().ShouldObstSpawn)
+            {
+                Debug.Log(spawnedSegments[i].gameObject.name + "should spawn obstacles: " + spawnedSegments[i].GetComponent<SpawnObstacles>().ShouldObstSpawn);
+                PlaceObjects(spawnedSegments[i], obstaclePrefabs);
+                PlaceObjects(spawnedSegments[i], treasurePrefabs);
+            }
             PlaceSupports(spawnedSegments[i], supports);
             PlaceScenery(spawnedSegments[i], sceneryObjects);
             i++;

@@ -763,6 +763,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1087594738658926266}
   - component: {fileID: 1674074312649121902}
+  - component: {fileID: 7726757206865213037}
   m_Layer: 0
   m_Name: Track_Right
   m_TagString: RightTrack
@@ -818,6 +819,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10, y: 1, z: 10}
   m_Center: {x: 0, y: 0, z: 5}
+--- !u!114 &7726757206865213037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4063483247131146777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d749fb3db5f701478df3ea1c098fdc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shouldObstSpawn: 1
 --- !u!1 &4358773045146754155
 GameObject:
   m_ObjectHideFlags: 0

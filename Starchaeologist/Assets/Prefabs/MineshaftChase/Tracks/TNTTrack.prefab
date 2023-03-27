@@ -2395,6 +2395,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1043521679332360583}
   - component: {fileID: -6269240910891662387}
+  - component: {fileID: -4281201277518542350}
   m_Layer: 0
   m_Name: TNTTrack
   m_TagString: StraightTrack
@@ -2475,6 +2476,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10, y: 1, z: 10}
   m_Center: {x: 0, y: 0, z: 5}
+--- !u!114 &-4281201277518542350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8978804571354781825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d749fb3db5f701478df3ea1c098fdc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shouldObstSpawn: 0
 --- !u!1 &9136149702423777605
 GameObject:
   m_ObjectHideFlags: 0
@@ -3337,14 +3351,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6dec56e7c63d06479d2ee21a8df448f, type: 3}
---- !u!198 &671652693735959539 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2953258354156335467, guid: a6dec56e7c63d06479d2ee21a8df448f, type: 3}
-  m_PrefabInstance: {fileID: 2426917121660394136}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &536553850416398520 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2800144549875391008, guid: a6dec56e7c63d06479d2ee21a8df448f, type: 3}
+  m_PrefabInstance: {fileID: 2426917121660394136}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &671652693735959539 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2953258354156335467, guid: a6dec56e7c63d06479d2ee21a8df448f, type: 3}
   m_PrefabInstance: {fileID: 2426917121660394136}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2866652549896376093
