@@ -67,6 +67,10 @@ public class MineGame : MonoBehaviour
     private float deadTimeStart;
     private float deadTime;
 
+    public float DeadTime
+    {
+        get { return deadTime; }
+    }
 
     // Start is called before the first frame update
     void Start()

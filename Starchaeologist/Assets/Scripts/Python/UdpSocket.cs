@@ -22,6 +22,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using TMPro;
 
 
 public class UdpSocket : MonoBehaviour
@@ -77,6 +78,12 @@ public class UdpSocket : MonoBehaviour
     IPEndPoint remoteEndPoint;
     Thread receiveThread; // Receiving Thread
 
+    [SerializeField]
+    private MineGame mineLevel;
+
+    [SerializeField]
+    private TMP_Text balanceScoreDisplay;
+
     public bool GameStart
     {
         get { return gameStart; }
@@ -90,6 +97,10 @@ public class UdpSocket : MonoBehaviour
     public float BoardRotation
     {
         get { return boardRotation; }
+    }
+    public float BalanceScore
+    {
+        get { return getBalanceScore; }
     }
 
     public void SendData(string message) // Use to send data to Python
@@ -200,6 +211,8 @@ public class UdpSocket : MonoBehaviour
                 // somehow collect the balance score?
                 getBalanceScore = float.Parse(splitMessage[1]);
                 Debug.Log(getBalanceScore.ToString());
+
+                balanceScoreDisplay.text = "" + getBalanceScore;
                 
                 break;
 
@@ -275,7 +288,11 @@ public class UdpSocket : MonoBehaviour
                     // send game mode
                     // send over gameProfile data so MATLAB data is correctly labeled
                     // start collecting balance data 
-                    
+                    string msg = "gameStart";
+                    SendData(msg);
+
+                    string deadTime = "" + mineLevel.DeadTime;
+                    SendData(deadTime);
                 }
 
                 else if(gameOver) // the game ends
@@ -283,7 +300,6 @@ public class UdpSocket : MonoBehaviour
                     Debug.Log("Game Over");
                     // stop acctuators
                     // get the balance score
-                    // close the server,,,,, i think
 
 
                     string msg = "gameOver";
