@@ -11,7 +11,7 @@ public class MineGame : MonoBehaviour
     [SerializeField] GameObject playerReference;
     [SerializeField] GameObject rightHandRay;
     [SerializeField] GameObject leftHandRay;
-    [SerializeField] GameObject shadowReference;
+   // [SerializeField] GameObject shadowReference;
     [SerializeField] Minecart raftReference;
     [SerializeField] Timer timer;
     S_MineCart raftScript;
@@ -171,13 +171,13 @@ public class MineGame : MonoBehaviour
             playerReference.transform.position = objectPosition;
             this.transform.position = objectPosition;
 
-            if (routeToGo < trackReferences.Count - 1)
-            {
-                //Put the shadow in front of the player
-                objectPosition = Mathf.Pow(1 - tParam, 3) * p02 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p12 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p22 + Mathf.Pow(tParam, 3) * p32;
-                shadowReference.transform.LookAt(objectPosition);
-                shadowReference.transform.position = objectPosition;
-            }
+            //if (routeToGo < trackReferences.Count - 1)
+            //{
+            //    //Put the shadow in front of the player
+            //    objectPosition = Mathf.Pow(1 - tParam, 3) * p02 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p12 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p22 + Mathf.Pow(tParam, 3) * p32;
+            //    shadowReference.transform.LookAt(objectPosition);
+            //    shadowReference.transform.position = objectPosition;
+            //}
             yield return 0;
         }
 

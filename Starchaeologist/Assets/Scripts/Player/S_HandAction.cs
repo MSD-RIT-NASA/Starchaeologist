@@ -121,7 +121,7 @@ public class S_HandAction : MonoBehaviour
             {
                 teleportReticle.SetActive(teleportActive);
             }
-            //teleportReticle.SetActive(isActive);
+            //teleportReticle.SetActive();
         }
         //set the animation of the hands
         hand.SetGrip(controller.selectAction.action.ReadValue<float>());

@@ -14,6 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LoaderManagerInstance: {fileID: -107266528962677403}
   m_InitManagerOnStart: 1
+--- !u!114 &-4466494506865957556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d236b7d11115f2143951f1e14045df39, type: 3}
+  m_Name: WebGL Settings
+  m_EditorClassIdentifier: 
+  m_LoaderManagerInstance: {fileID: 850611145284826937}
+  m_InitManagerOnStart: 1
 --- !u!114 &-107266528962677403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43,6 +57,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2dc886499c26824283350fa532d087d, type: 3}
   m_Name: XRGeneralSettings
   m_EditorClassIdentifier: 
-  Keys: 01000000
+  Keys: 010000000d000000
   Values:
   - {fileID: -6631685222876215078}
+  - {fileID: -4466494506865957556}
+--- !u!114 &850611145284826937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c3631f5e58749a59194e0cf6baf6d5, type: 3}
+  m_Name: WebGL Providers
+  m_EditorClassIdentifier: 
+  m_RequiresSettingsUpdate: 0
+  m_AutomaticLoading: 0
+  m_AutomaticRunning: 0
+  m_Loaders: []
