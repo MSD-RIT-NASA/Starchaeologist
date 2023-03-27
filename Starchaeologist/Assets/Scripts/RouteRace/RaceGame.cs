@@ -23,4 +23,9 @@ public class RaceGame : MonoBehaviour
     {
         secondCount += Time.deltaTime;
     }
+
+    public void PlayerCrossed()
+    {
+
+    }
 }
