@@ -10,16 +10,17 @@ public class S_RiverBuilder : MonoBehaviour
     [SerializeField] GameObject RiverPlaysection;
     [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
     [SerializeField] List<GameObject> treasurePrefabs = new List<GameObject>();
-    [SerializeField] List<GameObject> attackAnimals = new List<GameObject>();
+    static protected List<Vector3> checkpoints = new List<Vector3>();
+    //using system random system for varited seeds in a loop
     System.Random rand = new System.Random();
-
+    private const int maxObsticaleRotation = 70;
     // Start is called before the first frame update
     void Start()
     {
-        
+
 
         //SegmentSetup();
-        BuildRiver();
+        RiverObjBuilder();
 
         //give the game script the list of river pieces
         GetComponent<PythonCommunicator>().gameMode = 1;
@@ -28,24 +29,22 @@ public class S_RiverBuilder : MonoBehaviour
         Destroy(this);
     }
 
-    private void BuildRiver()
+    //will build all obsticales and treasures found throuough the game
+    private void RiverObjBuilder()
     {
-        int counter = 0;
         for (int x = 0;x < RiverPlaysection.transform.childCount;x++)
         {
             //skip transistion sections 
             if (RiverPlaysection.transform.GetChild(x).childCount > 3)
             {
                 //randomization of obsicaleType,placement, and position/rotation
+                //only the rotation of the attack animals are affected
                 GameObject randomObstacle1 = obstaclePrefabs[rand.Next(0,1)];
                 GameObject randomObstacle2 = obstaclePrefabs[rand.Next(0, 1)];
                 GameObject randomTreasure = treasurePrefabs[rand.Next(0, 8)];
-                GameObject randomAttackAnimal = attackAnimals[rand.Next(0, 2)];
                 int randomTreasurePos = rand.Next(0, 3);
-                int randomRot1 = rand.Next(0, 3);
-                int randomRot2 = rand.Next(0, 3);
 
-
+                //variables that make setting local object positions easier
                 GameObject objPoint1 = RiverPlaysection.transform.GetChild(x).GetChild(2).gameObject;
                 float point1Z = RiverPlaysection.transform.GetChild(x).GetChild(2).gameObject.transform.localPosition.z;
 
@@ -58,103 +57,198 @@ public class S_RiverBuilder : MonoBehaviour
                 GameObject attackAnimalPoint = RiverPlaysection.transform.GetChild(x).GetChild(5).gameObject;
                 float animalZ = RiverPlaysection.transform.GetChild(x).GetChild(5).gameObject.transform.localPosition.z;
 
-                //treasure can either be in object points 1-3 when chosen the other 2 points will be obstcales
+                float obj1Rotation;
+                float obj2Rotation;
+
+                //treasure can either be in object positions 1,2, or 3 when chosen the other 2 points will be obstcales
                 if (randomTreasurePos == 0)
                 {
-                    objPoint1.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point1Z);
+                    /*
+                     * Why local space? 
+                     * This object will be the children within each object point
+                     * its easier to set the same local space over and over than place
+                     * and adjust in world space
+                     */
 
-                    if (randomObstacle1.name == "Obstacle_Pillar")
-                    {
-                        objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point2Z);
-                    }
-                    else
-                    {
-                        objPoint2.transform.Rotate(objPoint2.transform.position, rand.Next(-70,71));
-                    }
+                    objPoint1.transform.localPosition = new Vector3(rand.Next(-6, 7), 0, point1Z);
+                    objPoint2.transform.Rotate(objPoint2.transform.position, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation+1));
+                    objPoint3.transform.Rotate(objPoint2.transform.position, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation+1));
 
-                    if (randomObstacle2.name == "Obstacle_Pillar")
-                    {
-                        objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point3Z);
-                    }
-                    else
-                    {
-                        objPoint3.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
-                    }
+
 
                     GameObject tresure = Instantiate(randomTreasure,objPoint1.transform);
                     GameObject ob1 = Instantiate(randomObstacle1, objPoint2.transform);
                     GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
+
+                    //object point 1 is the first one encountered by the player so as checkpoints go they are handled in order
+                    //player will be moved towards treasures while they are moved away from obsticales
+
+                    checkpoints.Add(tresure.transform.position);
+                    if (obj1Rotation <= 35 && obj1Rotation >= -35)
+                    {
+                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob1.transform.position.z);
+                        checkpoints.Add(tempObsticale1);
+                    }
+                    else
+                    {
+                        if (obj1Rotation >= 0)
+                        {
+                            float test1 = (70.0f / obj1Rotation) - 1.0f;
+                            Debug.Log(test1);
+                            Vector3 tempObsticale1 = new Vector3(((70.0f / obj1Rotation) - 1.0f) * -7.0f, 0.0f, ob1.transform.position.z);
+                            checkpoints.Add(tempObsticale1);
+                        }
+                        else
+                        {
+                            Vector3 tempObsticale1 = new Vector3(((70.0f / obj1Rotation) + 1.0f) * -7.0f, 0.0f, ob1.transform.position.z);
+                            checkpoints.Add(tempObsticale1);
+                        }
+                        
+                    }
+
+                    if (obj2Rotation <= 35 && obj2Rotation >= -35)
+                    {
+                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob2.transform.position.z);
+                        checkpoints.Add(tempObsticale2);
+                    }
+                    else
+                    {
+                        if (obj2Rotation >= 0)
+                        {
+                            Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) - 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
+                            checkpoints.Add(tempObsticale2);
+                        }
+                        else
+                        {
+                            Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) + 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
+                            checkpoints.Add(tempObsticale2);
+                        }
+                    }
+
                 }
                 else if (randomTreasurePos == 1)
                 {
-                    objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point2Z);
+                    objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 7), 0, point2Z);
+                    objPoint1.transform.Rotate(objPoint2.transform.position, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation+1));
+                    objPoint3.transform.Rotate(objPoint2.transform.position, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation+1));
 
-                    Debug.Log(objPoint2.transform.localPosition);
-                    if (randomObstacle1.name == "Obstacle_Pillar")
-                    {
-                        objPoint1.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point1Z);
-                    }
-                    else
-                    {
-                        objPoint1.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
-                    }
-                    if (randomObstacle2.name == "Obstacle_Pillar")
-                    {
-                        objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point3Z);
-                    }
-                    else
-                    {
-                        objPoint3.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
-                    }
                     GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
                     GameObject tresure = Instantiate(randomTreasure, objPoint2.transform);
                     GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
+
+
+                    if (obj1Rotation <= 35 && obj1Rotation >= -35)
+                    {
+                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob1.transform.position.z);
+                        checkpoints.Add(tempObsticale1);
+                    }
+                    else
+                    {
+                        if (obj1Rotation >= 0)
+                        {
+                            Vector3 tempObsticale1 = new Vector3(((70.0f / obj1Rotation) - 1.0f) * -7.0f, 0.0f, ob1.transform.position.z);
+                            checkpoints.Add(tempObsticale1);
+                        }
+                        else
+                        {
+                            Vector3 tempObsticale1 = new Vector3(((70.0f / obj1Rotation) + 1.0f) * -7.0f, 0.0f, ob1.transform.position.z);
+                            checkpoints.Add(tempObsticale1);
+                        }
+                    }
+
+                    checkpoints.Add(tresure.transform.position);
+
+                    if (obj2Rotation <= 35 && obj2Rotation >= -35)
+                    {
+                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob2.transform.position.z);
+                        checkpoints.Add(tempObsticale2);
+                    }
+                    else
+                    {
+                        if (obj2Rotation >= 0)
+                        {
+                            Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) - 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
+                            checkpoints.Add(tempObsticale2);
+                        }
+                        else
+                        {
+                            Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) + 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
+                            checkpoints.Add(tempObsticale2);
+                        }
+                    }
+
+                    
+
+
                 }
                 else
                 {
-                    objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point3Z);
+                    objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 7), 0, point3Z);
+                    objPoint1.transform.Rotate(objPoint1.transform.position, obj1Rotation = rand.Next(-70, 71));
+                    objPoint2.transform.Rotate(objPoint2.transform.position, obj2Rotation = rand.Next(-70, 71));
 
-                    Debug.Log(objPoint3.transform.localPosition);
-                    if (randomObstacle1.name == "Obstacle_Pillar")
-                    {
-                        objPoint1.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point1Z);
-                    }
-                    else
-                    {
-                        objPoint1.transform.Rotate(objPoint1.transform.position, rand.Next(-70, 71));
-                    }
-                    if (randomObstacle2.name == "Obstacle_Pillar")
-                    {
-                        objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 9), 0, point2Z);
-                    }
-                    else
-                    {
-                        objPoint2.transform.Rotate(objPoint2.transform.position, rand.Next(-70, 71));
-                    }
                     GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
                     GameObject ob2 = Instantiate(randomObstacle2, objPoint2.transform);
                     GameObject tresure = Instantiate(randomTreasure, objPoint3.transform);
-                }
-                
-                if (randomAttackAnimal.gameObject.name == "HippoEnemy2")
-                {
-                    attackAnimalPoint.transform.localPosition = new Vector3(rand.Next(-8, 7), -1, animalZ);
-                    attackAnimalPoint.transform.localRotation = Quaternion.Euler(0,-90,0);
-                }
-                else
-                {
-                    attackAnimalPoint.transform.localPosition = new Vector3(rand.Next(-8, 7), 0, animalZ);
-                }
 
-                Instantiate(randomAttackAnimal, attackAnimalPoint.transform);
-                counter += 3;
+
+                    if (obj1Rotation <= 35 && obj1Rotation >= -35)
+                    {
+                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob1.transform.position.z);
+                        checkpoints.Add(tempObsticale1);
+                    }
+                    else
+                    {
+                        if (obj1Rotation >= 0)
+                        {
+                            Vector3 tempObsticale1 = new Vector3(((70.0f / obj1Rotation) - 1.0f) * -7.0f, 0.0f, ob1.transform.position.z);
+                            checkpoints.Add(tempObsticale1);
+                        }
+                        else
+                        {
+                            Vector3 tempObsticale1 = new Vector3(((70.0f / obj1Rotation) + 1.0f) * -7.0f, 0.0f, ob1.transform.position.z);
+                            checkpoints.Add(tempObsticale1);
+                        }
+                    }
+
+                    if (obj2Rotation <= 35 && obj2Rotation >= -35)
+                    {
+                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob2.transform.position.z);
+                        checkpoints.Add(tempObsticale2);
+                    }
+                    else
+                    {
+                        if (obj2Rotation >= 0)
+                        {
+                            Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) - 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
+                            checkpoints.Add(tempObsticale2);
+                        }
+                        else
+                        {
+                            Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) + 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
+                            checkpoints.Add(tempObsticale2);
+                        }
+                    }
+
+                    checkpoints.Add(tresure.transform.position);
+
+
+                }
             }
             
         }
-        Debug.Log(counter);
+        
         
         //spawn the amount of river segemnts requested
         spawnedSegments.Add(GameObject.Find("RiverStart"));
 
+        checkpoints.Add(GameObject.Find("RiverEnd").gameObject.transform.GetChild(1).transform.position);
+        Debug.Log(checkpoints);
+
+        foreach (Vector3 checkpoint in checkpoints)
+        {
+            Debug.Log(checkpoint);
+        }
     }
+
 }

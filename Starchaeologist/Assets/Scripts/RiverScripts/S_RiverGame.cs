@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using Unity.XR.CoreUtils;
-
-public class S_RiverGame : MonoBehaviour
+public class S_RiverGame : S_RiverBuilder
 {
 
 
 
     //singleton
     public static S_RiverGame singleton;
-
     [SerializeField] GameObject playerReference;
     [SerializeField] GameObject raftReference;
     [SerializeField] GameObject riverWater;
@@ -27,6 +25,7 @@ public class S_RiverGame : MonoBehaviour
     public List<GameObject> riverReferences; //populated with positions while the river is being built from the S_RiverBuilder script
     Vector3 nextDestination;
     Vector3 currentDirection = new Vector3(0, 0, 1);
+    Vector3 desiredDirection = new Vector3(0, 0, 1);
     public float raftAcceleration = 0.1f;
     public float raftSpeed = 3.0f;
     float currentSpeed = 0f;
@@ -35,7 +34,7 @@ public class S_RiverGame : MonoBehaviour
     bool playerAttached = false;
     int checkpointIndex = 0;
     
-
+    
 
 
     //python variables
@@ -80,7 +79,7 @@ public class S_RiverGame : MonoBehaviour
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
         communicateReference = GetComponent<PythonCommunicator>();
         vrCameraRotation = vrCamera.transform.rotation;
-        nextDestination = riverReferences[0].transform.position;
+        nextDestination = checkpoints[0];
         //pythonCommunicator.Start();
     }
 
@@ -97,6 +96,8 @@ public class S_RiverGame : MonoBehaviour
                 playerAttached = true;
                 playerReference.transform.parent = raftReference.transform;
                 playerReference.transform.position = raftReference.transform.GetChild(0).position;
+
+
             }
             MoveRaft();
             //make the raft rotate
@@ -110,70 +111,82 @@ public class S_RiverGame : MonoBehaviour
 
     void MoveRaft()
     {
+        float distance = checkpoints[checkpointIndex].z - raftReference.transform.position.z;
         //accelerate or decelerate the raft
         if (currentSpeed != raftSpeed && !slowDown)
         {
             
             currentSpeed = currentSpeed + (raftAcceleration * Time.deltaTime * raftSpeed * 5f);
 
-            raftScript.tiltRange = raftScript.tiltRange + (raftAcceleration * Time.deltaTime * raftScript.maxRange * 5f);
+            //tilting affects for the python comunicator
+            //raftScript.tiltRange = raftScript.tiltRange + (raftAcceleration * Time.deltaTime * raftScript.maxRange * 5f);
         }
         else if (slowDown)
         {
-            if (currentSpeed <= 0.25f)
-            {
-                //after the user reaches a certain speed we will begin to speed up deceleration
-                raftAcceleration = 25;
-            }
-            else
+            if (distance <= 6.0f)
             {
                 //using the distance and the current speed of the raft we can calcuate how great our acceleration vector needs to be to come to a stop
                 raftAcceleration = Mathf.Abs((0 - currentSpeed) / (Mathf.Abs(2 * (raftObject.transform.position.z - raftEndPoint.transform.position.z))));
-            }
-            Debug.Log("Current Acceleration:" + raftAcceleration);
+                Debug.Log("Current Acceleration:" + raftAcceleration);
 
-            currentSpeed = currentSpeed - (raftAcceleration * Time.deltaTime * raftSpeed);
-            Debug.Log("Current Speed:"+currentSpeed);
-            raftScript.tiltRange = raftScript.tiltRange - (raftAcceleration * Time.deltaTime * raftScript.maxRange);
+                currentSpeed = currentSpeed - (raftAcceleration * Time.deltaTime * raftSpeed);
+                Debug.Log("Current Speed:" + currentSpeed);
+                raftScript.tiltRange = raftScript.tiltRange - (raftAcceleration * Time.deltaTime * raftScript.maxRange);
+            }
         }
         currentSpeed = Mathf.Clamp(currentSpeed, 0.25f, raftSpeed);
         raftScript.tiltRange = Mathf.Clamp(raftScript.tiltRange, 0.25f, raftScript.maxRange);
 
-        Vector3 desiredDirection;
-        if (raftObject.transform.localPosition.x > 7.0f)
+        //Vector3.RotateTowards(raftReference.transform.position,checkpoints[checkpointIndex],2*Mathf.PI,Mathf.PI);
+
+        desiredDirection = Vector3.Normalize(checkpoints[checkpointIndex] - raftReference.transform.position);
+        
+        Debug.Log(distance);
+        
+
+        //raftReference.transform.LookAt(checkpoints[checkpointIndex]);
+        if (distance <= 7)
         {
-            desiredDirection = new Vector3(-0.5f, 0, 1);
-        }
-        else if (raftObject.transform.localPosition.x < -7.0f)
-        {
-            desiredDirection = new Vector3(0.5f, 0, 1);
+            raftReference.transform.position += desiredDirection * currentSpeed * Time.deltaTime;
         }
         else
         {
-            desiredDirection = new Vector3(vrCamera.transform.rotation.z, 0, 1);
+            Quaternion toRotation = Quaternion.FromToRotation(raftReference.transform.forward, desiredDirection); // instead of LookRotation( )
+            raftReference.transform.rotation = Quaternion.Lerp(raftReference.transform.rotation, toRotation, (currentSpeed * Time.deltaTime));
+            raftReference.transform.position += raftReference.transform.forward * currentSpeed * Time.deltaTime;
         }
+        
+        /*//calculating and normalizing the direction vector for each checkpoint
+        Vector3 direction = checkpoints[checkpointIndex] - raftReference.transform.position;
+        direction = direction.normalized;
 
-        currentDirection= desiredDirection;
 
+        //getting the current direction we want to shift toward and the current direction
+        desiredDirection = Vector3.Normalize(checkpoints[checkpointIndex] - raftReference.transform.position);
+
+        currentDirection = Vector3.Normalize(currentDirection + (desiredDirection * Time.deltaTime * currentSpeed));
+
+        //Vector3.Lerp(currentDirection, desiredDirection,currentSpeed*Time.deltaTime);
+
+        Debug.Log(currentDirection);
         //move the raft
+        //raftReference.transform.position = Vector3.MoveTowards(raftReference.transform.position,nextDestination,currentSpeed * Time.deltaTime);
+        //raftReference.transform.position = Vector3.Lerp(raftReference.transform.position, nextDestination, currentSpeed * Time.deltaTime);
         raftReference.transform.position += currentDirection * Time.deltaTime * currentSpeed;
-        riverWater.transform.position = new Vector3(0, 0, raftReference.transform.position.z);
+        riverWater.transform.position = new Vector3(0, 0, raftReference.transform.position.z);*/
 
         //check if the raft has reach the checkpoint then go to the next one
-       /* Debug.Log("Distance:"+Vector3.Distance(raftReference.transform.position, nextDestination));
-
-        Debug.Log("Z:" + Mathf.Abs((raftReference.transform.position.z - nextDestination.z)));*/
 
         if (Mathf.Abs((raftReference.transform.position.z - nextDestination.z)) < 1f)
         {
             checkpointIndex++;
 
-            if (checkpointIndex == riverReferences.Count-1)//if this is the last checkpoint to go to, start slowing down the raft
+            if (checkpointIndex == checkpoints.Count-1)//if this is the last checkpoint to go to, start slowing down the raft
             {
                 slowDown = true;
-                nextDestination = riverReferences[checkpointIndex].transform.GetChild(1).transform.position;
+                nextDestination = checkpoints[checkpointIndex];
             }
-            else if (checkpointIndex == riverReferences.Count)//if the raft has reached the last checkpoint, stop
+            else if (checkpointIndex == checkpoints.Count)//if the raft has reached the last checkpoint, stop
             {
                 slowDown = false;
                 timeToMove = false;
@@ -182,17 +195,7 @@ public class S_RiverGame : MonoBehaviour
             }
             else//otherwise set the new destination tot he next checkpoint
             {
-                nextDestination = riverReferences[checkpointIndex].transform.GetChild(1).transform.position;
-            }
-
-            //optimization
-            if (checkpointIndex - 5 >= 0)//disable river segments that are far behind the player
-            {
-                riverReferences[checkpointIndex - 5].SetActive(false);
-            }
-            if (checkpointIndex + 5 < riverReferences.Count)//enable segments that are getting close to the player
-            {
-                riverReferences[checkpointIndex + 5].SetActive(true);
+                nextDestination = checkpoints[checkpointIndex];
             }
         }
     }
