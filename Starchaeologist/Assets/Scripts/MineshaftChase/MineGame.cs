@@ -135,7 +135,8 @@ public class MineGame : MonoBehaviour
             {
                 timeToMove = false;
                 //Tell python the game is not running
-                //server.GameStart = false;
+                server.GameStart = false;
+                server.GameOver = true;
             }
         }
     }

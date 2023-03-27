@@ -243,10 +243,11 @@ public class UdpSocket : MonoBehaviour
                     // stop acctuators
                     // get the balance score
                     // close the server,,,,, i think
-                    // end the game
 
 
-                    Application.Quit();
+                    string msg = "gameOver";
+                    SendData(msg);
+                    
 
                     return;
                 }
