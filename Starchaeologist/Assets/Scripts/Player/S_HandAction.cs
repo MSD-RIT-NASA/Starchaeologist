@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 
 public class S_HandAction : MonoBehaviour
 {
@@ -41,9 +42,10 @@ public class S_HandAction : MonoBehaviour
      
      */
 
-
+   
+    [SerializeField] private InputActionReference menuInputReference;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         controller = GetComponent<ActionBasedController>();
         teleportRay = GetComponent<XRRayInteractor>();
@@ -55,6 +57,7 @@ public class S_HandAction : MonoBehaviour
         if(leftHand)
         {
             //controller.activateAction.action.performed += Action_Pause;
+            menuInputReference.action.performed += Action_Pause;
             transform.parent.GetChild(5).gameObject.SetActive(false);
             transform.parent.GetChild(6).gameObject.SetActive(false);
         }
@@ -62,34 +65,35 @@ public class S_HandAction : MonoBehaviour
 
     //------CURRENTLY BREAKS HANDS------//
     //pause the game when the menu button is pressed (left hand only)
-    //private void Action_Pause(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    //{
-    //    //grab references
-    //    S_HandAction rightHand =  transform.parent.GetChild(2).GetComponent<S_HandAction>();
-    //    GameObject rightRay =  transform.parent.GetChild(5).gameObject;
-    //    GameObject leftRay =  transform.parent.GetChild(6).gameObject;
+    private void Action_Pause(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        Debug.Log("Pressed");
+        //grab references
+        S_HandAction rightHand = transform.parent.GetChild(2).GetComponent<S_HandAction>();
+        GameObject rightRay = transform.parent.GetChild(5).gameObject;
+        GameObject leftRay = transform.parent.GetChild(6).gameObject;
 
-    //    //close the pause menu
-    //    if (paused)
-    //    {
-    //        Debug.Log("Unpause");
-    //        paused = false;
-    //        PauseMenu.singleton.Resume();
-    //        rightHand.paused = false;
-    //        rightRay.SetActive(false);
-    //        leftRay.SetActive(false);
-    //    }
-    //    else//open the pause menu
-    //    {
-    //        Debug.Log("Pause");
-    //        paused = true;
-    //        PauseMenu.singleton.Pause();
-    //        rightHand.paused = true;
-    //        rightRay.SetActive(true);
-    //        leftRay.SetActive(true);
-    //    }
+        //close the pause menu
+        if (paused)
+        {
+            Debug.Log("Unpause");
+            paused = false;
+            PauseMenu.singleton.Resume();
+            rightHand.paused = false;
+            rightRay.SetActive(false);
+            leftRay.SetActive(false);
+        }
+        else//open the pause menu
+        {
+            Debug.Log("Pause");
+            paused = true;
+            PauseMenu.singleton.Pause();
+            rightHand.paused = true;
+            rightRay.SetActive(true);
+            leftRay.SetActive(true);
+        }
 
-    //}
+    }
 
     //when the player presses the trigger, read the value
     private void Action_Selec_Value(UnityEngine.InputSystem.InputAction.CallbackContext obj)
