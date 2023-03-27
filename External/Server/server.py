@@ -19,7 +19,7 @@ import math
 
 UDP_IP= "192.168.4.4"
 UDP_PORT = 4210
-MESSAGE = "Hello, World!"
+MESSAGE = "We have liftoff!"
 
 
 # Create UDP socket to use for sending (and receiving)
@@ -42,7 +42,7 @@ while True:
     # Constantly read message from Unity
     #logging.info("Waiting For Message From Unity")
     decodedMessage = sock.ReadReceivedData() # read data
-    print(decodedMessage)
+    #print(decodedMessage)
 
     # For checking for the board sensor in the minecart level
     # then sends board data
@@ -50,7 +50,7 @@ while True:
         boardMsg = boardSock.recvfrom(16)
         value = boardMsg[0].decode('utf-8')
         try:
-            newval = float(value.replace('\U00002013', '-'))*360/math.pi
+            newval = float(value.replace('\U00002013', '-'))*360/math.pi*2
             sock.SendData("boardMove " + str(newval))
             print(newval)
         except ValueError:
