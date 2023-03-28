@@ -1181,6 +1181,7 @@ MonoBehaviour:
   leftHand: 1
   paused: 0
   hand: {fileID: 8685718818491629397}
+  menuInputReference: {fileID: 0}
 --- !u!1 &5873311958952929952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1767,7 +1768,7 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: -1758520528963094988, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_ActivateAction:
-    m_UseReference: 0
+    m_UseReference: 1
     m_Action:
       m_Name: Activate
       m_Type: 0
@@ -1787,7 +1788,7 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_ActivateActionValue:
-    m_UseReference: 0
+    m_UseReference: 1
     m_Action:
       m_Name: Activate Action Value
       m_Type: 0
@@ -2241,6 +2242,7 @@ MonoBehaviour:
   leftHand: 0
   paused: 0
   hand: {fileID: 8685718819454492565}
+  menuInputReference: {fileID: 225231899232684990, guid: c348712bda248c246b8c49b3db54643f, type: 3}
 --- !u!1 &6184686251791005585
 GameObject:
   m_ObjectHideFlags: 0
