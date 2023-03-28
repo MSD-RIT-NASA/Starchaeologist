@@ -209,7 +209,8 @@ public class MineGame : MonoBehaviour
         if (routeToGo - 2 >= 0)//disable track segments that are far behind the player
         {
             if (trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track(Clone)" &&
-                trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Right" && trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Left")
+                trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Right" && trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Left" &&
+                trackReferences[routeToGo - 2].gameObject.name != "SensoryDeprevation(Clone)")
             {
                 Debug.Log(trackReferences[routeToGo - 2].gameObject.name);
                 trackReferences[routeToGo - 2].SetActive(false);
