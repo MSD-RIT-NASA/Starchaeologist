@@ -1,3 +1,5 @@
+//NASA x RIT authors: Deen Grey and Noah Flanders
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,13 +16,14 @@ public class MineGame : MonoBehaviour
     [SerializeField] GameObject shadowReference;
     [SerializeField] Minecart raftReference;
     [SerializeField] Timer timer;
+    [SerializeField] UdpSocket server;
     S_MineCart raftScript;
 
     public List<GameObject> trackReferences = new List<GameObject>(); //populated with positions while the mine is being built from the S_MineBuilder script
     Vector3 nextDestination = new Vector3(0, 0, 0);
     Vector3 currentDirection = new Vector3(0, 0, 1);
     public float cartAcceleration = 0.1f;
-    public float cartSpeed = 3.0f;
+    public float cartSpeed = 1.0f;
     float currentSpeed = 2f;
     public bool timeToMove = true; //turned true the first time the player teleports to the raft from the S_RaftCollision script
     bool slowDown = false;
@@ -64,6 +67,10 @@ public class MineGame : MonoBehaviour
     private float deadTimeStart;
     private float deadTime;
 
+    public float DeadTime
+    {
+        get { return deadTime; }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -83,7 +90,7 @@ public class MineGame : MonoBehaviour
 
         routeToGo = 0;
         tParam = 0f;
-        speedModifier = 0.55f;
+        speedModifier = 0.3f;
         coroutineAllowed = true;
     }
 
@@ -100,9 +107,13 @@ public class MineGame : MonoBehaviour
         {
             deadTimeStart = timer.GetTime;
             countdown.SetActive(false);
-            readyToStart.SetActive(true);
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
+            if (timeToMove)
+            {
+                readyToStart.SetActive(true);
+            }
+            readyToStart.SetActive(true);
         }
 
         //start the game by moving the raft
@@ -127,6 +138,10 @@ public class MineGame : MonoBehaviour
             else if (routeToGo == trackReferences.Count)
             {
                 timeToMove = false;
+                //Tell python the game is not running
+                server.GameStart = false;
+                server.GameOver = true;
+                readyToStart.SetActive(false);
             }
         }
     }
@@ -210,6 +225,9 @@ public class MineGame : MonoBehaviour
 
     public void TimeToMove()
     {
+        //Tells the python server the game has started
+        //server.GameStart = true;
+
         timeToMove = true;
         deadTime = timer.GetTime - deadTimeStart;
         rightHandRay.SetActive(false);

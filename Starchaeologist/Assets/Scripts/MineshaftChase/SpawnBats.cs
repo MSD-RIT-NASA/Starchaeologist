@@ -1,3 +1,6 @@
+//NASA x RIT author: Noah Flanders
+
+//Spawns and moves bat objects when a player is on the BatTrack
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,17 +60,16 @@ public class SpawnBats : MonoBehaviour
         //Spawn bat at a random spawnpoint chosen from the list
         int randIndex = (int)Random.Range(0.0f, 5.0f);
         bats.Add(Instantiate(batPrefab, spawnPoints[randIndex].transform));
-
-        //
-        //bats[numBats].transform.Rotate((5f * numBats), 0.0f, 0.0f, Space.Self);
         numBats++;
 
+        //Spawns 10 bats
         if(numBats > 10)
         {
             CancelInvoke("BatSpawn");
         }
     }
 
+    //Deletes bats once the player has left the BatTrack
     public void DeleteBats()
     {
         for (int i = 0; i < bats.Count; i++)

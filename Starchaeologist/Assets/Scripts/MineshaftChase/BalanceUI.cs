@@ -1,3 +1,9 @@
+//NASA x RIT author: Noah Flanders
+
+//This script displays the rotation of the balance board the player
+//is standing on and the "ideal zone" in which the balance board should
+//be within
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +13,8 @@ public class BalanceUI : MonoBehaviour
 {
     [SerializeField]
     private Minecart cart;
+    [SerializeField]
+    private Camera main;
 
     [SerializeField]
     private Image balanceBar;
@@ -14,31 +22,31 @@ public class BalanceUI : MonoBehaviour
     private Image safeZone;
 
     private float balanceRot;
+    private float headsetOffset;
 
-    /*
-     * [SerializeField]
-     * private SensorData sens1;
-     * [SerializeField]
-     * private SensorData sens2;
-    */
+    [SerializeField]
+    private UdpSocket server;
+
     // Start is called before the first frame update
     void Start()
     {
+        headsetOffset = 0f;
         balanceRot = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        balanceRot = cart.transform.eulerAngles.z;
+        headsetOffset = main.transform.eulerAngles.z;
+        balanceRot = server.BoardRotation;
         balanceBar.transform.eulerAngles = new Vector3(
             balanceBar.transform.eulerAngles.x,
             balanceBar.transform.eulerAngles.y,
-            balanceRot
+            balanceRot + headsetOffset
             );
     }
 
-
+    //The ideal zone changes depending on if the player is turning or not
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "StraightTrack")

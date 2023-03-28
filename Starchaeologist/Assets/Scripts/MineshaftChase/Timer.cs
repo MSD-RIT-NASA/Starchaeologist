@@ -1,3 +1,5 @@
+//NASA x RIT author: Noah Flanders
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +30,7 @@ public class Timer : MonoBehaviour
     {
         time = Time.deltaTime;
 
+        //The timer continues until it reaches 0
         if(timeRemaining > 0)
         {
             timeRemaining -= time;

@@ -16,11 +16,13 @@ Based on older work by Sandra Fang 2016 - Unity3D to MATLAB UDP communication - 
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using TMPro;
 
 
 public class UdpSocket : MonoBehaviour
@@ -39,11 +41,8 @@ public class UdpSocket : MonoBehaviour
     bool threadRunning = false;
     Thread communicateThread;
 
-    //rotation
-
     // int getMovement
     // int sendMovement
-
 
     //score
     bool isCalibrated = false;
@@ -55,10 +54,18 @@ public class UdpSocket : MonoBehaviour
 
     //Quit game
     bool gameOver = false;
-    bool gameStart = false;
+    private bool gameStart = false;
     bool gamePaused = false;
     bool txPlatformMovement = false;
     //string gameProfiles = null;
+
+    // TESTING
+    public bool test = false;
+    float fltTest = -1f;
+
+    // ROTATION BOARD SENSOR
+    //public bool getRotation = false;
+    private float boardRotation;
 
     [HideInInspector] public bool isTxStarted = false;
 
@@ -70,6 +77,36 @@ public class UdpSocket : MonoBehaviour
     UdpClient client;
     IPEndPoint remoteEndPoint;
     Thread receiveThread; // Receiving Thread
+
+    [SerializeField]
+    private MineGame mineLevel;
+
+    [SerializeField]
+    private TMP_Text balanceScoreDisplay;
+
+    static public int Score;
+
+    [SerializeField]
+    private ScoreData scoreMgr;
+
+    public bool GameStart
+    {
+        get { return gameStart; }
+        set { gameStart = value; }
+    }
+    public bool GameOver
+    {
+        get { return gameOver; }
+        set { gameOver = value; }
+    }
+    public float BoardRotation
+    {
+        get { return boardRotation; }
+    }
+    public float BalanceScore
+    {
+        get { return getBalanceScore; }
+    }
 
     public void SendData(string message) // Use to send data to Python
     {
@@ -138,9 +175,11 @@ public class UdpSocket : MonoBehaviour
         {
             isTxStarted = true;
         }
+        //split the string into two floats
+        string[] splitMessage = input.Split(' ');
 
         //figure out what to do with the message
-        switch (input)
+        switch (splitMessage[0])
         {
             case "kill":
                 Debug.Log("received 'kill'");
@@ -175,12 +214,27 @@ public class UdpSocket : MonoBehaviour
             case "balanceScore":
                 Debug.Log("Collecting balance score");
                 // somehow collect the balance score?
-                //getBalanceScore = 
+                getBalanceScore = float.Parse(splitMessage[1]);
+                Debug.Log(getBalanceScore.ToString());
+
+                float gameScore = Score + getBalanceScore;
+                balanceScoreDisplay.text = "" + gameScore;
+                scoreMgr.DetermineRank(gameScore);//Determines a letter rank based on the score and displays it
+                
                 break;
 
             case "boardMove":
-                Debug.Log("board moved!");
+                //Debug.Log("board moved!");
                 //collect board data
+                boardRotation = float.Parse(splitMessage[1]);
+                //Debug.Log(boardRotation.ToString());
+
+                //If multiple sensor values will be read in as parts of a single string,
+                //split the messageat whitespace and assign sensorLRot and sensorRRot respectively
+                break;
+            case "testingPython":
+                fltTest = float.Parse(splitMessage[1]);
+                Debug.Log(fltTest.ToString());
                 break;
 
             default:
@@ -199,8 +253,34 @@ public class UdpSocket : MonoBehaviour
         client.Close();
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        if(!threadRunning)
+        {
+            threadRunning = true;
+            StartThread();
+        }
+
+    }
+
+    void StartThread()
+    {
+        threadRunning = true;
+        communicateThread = new Thread(Communicate);
+        communicateThread.Start();
+    }
+
+     void StopThread()
+    {
+        threadRunning = false;
+        // block main thread, wait for _runnerThread to finish its job first, so we can be sure that 
+        // _runnerThread will end before main thread end
+        communicateThread.Join();
+    }
+
     //this method will be threaded and handles sending messages with the python server
-    void Communicate()
+    public void Communicate()
     {
 
 
@@ -212,10 +292,14 @@ public class UdpSocket : MonoBehaviour
                 if(gameStart) // the game starts
                 {
                     // for levels 1 and 2 this must be called AFTER confirmation of calibration
-                    //
+                    // send game mode
                     // send over gameProfile data so MATLAB data is correctly labeled
                     // start collecting balance data 
-                    
+                    string msg = "gameStart";
+                    SendData(msg);
+
+                    string deadTime = "" + mineLevel.DeadTime;
+                    SendData(deadTime);
                 }
 
                 else if(gameOver) // the game ends
@@ -223,11 +307,11 @@ public class UdpSocket : MonoBehaviour
                     Debug.Log("Game Over");
                     // stop acctuators
                     // get the balance score
-                    // close the server,,,,, i think
-                    // end the game
 
 
-                    Application.Quit();
+                    string msg = "gameOver";
+                    SendData(msg);
+                    
 
                     return;
                 }
@@ -255,11 +339,15 @@ public class UdpSocket : MonoBehaviour
                     return;
                 }
 
-                // else if(gameMode)
-                // {
-                //     //send over the game mode
-                //     return;
-                // }
+                else if(test)
+                {
+                    Debug.Log("testingtesting");
+                    string msg = "testing";
+                    SendData(msg);
+                    return;
+                }
+
+
 
                 
 
@@ -274,11 +362,7 @@ public class UdpSocket : MonoBehaviour
                 
             }
             threadRunning = false;
-        
-            
-        
 
     }
-
 
 }
