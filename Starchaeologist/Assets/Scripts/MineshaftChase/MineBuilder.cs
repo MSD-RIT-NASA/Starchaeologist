@@ -93,7 +93,20 @@ public class MineBuilder : MonoBehaviour
                     i++;
                 }
             }
-            
+            if (segmentArray[0][randIndex].gameObject.name == "SensoryDeprevation")
+            {
+                for (int j = 24; j < 26; j++)
+                {
+                    newSpawn.transform.GetChild(j).gameObject.transform.position = spawnPosition;
+                    newSpawn.transform.GetChild(j).gameObject.transform.rotation = spawnRotation;
+                    spawnPosition = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.position;
+                    spawnRotation = newSpawn.transform.GetChild(j).gameObject.transform.GetChild(0).transform.rotation;
+
+                    spawnedSegments.Add(newSpawn.transform.GetChild(j).gameObject);
+                    spawnedTransforms.Add(newSpawn.transform.GetChild(j).transform.GetChild(2).transform);
+                    i++;
+                }
+            }
             //spawn objects on the segment
             PlaceObjects(spawnedSegments[i], obstaclePrefabs);
             PlaceObjects(spawnedSegments[i], treasurePrefabs);
