@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class EndCollision : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class EndCollision : MonoBehaviour
     [SerializeField]
     private GameObject timerCanvas;
 
+    [SerializeField]
+    private TMP_Text scoreDisplay;
+
+    static public int Score;
 
     void OnTriggerEnter(Collider other)
     {
@@ -20,6 +25,7 @@ public class EndCollision : MonoBehaviour
         if (other.gameObject.CompareTag("PlayerFoot") || other.gameObject.CompareTag("Minecart"))
         {
             canvasRef.SetActive(true);
+            scoreDisplay.text = "" + Score;
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
             timerCanvas.SetActive(false);

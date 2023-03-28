@@ -84,6 +84,11 @@ public class UdpSocket : MonoBehaviour
     [SerializeField]
     private TMP_Text balanceScoreDisplay;
 
+    static public int Score;
+
+    [SerializeField]
+    private ScoreData scoreMgr;
+
     public bool GameStart
     {
         get { return gameStart; }
@@ -212,7 +217,9 @@ public class UdpSocket : MonoBehaviour
                 getBalanceScore = float.Parse(splitMessage[1]);
                 Debug.Log(getBalanceScore.ToString());
 
-                balanceScoreDisplay.text = "" + getBalanceScore;
+                float gameScore = Score + getBalanceScore;
+                balanceScoreDisplay.text = "" + gameScore;
+                scoreMgr.DetermineRank(gameScore);//Determines a letter rank based on the score and displays it
                 
                 break;
 
