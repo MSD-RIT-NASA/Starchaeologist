@@ -238,14 +238,12 @@ public class UdpSocket : MonoBehaviour
                 StopThread();
                 break;
 
+            //collect board data
             case "boardMove":
-                //Debug.Log("board moved!");
-                //collect board data
+                
                 boardRotation = float.Parse(splitMessage[1]);
                 //Debug.Log(boardRotation.ToString());
 
-                //If multiple sensor values will be read in as parts of a single string,
-                //split the messageat whitespace and assign sensorLRot and sensorRRot respectively
                 break;
 
             case "ACKgameStart": // Acknowledge the game has started
@@ -347,7 +345,7 @@ public class UdpSocket : MonoBehaviour
                 // send deadtime for minecart score data
                 if (gameMode == 3){
                     Debug.Log("Making deadTime");
-                    while(mineLevel.DeadTime == 0){}
+                    while(mineLevel.DeadTime == 0){} // wait until they click start to get deadtime
                     string deadTime = "" + mineLevel.DeadTime;
                     msg += " deadTime " + deadTime;
                 }
@@ -369,15 +367,16 @@ public class UdpSocket : MonoBehaviour
                 // close the server?
                 // end the game
 
-
                 string msg = "gameOver";
                 SendData(msg);
 
                 // // send over gameProfile data so MATLAB data is correctly labeled
                 // string serverProfile = gameProfile.ToString();
                 // SendData(gameProfile);
-                
+
+                //OnDisable();
                 gameOver = false;
+                StopThread();
                 return;
             }
 

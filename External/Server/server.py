@@ -18,7 +18,7 @@ import socket
 import math
 
 # Create Socket to send and receive data from Board sensor
-UDP_IP= "192.168.4.4"
+UDP_IP= "192.168.4.2"
 UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
 
@@ -50,6 +50,7 @@ while True:
         decodedMessage = [' ']
     else:
         print(decodedMessage)
+        
 
     try:
         decodedMessage = decodedMessage.split(' ')
@@ -67,7 +68,7 @@ while True:
         try:
             newval = float(value.replace('\U00002013', '-'))*360/math.pi*2
             sock.SendData("boardMove " + str(newval))
-            print(newval)
+            #print(newval)
         except ValueError:
             print ("Not a float")
             pass
@@ -86,7 +87,15 @@ while True:
         logging.info("Game has started!")
         gameStarted = True #in case python needs to know
         sock.SendData("ACKgameStart")
-        # start gathering sensor data
+        if(decodedMessage.__contains__("deadTime")):
+            logging.info("receiving deadTime from Unity")
+            counter = 0
+            for data in decodedMessage:
+                counter+=1
+                if data == "deadTime":
+                    deadTime = decodedMessage[counter]
+                    print(deadTime)
+                    sock.SendData("ACKdeadTime")
 
     elif(decodedMessage[0] == "startCalibrating"):
         logging.info("Game is trying to calibrate")
@@ -96,15 +105,15 @@ while True:
         else:
             sock.SendData("calibratedRigFailed")
 
-    elif(decodedMessage.__contains__("deadTime")):
-        logging.info("receiving deadTime from Unity")
-        counter = 0
-        for data in decodedMessage:
-            counter+=1
-            if data == "deadTime":
-                deadTime = decodedMessage[counter]
-                print(deadTime)
-                sock.SendData("ACKdeadTime")
+    # elif(decodedMessage.__contains__("deadTime")):
+    #     logging.info("receiving deadTime from Unity")
+    #     counter = 0
+    #     for data in decodedMessage:
+    #         counter+=1
+    #         if data == "deadTime":
+    #             deadTime = decodedMessage[counter]
+    #             print(deadTime)
+    #             sock.SendData("ACKdeadTime")
 
 
 #####################################################################
