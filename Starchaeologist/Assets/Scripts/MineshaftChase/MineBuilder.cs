@@ -36,6 +36,10 @@ public class MineBuilder : MonoBehaviour
 
         hasBeenUsed = false;
 
+        GetComponent<UdpSocket>().GameMode = 3;
+        GetComponent<UdpSocket>().GameStart = true;
+        //GetComponent<UdpSocket>().test = true; 
+
         //remove the script 
         Destroy(this);
     }

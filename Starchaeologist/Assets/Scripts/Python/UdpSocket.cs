@@ -35,7 +35,12 @@ public class UdpSocket : MonoBehaviour
      * Minecart = 3
      */
 
-    public int gameMode = 0;
+    private int gameMode = 0;
+    public int GameMode
+    {
+        get { return gameMode; }
+        set { gameMode = value; }
+    }
 
     //thread
     bool threadRunning = false;
@@ -96,16 +101,19 @@ public class UdpSocket : MonoBehaviour
         get { return gameStart; }
         set { gameStart = value; }
     }
+
     public bool GameOver
     {
         get { return gameOver; }
         set { gameOver = value; }
     }
+
     public float BoardRotation
     {
         get { return boardRotation; }
     }
-        public float BalanceScore
+
+    public float BalanceScore
     {
         get { return getBalanceScore; }
     }
@@ -230,14 +238,23 @@ public class UdpSocket : MonoBehaviour
                 StopThread();
                 break;
 
+            //collect board data
             case "boardMove":
-                //Debug.Log("board moved!");
-                //collect board data
+                
                 boardRotation = float.Parse(splitMessage[1]);
                 //Debug.Log(boardRotation.ToString());
 
-                //If multiple sensor values will be read in as parts of a single string,
-                //split the messageat whitespace and assign sensorLRot and sensorRRot respectively
+                break;
+
+            case "ACKgameStart": // Acknowledge the game has started
+                Debug.Log("Game start is Acknowledged");
+                StopThread();
+                break;
+
+            case "ACKdeadTime":
+                Debug.Log("Dead Game is Acknowledged");
+                StopThread();
+                // what happens when I stop a thread that has already been stopped?
                 break;
 
 //////////////////////////////////////////////////////////////////////
@@ -308,45 +325,60 @@ public class UdpSocket : MonoBehaviour
         {
             //send messages
 
-                if(gameStart) // the game starts
+            if(gameStart) // the game starts
             {
                 // for levels 1 and 2 this must be called AFTER confirmation of calibration
                 //if (isCalibrated == true){}
                 Debug.Log("Game start");
                 string msg = "gameStart";
-                SendData(msg);
+                
                 // send game mode
                 // string serverGameMode = gameMode.ToString();
                 // SendData(serverGameMode);
 
-                // send over gameProfile data so MATLAB data is correctly labeled
-                // // string serverProfile = gameProfile.ToString();
-                // // SendData(gameProfile);
-
                 // start collecting balance data 
-                SendData("collectBalanceData");
+                if( gameMode == 1 || gameMode == 2 && isCalibrated == true){
+                    msg = msg + " " + "collectBalanceData";
+                    
+                }
+                
+                // send deadtime for minecart score data
+                if (gameMode == 3){
+                    Debug.Log("Making deadTime");
+                    while(mineLevel.DeadTime == 0){} // wait until they click start to get deadtime
+                    string deadTime = "" + mineLevel.DeadTime;
+                    msg += " deadTime " + deadTime;
+                }
+                
 
-                string deadTime = "" + mineLevel.DeadTime;
-                SendData(deadTime);
-
+                SendData(msg);
                 gameStart = false;
+                gameMode = 0;
+                isCalibrated = false;
                 return;
 
             }
 
-                else if(gameOver) // the game ends
-                {
-                    Debug.Log("Game Over");
-                    // stop acctuators
-                    // get the balance score
-                    // close the server?
-                    // end the game
-                    string msg = "gameOver";
-                    SendData(msg);
-                    
-                    gameOver = false;
-                    return;
-                }
+            else if(gameOver) // the game ends
+            {
+                Debug.Log("Game Over");
+                // stop acctuators
+                // get the balance score
+                // close the server?
+                // end the game
+
+                string msg = "gameOver";
+                SendData(msg);
+
+                // // send over gameProfile data so MATLAB data is correctly labeled
+                // string serverProfile = gameProfile.ToString();
+                // SendData(gameProfile);
+
+                //OnDisable();
+                gameOver = false;
+                StopThread();
+                return;
+            }
 
             // when the game is paused, it must pause receiving / collecting sensor data, 
             // then recalibrate, then start collecting agin
@@ -380,7 +412,7 @@ public class UdpSocket : MonoBehaviour
             else if(test)
             {
                 Debug.Log("sending message1 test");
-                string msg = "testing";
+                string msg = "testing1";
                 SendData(msg);
 
                 Debug.Log("sending message2 test");

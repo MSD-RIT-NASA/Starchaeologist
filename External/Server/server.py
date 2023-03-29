@@ -18,7 +18,7 @@ import socket
 import math
 
 # Create Socket to send and receive data from Board sensor
-UDP_IP= "192.168.4.4"
+UDP_IP= "192.168.4.2"
 UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
 
@@ -50,6 +50,7 @@ while True:
         decodedMessage = [' ']
     else:
         print(decodedMessage)
+        
 
     try:
         decodedMessage = decodedMessage.split(' ')
@@ -67,7 +68,7 @@ while True:
         try:
             newval = float(value.replace('\U00002013', '-'))*360/math.pi*2
             sock.SendData("boardMove " + str(newval))
-            print(newval)
+            #print(newval)
         except ValueError:
             print ("Not a float")
             pass
@@ -84,36 +85,56 @@ while True:
         break
     elif(decodedMessage[0] == "gameStart"):
         logging.info("Game has started!")
-        # start gathering sensor data
+        gameStarted = True #in case python needs to know
+        sock.SendData("ACKgameStart")
+        if(decodedMessage.__contains__("deadTime")):
+            logging.info("receiving deadTime from Unity")
+            counter = 0
+            for data in decodedMessage:
+                counter+=1
+                if data == "deadTime":
+                    deadTime = decodedMessage[counter]
+                    print(deadTime)
+                    sock.SendData("ACKdeadTime")
 
     elif(decodedMessage[0] == "startCalibrating"):
-        print("Game is trying to calibrate")
+        logging.info("Game is trying to calibrate")
         getCalibration = U.UdpComms.sensorCalibration()
         if (getCalibration): 
             sock.SendData("calibratedRigsuccess")
         else:
             sock.SendData("calibratedRigFailed")
 
+    # elif(decodedMessage.__contains__("deadTime")):
+    #     logging.info("receiving deadTime from Unity")
+    #     counter = 0
+    #     for data in decodedMessage:
+    #         counter+=1
+    #         if data == "deadTime":
+    #             deadTime = decodedMessage[counter]
+    #             print(deadTime)
+    #             sock.SendData("ACKdeadTime")
+
 
 #####################################################################
 ############################## TESTING ##############################
 #####################################################################
 
-    elif(decodedMessage[0] == "testing"):
+    elif(decodedMessage[0] == "testing1"):
         print("Testing the communication")
         sock.SendData("testingPython 5555.00")
 
     # testing multi argument value strings sending back and forth to game
     elif(decodedMessage[0] == "testing2"):
         new_split_message = decodedMessage[1]
-        print("Testing the communication with multi: " + new_split_message)
+        logging.info("Testing the communication with multi: " + new_split_message)
         sock.SendData("longStringVerified")
         decodedMessage = [3] # reset split message or it'll keep sending this message
 
     # testing long string with many arguments
     # ex: hello 1234 world 5678
     elif(decodedMessage.__contains__("world")):
-        print("CONTAINS TEST RUN")
+        logging.info("CONTAINS TEST RUN")
         counter = 0
         for data in decodedMessage:
             counter+=1

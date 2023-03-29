@@ -39,8 +39,8 @@ public class S_RiverBuilder : MonoBehaviour
 
         //give the game script the list of river pieces
         GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
-        GetComponent<UdpSocket>().gameMode = 1;
-        //GetComponent<UdpSocket>().calibrateRig = true; 
+        GetComponent<UdpSocket>().GameMode = 1;
+        //GetComponent<UdpSocket>().CalibrateRig = true; 
 
         //remove this script
         Destroy(this);
