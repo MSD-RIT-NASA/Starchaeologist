@@ -41,18 +41,15 @@ public class UdpSocket : MonoBehaviour
     bool threadRunning = false;
     Thread communicateThread;
 
-    // int getMovement
-    // int sendMovement
-
     //score
     bool isCalibrated = false;
-    public bool calibrateRig = false;
+    private bool calibrateRig = false;
     float getBalanceScore = -1f;
 
     //killswitch
     bool killIt = false;
 
-    //Quit game
+    // Game data
     bool gameOver = false;
     private bool gameStart = false;
     bool gamePaused = false;
@@ -64,7 +61,6 @@ public class UdpSocket : MonoBehaviour
     float fltTest = -1f;
 
     // ROTATION BOARD SENSOR
-    //public bool getRotation = false;
     private float boardRotation;
 
     [HideInInspector] public bool isTxStarted = false;
@@ -77,7 +73,7 @@ public class UdpSocket : MonoBehaviour
     UdpClient client;
     IPEndPoint remoteEndPoint;
     Thread receiveThread; // Receiving Thread
-
+    
     [SerializeField]
     private MineGame mineLevel;
 
@@ -88,6 +84,12 @@ public class UdpSocket : MonoBehaviour
 
     [SerializeField]
     private ScoreData scoreMgr;
+    
+    public bool CalibrateRig
+    {
+        get { return calibrateRig; }
+        set { calibrateRig = value; }
+    }
 
     public bool GameStart
     {
@@ -103,10 +105,12 @@ public class UdpSocket : MonoBehaviour
     {
         get { return boardRotation; }
     }
-    public float BalanceScore
+        public float BalanceScore
     {
         get { return getBalanceScore; }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
 
     public void SendData(string message) // Use to send data to Python
     {
@@ -190,37 +194,40 @@ public class UdpSocket : MonoBehaviour
                 if(killIt)
                 {
                     killIt = false;
-                    //comeBack = true;
                 }
                 break;
+
             case "quit":
                 Debug.Log("received 'quit'");
                 threadRunning = false;
-                //NetMQConfig.Cleanup();
-                Application.Quit();
+                Application.Quit(); 
                 return;
+
             case "calibratedRigsuccess":
                 // when the message calibrated is received then 
                 Debug.Log("Sensors calibrated");
                 isCalibrated = true;
+                calibrateRig = false;
+                CalibrateRig = false;
                 // then allow user to step on platform
-                //game start AFTER isCalibrated is true
+                // game start AFTER isCalibrated is true
                 break;
+
             case "calibratedRigFailed":
-                Debug.Log("Sensors not calibrated");
+                Debug.Log("Sensors not calibrated"); 
                 isCalibrated = false;
+                StopThread();
                 break;
             
             case "balanceScore":
                 Debug.Log("Collecting balance score");
-                // somehow collect the balance score?
                 getBalanceScore = float.Parse(splitMessage[1]);
                 Debug.Log(getBalanceScore.ToString());
-
                 float gameScore = Score + getBalanceScore;
                 balanceScoreDisplay.text = "" + gameScore;
                 scoreMgr.DetermineRank(gameScore);//Determines a letter rank based on the score and displays it
                 
+                StopThread();
                 break;
 
             case "boardMove":
@@ -232,14 +239,26 @@ public class UdpSocket : MonoBehaviour
                 //If multiple sensor values will be read in as parts of a single string,
                 //split the messageat whitespace and assign sensorLRot and sensorRRot respectively
                 break;
+
+//////////////////////////////////////////////////////////////////////
+////////////////////////////// TESTING ///////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
             case "testingPython":
                 fltTest = float.Parse(splitMessage[1]);
                 Debug.Log(fltTest.ToString());
+                StopThread();
                 break;
 
-            default:
-                
+            case "longStringVerified":
+                Debug.Log("Test long string working"); 
+                StopThread();
                 break;
+
+
+            default:
+                break;
+
         }
             
     }
@@ -280,89 +299,104 @@ public class UdpSocket : MonoBehaviour
     }
 
     //this method will be threaded and handles sending messages with the python server
+    // note: unity has a hard time sending multiple SendData(string) in one case. 
+    //       Instead, send one long string and parse the string on server side
+    //       Ex: "hello 1234 world 5678" or "gameMode 2 gameProfile Jerry test 123"
     public void Communicate()
     {
-
-
-            if (threadRunning)
-            {
-                //send messages
-
+        if (threadRunning)
+        {
+            //send messages
 
                 if(gameStart) // the game starts
-                {
-                    // for levels 1 and 2 this must be called AFTER confirmation of calibration
-                    // send game mode
-                    // send over gameProfile data so MATLAB data is correctly labeled
-                    // start collecting balance data 
-                    string msg = "gameStart";
-                    SendData(msg);
+            {
+                // for levels 1 and 2 this must be called AFTER confirmation of calibration
+                //if (isCalibrated == true){}
+                Debug.Log("Game start");
+                string msg = "gameStart";
+                SendData(msg);
+                // send game mode
+                // string serverGameMode = gameMode.ToString();
+                // SendData(serverGameMode);
 
-                    string deadTime = "" + mineLevel.DeadTime;
-                    SendData(deadTime);
-                }
+                // send over gameProfile data so MATLAB data is correctly labeled
+                // // string serverProfile = gameProfile.ToString();
+                // // SendData(gameProfile);
+
+                // start collecting balance data 
+                SendData("collectBalanceData");
+
+                string deadTime = "" + mineLevel.DeadTime;
+                SendData(deadTime);
+
+                gameStart = false;
+                return;
+
+            }
 
                 else if(gameOver) // the game ends
                 {
                     Debug.Log("Game Over");
                     // stop acctuators
                     // get the balance score
-
-
+                    // close the server?
+                    // end the game
                     string msg = "gameOver";
                     SendData(msg);
                     
-
+                    gameOver = false;
                     return;
                 }
 
-                // when the game is paused, it must pause receiving / collecting sensor data, 
-                // then recalibrate, then start collecting agin
-                else if(gamePaused)
-                {
-                    return;
-                }
-
-                else if(txPlatformMovement) // Game 2 when sending different floor movements
-                {
-
-                    return;
-                }
-
-
-                else if(calibrateRig) 
-                {
-                    Debug.Log("startCalibrating");
-                    string msg = "startCalibrating";
-                    SendData(msg);
-
-                    return;
-                }
-
-                else if(test)
-                {
-                    Debug.Log("testingtesting");
-                    string msg = "testing";
-                    SendData(msg);
-                    return;
-                }
-
-
-
-                
-
-                // else//send the desired rotation
-                // {
-                //     //Debug.Log("Sending Rotation");
-                //     string giveRotation = "rotation " + desiredRotation.x + " " + desiredRotation.y;
-                //     client.SendFrame(giveRotation);
-                // }
-              
-            
-                
+            // when the game is paused, it must pause receiving / collecting sensor data, 
+            // then recalibrate, then start collecting agin
+            else if(gamePaused)
+            {
+                return; 
             }
-            threadRunning = false;
 
+            else if(txPlatformMovement) // Game 2 when sending different floor movements
+            {
+
+                return;
+            } 
+
+
+            else if(calibrateRig) 
+            {
+                Debug.Log("startCalibrating");
+                string msg = "startCalibrating";
+                SendData(msg);
+
+                calibrateRig = false;
+                CalibrateRig = false;
+                return;
+            }
+
+//////////////////////////////////////////////////////////////////////
+////////////////////////////// TESTING ///////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+            else if(test)
+            {
+                Debug.Log("sending message1 test");
+                string msg = "testing";
+                SendData(msg);
+
+                Debug.Log("sending message2 test");
+                string msg2 = "testing2 123";
+                SendData(msg2);
+
+                Debug.Log("sending message3 test");
+                string msg3 = "hello 1234 world 5678";
+                SendData(msg3);
+            
+                test = false;
+                return;
+            } 
+                
+        }
+        threadRunning = false;   
     }
 
 }
