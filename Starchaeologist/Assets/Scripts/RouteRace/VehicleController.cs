@@ -37,8 +37,8 @@ public class VehicleController : MonoBehaviour
         if(inControl)
         {
             //Headset tilt values from main camera 
-            xTiltValue = PlayerCam.transform.localRotation.x;
-            zTiltValue = -PlayerCam.transform.localRotation.z;
+            xTiltValue = -PlayerCam.transform.localRotation.x;
+            zTiltValue = PlayerCam.transform.localRotation.z;
 
             currentAccel = acccel * xTiltValue + 175f;
 
@@ -65,7 +65,7 @@ public class VehicleController : MonoBehaviour
         if (collision.gameObject.tag == "Obstacle")
         {
             Debug.Log("I Collided");
-            carBody.velocity *= .05f;
+            carBody.velocity -= new Vector3(0, 0, 10f);
         }
         if (collision.gameObject.name == "RaceFinish")
         {
