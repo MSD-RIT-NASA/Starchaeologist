@@ -24,6 +24,9 @@ public class BalanceUI : MonoBehaviour
     [SerializeField]
     private UdpSocket server;
 
+    [SerializeField]
+    private GameObject headBox;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,11 +36,13 @@ public class BalanceUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float headsetOffset = headBox.transform.eulerAngles.z;
+
         balanceRot = server.BoardRotation;
         balanceBar.transform.eulerAngles = new Vector3(
             balanceBar.transform.eulerAngles.x,
             balanceBar.transform.eulerAngles.y,
-            balanceRot
+            balanceRot + headsetOffset
             );
     }
 
