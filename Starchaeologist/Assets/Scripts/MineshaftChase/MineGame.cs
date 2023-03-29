@@ -65,6 +65,8 @@ public class MineGame : MonoBehaviour
     private bool coroutineAllowed;
 
     private float deadTimeStart;
+
+    [SerializeField]
     private float deadTime;
 
     public float DeadTime
@@ -105,7 +107,10 @@ public class MineGame : MonoBehaviour
         }
         else
         {
-            deadTimeStart = timer.GetTime;
+            if (deadTimeStart == 0)
+            {
+                deadTimeStart = timer.TimePassed;
+            }
             countdown.SetActive(false);
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
@@ -230,7 +235,7 @@ public class MineGame : MonoBehaviour
         //server.GameStart = true;
 
         timeToMove = true;
-        deadTime = timer.GetTime - deadTimeStart;
+        deadTime = timer.TimePassed - deadTimeStart;
         rightHandRay.SetActive(false);
         leftHandRay.SetActive(false);
     }
