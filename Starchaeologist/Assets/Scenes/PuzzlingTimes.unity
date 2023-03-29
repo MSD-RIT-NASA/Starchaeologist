@@ -2504,6 +2504,8 @@ MonoBehaviour:
   rightHandRay: {fileID: 7387500813503913827}
   leftHandRay: {fileID: 7723398613073621425}
   audSrc: {fileID: 0}
+  timerCanvas: {fileID: 0}
+  scoreDisplay: {fileID: 0}
 --- !u!1 &271078688
 GameObject:
   m_ObjectHideFlags: 0
@@ -6393,11 +6395,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameMode: 2
-  calibrateRig: 1
+  test: 0
   isTxStarted: 0
   IP: 127.0.0.1
   rxPort: 8000
   txPort: 8001
+  mineLevel: {fileID: 0}
+  balanceScoreDisplay: {fileID: 0}
+  scoreMgr: {fileID: 0}
 --- !u!1 &839988735
 GameObject:
   m_ObjectHideFlags: 0
@@ -11481,6 +11486,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonClick: {fileID: 0}
   click: {fileID: 0}
+  server: {fileID: 0}
 --- !u!114 &1553079655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15513,6 +15519,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3530708933263457321, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5873311957781832268, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -15571,6 +15581,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5873311959577746031, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
       propertyPath: m_ActivateActionValue.m_UseReference
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8685718818491629396, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8685718819454492564, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
+      propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
