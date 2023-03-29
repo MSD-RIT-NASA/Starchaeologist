@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -442,6 +442,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 149083204}
     - target: {fileID: 8602068237086423801, guid: cb5f7d58340994d48bf1bc5e7d457a17, type: 3}
+      propertyPath: headBox
+      value: 
+      objectReference: {fileID: 2134090115}
+    - target: {fileID: 8602068237086423801, guid: cb5f7d58340994d48bf1bc5e7d457a17, type: 3}
       propertyPath: safeZone
       value: 
       objectReference: {fileID: 1665565917}
@@ -510,7 +514,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 2061620862383443185}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d3783994fbea2a40957f325ae162a15, type: 3}
   m_Name: 
@@ -9034,6 +9038,10 @@ PrefabInstance:
       propertyPath: scoreMgr
       value: 
       objectReference: {fileID: 295434579}
+    - target: {fileID: 2061620862234433717, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2061620862234433717, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
       propertyPath: mineLevel
       value: 
