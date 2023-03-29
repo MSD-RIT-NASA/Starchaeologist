@@ -13,7 +13,8 @@ public class S_RiverBuilder : MonoBehaviour
     static protected List<Vector3> checkpoints = new List<Vector3>();
     //using system random system for varited seeds in a loop
     System.Random rand = new System.Random();
-    private const int maxObsticaleRotation = 70;
+    private const int maxObsticaleRotation = 60;
+    private const int maxCheckpointPosX = 6;
     // Start is called before the first frame update
     void Start()
     {
@@ -70,7 +71,7 @@ public class S_RiverBuilder : MonoBehaviour
                      * and adjust in world space
                      */
 
-                    objPoint1.transform.localPosition = new Vector3(rand.Next(-6, 7), 0, point1Z);
+                    objPoint1.transform.localPosition = new Vector3(rand.Next(-maxCheckpointPosX, maxCheckpointPosX + 1), 0, point1Z);
                     objPoint2.transform.Rotate(objPoint2.transform.position, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation+1));
                     objPoint3.transform.Rotate(objPoint2.transform.position, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation+1));
 
@@ -82,9 +83,32 @@ public class S_RiverBuilder : MonoBehaviour
 
                     //object point 1 is the first one encountered by the player so as checkpoints go they are handled in order
                     //player will be moved towards treasures while they are moved away from obsticales
-
+                    tresure.transform.position.Set(tresure.transform.position.x + 0.5f, tresure.transform.position.y, tresure.transform.position.z);
                     checkpoints.Add(tresure.transform.position);
-                    if (obj1Rotation <= 35 && obj1Rotation >= -35)
+
+                    if (obj1Rotation >= 0)
+                    {
+                        Vector3 tempObsticale1 = new Vector3(maxCheckpointPosX - obj1Rotation / (float)maxObsticaleRotation * maxCheckpointPosX - 1.5f, 0.0f, ob1.transform.position.z);
+                        checkpoints.Add(tempObsticale1);
+                    }
+                    else
+                    {
+                        Vector3 tempObsticale1 = new Vector3(maxCheckpointPosX + obj1Rotation / (float)maxObsticaleRotation * maxCheckpointPosX + 1.5f, 0.0f, ob1.transform.position.z);
+                        checkpoints.Add(tempObsticale1);
+                    }
+
+                    if (obj2Rotation >= 0)
+                    {
+                        Vector3 tempObsticale2 = new Vector3(maxCheckpointPosX - obj2Rotation / (float)maxObsticaleRotation * maxCheckpointPosX - 1.5f, 0.0f, ob2.transform.position.z);
+                        checkpoints.Add(tempObsticale2);
+                    }
+                    else
+                    {
+                        Vector3 tempObsticale2 = new Vector3(maxCheckpointPosX + obj2Rotation / (float)maxObsticaleRotation * maxCheckpointPosX + 1.5f, 0.0f, ob2.transform.position.z);
+                        checkpoints.Add(tempObsticale2);
+                    }
+
+                    /*if (obj1Rotation <= maxObsticaleRotation/2 && obj1Rotation >= -maxObsticaleRotation/2)
                     {
                         Vector3 tempObsticale1 = new Vector3((obj1Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob1.transform.position.z);
                         checkpoints.Add(tempObsticale1);
@@ -106,7 +130,7 @@ public class S_RiverBuilder : MonoBehaviour
                         
                     }
 
-                    if (obj2Rotation <= 35 && obj2Rotation >= -35)
+                    if (obj2Rotation <= maxObsticaleRotation/2 && obj2Rotation >= -maxObsticaleRotation/2)
                     {
                         Vector3 tempObsticale2 = new Vector3((obj2Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob2.transform.position.z);
                         checkpoints.Add(tempObsticale2);
@@ -123,7 +147,7 @@ public class S_RiverBuilder : MonoBehaviour
                             Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) + 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
                             checkpoints.Add(tempObsticale2);
                         }
-                    }
+                    }*/
 
                 }
                 else if (randomTreasurePos == 1)
@@ -137,48 +161,30 @@ public class S_RiverBuilder : MonoBehaviour
                     GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
 
 
-                    if (obj1Rotation <= 35 && obj1Rotation >= -35)
+                    if (obj1Rotation >= 0)
                     {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob1.transform.position.z);
+                        Vector3 tempObsticale1 = new Vector3(maxCheckpointPosX - obj1Rotation / (float)maxObsticaleRotation * maxCheckpointPosX - 1.5f, 0.0f, ob1.transform.position.z);
                         checkpoints.Add(tempObsticale1);
                     }
                     else
                     {
-                        if (obj1Rotation >= 0)
-                        {
-                            Vector3 tempObsticale1 = new Vector3(((70.0f / obj1Rotation) - 1.0f) * -7.0f, 0.0f, ob1.transform.position.z);
-                            checkpoints.Add(tempObsticale1);
-                        }
-                        else
-                        {
-                            Vector3 tempObsticale1 = new Vector3(((70.0f / obj1Rotation) + 1.0f) * -7.0f, 0.0f, ob1.transform.position.z);
-                            checkpoints.Add(tempObsticale1);
-                        }
+                        Vector3 tempObsticale1 = new Vector3(maxCheckpointPosX + obj1Rotation / (float)maxObsticaleRotation * maxCheckpointPosX + 1.5f, 0.0f, ob1.transform.position.z);
+                        checkpoints.Add(tempObsticale1);
                     }
 
+                    tresure.transform.position.Set(tresure.transform.position.x + 0.5f, tresure.transform.position.y, tresure.transform.position.z);
                     checkpoints.Add(tresure.transform.position);
 
-                    if (obj2Rotation <= 35 && obj2Rotation >= -35)
+                    if (obj2Rotation >= 0)
                     {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob2.transform.position.z);
+                        Vector3 tempObsticale2 = new Vector3(maxCheckpointPosX - obj2Rotation / (float)maxObsticaleRotation * maxCheckpointPosX - 1.5f, 0.0f, ob2.transform.position.z);
                         checkpoints.Add(tempObsticale2);
                     }
                     else
                     {
-                        if (obj2Rotation >= 0)
-                        {
-                            Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) - 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
-                            checkpoints.Add(tempObsticale2);
-                        }
-                        else
-                        {
-                            Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) + 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
-                            checkpoints.Add(tempObsticale2);
-                        }
+                        Vector3 tempObsticale2 = new Vector3(maxCheckpointPosX + obj2Rotation / (float)maxObsticaleRotation * maxCheckpointPosX + 1.5f, 0.0f, ob2.transform.position.z);
+                        checkpoints.Add(tempObsticale2);
                     }
-
-                    
-
 
                 }
                 else
@@ -192,44 +198,29 @@ public class S_RiverBuilder : MonoBehaviour
                     GameObject tresure = Instantiate(randomTreasure, objPoint3.transform);
 
 
-                    if (obj1Rotation <= 35 && obj1Rotation >= -35)
+                    if (obj1Rotation >= 0)
                     {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob1.transform.position.z);
+                        Vector3 tempObsticale1 = new Vector3(maxCheckpointPosX - obj1Rotation / (float)maxObsticaleRotation * maxCheckpointPosX - 1.5f, 0.0f, ob1.transform.position.z);
                         checkpoints.Add(tempObsticale1);
                     }
                     else
                     {
-                        if (obj1Rotation >= 0)
-                        {
-                            Vector3 tempObsticale1 = new Vector3(((70.0f / obj1Rotation) - 1.0f) * -7.0f, 0.0f, ob1.transform.position.z);
-                            checkpoints.Add(tempObsticale1);
-                        }
-                        else
-                        {
-                            Vector3 tempObsticale1 = new Vector3(((70.0f / obj1Rotation) + 1.0f) * -7.0f, 0.0f, ob1.transform.position.z);
-                            checkpoints.Add(tempObsticale1);
-                        }
+                        Vector3 tempObsticale1 = new Vector3(maxCheckpointPosX + obj1Rotation / (float)maxObsticaleRotation * maxCheckpointPosX + 1.5f, 0.0f, ob1.transform.position.z);
+                        checkpoints.Add(tempObsticale1);
                     }
 
-                    if (obj2Rotation <= 35 && obj2Rotation >= -35)
+                    if (obj2Rotation >= 0)
                     {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / (float)maxObsticaleRotation) * -7.0f, 0.0f, ob2.transform.position.z);
+                        Vector3 tempObsticale2 = new Vector3(maxCheckpointPosX - obj2Rotation / (float)maxObsticaleRotation * maxCheckpointPosX - 1.5f, 0.0f, ob2.transform.position.z);
                         checkpoints.Add(tempObsticale2);
                     }
                     else
                     {
-                        if (obj2Rotation >= 0)
-                        {
-                            Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) - 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
-                            checkpoints.Add(tempObsticale2);
-                        }
-                        else
-                        {
-                            Vector3 tempObsticale2 = new Vector3(((70.0f / obj2Rotation) + 1.0f) * -7.0f, 0.0f, ob2.transform.position.z);
-                            checkpoints.Add(tempObsticale2);
-                        }
+                        Vector3 tempObsticale2 = new Vector3(maxCheckpointPosX + obj2Rotation / (float)maxObsticaleRotation * maxCheckpointPosX + 1.5f, 0.0f, ob2.transform.position.z);
+                        checkpoints.Add(tempObsticale2);
                     }
 
+                    tresure.transform.position.Set(tresure.transform.position.x + 0.5f, tresure.transform.position.y, tresure.transform.position.z);
                     checkpoints.Add(tresure.transform.position);
 
 

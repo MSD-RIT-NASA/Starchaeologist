@@ -140,19 +140,24 @@ public class S_RiverGame : S_RiverBuilder
         //Vector3.RotateTowards(raftReference.transform.position,checkpoints[checkpointIndex],2*Mathf.PI,Mathf.PI);
 
         desiredDirection = Vector3.Normalize(checkpoints[checkpointIndex] - raftReference.transform.position);
-        
         Debug.Log(distance);
         
 
         //raftReference.transform.LookAt(checkpoints[checkpointIndex]);
         if (distance <= 7)
         {
-            raftReference.transform.position += desiredDirection * currentSpeed * Time.deltaTime;
+            // raftReference.transform.position += desiredDirection * currentSpeed * Time.deltaTime;
+
+            Quaternion lookRotation = Quaternion.LookRotation(desiredDirection);
+            raftReference.transform.rotation = Quaternion.Slerp(raftReference.transform.rotation, lookRotation, Time.deltaTime * (currentSpeed/6));
+            raftReference.transform.position += raftReference.transform.forward * currentSpeed * Time.deltaTime;
         }
         else
         {
-            Quaternion toRotation = Quaternion.FromToRotation(raftReference.transform.forward, desiredDirection); // instead of LookRotation( )
-            raftReference.transform.rotation = Quaternion.Lerp(raftReference.transform.rotation, toRotation, (currentSpeed * Time.deltaTime));
+            //Quaternion toRotation = Quaternion.FromToRotation(raftReference.transform.forward, desiredDirection); // instead of LookRotation( )
+            //raftReference.transform.rotation = Quaternion.Lerp(raftReference.transform.rotation, toRotation, (currentSpeed * Time.deltaTime));
+            Quaternion lookRotation = Quaternion.LookRotation(desiredDirection);
+            raftReference.transform.rotation = Quaternion.Slerp(raftReference.transform.rotation,lookRotation,Time.deltaTime* (currentSpeed/6));
             raftReference.transform.position += raftReference.transform.forward * currentSpeed * Time.deltaTime;
         }
         
