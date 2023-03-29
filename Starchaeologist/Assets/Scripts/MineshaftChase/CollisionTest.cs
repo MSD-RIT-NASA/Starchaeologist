@@ -45,9 +45,9 @@ public class CollisionTest : MonoBehaviour
     }
     public void hitScore()
     {
-        Score -= 10;
+        Score -= 2;
         txt.text = "Score: " + Score;
-        txtVisual(10);
+        txtVisual(2);
         Debug.Log(Score);
         //enable vignette
         //vignetteOn();
@@ -65,7 +65,7 @@ public class CollisionTest : MonoBehaviour
     //}
     void txtVisual(int points)
     {
-        if (points == 10)
+        if (points == 2)
         {
             txtBlip.text = "- " + points.ToString();
             txtBlip.color = Color.red;

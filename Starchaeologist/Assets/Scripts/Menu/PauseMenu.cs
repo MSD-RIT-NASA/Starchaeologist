@@ -8,7 +8,7 @@ public class PauseMenu : MonoBehaviour
 {
 
     //singleton
-    public static PauseMenu singleton;
+    public static PauseMenu singleton { get; private set; }
 
 
     public static bool GameIsPaused = false;
@@ -25,6 +25,7 @@ public class PauseMenu : MonoBehaviour
         {
             singleton = this;
         }
+        pauseMenuUI = this.transform.GetChild(0).gameObject;
     }
 
     private void UpdateMenuPosition()

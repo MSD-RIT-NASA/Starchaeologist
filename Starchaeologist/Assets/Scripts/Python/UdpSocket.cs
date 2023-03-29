@@ -22,6 +22,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using TMPro;
 
 
 public class UdpSocket : MonoBehaviour
@@ -72,7 +73,18 @@ public class UdpSocket : MonoBehaviour
     UdpClient client;
     IPEndPoint remoteEndPoint;
     Thread receiveThread; // Receiving Thread
+    
+    [SerializeField]
+    private MineGame mineLevel;
 
+    [SerializeField]
+    private TMP_Text balanceScoreDisplay;
+
+    static public int Score;
+
+    [SerializeField]
+    private ScoreData scoreMgr;
+    
     public bool CalibrateRig
     {
         get { return calibrateRig; }
@@ -92,6 +104,10 @@ public class UdpSocket : MonoBehaviour
     public float BoardRotation
     {
         get { return boardRotation; }
+    }
+        public float BalanceScore
+    {
+        get { return getBalanceScore; }
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -207,6 +223,10 @@ public class UdpSocket : MonoBehaviour
                 Debug.Log("Collecting balance score");
                 getBalanceScore = float.Parse(splitMessage[1]);
                 Debug.Log(getBalanceScore.ToString());
+                float gameScore = Score + getBalanceScore;
+                balanceScoreDisplay.text = "" + gameScore;
+                scoreMgr.DetermineRank(gameScore);//Determines a letter rank based on the score and displays it
+                
                 StopThread();
                 break;
 
@@ -288,7 +308,7 @@ public class UdpSocket : MonoBehaviour
         {
             //send messages
 
-            if(gameStart) // the game starts
+                if(gameStart) // the game starts
             {
                 // for levels 1 and 2 this must be called AFTER confirmation of calibration
                 //if (isCalibrated == true){}
@@ -306,24 +326,27 @@ public class UdpSocket : MonoBehaviour
                 // start collecting balance data 
                 SendData("collectBalanceData");
 
+                string deadTime = "" + mineLevel.DeadTime;
+                SendData(deadTime);
+
                 gameStart = false;
                 return;
 
             }
 
-            else if(gameOver) // the game ends
-            {
-                Debug.Log("Game Over");
-                // stop acctuators
-                // get the balance score
-                // close the server?
-                // end the game
-
-
-                Application.Quit();
-                gameOver = false;
-                return;
-            }
+                else if(gameOver) // the game ends
+                {
+                    Debug.Log("Game Over");
+                    // stop acctuators
+                    // get the balance score
+                    // close the server?
+                    // end the game
+                    string msg = "gameOver";
+                    SendData(msg);
+                    
+                    gameOver = false;
+                    return;
+                }
 
             // when the game is paused, it must pause receiving / collecting sensor data, 
             // then recalibrate, then start collecting agin
