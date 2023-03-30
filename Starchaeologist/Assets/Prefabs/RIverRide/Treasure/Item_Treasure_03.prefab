@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9140889712735406725}
   - component: {fileID: 3828208134059656262}
   - component: {fileID: 2703940987887105464}
+  - component: {fileID: 1027415913232677507}
   m_Layer: 0
   m_Name: simple_diamond
   m_TagString: Treasure
@@ -111,6 +112,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1462896356542371547, guid: 9fe476fe047c963418ff04cd98275058, type: 3}
+--- !u!114 &1027415913232677507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4664797634165485397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dee664c630f7a945bafd7ec9b31dcdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audSrc: {fileID: 0}
+  treasureCollect: {fileID: 0}
 --- !u!1 &5286565569865051167
 GameObject:
   m_ObjectHideFlags: 0
