@@ -99,7 +99,7 @@ while True:
         sock.SendData("ACKgameOver")
         if(decodedMessage.__contains__("getPlanetScore")):
             # TODO: get the planetScore from python scipt/MATLAB here!!
-            planetScore = 12345 # temporary value!!
+            planetScore = 12345.0 # temporary value!!
             sock.SendData("planetScore " + str(planetScore))
         elif(decodedMessage.__contains__("getBalanceScore")):
             #TODO: implement sending balance score from BASE
