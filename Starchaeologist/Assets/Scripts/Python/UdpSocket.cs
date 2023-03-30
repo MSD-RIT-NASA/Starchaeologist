@@ -239,7 +239,7 @@ public class UdpSocket : MonoBehaviour
                 break;
             
             // balanceScore from the BASE
-            case "balanceScore":
+             case "balanceScore":
                 Debug.Log("Collecting balance score");
                 getBalanceScore = float.Parse(splitMessage[1]);
                 Debug.Log(getBalanceScore.ToString());
@@ -272,7 +272,7 @@ public class UdpSocket : MonoBehaviour
 
             case "planetScore":
                 Debug.Log("Received planetScore"); // should be an int value between 1-100? TODO: ask
-                planetScore = int.Parse(splitMessage[1]);
+                planetScore = float.Parse(splitMessage[1]);
                 Debug.Log(planetScore.ToString());
                 
                 //TODO: Here is where the planetScore will be then used in the rest of unity
