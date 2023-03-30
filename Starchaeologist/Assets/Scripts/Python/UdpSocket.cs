@@ -51,6 +51,14 @@ public class UdpSocket : MonoBehaviour
     private bool calibrateRig = false;
     float getBalanceScore = -1f;
 
+    // PLANET score for minecart level
+    private int planetScore = 0;
+    public int PlanetScore
+    {
+        get { return planetScore; }
+        set { planetScore = value; }
+    }
+
     //killswitch
     bool killIt = false;
 
@@ -193,6 +201,7 @@ public class UdpSocket : MonoBehaviour
         //figure out what to do with the message
         switch (splitMessage[0])
         {
+            // killswitch cases
             case "kill":
                 Debug.Log("received 'kill'");
                 killIt = true;
@@ -204,13 +213,15 @@ public class UdpSocket : MonoBehaviour
                     killIt = false;
                 }
                 break;
-
+            
+            // End the game quickly
             case "quit":
                 Debug.Log("received 'quit'");
                 threadRunning = false;
                 Application.Quit(); 
                 return;
 
+            // Platform to BASE is calibrated sucessfully
             case "calibratedRigsuccess":
                 // when the message calibrated is received then 
                 Debug.Log("Sensors calibrated");
@@ -220,30 +231,29 @@ public class UdpSocket : MonoBehaviour
                 // then allow user to step on platform
                 // game start AFTER isCalibrated is true
                 break;
-
+            // Platform to BASE calibration failed
             case "calibratedRigFailed":
                 Debug.Log("Sensors not calibrated"); 
                 isCalibrated = false;
                 StopThread();
                 break;
             
+            // balanceScore from the BASE
             case "balanceScore":
                 Debug.Log("Collecting balance score");
                 getBalanceScore = float.Parse(splitMessage[1]);
                 Debug.Log(getBalanceScore.ToString());
                 float gameScore = Score + getBalanceScore;
                 balanceScoreDisplay.text = "" + gameScore;
-                scoreMgr.DetermineRank(gameScore);//Determines a letter rank based on the score and displays it
+                scoreMgr.DetermineRank(gameScore); //Determines a letter rank based on the score and displays it
                 
                 StopThread();
                 break;
 
-            //collect board data
+            //collect board data from PLANETs Board Connector
             case "boardMove":
-                
                 boardRotation = float.Parse(splitMessage[1]);
                 //Debug.Log(boardRotation.ToString());
-
                 break;
 
             case "ACKgameStart": // Acknowledge the game has started
@@ -251,11 +261,30 @@ public class UdpSocket : MonoBehaviour
                 StopThread();
                 break;
 
-            case "ACKdeadTime":
-                Debug.Log("Dead Game is Acknowledged");
+            case "ACKgameOver": // Acknowledge the game has ended
+                Debug.Log("Game over is Acknowledged");
                 StopThread();
-                // what happens when I stop a thread that has already been stopped?
                 break;
+
+            case "ACKdeadTime": // Acknowledge the server got the deadTime
+                Debug.Log("deadTime is Acknowledged");
+                StopThread();
+                break;
+
+            case "planetScore":
+                Debug.Log("Received planetScore"); // should be an int value between 1-100? TODO: ask
+                planetScore = int.Parse(splitMessage[1]);
+                Debug.Log(planetScore.ToString());
+                
+                //TODO: Here is where the planetScore will be then used in the rest of unity
+                // float gameScore = Score + planetScore;
+                // score.text = "" + gameScore;
+                // score.DetermineRank(gameScore); //Determines a letter rank based on the score and displays it
+                
+                StopThread();
+                break;
+
+            
 
 //////////////////////////////////////////////////////////////////////
 ////////////////////////////// TESTING ///////////////////////////////
@@ -271,7 +300,6 @@ public class UdpSocket : MonoBehaviour
                 Debug.Log("Test long string working"); 
                 StopThread();
                 break;
-
 
             default:
                 break;
@@ -338,7 +366,7 @@ public class UdpSocket : MonoBehaviour
 
                 // start collecting balance data 
                 if( gameMode == 1 || gameMode == 2 && isCalibrated == true){
-                    msg = msg + " " + "collectBalanceData";
+                    msg += " collectBalanceData";
                     
                 }
                 
@@ -349,11 +377,9 @@ public class UdpSocket : MonoBehaviour
                     string deadTime = "" + mineLevel.DeadTime;
                     msg += " deadTime " + deadTime;
                 }
-                
 
                 SendData(msg);
                 gameStart = false;
-                gameMode = 0;
                 isCalibrated = false;
                 return;
 
@@ -361,22 +387,32 @@ public class UdpSocket : MonoBehaviour
 
             else if(gameOver) // the game ends
             {
-                Debug.Log("Game Over");
-                // stop acctuators
-                // get the balance score
-                // close the server?
-                // end the game
-
-                string msg = "gameOver";
-                SendData(msg);
-
+                // TODO: home acctuators
+                
                 // // send over gameProfile data so MATLAB data is correctly labeled
                 // string serverProfile = gameProfile.ToString();
                 // SendData(gameProfile);
 
-                //OnDisable();
+                Debug.Log("Game Over");
+                string msg = "gameOver";
+
+                // get the balance score
+                if (gameMode == 1 || gameMode == 2){
+                    Debug.Log("Getting balanceScore");
+                    msg += " getBalanceScore";
+
+                }
+
+                // get the planet score
+                if (gameMode == 3){
+                    Debug.Log("Getting planetScore");
+                    msg += " getPlanetScore";
+
+                }
+
+                SendData(msg);
+                gameMode = 0;
                 gameOver = false;
-                StopThread();
                 return;
             }
 
@@ -387,7 +423,8 @@ public class UdpSocket : MonoBehaviour
                 return; 
             }
 
-            else if(txPlatformMovement) // Game 2 when sending different floor movements
+            // Game 2 when sending different floor movements
+            else if(txPlatformMovement) 
             {
 
                 return;
@@ -398,8 +435,8 @@ public class UdpSocket : MonoBehaviour
             {
                 Debug.Log("startCalibrating");
                 string msg = "startCalibrating";
-                SendData(msg);
 
+                SendData(msg);
                 calibrateRig = false;
                 CalibrateRig = false;
                 return;
