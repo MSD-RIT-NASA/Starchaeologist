@@ -47,9 +47,16 @@ public class Minecart : MonoBehaviour
     private float safeMax;
     private float safeMin;
 
+    private bool isMoving;
+
     public float TiltAngle
     {
         get { return tiltAngle; }
+    }
+    public bool IsMoving
+    {
+        get { return isMoving; }
+        set { isMoving = value; }
     }
 
     // Start is called before the first frame update
@@ -87,7 +94,7 @@ public class Minecart : MonoBehaviour
         {
             isTilting = false;
             tiltAngle = 0f;
-            if (boardRot < safeMax && boardRot > safeMin)
+            if (boardRot < safeMax && boardRot > safeMin && isMoving)
             {
                 int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
                 txt.text = "Score: " + (currentScore + 1);
