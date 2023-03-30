@@ -2395,6 +2395,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -82.53
       objectReference: {fileID: 0}
+    - target: {fileID: 4912305604762631667, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5254973138290360493, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
       propertyPath: m_Name
       value: Hand
@@ -5177,13 +5181,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d3783994fbea2a40957f325ae162a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameMode: 1
-  calibrateRig: 0
   test: 0
   isTxStarted: 0
   IP: 127.0.0.1
   rxPort: 8000
   txPort: 8001
+  mineLevel: {fileID: 0}
+  balanceScoreDisplay: {fileID: 0}
+  scoreMgr: {fileID: 0}
 --- !u!1 &936166875
 GameObject:
   m_ObjectHideFlags: 0
@@ -5352,6 +5357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonClick: {fileID: 0}
   click: {fileID: 0}
+  server: {fileID: 0}
 --- !u!114 &938760417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5619,6 +5625,10 @@ PrefabInstance:
     - target: {fileID: 4874788803148257815, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -82.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 4912305604762631667, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5254973138290360493, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
       propertyPath: m_Name
@@ -7993,6 +8003,9 @@ MonoBehaviour:
   canvasRef: {fileID: 1279581517}
   rightHandRay: {fileID: 1606384977}
   leftHandRay: {fileID: 1606384976}
+  audSrc: {fileID: 0}
+  timerCanvas: {fileID: 0}
+  scoreDisplay: {fileID: 0}
 --- !u!1001 &1332313803
 PrefabInstance:
   m_ObjectHideFlags: 0
