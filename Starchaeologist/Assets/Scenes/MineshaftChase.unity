@@ -1554,30 +1554,6 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 7865517847723088716, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
   m_PrefabInstance: {fileID: 523096628}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &523096635 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7865517849034610668, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
-  m_PrefabInstance: {fileID: 523096628}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &523096636
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 523096635}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 327f2c00ed22bdb48b99e087d16f1f56, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &554888221
 GameObject:
   m_ObjectHideFlags: 0
@@ -4863,30 +4839,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1150445560}
   m_CullTransparentMesh: 1
---- !u!1 &1156748187 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7865517847723088712, guid: 1e140e684bd98134596cf4f0d02f583d, type: 3}
-  m_PrefabInstance: {fileID: 523096628}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1156748191
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156748187}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9ecd71544f53e7944ae2595e1c6922ba, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1160407614
 GameObject:
   m_ObjectHideFlags: 0
@@ -8162,6 +8114,7 @@ MonoBehaviour:
   audSrc: {fileID: 149083208}
   timerCanvas: {fileID: 1708175916}
   scoreDisplay: {fileID: 593477630}
+  score: {fileID: 1616331566}
 --- !u!64 &1917099915
 MeshCollider:
   m_ObjectHideFlags: 0

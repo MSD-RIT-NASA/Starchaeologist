@@ -61,6 +61,10 @@ public class Minecart : MonoBehaviour
         safeMax = 3f;
         safeMin = -3f;
         boardRot = 0f;
+        txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
+        txt.text = "Score: " + Score;
+        txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
+        txtBlip.enabled = false;
     }
 
     // Update is called once per frame
@@ -125,9 +129,11 @@ public class Minecart : MonoBehaviour
         
          if(boardRot > safeMax || boardRot < safeMin){
              tiltAngle += .4f;
-             //score += 50;
-         }else{
-             //score += 5;
+             Score += 1;
+             txt.text = "Score: " + Score;
+        }
+        else{
+             
          }
         
 
@@ -152,11 +158,12 @@ public class Minecart : MonoBehaviour
         if (boardRot > safeMax || boardRot < safeMin)
         {
            tiltAngle -= .4f;
-           //score += 50;
+            Score += 1;
+            txt.text = "Score: " + Score;
         }
         else
         {
-           //score += 5;
+           
         }
 
 

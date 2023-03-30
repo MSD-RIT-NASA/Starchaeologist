@@ -35,6 +35,7 @@ public class ScoreData : MonoBehaviour
     private GameObject storedMessage;
 
     private bool hasPopulated;
+    private bool scoreCanvasActive;
 
     [SerializeField]
     private TMP_InputField playerSearchName;
@@ -46,6 +47,7 @@ public class ScoreData : MonoBehaviour
         leaders = new List<PlayerData>();
         singlePlayerData = new List<PlayerData>();
         hasPopulated = false;
+        scoreCanvasActive = true;
     }
 
     // Update is called once per frame
@@ -68,7 +70,8 @@ public class ScoreData : MonoBehaviour
         storedMessage.SetActive(false);
         if (isActive)
         {
-            keyboardCanvas.ScoreCanvasActive = true;
+            scoreCanvasActive = true;
+            keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
         }
     }
 
@@ -84,7 +87,8 @@ public class ScoreData : MonoBehaviour
         playerDataCanvas.SetActive(isActive);
         if (isActive)
         {
-            keyboardCanvas.ScoreCanvasActive = false;
+            scoreCanvasActive = false;
+            keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
         }
     }
 
@@ -246,6 +250,7 @@ public class ScoreData : MonoBehaviour
     public void ShowKeyboard()
     {
         keyboardCanvas.gameObject.SetActive(true);
+        keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
     }
 
     public void EditingName()
