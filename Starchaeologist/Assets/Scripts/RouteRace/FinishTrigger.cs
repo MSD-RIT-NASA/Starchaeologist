@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class FinishTrigger : MonoBehaviour
 {
-    [SerializeField] GameObject finshLine;
     [SerializeField] RaceGame raceScr;
-    [SerializeField] GameObject display;
 
-    void OnTriggerEnter()
+    void OnTriggerEnter(Collider collision)
     {
-        raceScr.PlayerCrossed();
+        if(collision.tag == "Player")
+        {
+            raceScr.PlayerCrossed();
+        }
     }
 }

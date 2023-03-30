@@ -10,14 +10,16 @@ public class SetUp : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(rules());
+        //StartCoroutine(rules());
         roadBuilderScript.BuildRoad();
     }
 
+    /*
     //Show controls and objective
     IEnumerator rules()
     {
         yield return new WaitForSeconds(8);
         playerRef.transform.GetChild(2).gameObject.SetActive(false);
     }
+    */
 }
