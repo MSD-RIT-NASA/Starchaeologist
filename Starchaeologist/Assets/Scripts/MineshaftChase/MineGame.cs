@@ -65,8 +65,14 @@ public class MineGame : MonoBehaviour
     private bool coroutineAllowed;
 
     private float deadTimeStart;
+
+    [SerializeField]
     private float deadTime;
 
+    public float DeadTime
+    {
+        get { return deadTime; }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -101,11 +107,18 @@ public class MineGame : MonoBehaviour
         }
         else
         {
-            deadTimeStart = timer.GetTime;
+            if (deadTimeStart == 0)
+            {
+                deadTimeStart = timer.TimePassed;
+            }
             countdown.SetActive(false);
-            readyToStart.SetActive(true);
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
+            if (timeToMove)
+            {
+                readyToStart.SetActive(true);
+            }
+            readyToStart.SetActive(true);
         }
 
         //start the game by moving the raft
@@ -131,7 +144,9 @@ public class MineGame : MonoBehaviour
             {
                 timeToMove = false;
                 //Tell python the game is not running
-                //server.GameStart = false;
+                server.GameStart = false;
+                server.GameOver = true;
+                readyToStart.SetActive(false);
             }
         }
     }
@@ -166,12 +181,12 @@ public class MineGame : MonoBehaviour
 
 
             Vector3 curAngles = raftReference.transform.eulerAngles;
-            objectPosition.y += 1;
+            objectPosition.y -= 1;
             raftReference.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, raftReference.TiltAngle);
             Vector3 upVec = raftReference.transform.up;
             raftReference.transform.LookAt(objectPosition, upVec);
             raftReference.transform.position = objectPosition;
-            objectPosition.y += 1;
+            objectPosition.y += 2;
             playerReference.transform.LookAt(objectPosition);
             playerReference.transform.position = objectPosition;
             this.transform.position = objectPosition;
@@ -182,6 +197,10 @@ public class MineGame : MonoBehaviour
                 objectPosition = Mathf.Pow(1 - tParam, 3) * p02 + 3 * Mathf.Pow(1 - tParam, 2) * tParam * p12 + 3 * (1 - tParam) * Mathf.Pow(tParam, 2) * p22 + Mathf.Pow(tParam, 3) * p32;
                 shadowReference.transform.LookAt(objectPosition);
                 shadowReference.transform.position = objectPosition;
+            }
+            else
+            {
+                shadowReference.SetActive(false);
             }
             yield return 0;
         }
@@ -195,7 +214,8 @@ public class MineGame : MonoBehaviour
         if (routeToGo - 2 >= 0)//disable track segments that are far behind the player
         {
             if (trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track(Clone)" &&
-                trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Right" && trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Left")
+                trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Right" && trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Left" &&
+                trackReferences[routeToGo - 2].gameObject.name != "SensoryDeprevation(Clone)")
             {
                 Debug.Log(trackReferences[routeToGo - 2].gameObject.name);
                 trackReferences[routeToGo - 2].SetActive(false);
@@ -215,7 +235,7 @@ public class MineGame : MonoBehaviour
         //server.GameStart = true;
 
         timeToMove = true;
-        deadTime = timer.GetTime - deadTimeStart;
+        deadTime = timer.TimePassed - deadTimeStart;
         rightHandRay.SetActive(false);
         leftHandRay.SetActive(false);
     }

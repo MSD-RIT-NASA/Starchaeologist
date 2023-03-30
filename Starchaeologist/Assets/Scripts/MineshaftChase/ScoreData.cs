@@ -140,9 +140,9 @@ public class ScoreData : MonoBehaviour
 
         SortPlayers();//Orders the list of players
 
-        if (players.Count >= 10)//Just take the top 10 scores
+        if (players.Count >= 9)//Just take the top 9 scores
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 9; i++)
             {
                 leaders.Add(players[i]);
             }
@@ -234,5 +234,29 @@ public class ScoreData : MonoBehaviour
     public void EditingDate()
     {
         keyboardCanvas.EditingName = false;
+    }
+
+    public void DetermineRank(float score)
+    {
+        if(score < 40)
+        {
+            rank.text = "D";
+        }
+        else if(score >= 40 && score < 60)
+        {
+            rank.text = "C";
+        }
+        else if(score >= 60 && score < 80)
+        {
+            rank.text = "B";
+        }
+        else if(score >= 80 && score < 95)
+        {
+            rank.text = "A";
+        }
+        else if(score >= 95)
+        {
+            rank.text = "S";
+        }
     }
 }

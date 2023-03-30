@@ -57,7 +57,7 @@ public class MainMenu : MonoBehaviour
 #endif
 
             //Tell python server to quit
-            //server.GameOver = true;
+            
             Application.Quit();
         
     }
