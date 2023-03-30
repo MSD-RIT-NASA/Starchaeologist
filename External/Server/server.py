@@ -51,11 +51,9 @@ while True:
     else:
         print(decodedMessage)
         
-
     try:
         decodedMessage = decodedMessage.split(' ')
     except AttributeError:
-        #print(AttributeError)
         pass
 
     #SPLIT THE MESSAGE NDUMMY HEAD
@@ -76,19 +74,18 @@ while True:
         #print("blocked!!")
         pass
     
-
     # decode message from unity
 
     if(decodedMessage[0] == "quit"):
         logging.info("End of Unity Game reached")
         sock.unityShutDown()               
         break
+
     elif(decodedMessage[0] == "gameStart"):
         logging.info("Game has started!")
-        gameStarted = True #in case python needs to know
         sock.SendData("ACKgameStart")
         if(decodedMessage.__contains__("deadTime")):
-            logging.info("receiving deadTime from Unity")
+            logging.info("Receiving deadTime from Unity")
             counter = 0
             for data in decodedMessage:
                 counter+=1
@@ -97,6 +94,18 @@ while True:
                     print(deadTime)
                     sock.SendData("ACKdeadTime")
 
+    elif(decodedMessage[0] == "gameOver"):
+        logging.info("Game has ended!")
+        sock.SendData("ACKgameOver")
+        if(decodedMessage.__contains__("getPlanetScore")):
+            # TODO: get the planetScore from python scipt/MATLAB here!!
+            planetScore = 12345 # temporary value!!
+            sock.SendData("planetScore " + str(planetScore))
+        elif(decodedMessage.__contains__("getBalanceScore")):
+            #TODO: implement sending balance score from BASE
+            pass
+        
+
     elif(decodedMessage[0] == "startCalibrating"):
         logging.info("Game is trying to calibrate")
         getCalibration = U.UdpComms.sensorCalibration()
@@ -104,16 +113,6 @@ while True:
             sock.SendData("calibratedRigsuccess")
         else:
             sock.SendData("calibratedRigFailed")
-
-    # elif(decodedMessage.__contains__("deadTime")):
-    #     logging.info("receiving deadTime from Unity")
-    #     counter = 0
-    #     for data in decodedMessage:
-    #         counter+=1
-    #         if data == "deadTime":
-    #             deadTime = decodedMessage[counter]
-    #             print(deadTime)
-    #             sock.SendData("ACKdeadTime")
 
 
 #####################################################################
@@ -143,6 +142,3 @@ while True:
             if data == "hello":
                 print(decodedMessage[counter])
             
-        
-    
-          
