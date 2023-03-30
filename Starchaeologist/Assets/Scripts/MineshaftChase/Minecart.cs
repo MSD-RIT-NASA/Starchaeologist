@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Globalization;
 
 public class Minecart : MonoBehaviour
 {
@@ -85,8 +86,16 @@ public class Minecart : MonoBehaviour
         else if (!turningLeft && !turningRight)
         {
             isTilting = false;
-            //FreeLean();
             tiltAngle = 0f;
+            if (boardRot < safeMax && boardRot > safeMin)
+            {
+                int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
+                txt.text = "Score: " + (currentScore + 1);
+            }
+            else
+            {
+
+            }
         }
     }
 
@@ -127,10 +136,11 @@ public class Minecart : MonoBehaviour
         //}
 
         
-         if(boardRot > safeMax || boardRot < safeMin){
+         if(boardRot < safeMax && boardRot > safeMin)
+        {
              tiltAngle += .4f;
-             Score += 1;
-             txt.text = "Score: " + Score;
+            int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
+            txt.text = "Score: " + (currentScore + 1);
         }
         else{
              
@@ -155,11 +165,11 @@ public class Minecart : MonoBehaviour
         //}
 
 
-        if (boardRot > safeMax || boardRot < safeMin)
+        if (boardRot < safeMax && boardRot > safeMin)
         {
            tiltAngle -= .4f;
-            Score += 1;
-            txt.text = "Score: " + Score;
+            int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
+            txt.text = "Score: " + (currentScore + 1);
         }
         else
         {
