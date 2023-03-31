@@ -11,10 +11,11 @@ public class S_RaftCollision : MonoBehaviour
         if (other.gameObject.CompareTag("PlayerFoot"))
         {
             //stop the player from teleporting back to land once the ride starts
-            GameObject startReference = GameObject.Find("RiverStart");
+            GameObject startReference = GameObject.Find("RiverPlayerSpawn");
             for (int i = 0; i < startReference.transform.childCount; i++)
             {
-                if(startReference.transform.GetChild(i).GetComponent<TeleportationArea>())
+                TeleportationArea test = startReference.transform.GetChild(i).GetComponent<TeleportationArea>();
+                if (startReference.transform.GetChild(i).GetComponent<TeleportationArea>())
                 {
                     Destroy(startReference.transform.GetChild(i).GetComponent<TeleportationArea>());
                     //startReference.transform.GetChild(i).GetComponent<TeleportationArea>().enabled = false;

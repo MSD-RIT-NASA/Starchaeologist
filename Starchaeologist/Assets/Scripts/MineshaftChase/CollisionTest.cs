@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Globalization;
 
 public class CollisionTest : MonoBehaviour
 {
@@ -45,8 +46,8 @@ public class CollisionTest : MonoBehaviour
     }
     public void hitScore()
     {
-        Score -= 2;
-        txt.text = "Score: " + Score;
+        int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
+        txt.text = "Score: " + (currentScore - 2);
         txtVisual(2);
         Debug.Log(Score);
         //enable vignette

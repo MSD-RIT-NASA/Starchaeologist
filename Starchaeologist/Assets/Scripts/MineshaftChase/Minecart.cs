@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Globalization;
 
 public class Minecart : MonoBehaviour
 {
@@ -46,9 +47,16 @@ public class Minecart : MonoBehaviour
     private float safeMax;
     private float safeMin;
 
+    private bool isMoving;
+
     public float TiltAngle
     {
         get { return tiltAngle; }
+    }
+    public bool IsMoving
+    {
+        get { return isMoving; }
+        set { isMoving = value; }
     }
 
     // Start is called before the first frame update
@@ -61,6 +69,10 @@ public class Minecart : MonoBehaviour
         safeMax = 3f;
         safeMin = -3f;
         boardRot = 0f;
+        txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
+        txt.text = "Score: " + Score;
+        txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
+        txtBlip.enabled = false;
     }
 
     // Update is called once per frame
@@ -81,8 +93,16 @@ public class Minecart : MonoBehaviour
         else if (!turningLeft && !turningRight)
         {
             isTilting = false;
-            //FreeLean();
             tiltAngle = 0f;
+            if (boardRot < safeMax && boardRot > safeMin && isMoving)
+            {
+                int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
+                txt.text = "Score: " + (currentScore + 1);
+            }
+            else
+            {
+
+            }
         }
     }
 
@@ -123,11 +143,14 @@ public class Minecart : MonoBehaviour
         //}
 
         
-         if(boardRot > safeMax || boardRot < safeMin){
+         if(boardRot < safeMax && boardRot > safeMin)
+        {
              tiltAngle += .4f;
-             //score += 50;
-         }else{
-             //score += 5;
+            int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
+            txt.text = "Score: " + (currentScore + 1);
+        }
+        else{
+             
          }
         
 
@@ -149,14 +172,15 @@ public class Minecart : MonoBehaviour
         //}
 
 
-        if (boardRot > safeMax || boardRot < safeMin)
+        if (boardRot < safeMax && boardRot > safeMin)
         {
            tiltAngle -= .4f;
-           //score += 50;
+            int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
+            txt.text = "Score: " + (currentScore + 1);
         }
         else
         {
-           //score += 5;
+           
         }
 
 

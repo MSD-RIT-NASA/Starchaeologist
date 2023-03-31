@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 7973780224037826827}
   - component: {fileID: 2541594102872233587}
   - component: {fileID: 1939911380889074283}
+  - component: {fileID: 5219671775141252399}
   m_Layer: 0
   m_Name: pCylinder1
   m_TagString: Treasure
@@ -142,3 +143,17 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5076798556035486163, guid: 9fe476fe047c963418ff04cd98275058, type: 3}
+--- !u!114 &5219671775141252399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7755911703033655917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dee664c630f7a945bafd7ec9b31dcdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audSrc: {fileID: 0}
+  treasureCollect: {fileID: 0}

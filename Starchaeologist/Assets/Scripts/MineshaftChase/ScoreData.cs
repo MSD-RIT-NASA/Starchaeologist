@@ -31,12 +31,23 @@ public class ScoreData : MonoBehaviour
 
     private string currentScene;
 
+    [SerializeField]
+    private GameObject storedMessage;
+
+    private bool hasPopulated;
+    private bool scoreCanvasActive;
+
+    [SerializeField]
+    private TMP_InputField playerSearchName;
+
     // Start is called before the first frame update
     void Start()
     {
         players = new List<PlayerData>();
         leaders = new List<PlayerData>();
         singlePlayerData = new List<PlayerData>();
+        hasPopulated = false;
+        scoreCanvasActive = true;
     }
 
     // Update is called once per frame
@@ -45,6 +56,7 @@ public class ScoreData : MonoBehaviour
         currentScene = SceneManager.GetActiveScene().name + "Scores";
         playerName.text = keyboardCanvas.NameEdit;
         date.text = keyboardCanvas.DateEdit;
+        playerSearchName.text = keyboardCanvas.SearchNameEdit;
     }
 
 
@@ -55,6 +67,12 @@ public class ScoreData : MonoBehaviour
     public void SetScoreCanvasActive(bool isActive)
     {
         scoreCanvas.SetActive(isActive);
+        storedMessage.SetActive(false);
+        if (isActive)
+        {
+            scoreCanvasActive = true;
+            keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
+        }
     }
 
     //Leaderboard Canvas
@@ -67,6 +85,11 @@ public class ScoreData : MonoBehaviour
     public void SetPlayerCanvas(bool isActive)
     {
         playerDataCanvas.SetActive(isActive);
+        if (isActive)
+        {
+            scoreCanvasActive = false;
+            keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
+        }
     }
 
 
@@ -84,6 +107,8 @@ public class ScoreData : MonoBehaviour
         writer.WriteLine("Rank: " + rank.text);
 
         writer.Close();
+
+        storedMessage.SetActive(true);
     }
 
 
@@ -122,6 +147,7 @@ public class ScoreData : MonoBehaviour
         }
 
         reader.Close();
+        hasPopulated = true;
     }
 
 
@@ -131,7 +157,7 @@ public class ScoreData : MonoBehaviour
     public void DisplayLeaderboard()
     {
         //If the list hasn't been populated, read the data from the score file
-        if (players.Count == 0)
+        if (!hasPopulated)
         {
             PopulatePlayers();
         }
@@ -224,6 +250,7 @@ public class ScoreData : MonoBehaviour
     public void ShowKeyboard()
     {
         keyboardCanvas.gameObject.SetActive(true);
+        keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
     }
 
     public void EditingName()
@@ -235,6 +262,8 @@ public class ScoreData : MonoBehaviour
     {
         keyboardCanvas.EditingName = false;
     }
+
+
 
     public void DetermineRank(float score)
     {

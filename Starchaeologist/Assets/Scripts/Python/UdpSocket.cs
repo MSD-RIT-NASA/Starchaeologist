@@ -239,13 +239,12 @@ public class UdpSocket : MonoBehaviour
                 break;
             
             // balanceScore from the BASE
-            case "balanceScore":
+             case "balanceScore":
                 Debug.Log("Collecting balance score");
                 getBalanceScore = float.Parse(splitMessage[1]);
                 Debug.Log(getBalanceScore.ToString());
-                float gameScore = Score + getBalanceScore;
-                balanceScoreDisplay.text = "" + gameScore;
-                scoreMgr.DetermineRank(gameScore); //Determines a letter rank based on the score and displays it
+                balanceScoreDisplay.text = "" + getBalanceScore;
+                scoreMgr.DetermineRank(getBalanceScore); //Determines a letter rank based on the score and displays it
                 
                 StopThread();
                 break;

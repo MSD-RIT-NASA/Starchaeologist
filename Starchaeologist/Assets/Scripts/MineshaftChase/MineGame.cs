@@ -99,6 +99,7 @@ public class MineGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        raftReference.IsMoving = timeToMove;
         if (timer.TimeRemaining > 0) {
             countdownText.text = "" + ((int)timer.TimeRemaining + 1);
             playerFallVel += playerFallAccel * timer.GetTime;

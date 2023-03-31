@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Globalization;
 
 /*DESCRIPTION
  * 
@@ -8,12 +10,16 @@ using UnityEngine;
  * 
  */
 
+
 public class TreasureCollision : MonoBehaviour
 {
     [SerializeField]
     private AudioSource audSrc;
     [SerializeField]
     private AudioClip treasureCollect;
+
+    private Text txt;
+    private Text txtBlip;
 
     //void OnTriggerEnter(Collider other)
     //{
@@ -35,6 +41,15 @@ public class TreasureCollision : MonoBehaviour
     //        Debug.Log("Deleted");
     //    }
     //}
+
+    void Start()
+    {
+        txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
+        txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
+        txtBlip.enabled = false;
+    }
+
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("PlayerHand"))
@@ -64,6 +79,9 @@ public class TreasureCollision : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("PlayerHand"))
         {
+            int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
+            txt.text = "Score: " + (currentScore + 1);
+
             audSrc.PlayOneShot(treasureCollect);
             Debug.Log("Gathered Treasure");
             Destroy(gameObject);
