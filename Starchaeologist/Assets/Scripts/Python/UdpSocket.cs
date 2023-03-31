@@ -52,8 +52,8 @@ public class UdpSocket : MonoBehaviour
     float getBalanceScore = -1f;
 
     // PLANET score for minecart level
-    private int planetScore = 0;
-    public int PlanetScore
+    private float planetScore = 0;
+    public float PlanetScore
     {
         get { return planetScore; }
         set { planetScore = value; }
@@ -243,8 +243,8 @@ public class UdpSocket : MonoBehaviour
                 Debug.Log("Collecting balance score");
                 getBalanceScore = float.Parse(splitMessage[1]);
                 Debug.Log(getBalanceScore.ToString());
-                balanceScoreDisplay.text = "" + getBalanceScore;
-                scoreMgr.DetermineRank(getBalanceScore); //Determines a letter rank based on the score and displays it
+                //balanceScoreDisplay.text = "" + getBalanceScore;
+                //scoreMgr.DetermineRank(getBalanceScore); //Determines a letter rank based on the score and displays it
                 
                 StopThread();
                 break;
@@ -274,12 +274,11 @@ public class UdpSocket : MonoBehaviour
                 Debug.Log("Received planetScore"); // should be an int value between 1-100? TODO: ask
                 planetScore = float.Parse(splitMessage[1]);
                 Debug.Log(planetScore.ToString());
-                
+
                 //TODO: Here is where the planetScore will be then used in the rest of unity
-                // float gameScore = Score + planetScore;
-                // score.text = "" + gameScore;
-                // score.DetermineRank(gameScore); //Determines a letter rank based on the score and displays it
-                
+                balanceScoreDisplay.text = "" + planetScore;
+                scoreMgr.DetermineRank(planetScore); //Determines a letter rank based on the score and displays it
+
                 StopThread();
                 break;
 
