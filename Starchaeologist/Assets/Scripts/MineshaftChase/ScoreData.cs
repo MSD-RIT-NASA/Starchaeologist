@@ -53,13 +53,13 @@ public class ScoreData : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        currentScene = SceneManager.GetActiveScene().name + "Scores";
         if (SceneManager.GetActiveScene().name != "MainMenu")
         {
-            currentScene = SceneManager.GetActiveScene().name + "Scores";
             playerName.text = keyboardCanvas.NameEdit;
             date.text = keyboardCanvas.DateEdit;
-            playerSearchName.text = keyboardCanvas.SearchNameEdit;
         }
+        playerSearchName.text = keyboardCanvas.SearchNameEdit;
     }
 
 
