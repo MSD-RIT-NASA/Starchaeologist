@@ -58,7 +58,7 @@ public class S_RiverGame : S_RiverBuilder
     public float rotationZ = 0f;
     public bool rotationChanged = false;
 
-    PythonCommunicator communicateReference;
+    //PythonCommunicator communicateReference;
 
 
 
@@ -77,7 +77,7 @@ public class S_RiverGame : S_RiverBuilder
 
         //pythonCommunicator = new HelloRequester();
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
-        communicateReference = GetComponent<PythonCommunicator>();
+        //communicateReference = GetComponent<PythonCommunicator>();
         vrCameraRotation = vrCamera.transform.rotation;
         nextDestination = checkpoints[0];
         //pythonCommunicator.Start();
@@ -230,13 +230,13 @@ public class S_RiverGame : S_RiverBuilder
         {
             //currentScript.transform.localRotation = currentScript.desiredRotation;
             Vector2 giveRotation = new Vector2(raftScript.plannedRotation.x, raftScript.plannedRotation.z);
-            communicateReference.desiredRotation = giveRotation;
-            raftScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
+            //communicateReference.desiredRotation = giveRotation;
+            //raftScript.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
             //raftScript.transform.localRotation = Quaternion.Euler(raftScript.plannedRotation);
         }
         else
         {
-            communicateReference.desiredRotation = new Vector2(0, 0);
+            //communicateReference.desiredRotation = new Vector2(0, 0);
         }
     }
 }

@@ -1,19 +1,25 @@
+//NASA x RIT author: Noah Flanders
+
+//This script interacts with the text files that store the game score data
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using TMPro;
 using System.Globalization;
+using UnityEngine.SceneManagement;
 
 public class ScoreData : MonoBehaviour
 {
     public GameObject scoreCanvas;
     public GameObject leaderBoard;
     public GameObject playerDataCanvas;
+    [SerializeField] private KeyInput keyboardCanvas;
     public TMP_Text score;
-    public TMP_Text playerName;
-    public TMP_Text date;
+    public TMP_InputField playerName;
+    public TMP_InputField date;
     public TMP_Text playerDataBox;
+    [SerializeField] private TMP_Text rank;
     public List<TMP_Text> leaderboardEntries;
 
     private StreamReader reader;
@@ -23,20 +29,34 @@ public class ScoreData : MonoBehaviour
     private List<PlayerData> leaders;
     private List<PlayerData> singlePlayerData;
 
+    private string currentScene;
+
+    [SerializeField]
+    private GameObject storedMessage;
+
+    private bool hasPopulated;
+    private bool scoreCanvasActive;
+
+    [SerializeField]
+    private TMP_InputField playerSearchName;
+
     // Start is called before the first frame update
     void Start()
     {
         players = new List<PlayerData>();
         leaders = new List<PlayerData>();
         singlePlayerData = new List<PlayerData>();
-
-        //PopulatePlayers();
+        hasPopulated = false;
+        scoreCanvasActive = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        currentScene = SceneManager.GetActiveScene().name + "Scores";
+        playerName.text = keyboardCanvas.NameEdit;
+        date.text = keyboardCanvas.DateEdit;
+        playerSearchName.text = keyboardCanvas.SearchNameEdit;
     }
 
 
@@ -47,16 +67,29 @@ public class ScoreData : MonoBehaviour
     public void SetScoreCanvasActive(bool isActive)
     {
         scoreCanvas.SetActive(isActive);
+        storedMessage.SetActive(false);
+        if (isActive)
+        {
+            scoreCanvasActive = true;
+            keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
+        }
     }
 
+    //Leaderboard Canvas
     public void SetLBCanvasActive(bool isActive)
     {
         leaderBoard.SetActive(isActive);
     }
 
+    //Individual Player Data Canvas
     public void SetPlayerCanvas(bool isActive)
     {
         playerDataCanvas.SetActive(isActive);
+        if (isActive)
+        {
+            scoreCanvasActive = false;
+            keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
+        }
     }
 
 
@@ -65,16 +98,17 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void StorePlayerData()
     {
-        writer = new StreamWriter("ScoreData.txt", true);
-
-        //float pScoreNum = float.Parse(score.text, CultureInfo.InvariantCulture.NumberFormat);
-        //players.Add(new PlayerData(playerName.text, date.text, pScoreNum));
+        string fileName = currentScene + ".txt";
+        writer = new StreamWriter(fileName, true);
 
         writer.WriteLine("Player: " + playerName.text);
         writer.WriteLine("Date: " + date.text);
         writer.WriteLine("Score: " + score.text);
+        writer.WriteLine("Rank: " + rank.text);
 
         writer.Close();
+
+        storedMessage.SetActive(true);
     }
 
 
@@ -84,7 +118,8 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void PopulatePlayers()
     {
-        reader = new StreamReader("ScoreData.txt");
+        string fileName = currentScene + ".txt";
+        reader = new StreamReader(fileName);
 
         string newLine = reader.ReadLine();
         while(newLine != null)
@@ -101,12 +136,18 @@ public class ScoreData : MonoBehaviour
             string pScore = data[1];
             float pScoreNum = float.Parse(pScore, CultureInfo.InvariantCulture.NumberFormat);
 
-            players.Add(new PlayerData(pName, pDate, pScoreNum));
+            newLine = reader.ReadLine();
+            data = newLine.Split(' ');
+            string pRank = data[1];
+
+            //Creates new instance of PlayerData object
+            players.Add(new PlayerData(pName, pDate, pScoreNum, pRank));
 
             newLine = reader.ReadLine();
         }
 
         reader.Close();
+        hasPopulated = true;
     }
 
 
@@ -115,18 +156,19 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void DisplayLeaderboard()
     {
-        if (players.Count == 0)
+        //If the list hasn't been populated, read the data from the score file
+        if (!hasPopulated)
         {
             PopulatePlayers();
         }
 
         leaders.Clear();
 
-        SortPlayers();
+        SortPlayers();//Orders the list of players
 
-        if (players.Count >= 10)//Just take the top 10 scores
+        if (players.Count >= 9)//Just take the top 9 scores
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 9; i++)
             {
                 leaders.Add(players[i]);
             }
@@ -160,6 +202,7 @@ public class ScoreData : MonoBehaviour
 
         singlePlayerData.Clear();
 
+        //Finds all data with the player name that matches the one being searched
         for(int i = 0; i < players.Count; i++)
         {
             if(players[i].PlayerName == name.text)
@@ -180,7 +223,9 @@ public class ScoreData : MonoBehaviour
         playerDataBox.text = dataText;
     }
 
-
+    /// <summary>
+    /// Puts the player data in order by score
+    /// </summary>
     private void SortPlayers()
     {
         int topScorerIndex = 0;
@@ -199,6 +244,48 @@ public class ScoreData : MonoBehaviour
             PlayerData tempPlayer = players[o];
             players[o] = players[topScorerIndex];
             players[topScorerIndex] = tempPlayer;
+        }
+    }
+
+    public void ShowKeyboard()
+    {
+        keyboardCanvas.gameObject.SetActive(true);
+        keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
+    }
+
+    public void EditingName()
+    {
+        keyboardCanvas.EditingName = true;
+    }
+
+    public void EditingDate()
+    {
+        keyboardCanvas.EditingName = false;
+    }
+
+
+
+    public void DetermineRank(float score)
+    {
+        if(score < 40)
+        {
+            rank.text = "D";
+        }
+        else if(score >= 40 && score < 60)
+        {
+            rank.text = "C";
+        }
+        else if(score >= 60 && score < 80)
+        {
+            rank.text = "B";
+        }
+        else if(score >= 80 && score < 95)
+        {
+            rank.text = "A";
+        }
+        else if(score >= 95)
+        {
+            rank.text = "S";
         }
     }
 }

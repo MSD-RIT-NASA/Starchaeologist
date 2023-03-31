@@ -51,6 +51,17 @@ public class PlateScript : MonoBehaviour
     //the manager scrpt will use this to determine which trap to set off
     public List<int> trapList;
 
+    public Transform leftHand;
+    public Transform rightHand;
+    void Start()
+    {
+        //Transform hands = Instantiate(leftHand) as Transform;
+        Transform hands = GameObject.Find("XR Rig 2").transform.GetChild(0).transform.Find("LeftHand Controller").transform.Find("Left_Hand").transform;
+        Physics.IgnoreCollision(hands.GetComponent<Collider>(), GetComponent<Collider>());
+       // hands = Instantiate(rightHand) as Transform;
+        hands = GameObject.Find("XR Rig 2").transform.GetChild(0).transform.Find("RightHand Controller").transform.Find("Right_Hand").transform;
+        Physics.IgnoreCollision(hands.GetComponent<Collider>(), GetComponent<Collider>());
+    }
 
     // Start is called before the first frame update
     public void DataSetup(Vector2 getPosition)

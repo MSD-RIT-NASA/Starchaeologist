@@ -65,6 +65,8 @@ public class PuzzlingBuilder : MonoBehaviour
         wallArray = new List<GameObject>[roomLength * 3];
         swingList = new List<GameObject>();
         pillarArray = new List<GameObject>[roomLength];
+        
+
     }
 
     // Update is called once per frame
@@ -74,7 +76,16 @@ public class PuzzlingBuilder : MonoBehaviour
         //PuzzlingGame.singleton.DataSetup();
         GetComponent<PuzzlingGame>().DataSetup();
         DataSetup();
-        GetComponent<PythonCommunicator>().gameMode = 2;
+
+        // UdpSocket Testing
+        //GetComponent<UdpSocket>().GameMode = 2;
+        //GetComponent<UdpSocket>().GameStart = true;
+        GetComponent<UdpSocket>().CalibrateRig = true; 
+        GetComponent<UdpSocket>().test = true; 
+        
+        
+
+        
 
         int lengthValue = (roomLength * 3);
 

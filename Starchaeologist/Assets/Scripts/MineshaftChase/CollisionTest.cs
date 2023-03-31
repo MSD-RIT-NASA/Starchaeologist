@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Globalization;
 
 public class CollisionTest : MonoBehaviour
 {
@@ -45,9 +46,9 @@ public class CollisionTest : MonoBehaviour
     }
     public void hitScore()
     {
-        Score -= 10;
-        txt.text = "Score: " + Score;
-        txtVisual(10);
+        int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
+        txt.text = "Score: " + (currentScore - 2);
+        txtVisual(2);
         Debug.Log(Score);
         //enable vignette
         //vignetteOn();
@@ -65,7 +66,7 @@ public class CollisionTest : MonoBehaviour
     //}
     void txtVisual(int points)
     {
-        if (points == 10)
+        if (points == 2)
         {
             txtBlip.text = "- " + points.ToString();
             txtBlip.color = Color.red;

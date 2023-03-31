@@ -1,6 +1,9 @@
+//NASA x RIT authors: Deen Grey and Noah Flanders
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class MineGame : MonoBehaviour
 {
@@ -8,21 +11,45 @@ public class MineGame : MonoBehaviour
     public static MineGame singleton;
 
     [SerializeField] GameObject playerReference;
+    [SerializeField] GameObject rightHandRay;
+    [SerializeField] GameObject leftHandRay;
     [SerializeField] GameObject shadowReference;
     [SerializeField] Minecart raftReference;
+    [SerializeField] Timer timer;
+    [SerializeField] UdpSocket server;
     S_MineCart raftScript;
 
     public List<GameObject> trackReferences = new List<GameObject>(); //populated with positions while the mine is being built from the S_MineBuilder script
     Vector3 nextDestination = new Vector3(0, 0, 0);
     Vector3 currentDirection = new Vector3(0, 0, 1);
     public float cartAcceleration = 0.1f;
-    public float cartSpeed = 3.0f;
+    public float cartSpeed = 1.0f;
     float currentSpeed = 2f;
     public bool timeToMove = true; //turned true the first time the player teleports to the raft from the S_RaftCollision script
     bool slowDown = false;
     bool playerAttached = false;
     int checkpointIndex = 0;
 
+    [SerializeField]
+    private GameObject countdown;
+    [SerializeField]
+    private GameObject readyToStart;
+    [SerializeField]
+    private TMP_Text countdownText;
+
+    public AudioSource soundfxSource;
+    public AudioClip railGrinding_SFX;
+    public AudioClip railRiding_SFX;
+    public AudioClip explosion1_SFX;
+    public AudioClip explosion2_SFX;
+    public AudioClip explosion3_SFX;
+    public AudioClip bats_SFX;
+    public AudioClip treasure_SFX;
+    public AudioClip obstacleHit_SFX;
+
+    private Vector3 playerFallPos;
+    private Vector3 playerFallVel;
+    private Vector3 playerFallAccel;
 
     //[SerializeField]
     public List<Transform> routes;
@@ -37,10 +64,23 @@ public class MineGame : MonoBehaviour
 
     private bool coroutineAllowed;
 
+    private float deadTimeStart;
+
+    [SerializeField]
+    private float deadTime;
+
+    public float DeadTime
+    {
+        get { return deadTime; }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+        playerFallPos = playerReference.transform.position;
+        playerFallVel = new Vector3(0f, -50f, 0f);
+        playerFallAccel = new Vector3(0f, -10f, 0f);
+
         if (singleton != null && singleton != this)
         {
             Destroy(this);
@@ -52,16 +92,44 @@ public class MineGame : MonoBehaviour
 
         routeToGo = 0;
         tParam = 0f;
-        speedModifier = 0.8f;
+        speedModifier = 0.3f;
         coroutineAllowed = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        raftReference.IsMoving = timeToMove;
+        if (timer.TimeRemaining > 0) {
+            countdownText.text = "" + ((int)timer.TimeRemaining + 1);
+            playerFallVel += playerFallAccel * timer.GetTime;
+            playerFallPos += playerFallVel * timer.GetTime;
+            playerReference.transform.position = new Vector3(playerFallPos.x, playerFallPos.y, playerFallPos.z);
+        }
+        else
+        {
+            if (deadTimeStart == 0)
+            {
+                deadTimeStart = timer.TimePassed;
+            }
+            countdown.SetActive(false);
+            rightHandRay.SetActive(true);
+            leftHandRay.SetActive(true);
+            if (timeToMove)
+            {
+                readyToStart.SetActive(true);
+            }
+            readyToStart.SetActive(true);
+        }
+
         //start the game by moving the raft
         if (timeToMove)
         {
+            readyToStart.SetActive(false);
+            if (!soundfxSource.isPlaying)
+            {
+                soundfxSource.PlayOneShot(railRiding_SFX);
+            }
             //stick the player under the raft gameobject to help with movement
             if (!playerAttached)
             {
@@ -76,6 +144,10 @@ public class MineGame : MonoBehaviour
             else if (routeToGo == trackReferences.Count)
             {
                 timeToMove = false;
+                //Tell python the game is not running
+                server.GameStart = false;
+                server.GameOver = true;
+                readyToStart.SetActive(false);
             }
         }
     }
@@ -110,13 +182,15 @@ public class MineGame : MonoBehaviour
 
 
             Vector3 curAngles = raftReference.transform.eulerAngles;
+            objectPosition.y -= 1;
             raftReference.transform.eulerAngles = new Vector3(curAngles.x, curAngles.y, raftReference.TiltAngle);
             Vector3 upVec = raftReference.transform.up;
             raftReference.transform.LookAt(objectPosition, upVec);
             raftReference.transform.position = objectPosition;
-            objectPosition.y += 3;
+            objectPosition.y += 2;
             playerReference.transform.LookAt(objectPosition);
             playerReference.transform.position = objectPosition;
+            this.transform.position = objectPosition;
 
             if (routeToGo < trackReferences.Count - 1)
             {
@@ -125,18 +199,28 @@ public class MineGame : MonoBehaviour
                 shadowReference.transform.LookAt(objectPosition);
                 shadowReference.transform.position = objectPosition;
             }
+            else
+            {
+                shadowReference.SetActive(false);
+            }
             yield return 0;
         }
 
         tParam = 0;
-        speedModifier = speedModifier * 0.90f;
+        //speedModifier = speedModifier * 0.90f;
         routeToGo += 1;
 
 
         //optimization
         if (routeToGo - 2 >= 0)//disable track segments that are far behind the player
         {
-            trackReferences[routeToGo - 2].SetActive(false);
+            if (trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track(Clone)" &&
+                trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Right" && trackReferences[routeToGo - 2].gameObject.name != "RepeatedTurns_Track_Left" &&
+                trackReferences[routeToGo - 2].gameObject.name != "SensoryDeprevation(Clone)")
+            {
+                Debug.Log(trackReferences[routeToGo - 2].gameObject.name);
+                trackReferences[routeToGo - 2].SetActive(false);
+            }
         }
         if (routeToGo + 2 < trackReferences.Count)//enable segments that are getting close to the player
         {
@@ -144,5 +228,16 @@ public class MineGame : MonoBehaviour
         }
         coroutineAllowed = true;
 
+    }
+
+    public void TimeToMove()
+    {
+        //Tells the python server the game has started
+        //server.GameStart = true;
+
+        timeToMove = true;
+        deadTime = timer.TimePassed - deadTimeStart;
+        rightHandRay.SetActive(false);
+        leftHandRay.SetActive(false);
     }
 }

@@ -24,7 +24,9 @@ public class S_RiverBuilder : MonoBehaviour
         RiverObjBuilder();
 
         //give the game script the list of river pieces
-        GetComponent<PythonCommunicator>().gameMode = 1;
+        GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
+        GetComponent<UdpSocket>().GameMode = 1;
+        //GetComponent<UdpSocket>().CalibrateRig = true; 
 
         //remove this script
         Destroy(this);

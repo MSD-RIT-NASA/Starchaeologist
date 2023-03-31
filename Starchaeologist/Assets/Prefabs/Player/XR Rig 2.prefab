@@ -1467,10 +1467,10 @@ MonoBehaviour:
   m_DirectionalAnchorRotationAction:
     m_UseReference: 0
     m_Action:
-      m_Name: 
+      m_Name: Directional Anchor Rotation
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 
+      m_Id: 4196ef01-550c-4852-a105-4b3346553fdc
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -1858,11 +1858,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHand: 0
   paused: 0
-  speed: 0
-  gripTarget: 0
-  triggerTarget: 0
-  gripCurrent: 0
-  triggerCurrent: 0
+  hand: {fileID: 0}
+  menuInputReference: {fileID: 0}
 --- !u!1 &7865517847717468942
 GameObject:
   m_ObjectHideFlags: 0
@@ -2446,11 +2443,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHand: 1
   paused: 0
-  speed: 0
-  gripTarget: 0
-  triggerTarget: 0
-  gripCurrent: 0
-  triggerCurrent: 0
+  hand: {fileID: 0}
+  menuInputReference: {fileID: 0}
 --- !u!1 &7865517847723088712
 GameObject:
   m_ObjectHideFlags: 0
@@ -3516,6 +3510,10 @@ PrefabInstance:
     - target: {fileID: 6177083109153100119, guid: 0b9aa12663a044546982eb434328db27, type: 3}
       propertyPath: m_Name
       value: Teleporter Reticle Left
+      objectReference: {fileID: 0}
+    - target: {fileID: 6177083109153100119, guid: 0b9aa12663a044546982eb434328db27, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b9aa12663a044546982eb434328db27, type: 3}

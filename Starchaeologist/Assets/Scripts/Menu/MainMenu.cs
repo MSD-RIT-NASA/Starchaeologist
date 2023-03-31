@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
 {
     public AudioSource buttonClick;
     public AudioClip click;
+    [SerializeField] UdpSocket server;
 
     void Start()
     {
@@ -52,10 +53,12 @@ public class MainMenu : MonoBehaviour
         {
             UnityEditor.EditorApplication.isPlaying = false;
         }
-        else 
+        else
 #endif
 
-        Application.Quit();
+            //Tell python server to quit
+            
+            Application.Quit();
         
     }
 }

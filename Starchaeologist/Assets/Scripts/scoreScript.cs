@@ -21,7 +21,7 @@ public class scoreScript : MonoBehaviour
     public static int Score;
     public static bool scoreMenu=false;
     public GameObject vignette;
-    public PythonCommunicator pythCom;
+    //public PythonCommunicator pythCom;
     // Start is called before the first frame update
     void Start()
     {
@@ -66,12 +66,12 @@ public class scoreScript : MonoBehaviour
     }
     public void treasureScore()
     {
-        Score += 20;
-        txtVisual(20);
+        Score += 1;
+        txtVisual(1);
     }
     public void hitScore()
     {
-        Score -= 10;
+        Score -= 2;
         Debug.Log("lower the score");
         //txtVisual(10);
         //enable vignette
@@ -90,7 +90,7 @@ public class scoreScript : MonoBehaviour
     }
     void txtVisual(int points)
     {
-        if (points == 10)
+        if (points == 2)
         {
             txtBlip.text = "- "+points.ToString();
             txtBlip.color = Color.red;
@@ -138,7 +138,7 @@ public class scoreScript : MonoBehaviour
         txtCalibration.enabled=false;
         scoreMenu = true;
         for(int s=0;s<Score;s++){
-            txt.text = s.ToString() + pythCom.BalanceScore;//+communication player score
+            txt.text = s.ToString(); //+ pythCom.BalanceScore;//+communication player score
         }
     }
 }
