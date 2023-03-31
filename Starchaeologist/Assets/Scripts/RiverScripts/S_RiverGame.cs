@@ -146,11 +146,11 @@ public class S_RiverGame : S_RiverBuilder
         //raftReference.transform.LookAt(checkpoints[checkpointIndex]);
         if (distance <= 7)
         {
-            // raftReference.transform.position += desiredDirection * currentSpeed * Time.deltaTime;
+            raftReference.transform.position += desiredDirection * currentSpeed * Time.deltaTime;
 
-            Quaternion lookRotation = Quaternion.LookRotation(desiredDirection);
+            /*Quaternion lookRotation = Quaternion.LookRotation(desiredDirection);
             raftReference.transform.rotation = Quaternion.Slerp(raftReference.transform.rotation, lookRotation, Time.deltaTime * (currentSpeed/6));
-            raftReference.transform.position += raftReference.transform.forward * currentSpeed * Time.deltaTime;
+            raftReference.transform.position += raftReference.transform.forward * currentSpeed * Time.deltaTime;*/
         }
         else
         {
