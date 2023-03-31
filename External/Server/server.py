@@ -47,6 +47,7 @@ time.sleep(1)
 decodedMessage = [20]  # adjust this if more strings and arguments are necessary
 collect_data = 0
 timestamp = 0
+deadTime = 0
 event = Event()
 
 while True:
@@ -73,7 +74,7 @@ while True:
         boardMsg = boardSock.recvfrom(16)
         value = boardMsg[0].decode('utf-8')
         try:
-            newval = float(value.replace('\U00002013', '-')) * 360 / math.pi * 2
+            newval = -1.0*(float(value.replace('\U00002013', '-')) * 360 / math.pi * 2)
             sock.SendData("boardMove " + str(newval))
             # print(newval)
         except ValueError:
@@ -113,10 +114,9 @@ while True:
         collect_data.join()
         sock.SendData("ACKgameOver")
         if (decodedMessage.__contains__("getPlanetScore")):
-            # TODO: get the planetScore from python scipt/MATLAB here!!
-            planetScore = matlab_data.run(csv_root + "/" + timestamp, "Corey", 5.0, 10.0, 2.5, 5.0, 10.0, 20.0)
-            planetScore = 12345.0  # temporary value!!
-            sock.SendData("planetScore " + str(planetScore))
+            planetScore = matlab_data.run(csv_root + "/" + timestamp, "Corey", 5.0, float(deadTime), 2.5, 5.0, 10.0, 20.0)
+            print(planetScore)
+            sock.SendData("planetScore " + str(int(planetScore)))
         elif (decodedMessage.__contains__("getBalanceScore")):
             # TODO: implement sending balance score from BASE
             pass

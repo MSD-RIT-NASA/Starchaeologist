@@ -23,6 +23,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using TMPro;
+using System.Globalization;
+using UnityEngine.SocialPlatforms.Impl;
 
 
 public class UdpSocket : MonoBehaviour
@@ -52,8 +54,10 @@ public class UdpSocket : MonoBehaviour
     float getBalanceScore = -1f;
 
     // PLANET score for minecart level
-    private float planetScore = 0;
-    public float PlanetScore
+    private int planetScore;
+    public string sendBalScore = "1234";
+
+    public int PlanetScore
     {
         get { return planetScore; }
         set { planetScore = value; }
@@ -92,6 +96,11 @@ public class UdpSocket : MonoBehaviour
 
     [SerializeField]
     private TMP_Text balanceScoreDisplay;
+    [SerializeField]
+    private TMP_Text rank;
+
+    [SerializeField]
+    public Canvas endCanas;
 
     static public int Score;
 
@@ -262,7 +271,7 @@ public class UdpSocket : MonoBehaviour
 
             case "ACKgameOver": // Acknowledge the game has ended
                 Debug.Log("Game over is Acknowledged");
-                StopThread();
+                //StopThread();
                 break;
 
             case "ACKdeadTime": // Acknowledge the server got the deadTime
@@ -272,14 +281,16 @@ public class UdpSocket : MonoBehaviour
 
             case "planetScore":
                 Debug.Log("Received planetScore"); // should be an int value between 1-100? TODO: ask
-                planetScore = int.Parse(splitMessage[1]);
+                planetScore = int.Parse(splitMessage[1], CultureInfo.InvariantCulture.NumberFormat);
                 Debug.Log(planetScore.ToString());
 
                 //TODO: Here is where the planetScore will be then used in the rest of unity
-                balanceScoreDisplay.text = "" + planetScore;
-                scoreMgr.DetermineRank(planetScore); //Determines a letter rank based on the score and displays it
+                sendBalScore = planetScore.ToString();
+                Debug.Log("Send Bal Score: " + sendBalScore);
 
                 StopThread();
+
+                scoreMgr.SetBalanceScore(sendBalScore);
                 break;
 
             
