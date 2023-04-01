@@ -119,7 +119,7 @@ try:
             log_data.set()
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
-                planetScore = matlab_data.run(csv_root + "/" + timestamp, "Corey", 5.0, float(deadTime), 2.5, 5.0, 10.0, 20.0)
+                planetScore = matlab_data.run(csv_root + "/" + timestamp, "Corey", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
                 print(planetScore)
                 sock.SendData("planetScore " + str(int(planetScore)))
             elif (decodedMessage.__contains__("getBalanceScore")):
