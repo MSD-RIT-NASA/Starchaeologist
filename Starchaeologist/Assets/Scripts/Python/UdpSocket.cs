@@ -280,17 +280,18 @@ public class UdpSocket : MonoBehaviour
                 break;
 
             case "planetScore":
-                Debug.Log("Received planetScore"); // should be an int value between 1-100? TODO: ask
+                Debug.Log("Received planetScore"); 
                 planetScore = int.Parse(splitMessage[1], CultureInfo.InvariantCulture.NumberFormat);
                 Debug.Log(planetScore.ToString());
 
-                //TODO: Here is where the planetScore will be then used in the rest of unity
+                //planetScore will be then used in the rest of unity
                 sendBalScore = planetScore.ToString();
                 Debug.Log("Send Bal Score: " + sendBalScore);
 
                 StopThread();
 
                 scoreMgr.SetBalanceScore(sendBalScore);
+                //planetScore = 0;
                 break;
 
             

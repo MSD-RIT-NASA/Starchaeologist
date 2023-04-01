@@ -37,9 +37,7 @@ boardSock.setblocking(0)  # allows the program to pass the blocking recvfrom() f
 # Create UDP socket to use for sending and receiving data from Unity game
 sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 logging.info("Starting Server")
 time.sleep(1)
@@ -65,8 +63,6 @@ while True:
         decodedMessage = decodedMessage.split(' ')
     except AttributeError:
         pass
-
-    # SPLIT THE MESSAGE NDUMMY HEAD
 
     # For checking for the board sensor in the minecart level
     # then sends board data
