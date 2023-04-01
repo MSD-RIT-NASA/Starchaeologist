@@ -8,6 +8,7 @@ using System.IO;
 using TMPro;
 using System.Globalization;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ScoreData : MonoBehaviour
 {
@@ -21,13 +22,17 @@ public class ScoreData : MonoBehaviour
     public TMP_Text playerDataBox;
     [SerializeField] private TMP_Text rank;
     public List<TMP_Text> leaderboardEntries;
-
+    [SerializeField]
+    private TMP_Text balanceScore;
+    private int balanceScoreint;
     private StreamReader reader;
     private StreamWriter writer;
 
     private List<PlayerData> players;
     private List<PlayerData> leaders;
     private List<PlayerData> singlePlayerData;
+
+    private bool receivedBalanceScore;
 
     private string currentScene;
 
@@ -40,6 +45,9 @@ public class ScoreData : MonoBehaviour
     [SerializeField]
     private TMP_InputField playerSearchName;
 
+    [SerializeField]
+    private GameObject waitCanvas;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +56,8 @@ public class ScoreData : MonoBehaviour
         singlePlayerData = new List<PlayerData>();
         hasPopulated = false;
         scoreCanvasActive = true;
+        receivedBalanceScore = false;
+        balanceScoreint = 0;
     }
 
     // Update is called once per frame
@@ -60,6 +70,12 @@ public class ScoreData : MonoBehaviour
             date.text = keyboardCanvas.DateEdit;
         }
         playerSearchName.text = keyboardCanvas.SearchNameEdit;
+        if(receivedBalanceScore == true)
+        {
+            DisplayBalanceScore(balanceScoreint);
+            receivedBalanceScore = false;
+        }
+        //balanceScore.text = 123.ToString();
     }
 
 
@@ -69,6 +85,11 @@ public class ScoreData : MonoBehaviour
     /// <param name="isActive"></param>
     public void SetScoreCanvasActive(bool isActive)
     {
+        //while (balanceScore.text == "0")
+        //{
+
+        ////}
+        //waitCanvas.SetActive(false);
         scoreCanvas.SetActive(isActive);
         storedMessage.SetActive(false);
         if (isActive)
@@ -112,6 +133,7 @@ public class ScoreData : MonoBehaviour
         writer.Close();
 
         storedMessage.SetActive(true);
+        Debug.Log("Stored");
     }
 
 
@@ -136,7 +158,7 @@ public class ScoreData : MonoBehaviour
 
             newLine = reader.ReadLine();
             data = newLine.Split(' ');
-            string pScore = data[1];
+            string pScore = data[2];
             float pScoreNum = float.Parse(pScore, CultureInfo.InvariantCulture.NumberFormat);
 
             newLine = reader.ReadLine();
@@ -196,7 +218,7 @@ public class ScoreData : MonoBehaviour
     /// Reads score data from the external file regarding a single user determined by their name/username
     /// </summary>
     /// <param name="name"></param>
-    public void ShowPlayerData(TMP_Text name)
+    public void ShowPlayerData(TMP_InputField name)
     {
         if (players.Count == 0)
         {
@@ -266,10 +288,24 @@ public class ScoreData : MonoBehaviour
         keyboardCanvas.EditingName = false;
     }
 
-
-
-    public void DetermineRank(float score)
+    public void SetBalanceScore(string balScore)
     {
+        balanceScoreint = int.Parse(balScore);
+        receivedBalanceScore = true;
+    }
+    public void DisplayBalanceScore(int balScore)
+    {
+        Debug.Log("displaying bScore");
+        balanceScore.SetText("" + balScore);
+        balanceScore.ForceMeshUpdate();
+        DetermineRank(balScore);
+
+        Debug.Log("Displayed bScore");
+    }
+
+    public void DetermineRank(int score)
+    {
+        Debug.Log("Determining Rank...");
         if(score < 40)
         {
             rank.text = "D";
@@ -290,5 +326,9 @@ public class ScoreData : MonoBehaviour
         {
             rank.text = "S";
         }
+
+        scoreCanvas.SetActive(false);
+        scoreCanvas.SetActive(true);
+        Debug.Log("Rank should be displaying...");
     }
 }

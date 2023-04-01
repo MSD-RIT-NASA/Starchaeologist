@@ -100,7 +100,7 @@ slant = slant - averageOffS;
 
 for i=1:size(chest_xy,1)
     timercheck = chest_xy(i,1);
-    if round(timercheck,2) == deadtime %Finds what row number is equivalent to 1 second
+    if round(timercheck,2) == round(deadtime,2) %Finds what row number is equivalent to 1 second
         timeDeadZone = i;
     end
 end
@@ -148,7 +148,7 @@ pitch = pitch - averageOffP;
 
 for i=1:size(chest_pyr,1)
     timercheck = chest_pyr(i,1);
-    if round(timercheck,2) == deadtime %Finds what row number is equivalent to 1 second
+    if round(timercheck,2) == round(deadtime,2) %Finds what row number is equivalent to 1 second
         timeDeadZoneP = i;
     end
 end

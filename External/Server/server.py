@@ -37,9 +37,7 @@ boardSock.setblocking(0)  # allows the program to pass the blocking recvfrom() f
 # Create UDP socket to use for sending and receiving data from Unity game
 sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 logging.info("Starting Server")
 time.sleep(1)
@@ -47,6 +45,7 @@ time.sleep(1)
 decodedMessage = [20]  # adjust this if more strings and arguments are necessary
 collect_data = 0
 timestamp = 0
+deadTime = 0
 event = Event()
 
 while True:
@@ -65,15 +64,13 @@ while True:
     except AttributeError:
         pass
 
-    # SPLIT THE MESSAGE NDUMMY HEAD
-
     # For checking for the board sensor in the minecart level
     # then sends board data
     try:
         boardMsg = boardSock.recvfrom(16)
         value = boardMsg[0].decode('utf-8')
         try:
-            newval = float(value.replace('\U00002013', '-')) * 360 / math.pi * 2
+            newval = -1.0*(float(value.replace('\U00002013', '-')) * 360 / math.pi * 2)
             sock.SendData("boardMove " + str(newval))
             # print(newval)
         except ValueError:
@@ -113,10 +110,9 @@ while True:
         collect_data.join()
         sock.SendData("ACKgameOver")
         if (decodedMessage.__contains__("getPlanetScore")):
-            # TODO: get the planetScore from python scipt/MATLAB here!!
-            planetScore = matlab_data.run(csv_root + "/" + timestamp, "Corey", 5.0, 10.0, 2.5, 5.0, 10.0, 20.0)
-            planetScore = 12345.0  # temporary value!!
-            sock.SendData("planetScore " + str(planetScore))
+            planetScore = matlab_data.run(csv_root + "/" + timestamp, "Corey", 5.0, float(deadTime), 2.5, 5.0, 10.0, 20.0)
+            print(planetScore)
+            sock.SendData("planetScore " + str(int(planetScore)))
         elif (decodedMessage.__contains__("getBalanceScore")):
             # TODO: implement sending balance score from BASE
             pass
