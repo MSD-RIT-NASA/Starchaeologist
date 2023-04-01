@@ -46,6 +46,7 @@ def run(collect: Event, log_data: Event):
 
     async def loop():
         global osc_requests
+        global data
         start_time = 0
         started = 0
         while True:
@@ -96,6 +97,7 @@ def run(collect: Event, log_data: Event):
                                 continue
                             writer.writerow(each_dict[key])
                 log_data.clear()
+                data = []
             await asyncio.sleep(0.01)
 
     def data_collector(requests, start_time):

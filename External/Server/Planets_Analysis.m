@@ -212,7 +212,7 @@ hBprop = h_back/total_pitch;
 placeholderLR = chest_xy(:,1);
 linegraphLR_X = zeros(size(placeholderLR,2),1);
 
-score = 100*midprop + 50*sRprop_v2+50*sLprop_v2;
+score = 75*midprop + 25*midPprop -hRprop_v2*25-hLprop_v2*25-hFprop*10-hBprop*10;
 linegraphLR_X = (chest_xy(:,1)-deadtime);
 linegraphLR_Y = slant;
 BarGraphLR_EL = hLprop_v2;
