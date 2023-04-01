@@ -196,7 +196,7 @@ linegraphLR_X = zeros(size(placeholderLR,2),1);
 %    linegraphLR_X(1,i) = (placeholderLR(i) - deadtime);
 %end
 
-score = 100*midprop + 50*sRprop_v2+50*sLprop_v2;
+score = 100*midprop + 50*sRprop_v2+50*sLprop_v2 - 100*hRprop_v2-100*hLprop_v2;
 linegraphLR_X = (chest_xy(:,1)-deadtime);
 linegraphLR_Y = slant;
 BarGraphLR_EL = hLprop_v2;
