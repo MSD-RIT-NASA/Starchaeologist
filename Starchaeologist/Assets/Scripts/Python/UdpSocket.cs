@@ -372,7 +372,7 @@ public class UdpSocket : MonoBehaviour
                 string msg = "gameStart";
 
                 // start collecting balance data 
-                if( gameMode == 1 || gameMode == 2 ){
+                if( gameMode == 1 || gameMode == 2 && isCalibrated == true){
                     Debug.Log("Collect Balance Data for BASE");
                     msg += " collectBaseData";
                 }
