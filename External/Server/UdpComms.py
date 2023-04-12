@@ -12,7 +12,7 @@ import serial
 import time
 
 # Grab sensor data from the arduino
-def getdata(ser):
+def getdata(sock):
 
     balanceData = []
     dataEntry = []
@@ -30,8 +30,8 @@ def getdata(ser):
         else:
             dataEntry.append(float(data))
         # on arduino side, when the game ends then stop getting the score by sending a message to arduino
-        decodedMessage = UdpComms.ReceiveData()
-        if ( decodedMessage == "Game Over"):
+        decodedMessage = sock.ReceiveData()
+        if (decodedMessage.__contains__("gameOver")):
             break
 
     return balanceData
@@ -145,11 +145,11 @@ class UdpComms():
     def sensorCalibration():
         # set up the serial line
         try:
+            global ser
             ser = serial.Serial('COM10', 9600) # will need to change COM # per device
         except Exception:
             return 0 # game will stop the game and retry to calibrate the sensors
             
-        
         time.sleep(2)
 
         # reading if calibration was complete

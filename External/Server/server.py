@@ -111,6 +111,16 @@ try:
                         print(deadTime)
                         sock.SendData("ACKdeadTime")
                 collect.set()
+            # if (decodedMessage.__contains__("startCalibrating")):
+            #     logging.info("Game is trying to calibrate")
+            #     [getCalibration, baseSerial] = U.UdpComms.sensorCalibration()
+            #     if (getCalibration):
+            #         sock.SendData("calibratedRigsuccess")
+            #     else:
+            #         sock.SendData("calibratedRigFailed")
+            if (decodedMessage.__contains__("collectBalanceData")):
+                logging.info("Started to collect data")
+                U.getdata(sock)
 
         elif (decodedMessage[0] == "gameOver"):
             logging.info("Game has ended!")
@@ -125,7 +135,6 @@ try:
             elif (decodedMessage.__contains__("getBalanceScore")):
                 # TODO: implement sending balance score from BASE
                 pass
-
 
         elif (decodedMessage[0] == "startCalibrating"):
             logging.info("Game is trying to calibrate")

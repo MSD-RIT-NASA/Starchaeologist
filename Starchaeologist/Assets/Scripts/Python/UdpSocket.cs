@@ -37,6 +37,14 @@ public class UdpSocket : MonoBehaviour
      * Minecart = 3
      */
 
+    // private int startButtonPressed = 0;
+
+    // public int StartButtonPressed
+    // {
+    //     get { return startButtonPressed; }
+    //     set { startButtonPressed = value; }
+    // }
+
     private int gameMode = 0;
     public int GameMode
     {
@@ -93,6 +101,9 @@ public class UdpSocket : MonoBehaviour
     
     [SerializeField]
     private MineGame mineLevel;
+
+    [SerializeField]
+    private PuzzlingGame puzzleLevel;
 
     [SerializeField]
     private TMP_Text balanceScoreDisplay;
@@ -244,7 +255,7 @@ public class UdpSocket : MonoBehaviour
             case "calibratedRigFailed":
                 Debug.Log("Sensors not calibrated"); 
                 isCalibrated = false;
-                StopThread();
+                //StopThread();
                 break;
             
             // balanceScore from the BASE
@@ -375,7 +386,15 @@ public class UdpSocket : MonoBehaviour
                 // SendData(serverGameMode);
 
                 // start collecting balance data 
-                if( gameMode == 1 || gameMode == 2 && isCalibrated == true){
+                if( gameMode == 1 || gameMode == 2 ){
+                    Debug.Log("startCalibrating");
+                    string cal = "startCalibrating";
+
+                    SendData(cal);
+                    calibrateRig = false;
+                    CalibrateRig = false;
+
+                    while(puzzleLevel.StartButtonPressed == 0){}
                     msg += " collectBalanceData";
                     
                 }
@@ -441,16 +460,16 @@ public class UdpSocket : MonoBehaviour
             } 
 
 
-            else if(calibrateRig) 
-            {
-                Debug.Log("startCalibrating");
-                string msg = "startCalibrating";
+            // else if(calibrateRig) 
+            // {
+            //     Debug.Log("startCalibrating");
+            //     string msg = "startCalibrating";
 
-                SendData(msg);
-                calibrateRig = false;
-                CalibrateRig = false;
-                return;
-            }
+            //     SendData(msg);
+            //     calibrateRig = false;
+            //     CalibrateRig = false;
+            //     return;
+            // }
 
 //////////////////////////////////////////////////////////////////////
 ////////////////////////////// TESTING ///////////////////////////////
