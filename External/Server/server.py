@@ -77,7 +77,7 @@ def getdata():
             print(data)
             dataEntry.append(float(data))
         # on arduino side, when the game ends then stop getting the score by sending a message to arduino
-        if (gameOver == True):
+        if (gameOver == True): # TODO: TEST IF THIS WORKS!!! 4/12
             break
 
     return balanceData
@@ -131,8 +131,6 @@ try:
             decodedMessage = decodedMessage.split(' ')
         except AttributeError:
             pass
-
-        # SPLIT THE MESSAGE NDUMMY HEAD
 
         # For checking for the board sensor in the minecart level
         # then sends board data
