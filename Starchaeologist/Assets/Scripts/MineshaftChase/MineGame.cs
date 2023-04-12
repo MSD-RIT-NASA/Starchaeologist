@@ -100,28 +100,6 @@ public class MineGame : MonoBehaviour
     void Update()
     {
         raftReference.IsMoving = timeToMove;
-        if (timer.TimeRemaining > 0) {
-            countdownText.text = "" + ((int)timer.TimeRemaining + 1);
-            playerFallVel += playerFallAccel * timer.GetTime;
-            playerFallPos += playerFallVel * timer.GetTime;
-            playerReference.transform.position = new Vector3(playerFallPos.x, playerFallPos.y, playerFallPos.z);
-        }
-        else
-        {
-            if (deadTimeStart == 0)
-            {
-                deadTimeStart = timer.TimePassed;
-            }
-            countdown.SetActive(false);
-            rightHandRay.SetActive(true);
-            leftHandRay.SetActive(true);
-            if (timeToMove)
-            {
-                readyToStart.SetActive(true);
-            }
-            readyToStart.SetActive(true);
-        }
-
         //start the game by moving the raft
         if (timeToMove)
         {
@@ -148,6 +126,31 @@ public class MineGame : MonoBehaviour
                 server.GameStart = false;
                 server.GameOver = true;
                 readyToStart.SetActive(false);
+            }
+        }
+        else
+        {
+            if (timer.TimeRemaining > 0)
+            {
+                countdownText.text = "" + ((int)timer.TimeRemaining + 1);
+                playerFallVel += playerFallAccel * timer.GetTime;
+                playerFallPos += playerFallVel * timer.GetTime;
+                playerReference.transform.position = new Vector3(playerFallPos.x, playerFallPos.y, playerFallPos.z);
+            }
+            else
+            {
+                if (deadTimeStart == 0)
+                {
+                    deadTimeStart = timer.TimePassed;
+                }
+                leftHandRay.SetActive(true);
+                rightHandRay.SetActive(true);
+                countdown.SetActive(false);
+                if (timeToMove)
+                {
+                    readyToStart.SetActive(true);
+                }
+                readyToStart.SetActive(true);
             }
         }
     }
@@ -235,9 +238,9 @@ public class MineGame : MonoBehaviour
         //Tells the python server the game has started
         //server.GameStart = true;
 
-        timeToMove = true;
-        deadTime = timer.TimePassed - deadTimeStart;
         rightHandRay.SetActive(false);
         leftHandRay.SetActive(false);
+        timeToMove = true;
+        deadTime = timer.TimePassed - deadTimeStart;
     }
 }

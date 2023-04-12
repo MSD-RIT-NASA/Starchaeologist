@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -234,7 +234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7865517847723088715, guid: cf24a06dd885e1f45813467bac31a3a6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7865517848709632932, guid: cf24a06dd885e1f45813467bac31a3a6, type: 3}
       propertyPath: m_RootOrder
@@ -250,7 +250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7865517848709632932, guid: cf24a06dd885e1f45813467bac31a3a6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.67
+      value: 9.6
       objectReference: {fileID: 0}
     - target: {fileID: 7865517848709632932, guid: cf24a06dd885e1f45813467bac31a3a6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -497,8 +497,8 @@ MonoBehaviour:
   buttonClick: {fileID: 91500099}
   click: {fileID: 8300000, guid: 0774b89e77dacf94c9e031f7d9f1e945, type: 3}
   server: {fileID: 0}
-  btn1: {fileID: 0}
-  btn2: {fileID: 0}
+  btn1: {fileID: 1201527432}
+  btn2: {fileID: 1041041211}
 --- !u!82 &91500099
 AudioSource:
   m_ObjectHideFlags: 0
@@ -722,7 +722,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -159, y: 70}
+  m_AnchoredPosition: {x: -470, y: 70}
   m_SizeDelta: {x: 269.18604, y: 114.866}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &112455639
@@ -3549,7 +3549,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 606, y: -215}
+  m_AnchoredPosition: {x: 46, y: -215}
   m_SizeDelta: {x: 8.47, y: -611.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &616775428
@@ -12727,14 +12727,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Nick Visconti
-
-    Emily Nack
-
-    Patrick Mitchell
-
-    Victoria Parsonage
-    Ueda'
+  m_text: "Nick Visconti\nEmily Nack\nPatrick Mitchell\nVictoria Parsonage Ueda\nJordan
+    Cincotti \nPaige Contorno\nNick Doherty\nNate Fisher\nNoah Flanders\nDeen Grey\nAngela
+    Hudak\nDaniel Joseph\nAndrew Klotz\nPaige Manley\nChayanne Quezada\nCorey Sheridan"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: b246c4190f4e46ec9352fe15a7b09ce0, type: 2}
@@ -12927,7 +12922,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 201, y: 72}
+  m_AnchoredPosition: {x: 523, y: 72}
   m_SizeDelta: {x: 269.18604, y: 114.86597}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1943774204
