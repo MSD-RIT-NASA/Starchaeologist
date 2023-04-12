@@ -8,33 +8,9 @@
 
 # NASA x RIT author: Angela Hudak
 
-import serial
-import time
+# import serial
+# import time
 
-# Grab sensor data from the arduino
-def getdata(sock):
-
-    balanceData = []
-    dataEntry = []
-
-    # TODO: Change this loop to continue for however long the game lasts. 
-    
-    #for i in range(1000):
-    while True:
-        data = ser.readline().decode("ISO-8859-1").strip()       # read a byte string
-        if data == "END":
-            balanceData.append(dataEntry)
-            dataEntry = []
-        elif data == '' or data == "Calibration completed":
-            continue
-        else:
-            dataEntry.append(float(data))
-        # on arduino side, when the game ends then stop getting the score by sending a message to arduino
-        decodedMessage = sock.ReceiveData()
-        if (decodedMessage.__contains__("gameOver")):
-            break
-
-    return balanceData
 
 class UdpComms():
     def __init__(self,udpIP,portTX,portRX,enableRX=False,suppressWarnings=True):
@@ -142,37 +118,7 @@ class UdpComms():
 
         return data
     
-    def sensorCalibration():
-        # set up the serial line
-        try:
-            global ser
-            ser = serial.Serial('COM10', 9600) # will need to change COM # per device
-        except Exception:
-            return 0 # game will stop the game and retry to calibrate the sensors
-            
-        time.sleep(2)
-
-        # reading if calibration was complete
-        if ser.readline().decode("ISO-8859-1").strip() == "Calibration completed" :
-            print("Calibration completed\n")
-            # send to start gathering data
-            #read unity for "Game start" or GAME MODE
-            # when the game mode is not 0 or 3 then start the score collection
-
-            
-            val = input("Step on sensor and type 'y' to begin or anykey to quit: ")
-            if val == "y":
-                ser.write(val.encode()) #arduino code waits for 'y' to start collecting data
-                #Server.getScore(ser)
-                return 1 #Calibrated!
-
-            else:
-                print("CALIBRATION FAILED")
-                return 0 
-        else:
-            print("recalibrating\n")
-            #ser.close()
-            UdpComms.sensorCalibration()
+    
 
     def sendPlatformMovement():
         return 0

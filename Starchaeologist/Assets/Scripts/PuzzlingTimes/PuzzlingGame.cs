@@ -75,14 +75,6 @@ public class PuzzlingGame : MonoBehaviour
     [SerializeField] GameObject readyCanvas;
 
 
-    [SerializeField]
-    private int startButtonPressed;
-
-    public int StartButtonPressed
-    {
-        get { return startButtonPressed; }
-    }
-
     void Start()
     {
         rightHand.SetActive(false);
@@ -328,13 +320,13 @@ public class PuzzlingGame : MonoBehaviour
 
     public void TimeToMove()
     {
-        //Tells the python server the game has started
-        startButtonPressed = 1;
-        Debug.Log("START BUTTON PRESSED");
-
+        
         rightHandRay.SetActive(false);
         leftHandRay.SetActive(false);
         timerCanvas.SetActive(false);
+        //Tells the python server the game has started
+        GetComponent<UdpSocket>().GameStart = true;
+        Debug.Log("START BUTTON PRESSED");
 
     }
 }

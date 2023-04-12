@@ -79,9 +79,9 @@ public class PuzzlingBuilder : MonoBehaviour
 
         // UdpSocket Testing
         //GetComponent<UdpSocket>().test = true; 
+        
         GetComponent<UdpSocket>().GameMode = 2;
-        //GetComponent<UdpSocket>().CalibrateRig = true; 
-        GetComponent<UdpSocket>().GameStart = true;
+        GetComponent<UdpSocket>().CalibrateRig = true; 
         
 
         int lengthValue = (roomLength * 3);

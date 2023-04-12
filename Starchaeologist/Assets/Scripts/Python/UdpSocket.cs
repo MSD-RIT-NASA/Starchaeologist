@@ -37,13 +37,6 @@ public class UdpSocket : MonoBehaviour
      * Minecart = 3
      */
 
-    // private int startButtonPressed = 0;
-
-    // public int StartButtonPressed
-    // {
-    //     get { return startButtonPressed; }
-    //     set { startButtonPressed = value; }
-    // }
 
     private int gameMode = 0;
     public int GameMode
@@ -56,10 +49,16 @@ public class UdpSocket : MonoBehaviour
     bool threadRunning = false;
     Thread communicateThread;
 
-    //score
+    // BASE score
     bool isCalibrated = false;
     private bool calibrateRig = false;
-    float getBalanceScore = -1f;
+
+    private float baseScore;
+    public float BaseScore
+    {
+        get { return baseScore; }
+        set { baseScore = value; }
+    }
 
     // PLANET score for minecart level
     private int planetScore;
@@ -139,11 +138,6 @@ public class UdpSocket : MonoBehaviour
     public float BoardRotation
     {
         get { return boardRotation; }
-    }
-
-    public float BalanceScore
-    {
-        get { return getBalanceScore; }
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -243,28 +237,27 @@ public class UdpSocket : MonoBehaviour
 
             // Platform to BASE is calibrated sucessfully
             case "calibratedRigsuccess":
-                // when the message calibrated is received then 
                 Debug.Log("Sensors calibrated");
                 isCalibrated = true;
                 calibrateRig = false;
                 CalibrateRig = false;
-                // then allow user to step on platform
-                // game start AFTER isCalibrated is true
+                StopThread();
                 break;
+
             // Platform to BASE calibration failed
             case "calibratedRigFailed":
                 Debug.Log("Sensors not calibrated"); 
                 isCalibrated = false;
-                //StopThread();
+                StopThread();
                 break;
             
-            // balanceScore from the BASE
-             case "balanceScore":
-                Debug.Log("Collecting balance score");
-                getBalanceScore = float.Parse(splitMessage[1]);
-                Debug.Log(getBalanceScore.ToString());
-                //balanceScoreDisplay.text = "" + getBalanceScore;
-                //scoreMgr.DetermineRank(getBalanceScore); //Determines a letter rank based on the score and displays it
+            // baseScore from the BASE
+             case "baseScore":
+                Debug.Log("Collecting BASE score");
+                baseScore = float.Parse(splitMessage[1]);
+                Debug.Log(baseScore.ToString());
+                //balanceScoreDisplay.text = "" + baseScore;
+                //scoreMgr.DetermineRank(baseScore); //Determines a letter rank based on the score and displays it
                 
                 StopThread();
                 break;
@@ -282,7 +275,6 @@ public class UdpSocket : MonoBehaviour
 
             case "ACKgameOver": // Acknowledge the game has ended
                 Debug.Log("Game over is Acknowledged");
-                //StopThread();
                 break;
 
             case "ACKdeadTime": // Acknowledge the server got the deadTime
@@ -302,7 +294,6 @@ public class UdpSocket : MonoBehaviour
                 StopThread();
 
                 scoreMgr.SetBalanceScore(sendBalScore);
-                //planetScore = 0;
                 break;
 
             
@@ -377,26 +368,13 @@ public class UdpSocket : MonoBehaviour
             if(gameStart) // the game starts
             {
                 // for levels 1 and 2 this must be called AFTER confirmation of calibration
-                //if (isCalibrated == true){}
                 Debug.Log("Game start");
                 string msg = "gameStart";
-                
-                // send game mode
-                // string serverGameMode = gameMode.ToString();
-                // SendData(serverGameMode);
 
                 // start collecting balance data 
                 if( gameMode == 1 || gameMode == 2 ){
-                    Debug.Log("startCalibrating");
-                    string cal = "startCalibrating";
-
-                    SendData(cal);
-                    calibrateRig = false;
-                    CalibrateRig = false;
-
-                    while(puzzleLevel.StartButtonPressed == 0){}
-                    msg += " collectBalanceData";
-                    
+                    Debug.Log("Collect Balance Data for BASE");
+                    msg += " collectBaseData";
                 }
                 
                 // send deadtime for minecart score data
@@ -427,8 +405,8 @@ public class UdpSocket : MonoBehaviour
 
                 // get the balance score
                 if (gameMode == 1 || gameMode == 2){
-                    Debug.Log("Getting balanceScore");
-                    msg += " getBalanceScore";
+                    Debug.Log("Getting baseScore");
+                    msg += " getBaseScore";
 
                 }
 
@@ -460,16 +438,16 @@ public class UdpSocket : MonoBehaviour
             } 
 
 
-            // else if(calibrateRig) 
-            // {
-            //     Debug.Log("startCalibrating");
-            //     string msg = "startCalibrating";
+            else if(calibrateRig) 
+            {
+                Debug.Log("startCalibrating");
+                string msg = "startCalibrating";
 
-            //     SendData(msg);
-            //     calibrateRig = false;
-            //     CalibrateRig = false;
-            //     return;
-            // }
+                SendData(msg);
+                calibrateRig = false;
+                CalibrateRig = false;
+                return;
+            }
 
 //////////////////////////////////////////////////////////////////////
 ////////////////////////////// TESTING ///////////////////////////////
