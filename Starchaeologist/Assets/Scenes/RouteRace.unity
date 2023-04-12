@@ -352,9 +352,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 332188620110693309, guid: e4aa31aeb608e984cb7ef99b1ba7c07f, type: 3}
+      propertyPath: hand
+      value: 
+      objectReference: {fileID: 4912305604762631666, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
     - target: {fileID: 435592918556947781, guid: e4aa31aeb608e984cb7ef99b1ba7c07f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 435592918556947807, guid: e4aa31aeb608e984cb7ef99b1ba7c07f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 435592919378400296, guid: e4aa31aeb608e984cb7ef99b1ba7c07f, type: 3}
       propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Id
@@ -364,6 +372,10 @@ PrefabInstance:
       propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Name
       value: Directional Anchor Rotation
       objectReference: {fileID: 0}
+    - target: {fileID: 435592919679237142, guid: e4aa31aeb608e984cb7ef99b1ba7c07f, type: 3}
+      propertyPath: hand
+      value: 
+      objectReference: {fileID: 4912305604762631666, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
     - target: {fileID: 435592920118037862, guid: e4aa31aeb608e984cb7ef99b1ba7c07f, type: 3}
       propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Id
       value: f0913689-8c9e-44ff-ab96-92789771564f
