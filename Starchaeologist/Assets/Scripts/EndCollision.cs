@@ -27,7 +27,7 @@ public class EndCollision : MonoBehaviour
         if (other.gameObject.CompareTag("PlayerFoot") || other.gameObject.CompareTag("Minecart"))
         {
             canvasRef.SetActive(true);
-            scoreDisplay.text = "" + score.text;
+            scoreDisplay.text = score.text.Split(' ')[1];
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
             if (timerCanvas != null)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using Unity.XR.CoreUtils;
+using TMPro;
 public class S_RiverGame : S_RiverBuilder
 {
 
@@ -33,9 +34,13 @@ public class S_RiverGame : S_RiverBuilder
     bool slowDown = false;
     bool playerAttached = false;
     int checkpointIndex = 0;
-    
-    
 
+    [SerializeField] Timer timer;
+    [SerializeField] UdpSocket server;
+    [SerializeField] TMP_Text countdownText;
+    [SerializeField] GameObject timerCanvas;
+    [SerializeField] GameObject rightHand;
+    [SerializeField] GameObject leftHand;
 
     //python variables
     /*
@@ -81,11 +86,24 @@ public class S_RiverGame : S_RiverBuilder
         vrCameraRotation = vrCamera.transform.rotation;
         nextDestination = checkpoints[0];
         //pythonCommunicator.Start();
+        rightHand.SetActive(false);
+        leftHand.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (timer.TimeRemaining > 0)
+        {
+            countdownText.text = "" + ((int)timer.TimeRemaining + 1);
+        }
+        else
+        {
+            timerCanvas.SetActive(false);
+            rightHand.SetActive(true);
+            leftHand.SetActive(true);
+        }
+
         //start the game by moving the raft
         if (timeToMove)
         {
