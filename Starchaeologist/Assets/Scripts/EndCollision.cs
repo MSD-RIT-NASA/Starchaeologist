@@ -30,8 +30,11 @@ public class EndCollision : MonoBehaviour
             scoreDisplay.text = "" + score.text;
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
-            timerCanvas.SetActive(false);
-            audSrc.Stop();
+            if (timerCanvas != null)
+            {
+                timerCanvas.SetActive(false);
+                audSrc.Stop();
+            }
             Destroy(this);
         }
     }
