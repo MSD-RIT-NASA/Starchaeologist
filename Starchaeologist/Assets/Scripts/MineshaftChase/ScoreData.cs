@@ -158,7 +158,7 @@ public class ScoreData : MonoBehaviour
 
             newLine = reader.ReadLine();
             data = newLine.Split(' ');
-            string pScore = data[2];
+            string pScore = data[1];
             float pScoreNum = float.Parse(pScore, CultureInfo.InvariantCulture.NumberFormat);
 
             newLine = reader.ReadLine();
