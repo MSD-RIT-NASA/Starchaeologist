@@ -18,7 +18,10 @@ public class S_RiverGame : S_RiverBuilder
 
     [SerializeField] Camera vrCamera;
     [SerializeField] GameObject raftObject;
-    
+    [SerializeField] GameObject rightHandRay;
+    [SerializeField] GameObject leftHandRay;
+    [SerializeField] GameObject countdownCanvas;
+    [SerializeField] GameObject readyCanvas;
 
     private Quaternion vrCameraRotation;
 
@@ -99,7 +102,8 @@ public class S_RiverGame : S_RiverBuilder
         }
         else
         {
-            timerCanvas.SetActive(false);
+            countdownCanvas.SetActive(false);
+            readyCanvas.SetActive(true);
             rightHand.SetActive(true);
             leftHand.SetActive(true);
         }
@@ -256,6 +260,16 @@ public class S_RiverGame : S_RiverBuilder
         {
             //communicateReference.desiredRotation = new Vector2(0, 0);
         }
+    }
+
+    public void TimeToMove()
+    {
+        //Tells the python server the game has started
+        //server.GameStart = true;
+
+        rightHandRay.SetActive(false);
+        leftHandRay.SetActive(false);
+        timerCanvas.SetActive(false);
     }
 }
 
