@@ -69,6 +69,11 @@ public class PuzzlingGame : MonoBehaviour
     [SerializeField] GameObject timerCanvas;
     [SerializeField] GameObject rightHand;
     [SerializeField] GameObject leftHand;
+    [SerializeField] GameObject rightHandRay;
+    [SerializeField] GameObject leftHandRay;
+    [SerializeField] GameObject countdownCanvas;
+    [SerializeField] GameObject readyCanvas;
+
 
     void Start()
     {
@@ -109,7 +114,8 @@ public class PuzzlingGame : MonoBehaviour
         }
         else
         {
-            timerCanvas.SetActive(false);
+            countdownCanvas.SetActive(false);
+            readyCanvas.SetActive(true);
             rightHand.SetActive(true);
             leftHand.SetActive(true);
         }
@@ -310,5 +316,15 @@ public class PuzzlingGame : MonoBehaviour
     void vignetteOffHit()
     {
         vignetteHit.SetActive(false);
+    }
+
+    public void TimeToMove()
+    {
+        //Tells the python server the game has started
+        //server.GameStart = true;
+
+        rightHandRay.SetActive(false);
+        leftHandRay.SetActive(false);
+        timerCanvas.SetActive(false);
     }
 }
