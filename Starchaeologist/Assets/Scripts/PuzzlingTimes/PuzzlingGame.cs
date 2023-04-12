@@ -293,6 +293,7 @@ public class PuzzlingGame : MonoBehaviour
     void vignetteOn()
     {
         vignetteWarning.SetActive(true);
+
     }
 
     void vignetteOff()
@@ -303,11 +304,11 @@ public class PuzzlingGame : MonoBehaviour
     
     void vignetteOnHit()
     {
-        vignetteWarning.SetActive(true);
+        vignetteHit.SetActive(true);
     }
 
     void vignetteOffHit()
     {
-        vignetteWarning.SetActive(false);
+        vignetteHit.SetActive(false);
     }
 }
