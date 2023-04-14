@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using TMPro;
 
 public class PuzzlingGame : MonoBehaviour
 {
@@ -62,9 +63,24 @@ public class PuzzlingGame : MonoBehaviour
 
     private Vector3 activeTrapPos;
 
+    [SerializeField] Timer timer;
+    [SerializeField] UdpSocket server;
+    [SerializeField] TMP_Text countdownText;
+    [SerializeField] GameObject timerCanvas;
+    [SerializeField] GameObject rightHand;
+    [SerializeField] GameObject leftHand;
+    [SerializeField] GameObject rightHandRay;
+    [SerializeField] GameObject leftHandRay;
+    [SerializeField] GameObject countdownCanvas;
+    [SerializeField] GameObject readyCanvas;
+
+
     void Start()
     {
-        if(singleton != null && singleton != this)
+        rightHand.SetActive(false);
+        leftHand.SetActive(false);
+
+        if (singleton != null && singleton != this)
         {
             Destroy(this);
         }
@@ -92,6 +108,19 @@ public class PuzzlingGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (timer.TimeRemaining > 0)
+        {
+            countdownText.text = "" + ((int)timer.TimeRemaining + 1);
+        }
+        else
+        {
+            countdownCanvas.SetActive(false);
+            readyCanvas.SetActive(true);
+            rightHand.SetActive(true);
+            leftHand.SetActive(true);
+            rightHandRay.SetActive(true);
+            leftHandRay.SetActive(true);
+        }
         Communication();
     }
 
@@ -272,6 +301,7 @@ public class PuzzlingGame : MonoBehaviour
     void vignetteOn()
     {
         vignetteWarning.SetActive(true);
+
     }
 
     void vignetteOff()
@@ -282,11 +312,21 @@ public class PuzzlingGame : MonoBehaviour
     
     void vignetteOnHit()
     {
-        vignetteWarning.SetActive(true);
+        vignetteHit.SetActive(true);
     }
 
     void vignetteOffHit()
     {
-        vignetteWarning.SetActive(false);
+        vignetteHit.SetActive(false);
+    }
+
+    public void TimeToMove()
+    {
+        //Tells the python server the game has started
+        //server.GameStart = true;
+
+        rightHandRay.SetActive(false);
+        leftHandRay.SetActive(false);
+        timerCanvas.SetActive(false);
     }
 }

@@ -9,15 +9,16 @@ public class MainMenu : MonoBehaviour
     public AudioSource buttonClick;
     public AudioClip click;
     [SerializeField] UdpSocket server;
+    [SerializeField] Button btn1;
+    [SerializeField] Button btn2;
 
     void Start()
     {
         buttonClick = GetComponent<AudioSource>();
-
-        Button btn1 = GameObject.Find("RiverRide").GetComponent<Button>();
+        //Button btn1 = GameObject.Find("RiverRide").GetComponent<Button>();
         btn1.onClick.AddListener(Level1);
 
-        Button btn2 = GameObject.Find("PuzzlingTimes").GetComponent<Button>();
+       // Button btn2 = GameObject.Find("PuzzlingTimes").GetComponent<Button>();
         btn2.onClick.AddListener(Level2);
     }
 

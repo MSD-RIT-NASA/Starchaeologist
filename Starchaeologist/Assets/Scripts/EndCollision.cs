@@ -9,6 +9,8 @@ public class EndCollision : MonoBehaviour
     public GameObject canvasRef;
     public GameObject rightHandRay;
     public GameObject leftHandRay;
+    [SerializeField]
+    private UdpSocket server;
 
     [SerializeField]
     private AudioSource audSrc;
@@ -26,12 +28,17 @@ public class EndCollision : MonoBehaviour
         //when the player first comes into contact with the raft, tell the game to start playing then remove this script to save space
         if (other.gameObject.CompareTag("PlayerFoot") || other.gameObject.CompareTag("Minecart"))
         {
+            server.GameStart = false;
+            server.GameOver = true;
             canvasRef.SetActive(true);
-            scoreDisplay.text = "" + score.text;
+            scoreDisplay.text = score.text.Split(' ')[1];
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
-            timerCanvas.SetActive(false);
-            audSrc.Stop();
+            if (timerCanvas != null)
+            {
+                timerCanvas.SetActive(false);
+                audSrc.Stop();
+            }
             Destroy(this);
         }
     }

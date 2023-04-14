@@ -23,6 +23,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using TMPro;
+using System.Globalization;
+using UnityEngine.SocialPlatforms.Impl;
 
 
 public class UdpSocket : MonoBehaviour
@@ -52,7 +54,9 @@ public class UdpSocket : MonoBehaviour
     float getBalanceScore = -1f;
 
     // PLANET score for minecart level
-    private int planetScore = 0;
+    private int planetScore;
+    public string sendBalScore = "1234";
+
     public int PlanetScore
     {
         get { return planetScore; }
@@ -92,11 +96,23 @@ public class UdpSocket : MonoBehaviour
 
     [SerializeField]
     private TMP_Text balanceScoreDisplay;
+    [SerializeField]
+    private TMP_Text rank;
+
+    [SerializeField]
+    public Canvas endCanas;
 
     static public int Score;
 
     [SerializeField]
     private ScoreData scoreMgr;
+
+    private bool raftStart;
+    public bool RaftStart
+    {
+        get { return raftStart; }
+        set { raftStart = value; }
+    }
     
     public bool CalibrateRig
     {
@@ -243,8 +259,8 @@ public class UdpSocket : MonoBehaviour
                 Debug.Log("Collecting balance score");
                 getBalanceScore = float.Parse(splitMessage[1]);
                 Debug.Log(getBalanceScore.ToString());
-                balanceScoreDisplay.text = "" + getBalanceScore;
-                scoreMgr.DetermineRank(getBalanceScore); //Determines a letter rank based on the score and displays it
+                //balanceScoreDisplay.text = "" + getBalanceScore;
+                //scoreMgr.DetermineRank(getBalanceScore); //Determines a letter rank based on the score and displays it
                 
                 StopThread();
                 break;
@@ -262,7 +278,7 @@ public class UdpSocket : MonoBehaviour
 
             case "ACKgameOver": // Acknowledge the game has ended
                 Debug.Log("Game over is Acknowledged");
-                StopThread();
+                //StopThread();
                 break;
 
             case "ACKdeadTime": // Acknowledge the server got the deadTime
@@ -271,16 +287,18 @@ public class UdpSocket : MonoBehaviour
                 break;
 
             case "planetScore":
-                Debug.Log("Received planetScore"); // should be an int value between 1-100? TODO: ask
-                planetScore = int.Parse(splitMessage[1]);
+                Debug.Log("Received planetScore"); 
+                planetScore = int.Parse(splitMessage[1], CultureInfo.InvariantCulture.NumberFormat);
                 Debug.Log(planetScore.ToString());
-                
-                //TODO: Here is where the planetScore will be then used in the rest of unity
-                // float gameScore = Score + planetScore;
-                // score.text = "" + gameScore;
-                // score.DetermineRank(gameScore); //Determines a letter rank based on the score and displays it
-                
+
+                //planetScore will be then used in the rest of unity
+                sendBalScore = planetScore.ToString();
+                Debug.Log("Send Bal Score: " + sendBalScore);
+
                 StopThread();
+
+                scoreMgr.SetBalanceScore(sendBalScore);
+                //planetScore = 0;
                 break;
 
             
