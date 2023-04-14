@@ -17,22 +17,21 @@ public class S_RiverGame : S_RiverBuilder
 
     [SerializeField] Camera vrCamera;
     [SerializeField] GameObject raftObject;
-    
-
-    private Quaternion vrCameraRotation;
 
     [SerializeField] GameObject raftEndPoint;
     public List<GameObject> riverReferences; //populated with positions while the river is being built from the S_RiverBuilder script
     Vector3 nextDestination;
     Vector3 currentDirection = new Vector3(0, 0, 1);
     Vector3 desiredDirection = new Vector3(0, 0, 1);
-    public float raftAcceleration = 0.1f;
-    public float raftSpeed = 3.0f;
+    [SerializeField] float raftAcceleration = 0.1f;
+    [SerializeField] float raftSpeed = 3.0f;
     float currentSpeed = 0f;
     public bool timeToMove = false; //turned true the first time the player teleports to the raft from the S_RaftCollision script
     bool slowDown = false;
     bool playerAttached = false;
     int checkpointIndex = 0;
+
+    int score = 0;
     
     
 
@@ -78,8 +77,6 @@ public class S_RiverGame : S_RiverBuilder
         //pythonCommunicator = new HelloRequester();
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
         //communicateReference = GetComponent<PythonCommunicator>();
-        vrCameraRotation = vrCamera.transform.rotation;
-        nextDestination = checkpoints[0];
         //pythonCommunicator.Start();
     }
 
@@ -89,6 +86,7 @@ public class S_RiverGame : S_RiverBuilder
         //start the game by moving the raft
         if (timeToMove)
         {
+            Debug.Log(vrCamera.transform.position);
             //stick the player under the raft gameobject to help with movement
             if (!playerAttached)
             {
@@ -96,8 +94,7 @@ public class S_RiverGame : S_RiverBuilder
                 playerAttached = true;
                 playerReference.transform.parent = raftReference.transform;
                 playerReference.transform.position = raftReference.transform.GetChild(0).position;
-
-
+                nextDestination = checkpoints[0];
             }
             MoveRaft();
             //make the raft rotate
@@ -140,7 +137,6 @@ public class S_RiverGame : S_RiverBuilder
         //Vector3.RotateTowards(raftReference.transform.position,checkpoints[checkpointIndex],2*Mathf.PI,Mathf.PI);
 
         desiredDirection = Vector3.Normalize(checkpoints[checkpointIndex] - raftReference.transform.position);
-        Debug.Log(distance);
         
 
         //raftReference.transform.LookAt(checkpoints[checkpointIndex]);
@@ -157,7 +153,7 @@ public class S_RiverGame : S_RiverBuilder
             //Quaternion toRotation = Quaternion.FromToRotation(raftReference.transform.forward, desiredDirection); // instead of LookRotation( )
             //raftReference.transform.rotation = Quaternion.Lerp(raftReference.transform.rotation, toRotation, (currentSpeed * Time.deltaTime));
             Quaternion lookRotation = Quaternion.LookRotation(desiredDirection);
-            raftReference.transform.rotation = Quaternion.Slerp(raftReference.transform.rotation,lookRotation,Time.deltaTime* (currentSpeed/6));
+            raftReference.transform.rotation = Quaternion.Slerp(raftReference.transform.rotation,lookRotation,Time.deltaTime* (currentSpeed/3));
             raftReference.transform.position += raftReference.transform.forward * currentSpeed * Time.deltaTime;
         }
         
@@ -210,7 +206,6 @@ public class S_RiverGame : S_RiverBuilder
     {
         Debug.Log("The player hit me!");
     }
-
 
     //python communication function
     void Communication()
