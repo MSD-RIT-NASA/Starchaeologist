@@ -14,7 +14,7 @@ def run(path, user, GreenScore, YellowScore, OrangeScore):
     now = datetime.now()
     eng = engine.start_matlab()
     eng.cd(root, nargout=0)
-    [CometX, CometY, R_score_rt, FinalScore, mat] = eng.DataAnalysis(path, GreenScore, YellowScore, OrangeScore, nargout=15)
+    [CometX, CometY, R_score_rt, FinalScore, mat] = eng.DataAnalysis(path, GreenScore, YellowScore, OrangeScore, nargout=5)
 
     if FinalScore != 0:
         fig, (comG, lineG, heatG) = plt.subplots(ncols=3, nrows=1, figsize=(16, 7))
@@ -57,3 +57,6 @@ def run(path, user, GreenScore, YellowScore, OrangeScore):
         return FinalScore
     else:
         return 0
+
+
+run("C:/Users/Corey/Documents/MSD/GPBA/External/old external/Arduino/score_demo/data.txt", 'Astronaut', 80.0, 60.0, 40.0)

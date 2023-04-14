@@ -114,7 +114,6 @@ try:
     log_data = Event()
     active = Event()
     stop = Event()
-    base_collect = Event()
     queue = Queue()
 
     # Start PLANET data collection
@@ -182,8 +181,7 @@ try:
             if (decodedMessage.__contains__("collectBaseData")):
                 logging.info("Started to collect data")
                 active.set()
-                base_collect.set()
-                #sensordata = getdata()
+                sensordata = getdata()
 
         elif (decodedMessage[0] == "gameOver"):
             logging.info("Game has ended!")
