@@ -106,6 +106,8 @@ public class S_RiverGame : S_RiverBuilder
             readyCanvas.SetActive(true);
             rightHand.SetActive(true);
             leftHand.SetActive(true);
+            rightHandRay.SetActive(true);
+            leftHandRay.SetActive(true);
         }
 
         //start the game by moving the raft

@@ -118,6 +118,8 @@ public class PuzzlingGame : MonoBehaviour
             readyCanvas.SetActive(true);
             rightHand.SetActive(true);
             leftHand.SetActive(true);
+            rightHandRay.SetActive(true);
+            leftHandRay.SetActive(true);
         }
         Communication();
     }
