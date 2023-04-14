@@ -12,6 +12,7 @@
 
 
 import UdpComms as U
+import sensors as s
 import time
 import logging
 import socket
@@ -19,11 +20,88 @@ import math
 import os
 from threading import Thread, Event
 import matlab_data, planet_data_collection
+import serial
+import time
 
 # Create Socket to send and receive data from Board sensor
 UDP_IP = "192.168.4.2"
 UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
+
+def sensorCalibration():
+    # set up the serial line
+    try:
+        global ser
+        ser = serial.Serial('COM9', 9600) # will need to change COM # per device
+    except Exception:
+        return 0 # game will stop the game and retry to calibrate the sensors
+
+    time.sleep(2)
+    # reading if calibration was complete
+    if ser.readline().decode("ISO-8859-1").strip() == "Calibration completed" :
+        print("Calibration completed\n")
+        # send to start gathering data
+        # read unity for "Game start" or GAME MODE
+        # when the game mode is not 0 or 3 then start the score collection
+
+        val = input("Step on sensor and type 'y' to begin or anykey to quit: ")
+        if val == "y":
+            ser.write(val.encode()) #arduino code waits for 'y' to start collecting data
+            return 1 #Calibrated!
+        else:
+            print("CALIBRATION FAILED")
+            return 0 
+    else:
+        print("recalibrating\n")
+        ser.close()
+        sensorCalibration()
+
+
+# Grab sensor data from the arduino
+def getdata(sock):
+
+    balanceData = []
+    dataEntry = []
+
+    # TODO: Change this loop to continue for however long the game lasts. 
+    
+    #for i in range(1000):
+    while True:
+        data = ser.readline().decode("ISO-8859-1").strip()       # read a byte string
+        if data == "END":
+            balanceData.append(dataEntry)
+            dataEntry = []
+        elif data == '' or data == "Calibration completed":
+            continue
+        else:
+            print(data)
+            dataEntry.append(float(data))
+        # on arduino side, when the game ends then stop getting the score by sending a message to arduino
+        decodedMessage = sock.ReadReceivedData()  # read data
+
+        # Handles messages that have 2 arguments. Such as "testing 123" -> ['testing2', '123']
+        if (decodedMessage == None):
+            decodedMessage = [' ']
+        else:
+            print(decodedMessage)
+
+        try:
+            decodedMessage = decodedMessage.split(' ')
+        except AttributeError:
+            pass
+
+        try: 
+            if (decodedMessage[0] == "gameOver"):
+                baseScore = s.getscore(balanceData)
+                print(baseScore)
+                sock.SendData("baseScore " + str(int(baseScore)))
+                break
+        except TypeError:
+            pass
+
+    return balanceData
+
+
 
 try:
 
@@ -37,6 +115,7 @@ try:
     boardSock.setblocking(0)  # allows the program to pass the blocking recvfrom() for the board
 
     # Create UDP socket to use for sending and receiving data from Unity game
+    
     sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
 
     logging.basicConfig(level=logging.INFO,
@@ -72,8 +151,6 @@ try:
             decodedMessage = decodedMessage.split(' ')
         except AttributeError:
             pass
-
-        # SPLIT THE MESSAGE NDUMMY HEAD
 
         # For checking for the board sensor in the minecart level
         # then sends board data
@@ -111,9 +188,13 @@ try:
                         print(deadTime)
                         sock.SendData("ACKdeadTime")
                 collect.set()
+            if (decodedMessage.__contains__("collectBaseData")):
+                logging.info("Started to collect data")
+                sensordata = getdata(sock)
 
         elif (decodedMessage[0] == "gameOver"):
             logging.info("Game has ended!")
+            gameOver = True
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
             log_data.set()
@@ -122,14 +203,16 @@ try:
                 planetScore = matlab_data.run(csv_root + "/" + timestamp, "Corey", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
                 print(planetScore)
                 sock.SendData("planetScore " + str(int(planetScore)))
-            elif (decodedMessage.__contains__("getBalanceScore")):
+            elif (decodedMessage.__contains__("getBaseScore")):
                 # TODO: implement sending balance score from BASE
+                baseScore = s.getscore(sensordata)
+                print(baseScore)
+                sock.SendData("baseScore " + str(int(baseScore)))
                 pass
-
 
         elif (decodedMessage[0] == "startCalibrating"):
             logging.info("Game is trying to calibrate")
-            getCalibration = U.UdpComms.sensorCalibration()
+            getCalibration = sensorCalibration()
             if (getCalibration):
                 sock.SendData("calibratedRigsuccess")
             else:
@@ -162,6 +245,7 @@ try:
                     print(decodedMessage[counter])
                 if data == "hello":
                     print(decodedMessage[counter])
+
 
 except KeyboardInterrupt:
     print("Exiting Server")

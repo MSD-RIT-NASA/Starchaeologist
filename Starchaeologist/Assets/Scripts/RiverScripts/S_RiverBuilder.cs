@@ -26,8 +26,19 @@ public class S_RiverBuilder : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+
+        //SegmentSetup();
+        RiverObjBuilder();
+
+        //give the game script the list of river pieces
+        GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
+        
+        // UdpSocket Testing
+        //GetComponent<UdpSocket>().test = true; 
+        
         GetComponent<UdpSocket>().GameMode = 1;
-        //GetComponent<UdpSocket>().CalibrateRig = true; 
+        GetComponent<UdpSocket>().CalibrateRig = true;
 
         //remove this script
         //Destroy(this);

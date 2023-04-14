@@ -322,11 +322,13 @@ public class PuzzlingGame : MonoBehaviour
 
     public void TimeToMove()
     {
-        //Tells the python server the game has started
-        //server.GameStart = true;
-
+        
         rightHandRay.SetActive(false);
         leftHandRay.SetActive(false);
         timerCanvas.SetActive(false);
+        //Tells the python server the game has started
+        //GetComponent<UdpSocket>().GameStart = true;
+        //Debug.Log("START BUTTON PRESSED");
+
     }
 }
