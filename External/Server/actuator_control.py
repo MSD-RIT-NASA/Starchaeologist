@@ -170,32 +170,39 @@ def get_velocity(actuator):
 
 def oscillate(freq1, freq2, active, stop, diff=0.5):
 
-    while active.is_set is False:
-        continue
+    counter = 0
     left_position = LEVEL_POS
     right_position = LEVEL_POS
     min_pos = MIN_LOWER_SPAN + (diff * (MAX_LOWER_SPAN - MIN_LOWER_SPAN))
     max_pos = MIN_UPPER_SPAN + (diff * (MAX_UPPER_SPAN - MIN_UPPER_SPAN))
+    while not active.is_set():
+        print("WAITING")
+        continue
+    while True:
+        print("GOING")
+        print(counter)
+        counter = counter + 1
 
-    if freq1 < freq2:
-        right_speed = int(MAX_SPEED * diff)
-        left_speed = int(MAX_SPEED * diff * (freq1 / freq2))
-    else:
-        right_speed = int(MAX_SPEED * diff * (freq2 / freq1))
-        left_speed = int(MAX_SPEED * diff)
+        if freq1 < freq2:
+            right_speed = int(MAX_SPEED * diff)
+            left_speed = int(MAX_SPEED * diff * (freq1 / freq2))
+        else:
+            right_speed = int(MAX_SPEED * diff * (freq2 / freq1))
+            left_speed = int(MAX_SPEED * diff)
 
-    if right_position == max_pos:
-        right_position = min_pos
-    else:
-        right_position = max_pos
-    if left_position == max_pos:
-        left_position = min_pos
-    else:
-        left_position = max_pos
-    print("Left, Right", left_position, right_position)
-    actuator_move(right_speed, ACC, right_position, left_speed, ACC, left_position)
-    if stop.is_set:
-        return
+        if right_position == max_pos:
+            right_position = min_pos
+        else:
+            right_position = max_pos
+        if left_position == max_pos:
+            left_position = min_pos
+        else:
+            left_position = max_pos
+        print("Left, Right", left_position, right_position)
+        actuator_move(right_speed, ACC, right_position, left_speed, ACC, left_position)
+        if stop.is_set():
+            print("STOPPING")
+            return
 
 def actuator_sinewave(freq1, freq2, duration):
 
@@ -274,10 +281,13 @@ def actuator_cleanup():
 def loop(riverRun: Event, puzzlingTimes: Event, active:Event, stop: Event):
     while True:
         if riverRun.is_set():
+            print("AGANE")
             oscillate(2, 1, active, stop)
         elif puzzlingTimes.is_set():
             pass
         if stop.is_set():
+            riverRun.clear()
+            active.clear()
             stop.clear()
             actuator_cleanup()
             break
@@ -285,8 +295,9 @@ def loop(riverRun: Event, puzzlingTimes: Event, active:Event, stop: Event):
 
 def run(riverRun: Event, puzzlingTimes: Event, active: Event, stop: Event):
     try:
-        actuator_startup()
-        loop(riverRun, puzzlingTimes, active, stop)
-        actuator_cleanup()
+        while True:
+            actuator_startup()
+            loop(riverRun, puzzlingTimes, active, stop)
+            actuator_cleanup()
     except Exception as e:
         actuator_cleanup()

@@ -93,6 +93,7 @@ def getdata(sock):
 
         try: 
             if (decodedMessage[0] == "gameOver"):
+                stop.set()
                 baseScore = s.getscore(balanceData)
                 print(baseScore)
                 sock.SendData("baseScore " + str(int(baseScore)))
@@ -105,6 +106,8 @@ def getdata(sock):
 
 
 try:
+
+    logging.getLogger("pycomm3").setLevel(logging.ERROR)
 
     script_path = os.path.abspath(__file__)
     root_path = os.path.dirname(script_path)
@@ -205,7 +208,7 @@ try:
                 riverRun.set()
                 #elif level == puzzlingTimes:
                 #puzzlingTimes.set()
-
+                stop.clear()
                 active.set()
 
                 logging.info("Started to collect data")
@@ -216,6 +219,7 @@ try:
             gameOver = True
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
+            stop.set()
             log_data.set()
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
