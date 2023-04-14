@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class S_ObstacleCollider : MonoBehaviour
 {
-    private Text scoreText;
+    private TMP_Text scoreText;
 
     void Start()
     {
-        scoreText = GameObject.Find("ScoreText").GetComponentInChildren<Text>();
+        scoreText = GameObject.Find("ScoreText").GetComponentInChildren<TMP_Text>();
         scoreText.text = "Score: " + 0;
     }
     void OnTriggerEnter(Collider other)

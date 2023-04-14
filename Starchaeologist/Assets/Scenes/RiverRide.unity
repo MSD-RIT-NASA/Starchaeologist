@@ -5290,6 +5290,9 @@ MonoBehaviour:
   - {fileID: 2240620234968401645, guid: 64a2a3320ef49034a9a4b105635fc9ee, type: 3}
   - {fileID: 2427158349449963868, guid: f3a1d815552c6794aa61fa5432cbdabd, type: 3}
   - {fileID: 7741937711840232210, guid: 6b9fe10a131f66d48bfe320ab8defdfd, type: 3}
+  playerCamera: {fileID: 704575402}
+  playerHitBox: {fileID: 0}
+  riverGameScript: {fileID: 915549104}
 --- !u!114 &915549104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5305,6 +5308,9 @@ MonoBehaviour:
   RiverPlaysection: {fileID: 0}
   obstaclePrefabs: []
   treasurePrefabs: []
+  playerCamera: {fileID: 0}
+  playerHitBox: {fileID: 0}
+  riverGameScript: {fileID: 0}
   playerReference: {fileID: 1897099648}
   raftReference: {fileID: 896039729}
   riverWater: {fileID: 477218227}
@@ -11418,7 +11424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6960295741515099642, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -58.1
+      value: -60.76
       objectReference: {fileID: 0}
     - target: {fileID: 7543426601423386719, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
       propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Id
@@ -12223,6 +12229,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8861415708310078050, guid: e44ee07a100b63741ae8d22a02167ecd, type: 3}
   m_PrefabInstance: {fileID: 1832392681}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2051036889 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2015929913, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
+  m_PrefabInstance: {fileID: 1852540166}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2062172216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12639,6 +12650,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8e8bf4624ca5b6d4ea5a28a347a96805, type: 3}
   m_PrefabInstance: {fileID: 2066802137}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2071446684 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 880297573, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
+  m_PrefabInstance: {fileID: 1852540166}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2088506116
 GameObject:
   m_ObjectHideFlags: 0
