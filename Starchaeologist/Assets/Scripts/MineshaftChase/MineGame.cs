@@ -123,8 +123,8 @@ public class MineGame : MonoBehaviour
             {
                 timeToMove = false;
                 //Tell python the game is not running
-                server.GameStart = false;
-                server.GameOver = true;
+                //server.GameStart = false;
+                //server.GameOver = true;
                 readyToStart.SetActive(false);
             }
         }
