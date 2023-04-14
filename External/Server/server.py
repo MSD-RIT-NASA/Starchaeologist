@@ -18,7 +18,8 @@ import socket
 import math
 import os
 from threading import Thread, Event
-import matlab_data, planet_data_collection
+from queue import Queue
+import matlab_data, planet_data_collection, actuator_control
 
 # Create Socket to send and receive data from Board sensor
 UDP_IP = "192.168.4.2"
@@ -52,10 +53,18 @@ try:
     deadTime = 0
     collect = Event()
     log_data = Event()
+    active = Event()
+    stop = Event()
+    base_collect = Event()
+    queue = Queue()
 
     # Start PLANET data collection
-    planet_data = Thread(target=planet_data_collection.run, args =(collect, log_data))
+    planet_data = Thread(target=planet_data_collection.run, args=(collect, log_data))
     planet_data.start()
+
+    # Actuator control
+    actuator_thread = Thread(target=actuator_control.run, args=(active, stop, queue))
+    actuator_thread.start()
 
     while True:
         # Constantly read message from Unity
@@ -109,6 +118,10 @@ try:
                         print(deadTime)
                         sock.SendData("ACKdeadTime")
                 collect.set()
+            else:
+                # TODO: Need message when player teleports to raft
+                active.set()
+                base_collect.set()
 
         elif (decodedMessage[0] == "gameOver"):
             logging.info("Game has ended!")
@@ -121,7 +134,7 @@ try:
                 print(planetScore)
                 sock.SendData("planetScore " + str(int(planetScore)))
             elif (decodedMessage.__contains__("getBalanceScore")):
-                # TODO: implement sending balance score from BASE
+                # TODO: implement sending balance score from BASE, base_matlab.py
                 pass
 
 
