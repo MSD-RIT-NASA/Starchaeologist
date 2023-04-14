@@ -73,8 +73,6 @@ try:
         except AttributeError:
             pass
 
-        # SPLIT THE MESSAGE NDUMMY HEAD
-
         # For checking for the board sensor in the minecart level
         # then sends board data
         try:
@@ -119,7 +117,7 @@ try:
             log_data.set()
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
-                planetScore = matlab_data.run(csv_root + "/" + timestamp, "Corey", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
+                planetScore = matlab_data.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
                 print(planetScore)
                 sock.SendData("planetScore " + str(int(planetScore)))
             elif (decodedMessage.__contains__("getBalanceScore")):

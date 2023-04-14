@@ -236,7 +236,7 @@ def new_oscillate(freq1, freq2, dur, diff):
 
 def actuator_sinewave(freq1, freq2, duration):
 
-    sleep_amount = 0.05
+    sleep_amount = 0.01
     left_position = 0
     right_position = 0
 
@@ -254,8 +254,8 @@ def actuator_sinewave(freq1, freq2, duration):
     out = MAX_LOWER_SPAN + (out * (MAX_UPPER_SPAN - MAX_LOWER_SPAN))
     out2 = MAX_LOWER_SPAN + (out2 * (MAX_UPPER_SPAN - MAX_LOWER_SPAN))
 
-    speed = 15000
-    acc = 20000
+    speed = 30000
+    acc = 45000
     right_speed = speed
     left_speed = speed
     right_acc = acc
@@ -311,15 +311,9 @@ def actuator_cleanup():
 if __name__ == '__main__':
     try:
         actuator_startup()
-        time.sleep(2)
-        #time.sleep(3)
-        #actuator_move(2500, 45000, -24500, 2500, 45000, -24500)
-        #actuator_home(ACT.LEFT)
-        #actuator_home(ACT.RIGHT)
-        #actuator_level(15000, 45000)
-        new_oscillate(5, 1, 10, 1)
-        actuator_sinewave(freq1=3, freq2=5, duration=10)
-        actuator_random(speed=15000, acc=30000, span=[-20000, -5000], duration=10)
+        new_oscillate(2, 1, 180, .5)
+        #actuator_sinewave(freq1=1, freq2=2, duration=10)
+        #actuator_random(speed=15000, acc=30000, span=[-20000, -5000], duration=60)
         actuator_wave(diff_scale=1, duration=10)
         actuator_cleanup()
     except KeyboardInterrupt:
