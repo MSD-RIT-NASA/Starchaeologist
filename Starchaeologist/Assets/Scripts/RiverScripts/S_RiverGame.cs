@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using Unity.XR.CoreUtils;
+using TMPro;
 public class S_RiverGame : S_RiverBuilder
 {
 
@@ -17,7 +18,10 @@ public class S_RiverGame : S_RiverBuilder
 
     [SerializeField] Camera vrCamera;
     [SerializeField] GameObject raftObject;
-    
+    [SerializeField] GameObject rightHandRay;
+    [SerializeField] GameObject leftHandRay;
+    [SerializeField] GameObject countdownCanvas;
+    [SerializeField] GameObject readyCanvas;
 
     private Quaternion vrCameraRotation;
 
@@ -33,9 +37,13 @@ public class S_RiverGame : S_RiverBuilder
     bool slowDown = false;
     bool playerAttached = false;
     int checkpointIndex = 0;
-    
-    
 
+    [SerializeField] Timer timer;
+    [SerializeField] UdpSocket server;
+    [SerializeField] TMP_Text countdownText;
+    [SerializeField] GameObject timerCanvas;
+    [SerializeField] GameObject rightHand;
+    [SerializeField] GameObject leftHand;
 
     //python variables
     /*
@@ -81,11 +89,25 @@ public class S_RiverGame : S_RiverBuilder
         vrCameraRotation = vrCamera.transform.rotation;
         nextDestination = checkpoints[0];
         //pythonCommunicator.Start();
+        rightHand.SetActive(false);
+        leftHand.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (timer.TimeRemaining > 0)
+        {
+            countdownText.text = "" + ((int)timer.TimeRemaining + 1);
+        }
+        else
+        {
+            countdownCanvas.SetActive(false);
+            readyCanvas.SetActive(true);
+            rightHand.SetActive(true);
+            leftHand.SetActive(true);
+        }
+
         //start the game by moving the raft
         if (timeToMove)
         {
@@ -238,6 +260,18 @@ public class S_RiverGame : S_RiverBuilder
         {
             //communicateReference.desiredRotation = new Vector2(0, 0);
         }
+    }
+
+    public void TimeToMove()
+    {
+        //Tells the python server the game has started
+        //server.GameStart = true;
+
+        rightHandRay.SetActive(false);
+        leftHandRay.SetActive(false);
+        timerCanvas.SetActive(false);
+        GetComponent<UdpSocket>().GameStart = true;
+        Debug.Log("START BUTTON PRESSED");
     }
 }
 

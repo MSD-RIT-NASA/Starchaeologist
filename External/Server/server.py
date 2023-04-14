@@ -12,19 +12,78 @@
 
 
 import UdpComms as U
+import sensors as s
 import time
 import logging
 import socket
 import math
 import os
 from threading import Thread, Event
+import matlab_data, planet_data_collection
+import serial
 from queue import Queue
-import matlab_data, planet_data_collection, actuator_control
+import actuator_control
 
 # Create Socket to send and receive data from Board sensor
 UDP_IP = "192.168.4.2"
 UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
+
+def sensorCalibration():
+    # set up the serial line
+    try:
+        global ser
+        ser = serial.Serial('COM10', 9600) # will need to change COM # per device
+    except Exception:
+        return 0 # game will stop the game and retry to calibrate the sensors
+
+    time.sleep(2)
+    # reading if calibration was complete
+    if ser.readline().decode("ISO-8859-1").strip() == "Calibration completed" :
+        print("Calibration completed\n")
+        # send to start gathering data
+        # read unity for "Game start" or GAME MODE
+        # when the game mode is not 0 or 3 then start the score collection
+
+        val = input("Step on sensor and type 'y' to begin or anykey to quit: ")
+        if val == "y":
+            ser.write(val.encode()) #arduino code waits for 'y' to start collecting data
+            return 1 #Calibrated!
+        else:
+            print("CALIBRATION FAILED")
+            return 0 
+    else:
+        print("recalibrating\n")
+        ser.close()
+        sensorCalibration()
+
+
+# Grab sensor data from the arduino
+def getdata():
+
+    balanceData = []
+    dataEntry = []
+
+    # TODO: Change this loop to continue for however long the game lasts. 
+    
+    #for i in range(1000):
+    while True:
+        data = ser.readline().decode("ISO-8859-1").strip()       # read a byte string
+        if data == "END":
+            balanceData.append(dataEntry)
+            dataEntry = []
+        elif data == '' or data == "Calibration completed":
+            continue
+        else:
+            print(data)
+            dataEntry.append(float(data))
+        # on arduino side, when the game ends then stop getting the score by sending a message to arduino
+        if (gameOver == True): # TODO: TEST IF THIS WORKS!!! 4/12
+            break
+
+    return balanceData
+
+
 
 try:
 
@@ -107,6 +166,8 @@ try:
 
         elif (decodedMessage[0] == "gameStart"):
             logging.info("Game has started!")
+            global gameOver
+            gameOver = False
             sock.SendData("ACKgameStart")
             if (decodedMessage.__contains__("deadTime")):
                 logging.info("Receiving deadTime from Unity")
@@ -118,13 +179,15 @@ try:
                         print(deadTime)
                         sock.SendData("ACKdeadTime")
                 collect.set()
-            else:
-                # TODO: Need message when player teleports to raft
+            if (decodedMessage.__contains__("collectBaseData")):
+                logging.info("Started to collect data")
                 active.set()
                 base_collect.set()
+                #sensordata = getdata()
 
         elif (decodedMessage[0] == "gameOver"):
             logging.info("Game has ended!")
+            gameOver = True
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
             log_data.set()
@@ -133,14 +196,16 @@ try:
                 planetScore = matlab_data.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
                 print(planetScore)
                 sock.SendData("planetScore " + str(int(planetScore)))
-            elif (decodedMessage.__contains__("getBalanceScore")):
-                # TODO: implement sending balance score from BASE, base_matlab.py
+            elif (decodedMessage.__contains__("getBaseScore")):
+                # TODO: implement sending balance score from BASE
+                baseScore = s.getscore(sensordata)
+                print(baseScore)
+                sock.SendData("baseScore " + str(int(baseScore)))
                 pass
-
 
         elif (decodedMessage[0] == "startCalibrating"):
             logging.info("Game is trying to calibrate")
-            getCalibration = U.UdpComms.sensorCalibration()
+            getCalibration = sensorCalibration()
             if (getCalibration):
                 sock.SendData("calibratedRigsuccess")
             else:
@@ -173,6 +238,7 @@ try:
                     print(decodedMessage[counter])
                 if data == "hello":
                     print(decodedMessage[counter])
+
 
 except KeyboardInterrupt:
     print("Exiting Server")

@@ -63,7 +63,10 @@ public class ScoreData : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentScene = SceneManager.GetActiveScene().name + "Scores";
+        if (SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            currentScene = SceneManager.GetActiveScene().name + "Scores";
+        }
         if (SceneManager.GetActiveScene().name != "MainMenu")
         {
             playerName.text = keyboardCanvas.NameEdit;
@@ -158,7 +161,7 @@ public class ScoreData : MonoBehaviour
 
             newLine = reader.ReadLine();
             data = newLine.Split(' ');
-            string pScore = data[2];
+            string pScore = data[1];
             float pScoreNum = float.Parse(pScore, CultureInfo.InvariantCulture.NumberFormat);
 
             newLine = reader.ReadLine();
@@ -330,5 +333,10 @@ public class ScoreData : MonoBehaviour
         scoreCanvas.SetActive(false);
         scoreCanvas.SetActive(true);
         Debug.Log("Rank should be displaying...");
+    }
+
+    public void SetCurrentScene(TMP_Text option)
+    {
+        currentScene = option.text;
     }
 }
