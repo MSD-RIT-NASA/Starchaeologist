@@ -33,7 +33,7 @@ def sensorCalibration():
     # set up the serial line
     try:
         global ser
-        ser = serial.Serial('COM10', 9600) # will need to change COM # per device
+        ser = serial.Serial('COM9', 9600) # will need to change COM # per device
     except Exception:
         return 0 # game will stop the game and retry to calibrate the sensors
 
@@ -59,7 +59,7 @@ def sensorCalibration():
 
 
 # Grab sensor data from the arduino
-def getdata():
+def getdata(sock):
 
     balanceData = []
     dataEntry = []
@@ -78,8 +78,27 @@ def getdata():
             print(data)
             dataEntry.append(float(data))
         # on arduino side, when the game ends then stop getting the score by sending a message to arduino
-        if (gameOver == True): # TODO: TEST IF THIS WORKS!!! 4/12
-            break
+        decodedMessage = sock.ReadReceivedData()  # read data
+
+        # Handles messages that have 2 arguments. Such as "testing 123" -> ['testing2', '123']
+        if (decodedMessage == None):
+            decodedMessage = [' ']
+        else:
+            print(decodedMessage)
+
+        try:
+            decodedMessage = decodedMessage.split(' ')
+        except AttributeError:
+            pass
+
+        try: 
+            if (decodedMessage[0] == "gameOver"):
+                baseScore = s.getscore(balanceData)
+                print(baseScore)
+                sock.SendData("baseScore " + str(int(baseScore)))
+                break
+        except TypeError:
+            pass
 
     return balanceData
 
@@ -97,6 +116,7 @@ try:
     boardSock.setblocking(0)  # allows the program to pass the blocking recvfrom() for the board
 
     # Create UDP socket to use for sending and receiving data from Unity game
+    
     sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
 
     logging.basicConfig(level=logging.INFO,
@@ -165,8 +185,6 @@ try:
 
         elif (decodedMessage[0] == "gameStart"):
             logging.info("Game has started!")
-            global gameOver
-            gameOver = False
             sock.SendData("ACKgameStart")
             if (decodedMessage.__contains__("deadTime")):
                 logging.info("Receiving deadTime from Unity")
@@ -180,8 +198,7 @@ try:
                 collect.set()
             if (decodedMessage.__contains__("collectBaseData")):
                 logging.info("Started to collect data")
-                active.set()
-                sensordata = getdata()
+                sensordata = getdata(sock)
 
         elif (decodedMessage[0] == "gameOver"):
             logging.info("Game has ended!")

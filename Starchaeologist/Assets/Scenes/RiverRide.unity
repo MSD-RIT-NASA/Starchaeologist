@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4443031, g: 0.5292234, b: 0.5711157, a: 1}
+  m_IndirectSpecularColor: {r: 0.44444633, g: 0.5292651, b: 0.57107574, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1129,6 +1129,7 @@ GameObject:
   - component: {fileID: 158876788}
   - component: {fileID: 158876787}
   - component: {fileID: 158876786}
+  - component: {fileID: 158876789}
   m_Layer: 0
   m_Name: LeaderboardCanvas
   m_TagString: Untagged
@@ -1227,6 +1228,25 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &158876789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158876784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 0
+  m_CheckFor2DOcclusion: 0
+  m_CheckFor3DOcclusion: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RaycastTriggerInteraction: 1
 --- !u!1 &175924657 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3089279849998905137, guid: e44ee07a100b63741ae8d22a02167ecd, type: 3}
@@ -2996,8 +3016,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.6311364, y: -93.8}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -2.6311364, y: -125}
+  m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &453292914
 MonoBehaviour:
@@ -3998,7 +4018,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnSelect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 367002593}
+        m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
+        m_MethodName: ShowKeyboard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
       m_Calls: []
@@ -5258,6 +5290,9 @@ MonoBehaviour:
   - {fileID: 2240620234968401645, guid: 64a2a3320ef49034a9a4b105635fc9ee, type: 3}
   - {fileID: 2427158349449963868, guid: f3a1d815552c6794aa61fa5432cbdabd, type: 3}
   - {fileID: 7741937711840232210, guid: 6b9fe10a131f66d48bfe320ab8defdfd, type: 3}
+  playerCamera: {fileID: 704575402}
+  playerHitBox: {fileID: 0}
+  riverGameScript: {fileID: 915549104}
 --- !u!114 &915549104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5273,6 +5308,9 @@ MonoBehaviour:
   RiverPlaysection: {fileID: 0}
   obstaclePrefabs: []
   treasurePrefabs: []
+  playerCamera: {fileID: 0}
+  playerHitBox: {fileID: 0}
+  riverGameScript: {fileID: 0}
   playerReference: {fileID: 1897099648}
   raftReference: {fileID: 896039729}
   riverWater: {fileID: 477218227}
@@ -5295,8 +5333,8 @@ MonoBehaviour:
   - {fileID: 1897675039}
   - {fileID: 175924657}
   - {fileID: 1780911767}
-  raftAcceleration: 0.0175
-  raftSpeed: 4
+  raftAcceleration: 1
+  raftSpeed: 80
   timeToMove: 0
   timer: {fileID: 915549108}
   server: {fileID: 0}
@@ -5326,6 +5364,7 @@ MonoBehaviour:
   rxPort: 8000
   txPort: 8001
   mineLevel: {fileID: 0}
+  puzzleLevel: {fileID: 0}
   balanceScoreDisplay: {fileID: 0}
   rank: {fileID: 0}
   endCanas: {fileID: 0}
@@ -6925,6 +6964,7 @@ GameObject:
   - component: {fileID: 1136413990}
   - component: {fileID: 1136413989}
   - component: {fileID: 1136413988}
+  - component: {fileID: 1136413991}
   m_Layer: 0
   m_Name: PlayerDataCanvas
   m_TagString: Untagged
@@ -7018,6 +7058,25 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1136413991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136413986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 0
+  m_CheckFor2DOcclusion: 0
+  m_CheckFor3DOcclusion: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RaycastTriggerInteraction: 1
 --- !u!1 &1143390956
 GameObject:
   m_ObjectHideFlags: 0
@@ -7550,7 +7609,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnSelect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 367002593}
+        m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
+        m_MethodName: ShowKeyboard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
       m_Calls: []
@@ -7636,6 +7707,7 @@ GameObject:
   - component: {fileID: 1249764707}
   - component: {fileID: 1249764706}
   - component: {fileID: 1249764705}
+  - component: {fileID: 1249764709}
   m_Layer: 5
   m_Name: TimerCanvas
   m_TagString: Untagged
@@ -7725,6 +7797,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1249764709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249764704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 0
+  m_CheckFor2DOcclusion: 0
+  m_CheckFor3DOcclusion: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RaycastTriggerInteraction: 1
 --- !u!1 &1261523532
 GameObject:
   m_ObjectHideFlags: 0
@@ -11333,7 +11424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6960295741515099642, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -58.1
+      value: -60.76
       objectReference: {fileID: 0}
     - target: {fileID: 7543426601423386719, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
       propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Id
@@ -11343,6 +11434,10 @@ PrefabInstance:
       propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Name
       value: Directional Anchor Rotation
       objectReference: {fileID: 0}
+    - target: {fileID: 8590352298456144458, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
+      propertyPath: server
+      value: 
+      objectReference: {fileID: 915549105}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
 --- !u!1 &1852540167 stripped
@@ -12134,6 +12229,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8861415708310078050, guid: e44ee07a100b63741ae8d22a02167ecd, type: 3}
   m_PrefabInstance: {fileID: 1832392681}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2051036889 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2015929913, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
+  m_PrefabInstance: {fileID: 1852540166}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2062172216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12550,6 +12650,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8e8bf4624ca5b6d4ea5a28a347a96805, type: 3}
   m_PrefabInstance: {fileID: 2066802137}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2071446684 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 880297573, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
+  m_PrefabInstance: {fileID: 1852540166}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2088506116
 GameObject:
   m_ObjectHideFlags: 0

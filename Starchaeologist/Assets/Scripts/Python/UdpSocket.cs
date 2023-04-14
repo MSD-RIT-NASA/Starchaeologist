@@ -116,6 +116,13 @@ public class UdpSocket : MonoBehaviour
 
     [SerializeField]
     private ScoreData scoreMgr;
+
+    private bool raftStart;
+    public bool RaftStart
+    {
+        get { return raftStart; }
+        set { raftStart = value; }
+    }
     
     public bool CalibrateRig
     {
