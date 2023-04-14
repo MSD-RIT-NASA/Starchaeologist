@@ -327,8 +327,8 @@ public class PuzzlingGame : MonoBehaviour
         leftHandRay.SetActive(false);
         timerCanvas.SetActive(false);
         //Tells the python server the game has started
-        GetComponent<UdpSocket>().GameStart = true;
-        Debug.Log("START BUTTON PRESSED");
+        //GetComponent<UdpSocket>().GameStart = true;
+        //Debug.Log("START BUTTON PRESSED");
 
     }
 }

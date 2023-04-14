@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4443031, g: 0.5292234, b: 0.5711157, a: 1}
+  m_IndirectSpecularColor: {r: 0.44444633, g: 0.5292651, b: 0.57107574, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5327,8 +5327,8 @@ MonoBehaviour:
   - {fileID: 1897675039}
   - {fileID: 175924657}
   - {fileID: 1780911767}
-  raftAcceleration: 0.0175
-  raftSpeed: 4
+  raftAcceleration: 1
+  raftSpeed: 80
   timeToMove: 0
   timer: {fileID: 915549108}
   server: {fileID: 0}
@@ -5358,6 +5358,7 @@ MonoBehaviour:
   rxPort: 8000
   txPort: 8001
   mineLevel: {fileID: 0}
+  puzzleLevel: {fileID: 0}
   balanceScoreDisplay: {fileID: 0}
   rank: {fileID: 0}
   endCanas: {fileID: 0}
