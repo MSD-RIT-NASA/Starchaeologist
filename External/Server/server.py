@@ -132,6 +132,8 @@ try:
     deadTime = 0
     collect = Event()
     log_data = Event()
+    riverRun = Event()
+    puzzlingTimes = Event()
     active = Event()
     stop = Event()
     queue = Queue()
@@ -141,7 +143,7 @@ try:
     planet_data.start()
 
     # Actuator control
-    actuator_thread = Thread(target=actuator_control.run, args=(active, stop, queue))
+    actuator_thread = Thread(target=actuator_control.run, args=(riverRun, puzzlingTimes, active, stop))
     actuator_thread.start()
 
     while True:
@@ -197,6 +199,15 @@ try:
                         sock.SendData("ACKdeadTime")
                 collect.set()
             if (decodedMessage.__contains__("collectBaseData")):
+                logging.info("Started actuator subroutines")
+
+                #if level == riverRun:
+                riverRun.set()
+                #elif level == puzzlingTimes:
+                #puzzlingTimes.set()
+
+                active.set()
+
                 logging.info("Started to collect data")
                 sensordata = getdata(sock)
 

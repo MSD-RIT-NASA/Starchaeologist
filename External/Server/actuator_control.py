@@ -30,30 +30,6 @@ class ACT(Enum):
     LEFT = 2
     BOTH = 3
 
-
-actuator_lock = threading.Lock()
-
-
-class ActuatorControl(threading.Thread):
-    def __init__(self, queue: Queue, active: Event, stop: Event, args=(), kwargs=None):
-        threading.Thread.__init__(self, args=(), kwargs=None)
-        self.active = active
-        self.stop = stop
-        self.queue = queue
-        self.daemon = True
-
-    def run(self):
-        while True:
-            difficulty = self.queue.get()
-            if difficulty is None:
-                return
-            self.river_run(difficulty)
-
-    def river_run(self, difficulty):
-        with actuator_lock:
-            oscillate(2, 1, difficulty, self.active, self.stop)
-
-
 def actuator_move(speed_right: int, acc_right: int, pos_right: int, speed_left: int, acc_left: int, pos_left: int):
 
     if speed_right not in range(1, 30000+1) or speed_left not in range(1, 30000+1):
@@ -192,7 +168,7 @@ def get_velocity(actuator):
             return plc.read('Left_ActualVelocity').value
 
 
-def oscillate(freq1, freq2, diff, active, stop):
+def oscillate(freq1, freq2, active, stop, diff=0.5):
 
     while active.is_set is False:
         continue
@@ -295,13 +271,22 @@ def actuator_cleanup():
     actuator_off(ACT.RIGHT)
 
 
-if __name__ == '__main__':
+def loop(riverRun: Event, puzzlingTimes: Event, active:Event, stop: Event):
+    while True:
+        if riverRun.is_set():
+            oscillate(2, 1, active, stop)
+        elif puzzlingTimes.is_set():
+            pass
+        if stop.is_set():
+            stop.clear()
+            actuator_cleanup()
+            break
+
+
+def run(riverRun: Event, puzzlingTimes: Event, active: Event, stop: Event):
     try:
         actuator_startup()
-        oscillate(2, 1, 180, .5)
-        #actuator_sinewave(freq1=1, freq2=2, duration=10)
-        #actuator_random(speed=15000, acc=30000, span=[-20000, -5000], duration=60)
-        #actuator_wave(diff_scale=1, duration=10)
+        loop(riverRun, puzzlingTimes, active, stop)
         actuator_cleanup()
-    except KeyboardInterrupt:
+    except Exception as e:
         actuator_cleanup()
