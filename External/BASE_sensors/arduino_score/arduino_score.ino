@@ -35,7 +35,7 @@
 //-20850 for sensor 2        // This value is obtained using the SparkFun_HX711_Calibration sketch
 //-22700 for sensor 3 and 4  // This value is obtained using the SparkFun_HX711_Calibration sketch
 
-#define Sensor1_DOUT_PIN 50
+#define Sensor1_DOUT_PIN 50 
 #define Sensor1_SCK_PIN 48
 
 #define Sensor2_DOUT_PIN 46
