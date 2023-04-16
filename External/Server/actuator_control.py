@@ -202,6 +202,7 @@ def oscillate(freq1, freq2, active, stop, diff=0.5):
         actuator_move(right_speed, ACC, right_position, left_speed, ACC, left_position)
         if stop.is_set():
             print("STOPPING")
+            stop.clear()
             return
 
 def actuator_sinewave(freq1, freq2, duration):
