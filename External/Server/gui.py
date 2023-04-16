@@ -60,6 +60,7 @@ base_col1 = sg.Column([
                                 [sg.Checkbox('Verbose Output', key='-verbose-', default=False, expand_x=True)]], expand_y=True, element_justification='center')],
     [sg.Frame('Difficulty:', [[sg.Slider(range=(0, 1), resolution=0.01, default_value=0.5, expand_x=True, enable_events=True, orientation='horizontal', key='-difficulty-'), sg.Button('Apply', key='-applyDifficulty-', size=(12,1), button_color=('white', 'blue'))]], expand_x=True, expand_y=True, element_justification='center')],
     [sg.Frame('Console Output:', [[sg.Button('Save Output to File', key='-saveOutput-', size=BUTTON_SIZE, button_color=('white', 'blue')), sg.Button('Clear Output', key='-clearOutput-', size=BUTTON_SIZE, button_color=('white', 'black'))], [sg.Output(background_color='black', text_color='white', size=(60,30), font=("Courier New", 8), key="-consoleOutput-")]], expand_x=True, expand_y=True, element_justification='center')]],expand_x=True, expand_y=True)
+    #])
 
 base_visualization = sg.Canvas(key='figCanvas')
 
@@ -88,12 +89,18 @@ calibrate_start = 0
 #Animated plot test code
 def my_function(i):
     cpu.append(0)
-    ax.plot(cpu, c='#EC5E29')
-    ax.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
+    #ax.plot(cpu, c='#EC5E29')
+    #ax.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
+    axes_1 = plt.subplot(2, 1, 1)
+    axes_1.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
+    axes_2 = plt.subplot(2, 2, 3)
+    axes_2.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
+    axes_3 = plt.subplot(2, 2, 4)
+    axes_3.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
+    fig.tight_layout()
 
 cpu = collections.deque()
 fig = plt.figure(figsize=(12,6), facecolor='#64778d')
-ax = plt.subplot(211)
 fig.tight_layout()
 animation = FuncAnimation(plt.gcf(), my_function, interval=1000, cache_frame_data=False)
 animated_plot=draw_figure(base_visualization.TKCanvas, fig)
@@ -124,8 +131,8 @@ while True:
     ###############################################################
     # BASE PANEL
     ###############################################################
+    # Start server thread
     if event == '-start_server-':
-        # Start server thread
         server_thread = Thread(target=server.run, args=(start_server, stop_server, calibrate_sensors, reset_actuators, stop_actuators))
         server_thread.start()
         start_server.set()
@@ -134,8 +141,8 @@ while True:
         window['-calibrate_floor-'].update(disabled=False)
         window['-reset_actuators-'].update(disabled=False)
         window['-stop_actuators-'].update(disabled=False)
+    # Kill server thread
     if event == '-stop_server-':
-        # Kill server thread
         stop_server.set()
         window['-stop_server-'].update(disabled=True)
         window['-start_server-'].update(disabled=False)
@@ -143,12 +150,12 @@ while True:
         window['-reset_actuators-'].update(disabled=True)
         window['-stop_actuators-'].update(disabled=True)
     if event == '-calibrate_floor-':
-        window['-calibrate_floor-'].update(disabled=True)
+        #window['-calibrate_floor-'].update(disabled=True)
         calibrate_sensors.set()
-        calibrate_start_time = time.time()
-        calibrate_timer = 1
-        calibratebuttonDisable = Thread(target=calibrateDisableButton, args=(calibrate_start_time, calibrate_timer, stop_server))
-        calibratebuttonDisable.start()
+        #calibrate_start_time = time.time()
+        #calibrate_timer = 1
+        #calibratebuttonDisable = Thread(target=calibrateDisableButton, args=(calibrate_start_time, calibrate_timer, stop_server))
+        #calibratebuttonDisable.start()
     if event == '-com_port-':
         com_port = values['-com_port-']
         print(com_port)
@@ -158,7 +165,7 @@ while True:
     if event == '-difficulty-':
         initial_difficulty=values['-difficulty-']
     if event == '-applyDifficulty-':
-        # send int(values['-difficulty-']) to server
+        #TODO: send int(values['-difficulty-']) to server
         print("Difficulty set to", initial_difficulty)
     if event == '-clearOutput-':
         window.FindElement('-consoleOutput-').Update('')
@@ -166,6 +173,10 @@ while True:
         cpu.clear()
         plt.clf()
         animated_plot.get_tk_widget().forget()
-        ax = plt.subplot(221)
+        plt.subplot(2, 1, 1)
+        plt.subplot(2, 2, 3)
+        plt.subplot(2, 2, 4)
+        fig.tight_layout()
         animated_plot=draw_figure(base_visualization.TKCanvas, fig)
+stop_server.set()
 window.close()
