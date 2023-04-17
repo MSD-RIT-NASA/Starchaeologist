@@ -162,9 +162,11 @@ def run(taskQueue: Queue, responseQueue: Queue):
 
             if message[0] == 'updateCOM':
                 com_port = message[1]
+                logging.info("COM Port updated to " + com_port)
 
             elif message[0] == 'updateDiff':
                 game_diff = message[1]
+                logging.info("Difficulty updated to " + game_diff)
 
             elif message[0] == 'calibrateSensors':
                 logging.info("Game is trying to calibrate")
@@ -173,6 +175,9 @@ def run(taskQueue: Queue, responseQueue: Queue):
                     sock.SendData("calibratedRigsuccess")
                 else:
                     sock.SendData("calibratedRigFailed")
+            
+            elif message[0] == "stopServer":
+                break
 
         ############################################################
         #                UNITY COMMUNICATION LOOP                  #

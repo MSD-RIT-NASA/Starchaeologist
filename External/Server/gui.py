@@ -29,9 +29,14 @@ def updateComPorts():
     ports = serial.tools.list_ports.comports()
     com_ports = []
     for port, desc, hwid in sorted(ports):
-        if desc.__contains__('USB'):
+        if desc.__contains__('Arduino'):
             com_ports.append(port)
 updateComPorts()
+
+def applyComPort(com_port):
+    if com_port not in ("", None):
+        com_port = values['-com_port-']
+        taskQueue.put(['updateCOM', com_port])
 
 base_image = open(image_path + '\\base_img.png', 'rb').read()
 base_image = base64.b64encode(base_image)
@@ -49,6 +54,7 @@ base_col1 = sg.Column([
                                 [sg.Button('Calibrate Floor', key='-calibrate_floor-', size=BUTTON_SIZE, button_color=('white', 'green'), disabled=True)], [sg.Button('Reset Actuators', key='-reset_actuators-', size=BUTTON_SIZE, button_color=('white', 'blue'), disabled=True)], \
                                 [sg.Button('Stop Actuators', key='-stop_actuators-', size=BUTTON_SIZE, button_color=('black', 'yellow'), disabled=True)]], element_justification='center', expand_x=True, expand_y=True),
     sg.Frame('Configuration:',[[sg.Text('COM Port Number:'), sg.DropDown(com_ports, key='-com_port-', auto_size_text=True, readonly=True, size=(7,1))], \
+                               [sg.Button('Apply', key='-apply_com_port-', size=BUTTON_SIZE, button_color=('white', 'green'))], \
                                [sg.Button('Update List', key='-update_com_ports-', size=BUTTON_SIZE, button_color=('white', 'black'))], \
                                 [sg.Checkbox('Verbose Output', key='-verbose-', default=False, expand_x=True)]], expand_y=True, element_justification='center')],
     [sg.Frame('Difficulty:', [[sg.Slider(range=(0, 1), resolution=0.01, default_value=0.5, expand_x=True, enable_events=True, orientation='horizontal', key='-difficulty-'), sg.Button('Apply', key='-applyDifficulty-', size=(12,1), button_color=('white', 'blue'))]], expand_x=True, expand_y=True, element_justification='center')],
@@ -126,6 +132,8 @@ while True:
     ###############################################################
     # Start server thread
     if event == '-start_server-':
+        taskQueue = Queue()
+        responseQueue = Queue()
         server_thread = Thread(target=server.run, args=(taskQueue, responseQueue))
         server_thread.start()
         taskQueue.put(['startServer'])
@@ -145,9 +153,10 @@ while True:
     if event == '-calibrate_floor-':
         window['-calibrate_floor-'].update(disabled=True)
         taskQueue.put(['calibrateFloor'])
-    if event == '-com_port-':
-        com_port = values['-com_port-']
-        taskQueue.put(['updateCOM', com_port])
+    if event == '-apply_com_port-':
+        #com_port = values['-com_port-']
+        #taskQueue.put(['updateCOM', com_port])
+        applyComPort(values['-com_port-'])
     if event in ('-update_com_ports-'):
         updateComPorts()
         window['-com_port-'].update(values=com_ports)
