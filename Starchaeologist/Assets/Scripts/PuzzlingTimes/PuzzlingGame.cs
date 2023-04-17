@@ -121,7 +121,7 @@ public class PuzzlingGame : MonoBehaviour
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
         }
-        Communication();
+        
     }
 
     //called by the plate the player lands on to activate teleportation for adjacent plates
@@ -212,6 +212,7 @@ public class PuzzlingGame : MonoBehaviour
             Vector2 giveRotation = new Vector2(desiredX, desiredZ);
             //communicateReference.desiredRotation = giveRotation;
             //currentScript.transform.parent.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
+            server.SendData
         }
         else
         {
@@ -222,6 +223,7 @@ public class PuzzlingGame : MonoBehaviour
     //called from the current platform to set off the trap
     public void TrapTime()
     {
+        Communication();
         Debug.Log("Trap Time");
         int xIndex = (int)currentPosition.x;
         int yIndex = (int)currentPosition.y;

@@ -28,6 +28,8 @@ UDP_IP = "192.168.4.2"
 UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
 
+com_port = 'COM9'
+
 def sensorCalibration():
     # set up the serial line
     print("Attempting to calibrate sensors")
@@ -149,8 +151,8 @@ def run(taskQueue: Queue, responseQueue: Queue):
     #planet_data.start()
 
     # Actuator control
-    #actuator_thread = Thread(target=actuator_control.run, args=(riverRun, puzzlingTimes, active, stop))
-    #actuator_thread.start()
+    actuator_thread = Thread(target=actuator_control.run, args=(riverRun, puzzlingTimes, active, stop))
+    actuator_thread.start()
 
     while True:
 
@@ -267,7 +269,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
 
         elif (decodedMessage[0] == "startCalibrating"):
             logging.info("Game is trying to calibrate")
-            getCalibration = U.UdpComms.sensorCalibration()
+            getCalibration = sensorCalibration()
             if (getCalibration):
                 sock.SendData("calibratedRigsuccess")
             else:
@@ -301,3 +303,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
                     print(decodedMessage[counter])
 
     logging.info("Stopping Server")
+
+test1 = Queue()
+test2 = Queue()
+run(test1, test2)
