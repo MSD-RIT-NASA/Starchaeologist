@@ -5,10 +5,12 @@ using System.Linq;
 using System;
 public class S_RiverBuilder : MonoBehaviour
 {
+    List<GameObject> spawnedSegments = new List<GameObject>();
     //The river is split into segments each segemnt has 3 empty gameobjects that will hold 
     [SerializeField] GameObject RiverPlaysection;
     [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
     [SerializeField] List<GameObject> treasurePrefabs = new List<GameObject>();
+    [SerializeField] List<GameObject> spawnedSegments = new List<GameObject>();
     private bool itemsAdjusted = false;
 
     [SerializeField] Camera playerCamera;
@@ -26,8 +28,19 @@ public class S_RiverBuilder : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+
+        //SegmentSetup();
+        RiverObjBuilder(1.8f);
+
+        //give the game script the list of river pieces
+        GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
+        
+        // UdpSocket Testing
+        //GetComponent<UdpSocket>().test = true; 
+        
         GetComponent<UdpSocket>().GameMode = 1;
-        //GetComponent<UdpSocket>().CalibrateRig = true; 
+        GetComponent<UdpSocket>().CalibrateRig = true;
 
         //remove this script
         //Destroy(this);

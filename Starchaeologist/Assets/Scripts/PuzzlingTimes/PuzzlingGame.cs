@@ -228,7 +228,7 @@ public class PuzzlingGame : MonoBehaviour
         int thisTrap = currentScript.trapList[Random.Range(0,currentScript.trapList.Count)];
         //trap_warning.Play();
         //Turn on warning vingette
-        vignetteOn();
+        //vignetteOn();
         Invoke("vignetteOff", 3.0f); //set inactive after 3 seconds have passed
 
         
@@ -247,6 +247,7 @@ public class PuzzlingGame : MonoBehaviour
                 ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().DataSetup(currentScript);
                 activeTrapPos = ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().transform.position;
                 activeTrapPos.y += 1000;
+                UIManager.GetComponent<Trap_Indicator>().SetTarget(1);
                 break;
             case 1:
                 trap_warning.PlayOneShot(trap_warning2);
@@ -255,6 +256,14 @@ public class PuzzlingGame : MonoBehaviour
                 wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().enabled = true;
                 wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().DataSetup(currentScript);
                 activeTrapPos = wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().transform.position;
+                if(wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().rightSide)
+                {
+                    UIManager.GetComponent<Trap_Indicator>().SetTarget(2);
+                }
+                else
+                {
+                    UIManager.GetComponent<Trap_Indicator>().SetTarget(3);
+                }
                 break;
             case 2:
                 trap_warning.PlayOneShot(trap_warning3);
@@ -262,6 +271,14 @@ public class PuzzlingGame : MonoBehaviour
                 swingList[yIndex].GetComponent<Trap_Log>().enabled = true;
                 swingList[yIndex].GetComponent<Trap_Log>().DataSetup(currentScript);
                 activeTrapPos = swingList[yIndex].GetComponent<Trap_Log>().transform.position;
+                if (swingList[yIndex].GetComponent<Trap_Log>().rightSide)
+                {
+                    UIManager.GetComponent<Trap_Indicator>().SetTarget(2);
+                }
+                else
+                {
+                    UIManager.GetComponent<Trap_Indicator>().SetTarget(3);
+                }
                 break;
             case 3:
                 trap_warning.PlayOneShot(trap_warning4);
@@ -276,13 +293,21 @@ public class PuzzlingGame : MonoBehaviour
                 pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().enabled = true;
                 pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().DataSetup(currentScript);
                 activeTrapPos = pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().transform.position;
+                if (pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().rightSide)
+                {
+                    UIManager.GetComponent<Trap_Indicator>().SetTarget(2);
+                }
+                else
+                {
+                    UIManager.GetComponent<Trap_Indicator>().SetTarget(3);
+                }
                 break;
             default:
                 break;
         }
         Debug.Log("Got to the Trap_Indicaor Setters");
-        UIManager.GetComponent<Trap_Indicator>().SetTrapActive(true);
-        UIManager.GetComponent<Trap_Indicator>().SetTarget(activeTrapPos);
+       // UIManager.GetComponent<Trap_Indicator>().SetTrapActive(true);
+        //UIManager.GetComponent<Trap_Indicator>().SetTarget(thisTrap);
     }
 
     //a method called by obstacles when the player hits them which will increment points
@@ -292,13 +317,13 @@ public class PuzzlingGame : MonoBehaviour
         if(!healing)
         {
             vignetteOnHit();
-            Invoke("vignetteOffHit", 5.0f); //set inactive after 5 seconds have passed
+            Invoke("vignetteOffHit", 3.0f); //set inactive after 5 seconds have passed
             healing = true;
             Debug.Log("The player hit me!");
         }
     }
 
-    void vignetteOn()
+    public void vignetteOn()
     {
         vignetteWarning.SetActive(true);
 
@@ -322,11 +347,13 @@ public class PuzzlingGame : MonoBehaviour
 
     public void TimeToMove()
     {
-        //Tells the python server the game has started
-        //server.GameStart = true;
-
+        
         rightHandRay.SetActive(false);
         leftHandRay.SetActive(false);
         timerCanvas.SetActive(false);
+        //Tells the python server the game has started
+        //GetComponent<UdpSocket>().GameStart = true;
+        //Debug.Log("START BUTTON PRESSED");
+
     }
 }

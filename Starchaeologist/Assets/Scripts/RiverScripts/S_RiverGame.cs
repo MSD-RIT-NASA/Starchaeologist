@@ -242,6 +242,8 @@ public class S_RiverGame : S_RiverBuilder
         rightHandRay.SetActive(false);
         leftHandRay.SetActive(false);
         timerCanvas.SetActive(false);
+        //GetComponent<UdpSocket>().GameStart = true;
+        //Debug.Log("START BUTTON PRESSED");
     }
 }
 

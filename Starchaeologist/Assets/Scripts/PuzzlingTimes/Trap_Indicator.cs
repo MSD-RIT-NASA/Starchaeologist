@@ -14,11 +14,14 @@ public class Trap_Indicator : MonoBehaviour
     private Vector3 indicatingTarget;
 
     public GameObject indicator;
+    public List<GameObject> warningLight;
 
     //Calculated using indicatingTarget
     private float angleToRotateX;
     private float angleToRotateY;
     private float angleToRotateZ;
+
+    private int light;
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +37,7 @@ public class Trap_Indicator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        indicator.SetActive(isActive);
+        //indicator.SetActive(isActive);
 
         if (isActive)
         {
@@ -52,16 +55,32 @@ public class Trap_Indicator : MonoBehaviour
             // angleToRotateX = Vector2.Angle(new Vector2(indicator.transform.right.y, indicator.transform.right.z), new Vector2(indicatingTarget.y, indicatingTarget.z));
             // indicator.transform.rotation = new Quaternion(angleToRotateX, angleToRotateY, angleToRotateZ, 1);//Changed to setting the rotation instead of adding it
 
-            indicator.transform.LookAt(targetPosition);
+            //indicator.transform.LookAt(targetPosition);
         }
     }
 
     //Sets the target transform and calculate the indicating vector accordingly
-    public void SetTarget(Vector3 targetPos)
+    public void SetTarget(int trap)
     {
-        targetPosition = targetPos;
-        indicatingTarget = targetPos - indicator.transform.position;
-        Debug.Log("TargetTransform has been set");
+        //targetPosition = targetPos;
+        //indicatingTarget = targetPos - indicator.transform.position;
+        //float min = Vector3.Distance(warningLight[0].transform.position, targetPos);
+        //float distance = 0;
+        //for(int i = 1; i < warningLight.Count; i ++)
+        //{
+        //    distance = Vector3.Distance(warningLight[i].transform.position, targetPos);
+        //    if (min < distance)
+        //    {
+        //        min = Vector3.Distance(warningLight[i].transform.position, targetPos);
+        //        warningLight[light].SetActive(false);
+        //        warningLight[i].SetActive(true);
+        //        light = i;
+        //    }
+        //}
+        //Debug.Log("distance: " + distance);
+        light = trap;
+        warningLight[light].SetActive(true);
+        Invoke("TurnOffLight", 3.0f);
     }
 
     //Sets the isActive bool to determine of the indicator should be displayed
@@ -69,5 +88,10 @@ public class Trap_Indicator : MonoBehaviour
     {
         isActive = active;
         Debug.Log("SetTrapActive = " + isActive);
+    }
+
+    public void TurnOffLight()
+    {
+        warningLight[light].SetActive(false);
     }
 }
