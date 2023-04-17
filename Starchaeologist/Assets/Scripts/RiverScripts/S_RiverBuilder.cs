@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 public class S_RiverBuilder : MonoBehaviour
 {
+    List<GameObject> spawnedSegments = new List<GameObject>();
     //The river is split into segments each segemnt has 3 empty gameobjects that will hold 
     [SerializeField] GameObject RiverPlaysection;
     [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
@@ -30,7 +31,7 @@ public class S_RiverBuilder : MonoBehaviour
 
 
         //SegmentSetup();
-        RiverObjBuilder(0f);
+        RiverObjBuilder(1.8f);
 
         //give the game script the list of river pieces
         GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
