@@ -51,7 +51,7 @@ level_select = [[sg.Button('BASE Levels', font=("Arial", 24, "bold"), image_data
 
 base_col1 = sg.Column([
     [sg.Frame('Control:',[[sg.Button('Start Server', key='-start_server-', size=BUTTON_SIZE, button_color=('white', 'red'))],[sg.Button('Stop Server', key='-stop_server-', size=BUTTON_SIZE, button_color=('white', 'black'), disabled=True)], \
-                                [sg.Button('Calibrate Floor', key='-calibrate_floor-', size=BUTTON_SIZE, button_color=('white', 'green'), disabled=True)], [sg.Button('Reset Actuators', key='-reset_actuators-', size=BUTTON_SIZE, button_color=('white', 'blue'), disabled=True)], \
+                                [sg.Button('Reset Actuators', key='-reset_actuators-', size=BUTTON_SIZE, button_color=('white', 'blue'), disabled=True)], \
                                 [sg.Button('Stop Actuators', key='-stop_actuators-', size=BUTTON_SIZE, button_color=('black', 'yellow'), disabled=True)]], element_justification='center', expand_x=True, expand_y=True),
     sg.Frame('Configuration:',[[sg.Text('COM Port Number:'), sg.DropDown(com_ports, key='-com_port-', auto_size_text=True, readonly=True, size=(7,1))], \
                                [sg.Button('Apply', key='-apply_com_port-', size=BUTTON_SIZE, button_color=('white', 'green'))], \
