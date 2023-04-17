@@ -144,7 +144,7 @@ public class PlateScript : MonoBehaviour
                 //randomly  choose a wobble patern
                 wobbling = true;
                 wobbleType = Random.Range(0, 3);
-
+                PuzzlingGame.singleton.vignetteOn();
                 if(wobbleType == 0)//0 = 2-way wobble
                 {
                     twoWayScript.enabled = true;

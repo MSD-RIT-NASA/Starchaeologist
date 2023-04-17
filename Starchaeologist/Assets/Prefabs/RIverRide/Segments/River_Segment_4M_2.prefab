@@ -30,7 +30,7 @@ Transform:
   - {fileID: 6647280949357237021}
   - {fileID: 8805438863255739789}
   m_Father: {fileID: 3295489834818014079}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1954243783249793285
 GameObject:
@@ -318,36 +318,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &6704011236669981932
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 935662063361152288}
-  m_Layer: 0
-  m_Name: animalAttackPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &935662063361152288
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6704011236669981932}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 6.25}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3295489834818014079}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7204651072964154178
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +446,6 @@ Transform:
   - {fileID: 2550912714317548138}
   - {fileID: 4383201094455944790}
   - {fileID: 5167511309160661939}
-  - {fileID: 935662063361152288}
   - {fileID: 8720825244771274186}
   m_Father: {fileID: 0}
   m_RootOrder: 0

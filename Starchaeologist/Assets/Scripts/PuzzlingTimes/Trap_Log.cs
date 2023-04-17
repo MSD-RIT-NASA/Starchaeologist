@@ -24,7 +24,7 @@ public class Trap_Log : MonoBehaviour
     float lerpRatio = 1f;
     float swingSpeed = 2f;
     bool trapping = false;
-    bool rightSide = true;
+   public bool rightSide = true;
     int swingStep = 0;
 
     float pauseTimer = 0f;
