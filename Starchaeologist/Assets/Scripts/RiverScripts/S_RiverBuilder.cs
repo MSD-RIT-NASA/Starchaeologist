@@ -10,6 +10,7 @@ public class S_RiverBuilder : MonoBehaviour
     [SerializeField] GameObject RiverPlaysection;
     [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
     [SerializeField] List<GameObject> treasurePrefabs = new List<GameObject>();
+    [SerializeField] List<GameObject> spawnedSegments = new List<GameObject>();
     private bool itemsAdjusted = false;
 
     [SerializeField] Camera playerCamera;

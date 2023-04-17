@@ -3381,6 +3381,11 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &402398124 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5873311958941772518, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
+  m_PrefabInstance: {fileID: 4370141819609914693}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &418037871 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 518c00746e903504fb950e9b8e70a4bd, type: 3}
@@ -7012,6 +7017,7 @@ MonoBehaviour:
   swingPrefab: {fileID: 6053136410156316217, guid: f43ab709a97893141a0dd0d824fd2308, type: 3}
   wallPrefab: {fileID: 3959609665189242549, guid: 0404aa5796c29a1448f08a2a5d725c19, type: 3}
   pillarPrefab: {fileID: 1026845039597745795, guid: 1c7dcb0b9e329424f8d6f7afb7151945, type: 3}
+  InitialColPrefab: {fileID: 2891969409778686666, guid: c728d6507723b054598b5497d3eb14b7, type: 3}
   perimeterPrefab: {fileID: 7982386991539263300, guid: 335e5446d23e62b429e5ad9208aa819b, type: 3}
   roomLength: 2
 --- !u!4 &839490669
@@ -7058,7 +7064,7 @@ MonoBehaviour:
   countdownText: {fileID: 1190579936}
   timerCanvas: {fileID: 261730932}
   rightHand: {fileID: 4370141819609914695}
-  leftHand: {fileID: 4370141819609914694}
+  leftHand: {fileID: 402398124}
   rightHandRay: {fileID: 7387500813503913827}
   leftHandRay: {fileID: 7723398613073621425}
   countdownCanvas: {fileID: 1109578265}
@@ -7205,6 +7211,7 @@ MonoBehaviour:
   rxPort: 8000
   txPort: 8001
   mineLevel: {fileID: 0}
+  puzzleLevel: {fileID: 0}
   balanceScoreDisplay: {fileID: 0}
   rank: {fileID: 0}
   endCanas: {fileID: 0}
@@ -17288,11 +17295,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
---- !u!1 &4370141819609914694 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5873311958240752284, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
-  m_PrefabInstance: {fileID: 4370141819609914693}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4370141819609914695 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5873311959577746024, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
