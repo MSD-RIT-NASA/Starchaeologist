@@ -16,10 +16,10 @@ def my_function(i):
 
     ax.plot(cpu, c='#EC5E29')
     ax.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
-    ax.text(len(cpu)-1, cpu[-1]+2, "{}%".format(cpu[-1]))
+    #ax.text(len(cpu)-1, cpu[-1]+2, "{}%".format(cpu[-1]))
 
-    ax.set_xticks(np.arange(-1,10,2))
-    ax.set_xticklabels(np.arange(10,-1,-2))
+    #ax.set_xticks(np.arange(-1,10,2))
+    #ax.set_xticklabels(np.arange(10,-1,-2))
     ax.set_xlabel('Seconds')
     ax.set_title('CPU %\n')
     ax.set_ylim(0,100)
