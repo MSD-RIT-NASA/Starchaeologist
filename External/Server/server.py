@@ -10,7 +10,6 @@
 
 # NASA x RIT author: Angela Hudak
 
-
 import UdpComms as U
 import sensors as s
 import time
@@ -21,18 +20,20 @@ import os
 from threading import Thread, Event
 import matlab_data, planet_data_collection
 import serial
-import time
+from queue import Queue
+import actuator_control
 
-# Create Socket to send and receive data from Board sensor
+# PLANET CONSTANTS
 UDP_IP = "192.168.4.2"
 UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
 
 def sensorCalibration():
     # set up the serial line
+    print("Attempting to calibrate sensors")
     try:
         global ser
-        ser = serial.Serial('COM9', 9600) # will need to change COM # per device
+        ser = serial.Serial(com_port, 9600) # will need to change COM # per device
     except Exception:
         return 0 # game will stop the game and retry to calibrate the sensors
 
@@ -55,7 +56,6 @@ def sensorCalibration():
         print("recalibrating\n")
         ser.close()
         sensorCalibration()
-
 
 # Grab sensor data from the arduino
 def getdata(sock):
@@ -92,6 +92,7 @@ def getdata(sock):
 
         try: 
             if (decodedMessage[0] == "gameOver"):
+                stop.set()
                 baseScore = s.getscore(balanceData)
                 print(baseScore)
                 sock.SendData("baseScore " + str(int(baseScore)))
@@ -101,9 +102,23 @@ def getdata(sock):
 
     return balanceData
 
+# PLANET events
+collect = Event()
+log_data = Event()
+# Actuator events
+riverRun = Event()
+puzzlingTimes = Event()
+active = Event()
+stop = Event()
+queue = Queue()
 
+def run(taskQueue: Queue, responseQueue: Queue):
 
-try:
+    global com_port
+    global game_diff
+
+    logging.getLogger("pycomm3").setLevel(logging.ERROR)
+    logging.Formatter(fmt='%(asctime)s',datefmt='%Y-%m-%d,%H:%M:%S.%f')
 
     script_path = os.path.abspath(__file__)
     root_path = os.path.dirname(script_path)
@@ -115,7 +130,6 @@ try:
     boardSock.setblocking(0)  # allows the program to pass the blocking recvfrom() for the board
 
     # Create UDP socket to use for sending and receiving data from Unity game
-    
     sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
 
     logging.basicConfig(level=logging.INFO,
@@ -129,14 +143,46 @@ try:
     collect_data = 0
     timestamp = 0
     deadTime = 0
-    collect = Event()
-    log_data = Event()
 
     # Start PLANET data collection
-    planet_data = Thread(target=planet_data_collection.run, args =(collect, log_data))
-    planet_data.start()
+    #planet_data = Thread(target=planet_data_collection.run, args=(collect, log_data))
+    #planet_data.start()
+
+    # Actuator control
+    #actuator_thread = Thread(target=actuator_control.run, args=(riverRun, puzzlingTimes, active, stop))
+    #actuator_thread.start()
 
     while True:
+
+        ############################################################
+        #                GUI COMMUNICATION LOOP                    #
+        ############################################################
+        if not taskQueue.empty():
+            message = taskQueue.get()
+
+            if message[0] == 'updateCOM':
+                com_port = message[1]
+                logging.info("COM Port updated to " + com_port)
+
+            elif message[0] == 'updateDiff':
+                game_diff = message[1]
+                logging.info("Difficulty updated to " + str(game_diff))
+
+            elif message[0] == 'calibrateSensors':
+                logging.info("Game is trying to calibrate")
+                getCalibration = sensorCalibration()
+                if (getCalibration):
+                    sock.SendData("calibratedRigsuccess")
+                else:
+                    sock.SendData("calibratedRigFailed")
+            
+            elif message[0] == "stopServer":
+                break
+
+        ############################################################
+        #                UNITY COMMUNICATION LOOP                  #
+        ############################################################
+
         # Constantly read message from Unity
         # logging.info("Waiting For Message From Unity")
         decodedMessage = sock.ReadReceivedData()  # read data
@@ -145,7 +191,7 @@ try:
         if (decodedMessage == None):
             decodedMessage = [' ']
         else:
-            print(decodedMessage)
+            logging.info("Message Recieved: " + decodedMessage.strip('\n'))
 
         try:
             decodedMessage = decodedMessage.split(' ')
@@ -189,6 +235,15 @@ try:
                         sock.SendData("ACKdeadTime")
                 collect.set()
             if (decodedMessage.__contains__("collectBaseData")):
+                logging.info("Started actuator subroutines")
+
+                #if level == riverRun:
+                riverRun.set()
+                #elif level == puzzlingTimes:
+                #puzzlingTimes.set()
+                stop.clear()
+                active.set()
+
                 logging.info("Started to collect data")
                 sensordata = getdata(sock)
 
@@ -197,27 +252,18 @@ try:
             gameOver = True
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
+            stop.set()
             log_data.set()
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
-                planetScore = matlab_data.run(csv_root + "/" + timestamp, "Corey", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
+                planetScore = matlab_data.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
                 print(planetScore)
                 sock.SendData("planetScore " + str(int(planetScore)))
             elif (decodedMessage.__contains__("getBaseScore")):
                 # TODO: implement sending balance score from BASE
                 baseScore = s.getscore(sensordata)
-                print(baseScore)
                 sock.SendData("baseScore " + str(int(baseScore)))
                 pass
-
-        elif (decodedMessage[0] == "startCalibrating"):
-            logging.info("Game is trying to calibrate")
-            getCalibration = sensorCalibration()
-            if (getCalibration):
-                sock.SendData("calibratedRigsuccess")
-            else:
-                sock.SendData("calibratedRigFailed")
-
 
         #####################################################################
         ############################## TESTING ##############################
@@ -246,7 +292,4 @@ try:
                 if data == "hello":
                     print(decodedMessage[counter])
 
-
-except KeyboardInterrupt:
-    print("Exiting Server")
-    os._exit(0)
+    logging.info("Stopping Server")

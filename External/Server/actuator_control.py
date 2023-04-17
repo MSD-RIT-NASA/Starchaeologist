@@ -5,6 +5,10 @@ import numpy as np
 import time
 import math
 from sklearn.preprocessing import minmax_scale
+import threading
+import time
+from threading import Event
+from queue import Queue
 
 IP = "10.100.20.10"
 LEVEL_POS = -12500
@@ -25,7 +29,6 @@ class ACT(Enum):
     RIGHT = 1
     LEFT = 2
     BOTH = 3
-
 
 def actuator_move(speed_right: int, acc_right: int, pos_right: int, speed_left: int, acc_left: int, pos_left: int):
 
@@ -82,6 +85,7 @@ def actuator_off(actuator: ACT):
             plc.write(('Cmd_Right_MSF', 1))
             plc.write(('Cmd_Left_MSF', 1))
 
+# NEVER USE THE STOP FLAG
 def actuator_stop(actuator: ACT):
 
     with LogixDriver(IP) as plc:
@@ -164,79 +168,46 @@ def get_velocity(actuator):
             return plc.read('Left_ActualVelocity').value
 
 
-def new_oscillate(freq1, freq2, dur, diff):
+def oscillate(freq1, freq2, active, stop, diff=0.5):
 
-    # Determine sleep amount based on frequency and velocity
-    sleep_time = 0.0
+    counter = 0
     left_position = LEVEL_POS
     right_position = LEVEL_POS
-    speed = MIN_SPEED + (diff * (MAX_SPEED - MIN_SPEED))
     min_pos = MIN_LOWER_SPAN + (diff * (MAX_LOWER_SPAN - MIN_LOWER_SPAN))
     max_pos = MIN_UPPER_SPAN + (diff * (MAX_UPPER_SPAN - MIN_UPPER_SPAN))
+    while not active.is_set():
+        print("WAITING")
+        continue
+    while True:
+        print("GOING")
+        print(counter)
+        counter = counter + 1
 
-    distance = max_pos - min_pos
+        if freq1 < freq2:
+            right_speed = int(MAX_SPEED * diff)
+            left_speed = int(MAX_SPEED * diff * (freq1 / freq2))
+        else:
+            right_speed = int(MAX_SPEED * diff * (freq2 / freq1))
+            left_speed = int(MAX_SPEED * diff)
 
-    first_sleep_time = math.sqrt(distance / ACC)
-    #sleep_time = math.sqrt(2 * distance / ACC)
-
-    #sleep_time = (math.sqrt((2*distance / ACC) + math.pow(speed, 2))) / ACC
-
-    #print(sleep_time)
-
-    # Calculate minimal number of steps needed to represent both waves
-    #steps = math.lcm(int(freq1 * 4), int(freq2 * 4)) + 1
-
-    # Create linear space array for the sin wave generation
-    #x = np.linspace(0, 2 * math.pi, num=steps)
-
-    # Create sine waves
-    #out = np.sin(freq1 * x)
-    #out2 = np.sin(freq2 * x + math.pi)
-
-    # Scale waves to min and max position values
-    #out = minmax_scale(out, (MAX_LOWER_SPAN, MAX_UPPER_SPAN))
-    #out2 = minmax_scale(out2, (MAX_LOWER_SPAN, MAX_UPPER_SPAN))
-    #out = MAX_LOWER_SPAN + (out * (MAX_UPPER_SPAN - MAX_LOWER_SPAN))
-    #out2 = MAX_LOWER_SPAN + (out2 * (MAX_UPPER_SPAN - MAX_LOWER_SPAN))
-
-    #print(sleep_time)
-
-    if freq1 < freq2:
-        right_speed = int(MAX_SPEED * diff)
-        left_speed = int(MAX_SPEED * diff * (freq1 / freq2))
-    else:
-        right_speed = int(MAX_SPEED * diff * (freq2 / freq1))
-        left_speed = int(MAX_SPEED * diff)
-
-    print("Left & right speed to ", left_speed, right_speed)
-
-    # Start timer for run duration
-    t_end = time.time() + dur
-    while time.time() < t_end:
-        #if not first:
-        #    time.sleep(sleep_time)
-        #else:
-        #    time.sleep(first_sleep_time)
-        #    first = False
         if right_position == max_pos:
             right_position = min_pos
         else:
             right_position = max_pos
-        #freq_counter += freq_diff
-        #if freq_counter <= 1:
-        #    pass
-        #else:
         if left_position == max_pos:
             left_position = min_pos
         else:
             left_position = max_pos
-        #    freq_counter = 0
         print("Left, Right", left_position, right_position)
         actuator_move(right_speed, ACC, right_position, left_speed, ACC, left_position)
+        if stop.is_set():
+            print("STOPPING")
+            stop.clear()
+            return
 
 def actuator_sinewave(freq1, freq2, duration):
 
-    sleep_amount = 0.05
+    sleep_amount = 0.01
     left_position = 0
     right_position = 0
 
@@ -254,8 +225,8 @@ def actuator_sinewave(freq1, freq2, duration):
     out = MAX_LOWER_SPAN + (out * (MAX_UPPER_SPAN - MAX_LOWER_SPAN))
     out2 = MAX_LOWER_SPAN + (out2 * (MAX_UPPER_SPAN - MAX_LOWER_SPAN))
 
-    speed = 15000
-    acc = 20000
+    speed = 30000
+    acc = 45000
     right_speed = speed
     left_speed = speed
     right_acc = acc
@@ -308,19 +279,26 @@ def actuator_cleanup():
     actuator_off(ACT.RIGHT)
 
 
-if __name__ == '__main__':
+def loop(riverRun: Event, puzzlingTimes: Event, active:Event, stop: Event):
+    while True:
+        if riverRun.is_set():
+            print("AGANE")
+            oscillate(2, 1, active, stop)
+        elif puzzlingTimes.is_set():
+            pass
+        if stop.is_set():
+            riverRun.clear()
+            active.clear()
+            stop.clear()
+            actuator_cleanup()
+            break
+
+
+def run(riverRun: Event, puzzlingTimes: Event, active: Event, stop: Event):
     try:
-        actuator_startup()
-        time.sleep(2)
-        #time.sleep(3)
-        #actuator_move(2500, 45000, -24500, 2500, 45000, -24500)
-        #actuator_home(ACT.LEFT)
-        #actuator_home(ACT.RIGHT)
-        #actuator_level(15000, 45000)
-        new_oscillate(5, 1, 10, 1)
-        actuator_sinewave(freq1=3, freq2=5, duration=10)
-        actuator_random(speed=15000, acc=30000, span=[-20000, -5000], duration=10)
-        actuator_wave(diff_scale=1, duration=10)
-        actuator_cleanup()
-    except KeyboardInterrupt:
+        while True:
+            actuator_startup()
+            loop(riverRun, puzzlingTimes, active, stop)
+            actuator_cleanup()
+    except Exception as e:
         actuator_cleanup()
