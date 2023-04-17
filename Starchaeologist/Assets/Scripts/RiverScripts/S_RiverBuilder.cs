@@ -22,7 +22,7 @@ public class S_RiverBuilder : MonoBehaviour
     //using system random system for varited seeds in a loop
     System.Random rand = new System.Random();
     private const int maxObsticaleRotation = 35;
-    private const float adjustedObsticleHeight = 0.5f;
+    private const float adjustedObsticleHeight = 0.75f;
 
     private const int testVar = 0;
     // Start is called before the first frame update
@@ -87,16 +87,40 @@ public class S_RiverBuilder : MonoBehaviour
                 GameObject objPoint3 = RiverPlaysection.transform.GetChild(x).GetChild(4).gameObject;
                 float point3Z = RiverPlaysection.transform.GetChild(x).GetChild(4).gameObject.transform.localPosition.z;
 
-                float obj1Rotation;
-                float obj2Rotation;
+                float obj1Rotation = 0.0f;
+                float obj2Rotation = 0.0f;
 
                 //treasure can either be in object positions 1,2, or 3 when chosen the other 2 points will be obstcales
                 if (randomTreasurePos == 0)
                 {
                     //Setting the postion of treasure ob1 in this case and setting the rotations of the 2 other obsticales
                     objPoint1.transform.localPosition = new Vector3(rand.Next(-7, 7 + 1), 0.0f, point1Z);
-                    objPoint2.transform.eulerAngles = new Vector3(0.0f,0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation+1));
-                    objPoint3.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+
+                    if (randomObstacle1.name == "Obst_TreeLeftNS" || randomObstacle1.name == "Obst_TreeLeftS")
+                    {
+                        objPoint2.transform.localPosition = new Vector3(-10,0.0f,point2Z);
+                    }
+                    else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
+                    {
+                        objPoint2.transform.localPosition = new Vector3(10, 0.0f, point2Z);
+                    }
+                    else
+                    {
+                        objPoint2.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                    }
+
+                    if (randomObstacle2.name == "Obst_TreeLeftNS" || randomObstacle2.name == "Obst_TreeLeftS")
+                    {
+                        objPoint3.transform.localPosition = new Vector3(-10, 0.0f, point3Z);
+                    }
+                    else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
+                    {
+                        objPoint3.transform.localPosition = new Vector3(10, 0.0f, point3Z);
+                    }
+                    else
+                    {
+                        objPoint3.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                    }
 
                     //setting the height of all obsticales to correspond with the players height 
                     objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
@@ -134,8 +158,31 @@ public class S_RiverBuilder : MonoBehaviour
                 else if (randomTreasurePos == 1)
                 {
                     objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 7), 0.0f, point2Z);
-                    objPoint1.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
-                    objPoint3.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                    if (randomObstacle1.name == "Obst_TreeLeftNS" || randomObstacle1.name == "Obst_TreeLeftS")
+                    {
+                        objPoint1.transform.localPosition = new Vector3(-10, 0.0f, point1Z);
+                    }
+                    else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeLeftS")
+                    {
+                        objPoint1.transform.localPosition = new Vector3(10, 0.0f, point1Z);
+                    }
+                    else
+                    {
+                        objPoint1.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                    }
+
+                    if (randomObstacle2.name == "Obst_TreeLeftNS" || randomObstacle2.name == "Obst_TreeLeftS")
+                    {
+                        objPoint3.transform.localPosition = new Vector3(-10, 0.0f, point3Z);
+                    }
+                    else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
+                    {
+                        objPoint3.transform.localPosition = new Vector3(10, 0.0f, point3Z);
+                    }
+                    else
+                    {
+                        objPoint3.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                    }
 
                     objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
                     objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint2.transform.position.z);
@@ -162,8 +209,31 @@ public class S_RiverBuilder : MonoBehaviour
                 else
                 {
                     objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 7), 0.0f, point3Z);
-                    objPoint1.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
-                    objPoint2.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                    if (randomObstacle1.name == "Obst_TreeLeftNS" || randomObstacle1.name == "Obst_TreeLeftS")
+                    {
+                        objPoint1.transform.localPosition = new Vector3(-10, 0.0f, point1Z);
+                    }
+                    else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
+                    {
+                        objPoint1.transform.localPosition = new Vector3(10, 0.0f, point1Z);
+                    }
+                    else
+                    {
+                        objPoint1.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                    }
+
+                    if (randomObstacle2.name == "Obst_TreeLeftNS" || randomObstacle2.name == "Obst_TreeLeftS")
+                    {
+                        objPoint2.transform.localPosition = new Vector3(-10, 0.0f, point2Z);
+                    }
+                    else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
+                    {
+                        objPoint2.transform.localPosition = new Vector3(10, 0.0f, point2Z);
+                    }
+                    else
+                    {
+                        objPoint2.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                    }
 
                     objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
                     objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
