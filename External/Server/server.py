@@ -265,6 +265,14 @@ def run(taskQueue: Queue, responseQueue: Queue):
                 sock.SendData("baseScore " + str(int(baseScore)))
                 pass
 
+        elif (decodedMessage[0] == "startCalibrating"):
+            logging.info("Game is trying to calibrate")
+            getCalibration = U.UdpComms.sensorCalibration()
+            if (getCalibration):
+                sock.SendData("calibratedRigsuccess")
+            else:
+                sock.SendData("calibratedRigFailed")
+
         #####################################################################
         ############################## TESTING ##############################
         #####################################################################
