@@ -19,6 +19,9 @@ taskQueue = Queue()
 responseQueue = Queue()
 
 def draw_figure(canvas, figure):
+    if 'animated_plot' in globals():
+        animated_plot.get_tk_widget().forget()
+        plt.close('all')
     figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
     figure_canvas_agg.draw()
     figure_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
@@ -88,8 +91,8 @@ calibrate_start = 0
 #Animated plot test code
 def my_function(i):
     cpu.append(0)
-    #ax.plot(cpu, c='#EC5E29')
-    #ax.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
+    #axes_1.plot(cpu, c='#EC5E29')
+    #axes_1.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
     axes_1 = plt.subplot(2, 1, 1)
     axes_1.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
     axes_2 = plt.subplot(2, 2, 3)
@@ -163,14 +166,16 @@ while True:
     if event == '-difficulty-':
         gameDifficulty=values['-difficulty-']
     if event == '-applyDifficulty-':
-        taskQueue.put(['difficulty', gameDifficulty])
-        print("Difficulty set to", gameDifficulty)
+        taskQueue.put(['updateDiff', gameDifficulty])
     if event == '-clearOutput-':
         window.FindElement('-consoleOutput-').Update('')
     if event == '-clearPlot-':
         cpu.clear()
         plt.clf()
+        fig.clf()
+        plt.cla()
         animated_plot.get_tk_widget().forget()
+        plt.close('all')
         ax1 = plt.subplot(2, 1, 1)
         ax2 = plt.subplot(2, 2, 3)
         ax3 = plt.subplot(2, 2, 4)
