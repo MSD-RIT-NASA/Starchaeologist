@@ -19,9 +19,6 @@ taskQueue = Queue()
 responseQueue = Queue()
 
 def draw_figure(canvas, figure):
-    if 'animated_plot' in globals():
-        animated_plot.get_tk_widget().forget()
-        plt.close('all')
     figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
     figure_canvas_agg.draw()
     figure_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
@@ -94,11 +91,11 @@ def my_function(i):
     #axes_1.plot(cpu, c='#EC5E29')
     #axes_1.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
     axes_1 = plt.subplot(2, 1, 1)
-    axes_1.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
+    axes_1.scatter(len(cpu)-1, cpu[-1], c='#EC5E29', marker='none')
     axes_2 = plt.subplot(2, 2, 3)
-    axes_2.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
+    axes_2.scatter(len(cpu)-1, cpu[-1], c='#EC5E29', marker='none')
     axes_3 = plt.subplot(2, 2, 4)
-    axes_3.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
+    axes_3.scatter(len(cpu)-1, cpu[-1], c='#EC5E29', marker='none')
     fig.tight_layout()
 
 cpu = collections.deque()
@@ -172,10 +169,10 @@ while True:
     if event == '-clearPlot-':
         cpu.clear()
         plt.clf()
-        fig.clf()
-        plt.cla()
+        #fig.clf()
+        #plt.cla()
         animated_plot.get_tk_widget().forget()
-        plt.close('all')
+        #plt.close('all')
         ax1 = plt.subplot(2, 1, 1)
         ax2 = plt.subplot(2, 2, 3)
         ax3 = plt.subplot(2, 2, 4)

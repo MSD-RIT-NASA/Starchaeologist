@@ -166,7 +166,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
 
             elif message[0] == 'updateDiff':
                 game_diff = message[1]
-                logging.info("Difficulty updated to " + game_diff)
+                logging.info("Difficulty updated to " + str(game_diff))
 
             elif message[0] == 'calibrateSensors':
                 logging.info("Game is trying to calibrate")
