@@ -1,16 +1,13 @@
+import os, time, base64
 import PySimpleGUI as sg
 import matplotlib.pyplot as plt
-import os
 from matplotlib.animation import FuncAnimation
-import base64
-import serial.tools.list_ports
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import collections
-import sys
-import time
+import serial.tools.list_ports
 from threading import Thread, Event
-import subprocess
+from queue import Queue
 import server
+import collections
 
 BUTTON_SIZE = (24,1)
 CALIBRATION_COOLDOWN = 5
@@ -18,12 +15,8 @@ CALIBRATION_COOLDOWN = 5
 root_path = os.path.dirname(__file__)
 image_path = root_path+"\\images"
 com_ports = []
-start_server = Event()
-stop_server = Event()
-calibrate_sensors = Event()
-stop_calibration = Event()
-reset_actuators = Event()
-stop_actuators = Event()
+taskQueue = Queue()
+responseQueue = Queue()
 
 def draw_figure(canvas, figure):
     figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
@@ -78,9 +71,9 @@ window = sg.Window("Starchaeologist Control Panel", layout, auto_size_buttons=Tr
 window.maximize()
 
 #initial GUI layout, do not change
-layout = 'level_select'
+current_layout = 'level_select'
 comm_port = ""
-initial_difficulty = 0.5
+gameDifficulty = 0.5
 calibrate_timer = 0
 calibrate_start = 0
 #GUI loop
@@ -124,8 +117,8 @@ while True:
     if event in (None, 'Exit'):
         break
     if event in ('level_select', 'base_layout', 'planet_layout'):
-        window[f'-{layout}-'].update(visible=False)
-        layout = event
+        window[f'-{current_layout}-'].update(visible=False)
+        current_layout = event
         window[f'-{event}-'].update(visible=True)
 
     ###############################################################
@@ -133,9 +126,9 @@ while True:
     ###############################################################
     # Start server thread
     if event == '-start_server-':
-        server_thread = Thread(target=server.run, args=(start_server, stop_server, calibrate_sensors, reset_actuators, stop_actuators))
+        server_thread = Thread(target=server.run, args=(taskQueue, responseQueue))
         server_thread.start()
-        start_server.set()
+        taskQueue.put(['startServer'])
         window['-start_server-'].update(disabled=True)
         window['-stop_server-'].update(disabled=False)
         window['-calibrate_floor-'].update(disabled=False)
@@ -143,40 +136,36 @@ while True:
         window['-stop_actuators-'].update(disabled=False)
     # Kill server thread
     if event == '-stop_server-':
-        stop_server.set()
+        taskQueue.put(['stopServer'])
         window['-stop_server-'].update(disabled=True)
         window['-start_server-'].update(disabled=False)
         window['-calibrate_floor-'].update(disabled=True)
         window['-reset_actuators-'].update(disabled=True)
         window['-stop_actuators-'].update(disabled=True)
     if event == '-calibrate_floor-':
-        #window['-calibrate_floor-'].update(disabled=True)
-        calibrate_sensors.set()
-        #calibrate_start_time = time.time()
-        #calibrate_timer = 1
-        #calibratebuttonDisable = Thread(target=calibrateDisableButton, args=(calibrate_start_time, calibrate_timer, stop_server))
-        #calibratebuttonDisable.start()
+        window['-calibrate_floor-'].update(disabled=True)
+        taskQueue.put(['calibrateFloor'])
     if event == '-com_port-':
         com_port = values['-com_port-']
-        print(com_port)
+        taskQueue.put(['updateCOM', com_port])
     if event in ('-update_com_ports-'):
         updateComPorts()
         window['-com_port-'].update(values=com_ports)
     if event == '-difficulty-':
-        initial_difficulty=values['-difficulty-']
+        gameDifficulty=values['-difficulty-']
     if event == '-applyDifficulty-':
-        #TODO: send int(values['-difficulty-']) to server
-        print("Difficulty set to", initial_difficulty)
+        taskQueue.put(['difficulty', gameDifficulty])
+        print("Difficulty set to", gameDifficulty)
     if event == '-clearOutput-':
         window.FindElement('-consoleOutput-').Update('')
     if event == '-clearPlot-':
         cpu.clear()
         plt.clf()
         animated_plot.get_tk_widget().forget()
-        plt.subplot(2, 1, 1)
-        plt.subplot(2, 2, 3)
-        plt.subplot(2, 2, 4)
+        ax1 = plt.subplot(2, 1, 1)
+        ax2 = plt.subplot(2, 2, 3)
+        ax3 = plt.subplot(2, 2, 4)
         fig.tight_layout()
         animated_plot=draw_figure(base_visualization.TKCanvas, fig)
-stop_server.set()
+taskQueue.put(['stopServer'])
 window.close()

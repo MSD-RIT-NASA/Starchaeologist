@@ -23,7 +23,7 @@ import serial
 from queue import Queue
 import actuator_control
 
-# Create Socket to send and receive data from Board sensor
+# PLANET CONSTANTS
 UDP_IP = "192.168.4.2"
 UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
@@ -33,7 +33,7 @@ def sensorCalibration():
     print("Attempting to calibrate sensors")
     try:
         global ser
-        ser = serial.Serial('COM9', 9600) # will need to change COM # per device
+        ser = serial.Serial(com_port, 9600) # will need to change COM # per device
     except Exception:
         return 0 # game will stop the game and retry to calibrate the sensors
 
@@ -56,7 +56,6 @@ def sensorCalibration():
         print("recalibrating\n")
         ser.close()
         sensorCalibration()
-
 
 # Grab sensor data from the arduino
 def getdata(sock):
@@ -113,183 +112,179 @@ active = Event()
 stop = Event()
 queue = Queue()
 
-def run(start_server: Event, stop_server: Event, calibrate_sensors: Event, reset_actuators: Event, stop_actuators: Event):
-    try:
-        logging.getLogger("pycomm3").setLevel(logging.ERROR)
+def run(taskQueue: Queue, responseQueue: Queue):
 
-        script_path = os.path.abspath(__file__)
-        root_path = os.path.dirname(script_path)
-        csv_root = root_path+"\\Planet Skeleton Data"
+    global com_port
+    global game_diff
 
-        boardSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # need to send any message over to initialize connection to sensor
-        boardSock.sendto(bytes(MESSAGE, "utf-8"), (UDP_IP, UDP_PORT))
-        boardSock.setblocking(0)  # allows the program to pass the blocking recvfrom() for the board
+    logging.getLogger("pycomm3").setLevel(logging.ERROR)
+    logging.Formatter(fmt='%(asctime)s',datefmt='%Y-%m-%d,%H:%M:%S.%f')
 
-        # Create UDP socket to use for sending and receiving data from Unity game
-        
-        sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
+    script_path = os.path.abspath(__file__)
+    root_path = os.path.dirname(script_path)
+    csv_root = root_path+"\\Planet Skeleton Data"
 
-        logging.basicConfig(level=logging.INFO,
-                            format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
-                            datefmt='%Y-%m-%d %H:%M:%S')
+    boardSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # need to send any message over to initialize connection to sensor
+    boardSock.sendto(bytes(MESSAGE, "utf-8"), (UDP_IP, UDP_PORT))
+    boardSock.setblocking(0)  # allows the program to pass the blocking recvfrom() for the board
 
-        logging.info("Starting Server")
-        time.sleep(1)
+    # Create UDP socket to use for sending and receiving data from Unity game
+    sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
 
-        decodedMessage = [20]  # adjust this if more strings and arguments are necessary
-        collect_data = 0
-        timestamp = 0
-        deadTime = 0
+    logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S')
 
-        # Start PLANET data collection
-        #planet_data = Thread(target=planet_data_collection.run, args=(collect, log_data))
-        #planet_data.start()
+    logging.info("Starting Server")
+    time.sleep(1)
 
-        # Actuator control
-        #actuator_thread = Thread(target=actuator_control.run, args=(riverRun, puzzlingTimes, active, stop))
-        #actuator_thread.start()
+    decodedMessage = [20]  # adjust this if more strings and arguments are necessary
+    collect_data = 0
+    timestamp = 0
+    deadTime = 0
 
-        while not start_server.is_set():
-            print("WAITING")
-            continue
+    # Start PLANET data collection
+    #planet_data = Thread(target=planet_data_collection.run, args=(collect, log_data))
+    #planet_data.start()
 
-        while True:
-            # Constantly read message from Unity
-            # logging.info("Waiting For Message From Unity")
-            decodedMessage = sock.ReadReceivedData()  # read data
+    # Actuator control
+    #actuator_thread = Thread(target=actuator_control.run, args=(riverRun, puzzlingTimes, active, stop))
+    #actuator_thread.start()
 
-            # Handles messages that have 2 arguments. Such as "testing 123" -> ['testing2', '123']
-            if (decodedMessage == None):
-                decodedMessage = [' ']
-            else:
-                print(decodedMessage)
+    while True:
 
-            try:
-                decodedMessage = decodedMessage.split(' ')
-            except AttributeError:
-                pass
+        ############################################################
+        #                GUI COMMUNICATION LOOP                    #
+        ############################################################
+        if not taskQueue.empty():
+            message = taskQueue.get()
 
-            # For checking for the board sensor in the minecart level
-            # then sends board data
-            try:
-                boardMsg = boardSock.recvfrom(16)
-                value = boardMsg[0].decode('utf-8')
-                try:
-                    newval = -1.0*(float(value.replace('\U00002013', '-')) * 360 / math.pi * 2)
-                    sock.SendData("boardMove " + str(newval))
-                    # print(newval)
-                except ValueError:
-                    print("Not a float")
-                    pass
-            except BlockingIOError:  # when board sensor is not connected
-                # print("blocked!!")
-                pass
+            if message[0] == 'updateCOM':
+                com_port = message[1]
 
-            # decode message from unity
+            elif message[0] == 'updateDiff':
+                game_diff = message[1]
 
-            if (decodedMessage[0] == "quit"):
-                logging.info("End of Unity Game reached")
-                sock.unityShutDown()
-                break
-
-            elif (decodedMessage[0] == "gameStart"):
-                logging.info("Game has started!")
-                sock.SendData("ACKgameStart")
-                if (decodedMessage.__contains__("deadTime")):
-                    logging.info("Receiving deadTime from Unity")
-                    counter = 0
-                    for data in decodedMessage:
-                        counter += 1
-                        if data == "deadTime":
-                            deadTime = decodedMessage[counter]
-                            print(deadTime)
-                            sock.SendData("ACKdeadTime")
-                    collect.set()
-                if (decodedMessage.__contains__("collectBaseData")):
-                    logging.info("Started actuator subroutines")
-
-                    #if level == riverRun:
-                    riverRun.set()
-                    #elif level == puzzlingTimes:
-                    #puzzlingTimes.set()
-                    stop.clear()
-                    active.set()
-
-                    logging.info("Started to collect data")
-                    sensordata = getdata(sock)
-
-            elif (decodedMessage[0] == "gameOver"):
-                logging.info("Game has ended!")
-                gameOver = True
-                end_time = time.time()
-                timestamp = str(end_time).split('.')[0]
-                stop.set()
-                log_data.set()
-                sock.SendData("ACKgameOver")
-                if (decodedMessage.__contains__("getPlanetScore")):
-                    planetScore = matlab_data.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
-                    print(planetScore)
-                    sock.SendData("planetScore " + str(int(planetScore)))
-                elif (decodedMessage.__contains__("getBaseScore")):
-                    # TODO: implement sending balance score from BASE
-                    baseScore = s.getscore(sensordata)
-                    sock.SendData("baseScore " + str(int(baseScore)))
-                    pass
-            
-            if calibrate_sensors.is_set():
+            elif message[0] == 'calibrateSensors':
                 logging.info("Game is trying to calibrate")
                 getCalibration = sensorCalibration()
                 if (getCalibration):
                     sock.SendData("calibratedRigsuccess")
                 else:
                     sock.SendData("calibratedRigFailed")
-                calibrate_sensors.clear()
 
-            if reset_actuators.is_set():
-                logging.info("Resetting actuators")
-                stop.set()
-                reset_actuators.clear()
+        ############################################################
+        #                UNITY COMMUNICATION LOOP                  #
+        ############################################################
 
-            if stop_actuators.is_set():
-                logging.info("Stopping actuators")
-                stop.set()
-                stop_actuators.clear()
+        # Constantly read message from Unity
+        # logging.info("Waiting For Message From Unity")
+        decodedMessage = sock.ReadReceivedData()  # read data
 
-            #####################################################################
-            ############################## TESTING ##############################
-            #####################################################################
+        # Handles messages that have 2 arguments. Such as "testing 123" -> ['testing2', '123']
+        if (decodedMessage == None):
+            decodedMessage = [' ']
+        else:
+            logging.info("Message Recieved: " + decodedMessage.strip('\n'))
 
-            elif (decodedMessage[0] == "testing1"):
-                print("Testing the communication")
-                sock.SendData("testingPython 5555.00")
+        try:
+            decodedMessage = decodedMessage.split(' ')
+        except AttributeError:
+            pass
 
-            # testing multi argument value strings sending back and forth to game
-            elif (decodedMessage[0] == "testing2"):
-                new_split_message = decodedMessage[1]
-                logging.info("Testing the communication with multi: " + new_split_message)
-                sock.SendData("longStringVerified")
-                decodedMessage = [3]  # reset split message or it'll keep sending this message
+        # For checking for the board sensor in the minecart level
+        # then sends board data
+        try:
+            boardMsg = boardSock.recvfrom(16)
+            value = boardMsg[0].decode('utf-8')
+            try:
+                newval = -1.0*(float(value.replace('\U00002013', '-')) * 360 / math.pi * 2)
+                sock.SendData("boardMove " + str(newval))
+                # print(newval)
+            except ValueError:
+                print("Not a float")
+                pass
+        except BlockingIOError:  # when board sensor is not connected
+            # print("blocked!!")
+            pass
 
-            # testing long string with many arguments
-            # ex: hello 1234 world 5678
-            elif (decodedMessage.__contains__("world")):
-                logging.info("CONTAINS TEST RUN")
+        # decode message from unity
+
+        if (decodedMessage[0] == "quit"):
+            logging.info("End of Unity Game reached")
+            sock.unityShutDown()
+            break
+
+        elif (decodedMessage[0] == "gameStart"):
+            logging.info("Game has started!")
+            sock.SendData("ACKgameStart")
+            if (decodedMessage.__contains__("deadTime")):
+                logging.info("Receiving deadTime from Unity")
                 counter = 0
                 for data in decodedMessage:
                     counter += 1
-                    if data == "world":
-                        print(decodedMessage[counter])
-                    if data == "hello":
-                        print(decodedMessage[counter])
+                    if data == "deadTime":
+                        deadTime = decodedMessage[counter]
+                        print(deadTime)
+                        sock.SendData("ACKdeadTime")
+                collect.set()
+            if (decodedMessage.__contains__("collectBaseData")):
+                logging.info("Started actuator subroutines")
 
-            if stop_server.is_set():
-                logging.info("Stopping Server")
-                stop_server.clear()
-                start_server.clear()
-                break
+                #if level == riverRun:
+                riverRun.set()
+                #elif level == puzzlingTimes:
+                #puzzlingTimes.set()
+                stop.clear()
+                active.set()
 
+                logging.info("Started to collect data")
+                sensordata = getdata(sock)
 
-    except KeyboardInterrupt:
-        print("Exiting Server")
-        return
+        elif (decodedMessage[0] == "gameOver"):
+            logging.info("Game has ended!")
+            gameOver = True
+            end_time = time.time()
+            timestamp = str(end_time).split('.')[0]
+            stop.set()
+            log_data.set()
+            sock.SendData("ACKgameOver")
+            if (decodedMessage.__contains__("getPlanetScore")):
+                planetScore = matlab_data.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
+                print(planetScore)
+                sock.SendData("planetScore " + str(int(planetScore)))
+            elif (decodedMessage.__contains__("getBaseScore")):
+                # TODO: implement sending balance score from BASE
+                baseScore = s.getscore(sensordata)
+                sock.SendData("baseScore " + str(int(baseScore)))
+                pass
+
+        #####################################################################
+        ############################## TESTING ##############################
+        #####################################################################
+
+        elif (decodedMessage[0] == "testing1"):
+            print("Testing the communication")
+            sock.SendData("testingPython 5555.00")
+
+        # testing multi argument value strings sending back and forth to game
+        elif (decodedMessage[0] == "testing2"):
+            new_split_message = decodedMessage[1]
+            logging.info("Testing the communication with multi: " + new_split_message)
+            sock.SendData("longStringVerified")
+            decodedMessage = [3]  # reset split message or it'll keep sending this message
+
+        # testing long string with many arguments
+        # ex: hello 1234 world 5678
+        elif (decodedMessage.__contains__("world")):
+            logging.info("CONTAINS TEST RUN")
+            counter = 0
+            for data in decodedMessage:
+                counter += 1
+                if data == "world":
+                    print(decodedMessage[counter])
+                if data == "hello":
+                    print(decodedMessage[counter])
+
+    logging.info("Stopping Server")
