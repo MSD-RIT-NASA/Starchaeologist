@@ -14,12 +14,12 @@ public class S_ObstacleCollider : MonoBehaviour
         if (other.gameObject.CompareTag("Obstacle"))
         {
 
-            
-            GameObject.Find("Game Manager").GetComponent<S_RiverGame>().ObstacleHit();
-            scoreScript.Instance.hitScore();
-            Debug.Log(scoreScript.Score);
+
+            S_RiverGame riverScript = GameObject.Find("Game Manager").GetComponent<S_RiverGame>();
+            riverScript.ObstacleHit();
             Debug.Log("score updated");
-            scoreText.text = "Score: " + scoreScript.Score;
+            scoreText.text = "Score: " + riverScript.score;
+            Destroy(other.transform.parent.gameObject);
         }
     }
 }
