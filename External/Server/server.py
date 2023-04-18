@@ -29,7 +29,7 @@ UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
 
 com_port = 'COM9'
-game_diff = 0.5
+game_diff = 1.0
 level = ""
 
 def sensorCalibration():

@@ -170,7 +170,7 @@ def get_velocity(actuator):
             return plc.read('Left_ActualVelocity').value
 
 
-def riverRun(freq1, freq2, stop, diff=0.5):
+def riverRun(freq1, freq2, stop, diff=1.0):
 
     left_position = LEVEL_POS
     right_position = LEVEL_POS
@@ -207,10 +207,14 @@ def puzzlingTimes(diff=1.0):
 
     speed = 30000
     level_state = [LEVEL_POS, LEVEL_POS]
-    forward_state = [MAX_UPPER_SPAN, MAX_UPPER_SPAN]
-    backward_state = [MAX_LOWER_SPAN, MAX_LOWER_SPAN]
-    left_state = [MAX_LOWER_SPAN, MAX_UPPER_SPAN]
-    right_state =[MAX_UPPER_SPAN, MAX_LOWER_SPAN]
+
+    min_pos = MIN_LOWER_SPAN + (diff * (MAX_LOWER_SPAN - MIN_LOWER_SPAN))
+    max_pos = MIN_UPPER_SPAN + (diff * (MAX_UPPER_SPAN - MIN_UPPER_SPAN))
+
+    forward_state = [max_pos, max_pos]
+    backward_state = [min_pos, min_pos]
+    left_state = [min_pos, max_pos]
+    right_state =[max_pos, min_pos]
 
     states = [forward_state, backward_state, left_state, right_state]
 
