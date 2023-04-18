@@ -28,6 +28,9 @@ UDP_IP = "192.168.4.2"
 UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
 
+com_port = 'COM9'
+game_diff = 0.5
+
 def sensorCalibration():
     # set up the serial line
     print("Attempting to calibrate sensors")
@@ -74,7 +77,7 @@ def getdata(sock):
         elif data == '' or data == "Calibration completed":
             continue
         else:
-            print(data)
+            #print(data)
             dataEntry.append(float(data))
         # on arduino side, when the game ends then stop getting the score by sending a message to arduino
         decodedMessage = sock.ReadReceivedData()  # read data
@@ -105,12 +108,10 @@ def getdata(sock):
 # PLANET events
 collect = Event()
 log_data = Event()
-# Actuator events
-riverRun = Event()
-puzzlingTimes = Event()
-active = Event()
-stop = Event()
-queue = Queue()
+
+# Actuator queues
+actuator_taskQueue = Queue()
+actuator_responseQueue = Queue()
 
 def run(taskQueue: Queue, responseQueue: Queue):
 
@@ -118,7 +119,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
     global game_diff
 
     logging.getLogger("pycomm3").setLevel(logging.ERROR)
-    logging.Formatter(fmt='%(asctime)s',datefmt='%Y-%m-%d,%H:%M:%S.%f')
+    logging.Formatter(fmt='%(asctime)s',datefmt='%Y-%m-%d,%H:%M:%S')
 
     script_path = os.path.abspath(__file__)
     root_path = os.path.dirname(script_path)
@@ -140,7 +141,6 @@ def run(taskQueue: Queue, responseQueue: Queue):
     time.sleep(1)
 
     decodedMessage = [20]  # adjust this if more strings and arguments are necessary
-    collect_data = 0
     timestamp = 0
     deadTime = 0
 
@@ -149,8 +149,8 @@ def run(taskQueue: Queue, responseQueue: Queue):
     #planet_data.start()
 
     # Actuator control
-    #actuator_thread = Thread(target=actuator_control.run, args=(riverRun, puzzlingTimes, active, stop))
-    #actuator_thread.start()
+    actuator_thread = Thread(target=actuator_control.run, args=(actuator_taskQueue, actuator_responseQueue))
+    actuator_thread.start()
 
     while True:
 
@@ -191,7 +191,8 @@ def run(taskQueue: Queue, responseQueue: Queue):
         if (decodedMessage == None):
             decodedMessage = [' ']
         else:
-            logging.info("Message Recieved: " + decodedMessage.strip('\n'))
+            print(decodedMessage)
+            #logging.info("Message Recieved: " + decodedMessage)
 
         try:
             decodedMessage = decodedMessage.split(' ')
@@ -237,22 +238,22 @@ def run(taskQueue: Queue, responseQueue: Queue):
             if (decodedMessage.__contains__("collectBaseData")):
                 logging.info("Started actuator subroutines")
 
-                #if level == riverRun:
-                riverRun.set()
-                #elif level == puzzlingTimes:
-                #puzzlingTimes.set()
-                stop.clear()
-                active.set()
-
+                #TODO: Get level selected from game
+                level = 'riverRun'
+                if level == 'riverRun':
+                    actuator_taskQueue.put(['riverRun', game_diff])
+                elif level == 'puzzlingTimes':
+                    actuator_taskQueue.put(['puzzlingTimes', game_diff])
                 logging.info("Started to collect data")
-                sensordata = getdata(sock)
+                #sensordata = getdata(sock)
+                sensordata=[]
 
         elif (decodedMessage[0] == "gameOver"):
             logging.info("Game has ended!")
             gameOver = True
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
-            stop.set()
+            actuator_taskQueue.put(['stopActuators'])
             log_data.set()
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
@@ -267,7 +268,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
 
         elif (decodedMessage[0] == "startCalibrating"):
             logging.info("Game is trying to calibrate")
-            getCalibration = U.UdpComms.sensorCalibration()
+            getCalibration = sensorCalibration()
             if (getCalibration):
                 sock.SendData("calibratedRigsuccess")
             else:
@@ -301,3 +302,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
                     print(decodedMessage[counter])
 
     logging.info("Stopping Server")
+
+test1 = Queue()
+test2 = Queue()
+run(test1, test2)

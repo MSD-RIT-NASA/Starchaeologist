@@ -2422,6 +2422,7 @@ MonoBehaviour:
   canvasRef: {fileID: 731994345}
   rightHandRay: {fileID: 7387500813503913827}
   leftHandRay: {fileID: 7723398613073621425}
+  server: {fileID: 0}
   audSrc: {fileID: 0}
   timerCanvas: {fileID: 0}
   scoreDisplay: {fileID: 1614645342}
@@ -6136,6 +6137,7 @@ MonoBehaviour:
   swingPrefab: {fileID: 6053136410156316217, guid: f43ab709a97893141a0dd0d824fd2308, type: 3}
   wallPrefab: {fileID: 3959609665189242549, guid: 0404aa5796c29a1448f08a2a5d725c19, type: 3}
   pillarPrefab: {fileID: 1026845039597745795, guid: 1c7dcb0b9e329424f8d6f7afb7151945, type: 3}
+  InitialColPrefab: {fileID: 2891969409778686666, guid: c728d6507723b054598b5497d3eb14b7, type: 3}
   perimeterPrefab: {fileID: 7982386991539263300, guid: 335e5446d23e62b429e5ad9208aa819b, type: 3}
   roomLength: 2
 --- !u!4 &839490669
@@ -6177,6 +6179,16 @@ MonoBehaviour:
   vignetteWarning: {fileID: 174861213}
   vignetteHit: {fileID: 1266225657}
   UIManager: {fileID: 1883498052}
+  timer: {fileID: 0}
+  server: {fileID: 839490672}
+  countdownText: {fileID: 0}
+  timerCanvas: {fileID: 0}
+  rightHand: {fileID: 0}
+  leftHand: {fileID: 0}
+  rightHandRay: {fileID: 0}
+  leftHandRay: {fileID: 0}
+  countdownCanvas: {fileID: 0}
+  readyCanvas: {fileID: 0}
 --- !u!82 &839490671
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6319,6 +6331,7 @@ MonoBehaviour:
   rxPort: 8000
   txPort: 8001
   mineLevel: {fileID: 0}
+  puzzleLevel: {fileID: 0}
   balanceScoreDisplay: {fileID: 0}
   rank: {fileID: 0}
   endCanas: {fileID: 0}
@@ -8966,11 +8979,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &1201148882 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4370141820558347927, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
-  m_PrefabInstance: {fileID: 4370141819609914693}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1205179628
 GameObject:
   m_ObjectHideFlags: 0
@@ -9932,7 +9940,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289044073}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b20132c0d78814449bfc4032aa8b1734, type: 3}
   m_Name: 
@@ -14181,7 +14189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 7865517847945838345}
-  indicator: {fileID: 1201148882}
+  indicator: {fileID: 0}
   warningLight:
   - {fileID: 981511443}
   - {fileID: 1071392628}

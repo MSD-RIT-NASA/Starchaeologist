@@ -5,7 +5,6 @@ using System.Linq;
 using System;
 public class S_RiverBuilder : MonoBehaviour
 {
-    List<GameObject> spawnedSegments = new List<GameObject>();
     //The river is split into segments each segemnt has 3 empty gameobjects that will hold 
     [SerializeField] GameObject RiverPlaysection;
     [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
@@ -31,6 +30,7 @@ public class S_RiverBuilder : MonoBehaviour
         //GetComponent<UdpSocket>().test = true; 
         
         GetComponent<UdpSocket>().GameMode = 1;
+        GetComponent<UdpSocket>().SendData("gameMode 1");
         GetComponent<UdpSocket>().CalibrateRig = true;
 
         //remove this script

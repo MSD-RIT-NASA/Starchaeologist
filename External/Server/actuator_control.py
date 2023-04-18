@@ -6,6 +6,7 @@ import time
 import math
 from sklearn.preprocessing import minmax_scale
 import threading
+import logging
 import time
 from threading import Event
 from queue import Queue
@@ -168,20 +169,14 @@ def get_velocity(actuator):
             return plc.read('Left_ActualVelocity').value
 
 
-def oscillate(freq1, freq2, active, stop, diff=0.5):
+def riverRun(freq1, freq2, stop, diff=0.5):
 
-    counter = 0
     left_position = LEVEL_POS
     right_position = LEVEL_POS
     min_pos = MIN_LOWER_SPAN + (diff * (MAX_LOWER_SPAN - MIN_LOWER_SPAN))
     max_pos = MIN_UPPER_SPAN + (diff * (MAX_UPPER_SPAN - MIN_UPPER_SPAN))
-    while not active.is_set():
-        print("WAITING")
-        continue
+
     while True:
-        print("GOING")
-        print(counter)
-        counter = counter + 1
 
         if freq1 < freq2:
             right_speed = int(MAX_SPEED * diff)
@@ -198,10 +193,23 @@ def oscillate(freq1, freq2, active, stop, diff=0.5):
             left_position = min_pos
         else:
             left_position = max_pos
-        print("Left, Right", left_position, right_position)
+
         actuator_move(right_speed, ACC, right_position, left_speed, ACC, left_position)
+
         if stop.is_set():
-            print("STOPPING")
+            stop.clear()
+            return
+        
+def puzzlingTimes(stop, left_position, right_position, diff=0.5):
+
+    right_speed = int(MAX_SPEED * diff)
+    left_speed = int(MAX_SPEED * diff)
+
+    while True:
+
+        actuator_move(right_speed, ACC, right_position, left_speed, ACC, left_position)
+
+        if stop.is_set():
             stop.clear()
             return
 
@@ -243,25 +251,29 @@ def actuator_sinewave(freq1, freq2, duration):
                 right_position = int(out[i])
             if int(out2[i]) in (MAX_LOWER_SPAN, MAX_UPPER_SPAN):
                 left_position = int(out2[i])
-            print("Moving left,right to ", left_position, right_position)
+            #print("Moving left,right to ", left_position, right_position)
             actuator_move(speed, acc, right_position, speed, acc, left_position)
 
 
 def actuator_startup():
+
     actuator_on(ACT.LEFT)
     actuator_on(ACT.RIGHT)
+
+    # Sending this move command and checking if the actual position is
+    # updated tells us if we need to HOME the actuators.
     actuator_move(30000, 45000, LEVEL_POS, 30000, 45000, LEVEL_POS)
     time.sleep(1)
     left_position = get_position(ACT.LEFT)
     right_position = get_position(ACT.RIGHT)
     if abs(-LEVEL_POS + left_position) > ACTUATOR_VAR:
+        if DEBUG:
+            logging.info("Sending ACT.LEFT to HOME.")
         actuator_home(ACT.LEFT)
-        if DEBUG:
-            print("Sending ACT.LEFT to HOME.")
     if abs(-LEVEL_POS + right_position) > ACTUATOR_VAR:
-        actuator_home(ACT.RIGHT)
         if DEBUG:
-            print("Sending ACT.RIGHT to HOME.")
+            logging.info("Sending ACT.LEFT to HOME.")
+        actuator_home(ACT.RIGHT)
     actuator_level()
 
 
@@ -279,26 +291,37 @@ def actuator_cleanup():
     actuator_off(ACT.RIGHT)
 
 
-def loop(riverRun: Event, puzzlingTimes: Event, active:Event, stop: Event):
+def loop(taskQueue: Queue, responseQueue: Queue):
+    global stop
+
+    stop = Event()
+
     while True:
-        if riverRun.is_set():
-            print("AGANE")
-            oscillate(2, 1, active, stop)
-        elif puzzlingTimes.is_set():
-            pass
-        if stop.is_set():
-            riverRun.clear()
-            active.clear()
-            stop.clear()
-            actuator_cleanup()
-            break
+        if not taskQueue.empty():
+
+            message = taskQueue.get()
+
+            # River Run message format:
+            # riverRun <difficulty>
+            if message[0] == 'riverRun':
+                riverRun(2, 1, stop, message[2])
+            
+            # Puzzling Times message format:
+            # puzzlingTimes <left position> <right position> <difficulty>
+            if message[0] == 'puzzlingTimes':
+                puzzlingTimes(stop, int(message[1]), int(message[2]), float(message[3]))
+            
+            # Stop message
+            if message[0] == 'stopActuators':
+                stop.set()
+                break
 
 
-def run(riverRun: Event, puzzlingTimes: Event, active: Event, stop: Event):
+def run(taskQueue: Queue, responseQueue: Queue):
     try:
         while True:
             actuator_startup()
-            loop(riverRun, puzzlingTimes, active, stop)
+            loop(taskQueue, responseQueue)
             actuator_cleanup()
     except Exception as e:
         actuator_cleanup()
