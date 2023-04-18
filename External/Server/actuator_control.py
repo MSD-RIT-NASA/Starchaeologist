@@ -199,19 +199,19 @@ def riverRun(freq1, freq2, stop, diff=0.5):
         if stop.is_set():
             stop.clear()
             return
-        
-def puzzlingTimes(stop, left_position, right_position, diff=0.5):
+
+def puzzlingTimes(diff=1.0):
+
+    min_pos = -1500
+    max_pos = -24500
 
     right_speed = int(MAX_SPEED * diff)
     left_speed = int(MAX_SPEED * diff)
 
-    while True:
-
-        actuator_move(right_speed, ACC, right_position, left_speed, ACC, left_position)
-
-        if stop.is_set():
-            stop.clear()
-            return
+    left_position = int(random.uniform(min_pos, max_pos))
+    right_position = int(random.uniform(min_pos, max_pos))
+    print(min_pos, max_pos, right_speed, left_speed, left_position, right_position)
+    actuator_move(right_speed, ACC, right_position, left_speed, ACC, left_position)
 
 def actuator_sinewave(freq1, freq2, duration):
 
@@ -298,18 +298,17 @@ def loop(taskQueue: Queue, responseQueue: Queue):
 
     while True:
         if not taskQueue.empty():
-
             message = taskQueue.get()
 
             # River Run message format:
             # riverRun <difficulty>
             if message[0] == 'riverRun':
-                riverRun(2, 1, stop, message[2])
+                riverRun(2, 1, stop, float(message[1]))
             
             # Puzzling Times message format:
             # puzzlingTimes <left position> <right position> <difficulty>
             if message[0] == 'puzzlingTimes':
-                puzzlingTimes(stop, int(message[1]), int(message[2]), float(message[3]))
+                puzzlingTimes(float(message[1]))
             
             # Stop message
             if message[0] == 'stopActuators':
