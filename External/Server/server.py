@@ -30,6 +30,7 @@ MESSAGE = "We have liftoff!"
 
 com_port = 'COM9'
 game_diff = 0.5
+level = ""
 
 def sensorCalibration():
     # set up the serial line
@@ -117,6 +118,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
 
     global com_port
     global game_diff
+    global level
 
     logging.getLogger("pycomm3").setLevel(logging.ERROR)
     logging.Formatter(fmt='%(asctime)s',datefmt='%Y-%m-%d,%H:%M:%S')
@@ -222,6 +224,15 @@ def run(taskQueue: Queue, responseQueue: Queue):
             sock.unityShutDown()
             break
 
+        if (decodedMessage[0] == "gameMode"):
+            gameModeID = int(decodedMessage[1])
+            if gameModeID == 1:
+                level = "riverRun"
+            elif gameModeID == 2:
+                level = "puzzlingTimes"
+            elif gameModeID == 3:
+                level = "minecartChase"
+
         elif (decodedMessage[0] == "gameStart"):
             logging.info("Game has started!")
             sock.SendData("ACKgameStart")
@@ -239,14 +250,14 @@ def run(taskQueue: Queue, responseQueue: Queue):
                 logging.info("Started actuator subroutines")
 
                 #TODO: Get level selected from game
-                level = 'riverRun'
                 if level == 'riverRun':
                     actuator_taskQueue.put(['riverRun', game_diff])
-                elif level == 'puzzlingTimes':
-                    actuator_taskQueue.put(['puzzlingTimes', game_diff])
                 logging.info("Started to collect data")
                 #sensordata = getdata(sock)
                 sensordata=[]
+        
+        elif (decodedMessage[0] == "trapTriggered"):
+            actuator_taskQueue.put(['puzzlingTimes', game_diff])
 
         elif (decodedMessage[0] == "gameOver"):
             logging.info("Game has ended!")
