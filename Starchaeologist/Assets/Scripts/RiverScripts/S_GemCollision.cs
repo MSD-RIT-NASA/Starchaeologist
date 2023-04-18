@@ -10,15 +10,12 @@ public class S_GemCollision : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //when the player hits the obstacle, tell the game manager to deduct points
-        if (other.gameObject.CompareTag("Tresure"))
+        if (other.gameObject.CompareTag("Treasure"))
         {
-
-
-            GameObject.Find("Game Manager").GetComponent<S_RiverGame>().ObstacleHit();
-            scoreScript.Instance.treasureScore();
-            Debug.Log(scoreScript.Score);
-            Debug.Log("score updated");
-            scoreText.text = "Score: " + scoreScript.Score;
+            S_RiverGame riverScript = GameObject.Find("Game Manager").GetComponent<S_RiverGame>();
+            riverScript.TreaureHit();
+            scoreText.text = "Score: " + riverScript.score;
+            Destroy(other.gameObject);
         }
     }
 }

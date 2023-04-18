@@ -33,6 +33,8 @@ public class S_RiverGame : S_RiverBuilder
     bool playerAttached = false;
     int checkpointIndex = 0;
 
+    public int score = 0;
+
     [SerializeField] Timer timer;
     [SerializeField] UdpSocket server;
     [SerializeField] TMP_Text countdownText;
@@ -69,19 +71,7 @@ public class S_RiverGame : S_RiverBuilder
     // Start is called before the first frame update
     void Start()
     {
-        if (singleton != null && singleton != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            singleton = this;
-        }
-
-        //pythonCommunicator = new HelloRequester();
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
-        //communicateReference = GetComponent<PythonCommunicator>();
-        //pythonCommunicator.Start();
         rightHand.SetActive(false);
         leftHand.SetActive(false);
     }
@@ -204,6 +194,13 @@ public class S_RiverGame : S_RiverBuilder
     public void ObstacleHit()
     {
         Debug.Log("The player hit me!");
+        score-=2;
+    }
+
+    public void TreaureHit()
+    {
+        Debug.Log("The player hit me!");
+        score += 2;
     }
 
     //python communication function
