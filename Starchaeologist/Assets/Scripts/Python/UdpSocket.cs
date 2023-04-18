@@ -265,7 +265,13 @@ public class UdpSocket : MonoBehaviour
                 Debug.Log(baseScore.ToString());
                 //balanceScoreDisplay.text = "" + baseScore;
                 //scoreMgr.DetermineRank(baseScore); //Determines a letter rank based on the score and displays it
-                
+                sendBalScore = baseScore.ToString();
+                Debug.Log("Send Bal Score: " + sendBalScore);
+
+                StopThread();
+
+                scoreMgr.SetBalanceScore(sendBalScore);
+
                 StopThread();
                 break;
 
