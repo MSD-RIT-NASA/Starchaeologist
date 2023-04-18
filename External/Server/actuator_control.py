@@ -25,6 +25,7 @@ MAX_SPEED = 30000
 MAX_LOWER_SPAN = -24500
 MAX_UPPER_SPAN = -500
 
+current_state = [LEVEL_POS, LEVEL_POS]
 
 class ACT(Enum):
     RIGHT = 1
@@ -169,7 +170,7 @@ def get_velocity(actuator):
             return plc.read('Left_ActualVelocity').value
 
 
-def riverRun(freq1, freq2, stop, diff=0.5):
+def riverRun(freq1, freq2, stop, diff=1.0):
 
     left_position = LEVEL_POS
     right_position = LEVEL_POS
@@ -202,16 +203,28 @@ def riverRun(freq1, freq2, stop, diff=0.5):
 
 def puzzlingTimes(diff=1.0):
 
-    min_pos = -1500
-    max_pos = -24500
+    global current_state
 
-    right_speed = int(MAX_SPEED * diff)
-    left_speed = int(MAX_SPEED * diff)
+    speed = 30000
+    level_state = [LEVEL_POS, LEVEL_POS]
 
-    left_position = int(random.uniform(min_pos, max_pos))
-    right_position = int(random.uniform(min_pos, max_pos))
-    print(min_pos, max_pos, right_speed, left_speed, left_position, right_position)
-    actuator_move(right_speed, ACC, right_position, left_speed, ACC, left_position)
+    min_pos = MIN_LOWER_SPAN + (diff * (MAX_LOWER_SPAN - MIN_LOWER_SPAN))
+    max_pos = MIN_UPPER_SPAN + (diff * (MAX_UPPER_SPAN - MIN_UPPER_SPAN))
+
+    forward_state = [max_pos, max_pos]
+    backward_state = [min_pos, min_pos]
+    left_state = [min_pos, max_pos]
+    right_state =[max_pos, min_pos]
+
+    states = [forward_state, backward_state, left_state, right_state]
+
+    index = random.randint(0, len(states)-1)
+    print("Initial Index:", index)
+    while states[index] == current_state:
+        index = random.randint(0, len(states)-1)
+        print("New Index:", index)
+    current_state = states[index]
+    actuator_move(speed, ACC, current_state[0], speed, ACC, current_state[1])
 
 def actuator_sinewave(freq1, freq2, duration):
 
@@ -313,6 +326,8 @@ def loop(taskQueue: Queue, responseQueue: Queue):
             # Stop message
             if message[0] == 'stopActuators':
                 stop.set()
+                time.sleep(1)
+                stop.clear()
                 break
 
 
