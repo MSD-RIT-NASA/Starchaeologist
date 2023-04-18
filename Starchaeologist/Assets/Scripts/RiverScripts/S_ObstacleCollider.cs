@@ -13,13 +13,14 @@ public class S_ObstacleCollider : MonoBehaviour
         //when the player hits the obstacle, tell the game manager to deduct points
         if (other.gameObject.CompareTag("Obstacle"))
         {
-
+            S_RiverGame riverScript = GameObject.Find("Game Manager").GetComponent<S_RiverGame>();
+            riverScript.ObstacleHit();
+            scoreText.text = "Score: " + riverScript.score;
+            if (other.name != "PillarObstacle_Straight")
+            {
+                Destroy(other.transform.parent.gameObject);
+            }
             
-            GameObject.Find("Game Manager").GetComponent<S_RiverGame>().ObstacleHit();
-            scoreScript.Instance.hitScore();
-            Debug.Log(scoreScript.Score);
-            Debug.Log("score updated");
-            scoreText.text = "Score: " + scoreScript.Score;
         }
     }
 }

@@ -40,6 +40,8 @@ public class S_RiverGame : S_RiverBuilder
     [SerializeField] GameObject rightHand;
     [SerializeField] GameObject leftHand;
 
+    public int score = 0;
+
     //python variables
     /*
     PYTHON COMMUNICATION FORMAT
@@ -78,10 +80,7 @@ public class S_RiverGame : S_RiverBuilder
             singleton = this;
         }
 
-        //pythonCommunicator = new HelloRequester();
         raftScript = raftReference.transform.GetChild(1).GetComponent<S_Raft>();
-        //communicateReference = GetComponent<PythonCommunicator>();
-        //pythonCommunicator.Start();
         rightHand.SetActive(false);
         leftHand.SetActive(false);
     }
@@ -204,6 +203,13 @@ public class S_RiverGame : S_RiverBuilder
     public void ObstacleHit()
     {
         Debug.Log("The player hit me!");
+        score -= 2;
+    }
+
+    public void TreaureHit()
+    {
+        Debug.Log("The player hit me!");
+        score += 2;
     }
 
     //python communication function
