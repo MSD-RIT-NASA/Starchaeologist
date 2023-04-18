@@ -30,10 +30,7 @@ public class S_RiverBuilder : MonoBehaviour
 
 
         //SegmentSetup();
-        RiverObjBuilder(adjustedObsticleHeight);
-
-        //give the game script the list of river pieces
-        GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
+        RiverObjBuilder(playerCamera.transform.position.y + adjustedObsticleHeight);
         
         // UdpSocket Testing
         //GetComponent<UdpSocket>().test = true; 

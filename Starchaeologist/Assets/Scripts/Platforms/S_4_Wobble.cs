@@ -42,6 +42,7 @@ public class S_4_Wobble : MonoBehaviour
         secondaryX = Random.Range(-tiltRange, tiltRange);
         secondaryZ = Random.Range(-tiltRange, tiltRange);
         dataReady = true;
+        Debug.Log("Data ready");
     }
 
     // Update is called once per frame
@@ -109,7 +110,7 @@ public class S_4_Wobble : MonoBehaviour
 
         //lerp
         GetComponent<PlateScript>().desiredRotation = Quaternion.Slerp(oldTilt, newTilt, tiltRatio);
-
+        //Debug.Log("set desired rotation");
         //increment time
         tiltRatio = tiltRatio + Time.deltaTime * tiltSpeed;
     }

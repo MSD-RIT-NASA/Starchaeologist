@@ -207,12 +207,15 @@ public class PuzzlingGame : MonoBehaviour
             desiredZ -= 360f;
         }
 
+        Debug.Log(currentScript.trapped);
         if (currentScript.trapped)
         {
-            Vector2 giveRotation = new Vector2(desiredX, desiredZ);
+            //TODO: Reimplement floor rotation on Unity side, currently is handled on Python side
+            //Vector2 giveRotation = new Vector2(desiredX, desiredZ);
             //communicateReference.desiredRotation = giveRotation;
-            //currentScript.transform.parent.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
-            server.SendData
+            //currentScript.transform.parent.transform.localRotation = Quaternion.Euler(giveRotation.x, -45, giveRotation.y);
+            // Quaternion test = Quaternion.Euler(giveRotation.x, -45, giveRotation.y);
+            server.SendData("trapTriggered");
         }
         else
         {

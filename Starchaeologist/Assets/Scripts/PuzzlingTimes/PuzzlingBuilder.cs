@@ -278,7 +278,7 @@ public class PuzzlingBuilder : MonoBehaviour
 
         GetComponent<PuzzlingGame>().ActivatePlates(startScript.adjacentPlates);
 
-        Instantiate(InitialColPrefab, new Vector3(6f, -.5f, 1.05f), Quaternion.identity);
+        Instantiate(InitialColPrefab, new Vector3(6f, -.54f, 1.05f), Quaternion.identity);
 
         //delete the script at the end
         Destroy(this);
