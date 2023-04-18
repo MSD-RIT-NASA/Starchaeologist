@@ -20,7 +20,7 @@ public class S_RiverBuilder : MonoBehaviour
     //using system random system for varited seeds in a loop
     System.Random rand = new System.Random();
     private const int maxObsticaleRotation = 30;
-    private const float adjustedObsticleHeight = 0.6f;
+    private const float adjustedObsticleHeight = 0.5f;
 
     private const int testVar = 0;
     // Start is called before the first frame update
@@ -57,8 +57,8 @@ public class S_RiverBuilder : MonoBehaviour
             if (RiverPlaysection.transform.GetChild(x).childCount > 3)
             {
                 //randomization of obsicaleType,placement, and position/rotation
-                GameObject randomObstacle1 = obstaclePrefabs[rand.Next(0,8)];
-                GameObject randomObstacle2 = obstaclePrefabs[rand.Next(0, 8)];
+                GameObject randomObstacle1 = obstaclePrefabs[rand.Next(0,5)];
+                GameObject randomObstacle2 = obstaclePrefabs[rand.Next(0, 5)];
                 GameObject randomTreasure = treasurePrefabs[rand.Next(0, 8)];
 
                 //each segment will spawn obsticales and treasures at differing orientations
@@ -86,7 +86,7 @@ public class S_RiverBuilder : MonoBehaviour
                 if (randomTreasurePos == 0)
                 {
                     //Setting the postion of treasure ob1 in this case and setting the rotations of the 2 other obsticales
-                    objPoint1.transform.localPosition = new Vector3(rand.Next(-7, 7 + 1), playerHeight - adjustedObsticleHeight, point1Z);
+                    objPoint1.transform.localPosition = new Vector3(rand.Next(-7, 7 + 1), 0.0f, point1Z);
                     GameObject tresure = Instantiate(randomTreasure, objPoint1.transform);
                     Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
                     checkpoints.Add(treasureRiverCheckpoint);
@@ -94,16 +94,16 @@ public class S_RiverBuilder : MonoBehaviour
                     if (randomObstacle1.name == "Obst_TreeLeftNS" || randomObstacle1.name == "Obst_TreeLeftS")
                     {
                         objPoint2.transform.localPosition = new Vector3(-10,0.0f,point2Z);
-                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint2.transform.position.z);
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle1, objPoint2.transform);
-                        checkpoints.Add(new Vector3(-5.9f, 0.0f, ob1.transform.position.z - 1));
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob1.transform.position.z));
                     }
                     else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
                     {
                         objPoint2.transform.localPosition = new Vector3(10, 0.0f, point2Z);
-                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint2.transform.position.z);
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle1, objPoint2.transform);
-                        checkpoints.Add(new Vector3(5.9f, 0.0f, ob1.transform.position.z - 1));
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob1.transform.position.z));
                     }
                     else
                     {
@@ -129,21 +129,21 @@ public class S_RiverBuilder : MonoBehaviour
                     if (randomObstacle2.name == "Obst_TreeLeftNS" || randomObstacle2.name == "Obst_TreeLeftS")
                     {
                         objPoint3.transform.localPosition = new Vector3(-10, 0.0f, point3Z);
-                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint3.transform.position.z);
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
                         GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
-                        checkpoints.Add(new Vector3(-5.9f, 0.0f, ob2.transform.position.z - 1));
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob2.transform.position.z));
                     }
                     else if (randomObstacle2.name == "Obst_TreeRightNS" || randomObstacle2.name == "Obst_TreeRightS")
                     {
                         objPoint3.transform.localPosition = new Vector3(10, 0.0f, point3Z);
-                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint3.transform.position.z);
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
                         GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
-                        checkpoints.Add(new Vector3(5.9f, 0.0f, ob2.transform.position.z - 1));
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob2.transform.position.z));
                     }
                     else
                     {
                         objPoint3.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
-                        objPoint3.transform.position = new Vector3(0.0f, playerHeight, objPoint3.transform.position.z);
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
                         GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
                         float rad2 = obj2Rotation * Mathf.PI / 180.0f;
                         float calculatedAdjacent2 = (playerHeight) * Mathf.Tan(rad2);
@@ -159,28 +159,28 @@ public class S_RiverBuilder : MonoBehaviour
                     if (randomObstacle1.name == "Obst_TreeLeftNS" || randomObstacle1.name == "Obst_TreeLeftS")
                     {
                         objPoint1.transform.localPosition = new Vector3(-10, 0.0f, point1Z);
-                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint1.transform.position.z);
-                        GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
-                        checkpoints.Add(new Vector3(-5.9f, 0.0f, ob1.transform.position.z - 1));
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle2, objPoint1.transform);
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob1.transform.position.z));
                     }
                     else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
                     {
                         objPoint1.transform.localPosition = new Vector3(10, 0.0f, point1Z);
-                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint1.transform.position.z);
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
-                        checkpoints.Add(new Vector3(5.9f, 0.0f, ob1.transform.position.z - 1));
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob1.transform.position.z));
                     }
                     else
                     {
                         objPoint1.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
-                        objPoint1.transform.position = new Vector3(0.0f, playerHeight, objPoint1.transform.position.z);
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
                         float rad1 = obj1Rotation * Mathf.PI / 180.0f;
                         float calculatedAdjacent1 = (playerHeight) * Mathf.Tan(rad1);
                         checkpoints.Add(new Vector3((float)calculatedAdjacent1, 0.0f, ob1.transform.position.z));
                     }
 
-                    objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 7), playerHeight - adjustedObsticleHeight, point2Z);
+                    objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 7), 0.0f, point2Z);
                     GameObject tresure = Instantiate(randomTreasure, objPoint2.transform);
                     Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
                     checkpoints.Add(treasureRiverCheckpoint);
@@ -188,21 +188,21 @@ public class S_RiverBuilder : MonoBehaviour
                     if (randomObstacle2.name == "Obst_TreeLeftNS" || randomObstacle2.name == "Obst_TreeLeftS")
                     {
                         objPoint3.transform.localPosition = new Vector3(-10, 0.0f, point3Z);
-                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint3.transform.position.z);
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
                         GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
-                        checkpoints.Add(new Vector3(-5.9f, 0.0f, ob2.transform.position.z - 1));
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob2.transform.position.z));
                     }
                     else if (randomObstacle2.name == "Obst_TreeRightNS" || randomObstacle2.name == "Obst_TreeRightS")
                     {
                         objPoint3.transform.localPosition = new Vector3(10, 0.0f, point3Z);
-                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint3.transform.position.z);
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
                         GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
-                        checkpoints.Add(new Vector3(5.9f, 0.0f, ob2.transform.position.z - 1));
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob2.transform.position.z));
                     }
                     else
                     {
                         objPoint3.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
-                        objPoint3.transform.position = new Vector3(0.0f, playerHeight, objPoint3.transform.position.z);
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
                         GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
                         float rad2 = obj2Rotation * Mathf.PI / 180.0f;
                         float calculatedAdjacent2 = (playerHeight) * Mathf.Tan(rad2);
@@ -216,21 +216,21 @@ public class S_RiverBuilder : MonoBehaviour
                     if (randomObstacle1.name == "Obst_TreeLeftNS" || randomObstacle1.name == "Obst_TreeLeftS")
                     {
                         objPoint1.transform.localPosition = new Vector3(-10, 0.0f, point1Z);
-                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint1.transform.position.z);
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
-                        checkpoints.Add(new Vector3(-5.9f, 0.0f, ob1.transform.position.z - 1));
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob1.transform.position.z));
                     }
                     else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
                     {
                         objPoint1.transform.localPosition = new Vector3(10, 0.0f, point1Z);
-                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint1.transform.position.z);
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
-                        checkpoints.Add(new Vector3(5.9f, 0.0f, ob1.transform.position.z - 1));
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob1.transform.position.z));
                     }
                     else
                     {
                         objPoint1.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
-                        objPoint1.transform.position = new Vector3(0.0f, playerHeight, objPoint1.transform.position.z);
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
                         float rad1 = obj1Rotation * Mathf.PI / 180.0f;
                         float calculatedAdjacent1 = (playerHeight) * Mathf.Tan(rad1);
@@ -239,29 +239,29 @@ public class S_RiverBuilder : MonoBehaviour
 
                     if (randomObstacle2.name == "Obst_TreeLeftNS" || randomObstacle2.name == "Obst_TreeLeftS")
                     {
-                        objPoint2.transform.localPosition = new Vector3(-10, 0.0f, point2Z - 1);
-                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint2.transform.position.z);
+                        objPoint2.transform.localPosition = new Vector3(-10, 0.0f, point2Z);
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle2, objPoint2.transform);
-                        checkpoints.Add(new Vector3(-5.9f, 0.0f, ob1.transform.position.z));
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob1.transform.position.z));
                     }
                     else if (randomObstacle2.name == "Obst_TreeRightNS" || randomObstacle2.name == "Obst_TreeRightS")
                     {
-                        objPoint2.transform.localPosition = new Vector3(10, 0.0f, point2Z - 1);
-                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight - adjustedObsticleHeight, objPoint2.transform.position.z);
+                        objPoint2.transform.localPosition = new Vector3(10, 0.0f, point2Z);
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle2, objPoint2.transform);
-                        checkpoints.Add(new Vector3(5.9f, 0.0f, ob1.transform.position.z));
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob1.transform.position.z));
                     }
                     else
                     {
                         objPoint2.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
-                        objPoint2.transform.position = new Vector3(0.0f, playerHeight, objPoint2.transform.position.z);
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle2, objPoint2.transform);
                         float rad2 = obj2Rotation * Mathf.PI / 180.0f;
                         float calculatedAdjacent2 = (playerHeight) * Mathf.Tan(rad2);
                         checkpoints.Add(new Vector3((float)calculatedAdjacent2, 0.0f, ob1.transform.position.z));
                     }
 
-                    objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 7), playerHeight - adjustedObsticleHeight, point3Z);
+                    objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 7), 0.0f, point3Z);
                     GameObject tresure = Instantiate(randomTreasure, objPoint3.transform);
                     Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
                     checkpoints.Add(treasureRiverCheckpoint);
