@@ -84,6 +84,7 @@ public class PuzzlingBuilder : MonoBehaviour
         //GetComponent<UdpSocket>().test = true; 
         
         GetComponent<UdpSocket>().GameMode = 2;
+        GetComponent<UdpSocket>().SendData("gameMode 2");
         GetComponent<UdpSocket>().CalibrateRig = true; 
         
 

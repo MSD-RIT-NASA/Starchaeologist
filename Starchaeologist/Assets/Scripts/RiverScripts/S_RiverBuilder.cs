@@ -30,6 +30,7 @@ public class S_RiverBuilder : MonoBehaviour
         //GetComponent<UdpSocket>().test = true; 
         
         GetComponent<UdpSocket>().GameMode = 1;
+        GetComponent<UdpSocket>().SendData("gameMode 1");
         GetComponent<UdpSocket>().CalibrateRig = true;
 
         //remove this script
