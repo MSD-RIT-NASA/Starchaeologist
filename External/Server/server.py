@@ -239,14 +239,15 @@ def run(taskQueue: Queue, responseQueue: Queue):
                 logging.info("Started actuator subroutines")
 
                 #TODO: Get level selected from game
-                level = 'riverRun'
+                level = 'puzzlingTimes'
                 if level == 'riverRun':
                     actuator_taskQueue.put(['riverRun', game_diff])
-                elif level == 'puzzlingTimes':
-                    actuator_taskQueue.put(['puzzlingTimes', game_diff])
                 logging.info("Started to collect data")
                 #sensordata = getdata(sock)
                 sensordata=[]
+        
+        elif (decodedMessage[0] == "trapTriggered"):
+            actuator_taskQueue.put(['puzzlingTimes', game_diff])
 
         elif (decodedMessage[0] == "gameOver"):
             logging.info("Game has ended!")
