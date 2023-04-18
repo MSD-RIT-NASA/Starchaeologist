@@ -121,7 +121,7 @@ public class PuzzlingGame : MonoBehaviour
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
         }
-        Communication();
+        
     }
 
     //called by the plate the player lands on to activate teleportation for adjacent plates
@@ -207,11 +207,15 @@ public class PuzzlingGame : MonoBehaviour
             desiredZ -= 360f;
         }
 
+        Debug.Log(currentScript.trapped);
         if (currentScript.trapped)
         {
-            Vector2 giveRotation = new Vector2(desiredX, desiredZ);
+            //TODO: Reimplement floor rotation on Unity side, currently is handled on Python side
+            //Vector2 giveRotation = new Vector2(desiredX, desiredZ);
             //communicateReference.desiredRotation = giveRotation;
-            //currentScript.transform.parent.transform.localRotation = Quaternion.Euler(communicateReference.realRotation.x, -45, communicateReference.realRotation.y);
+            //currentScript.transform.parent.transform.localRotation = Quaternion.Euler(giveRotation.x, -45, giveRotation.y);
+            // Quaternion test = Quaternion.Euler(giveRotation.x, -45, giveRotation.y);
+            server.SendData("trapTriggered");
         }
         else
         {
@@ -222,6 +226,7 @@ public class PuzzlingGame : MonoBehaviour
     //called from the current platform to set off the trap
     public void TrapTime()
     {
+        Communication();
         Debug.Log("Trap Time");
         int xIndex = (int)currentPosition.x;
         int yIndex = (int)currentPosition.y;

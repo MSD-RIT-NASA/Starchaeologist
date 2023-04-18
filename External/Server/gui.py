@@ -105,14 +105,14 @@ animation = FuncAnimation(plt.gcf(), my_function, interval=1000, cache_frame_dat
 animated_plot=draw_figure(base_visualization.TKCanvas, fig)
 #################################################################################################
 
-def calibrateDisableButton(calibrate_start_time, calibrate_timer, stop_server):
-    while calibrate_timer == 1:
-        if stop_server.is_set():
-            break
-        current_time = time.time()
-        if current_time - calibrate_start_time > CALIBRATION_COOLDOWN:
-            window['-calibrate_floor-'].update(disabled=False)
-            calibrate_timer = 0
+#def calibrateDisableButton(calibrate_start_time, calibrate_timer, stop_server):
+#    while calibrate_timer == 1:
+#        if stop_server.is_set():
+#            break
+#        current_time = time.time()
+#        if current_time - calibrate_start_time > CALIBRATION_COOLDOWN:
+#            window['-calibrate_floor-'].update(disabled=False)
+#            calibrate_timer = 0
 
 while True:
     event, values = window.read()
@@ -139,7 +139,7 @@ while True:
         taskQueue.put(['startServer'])
         window['-start_server-'].update(disabled=True)
         window['-stop_server-'].update(disabled=False)
-        window['-calibrate_floor-'].update(disabled=False)
+        #window['-calibrate_floor-'].update(disabled=False)
         window['-reset_actuators-'].update(disabled=False)
         window['-stop_actuators-'].update(disabled=False)
     # Kill server thread
@@ -147,12 +147,12 @@ while True:
         taskQueue.put(['stopServer'])
         window['-stop_server-'].update(disabled=True)
         window['-start_server-'].update(disabled=False)
-        window['-calibrate_floor-'].update(disabled=True)
+        #window['-calibrate_floor-'].update(disabled=True)
         window['-reset_actuators-'].update(disabled=True)
         window['-stop_actuators-'].update(disabled=True)
-    if event == '-calibrate_floor-':
-        window['-calibrate_floor-'].update(disabled=True)
-        taskQueue.put(['calibrateFloor'])
+    #if event == '-calibrate_floor-':
+    #    window['-calibrate_floor-'].update(disabled=True)
+    #    taskQueue.put(['calibrateFloor'])
     if event == '-apply_com_port-':
         #com_port = values['-com_port-']
         #taskQueue.put(['updateCOM', com_port])
