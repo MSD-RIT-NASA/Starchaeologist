@@ -4,6 +4,7 @@ using System.Globalization;
 using UnityEngine;
 using Unity.XR.CoreUtils;
 using TMPro;
+using UnityEngine.XR.Interaction.Toolkit;
 public class S_RiverGame : S_RiverBuilder
 {
 
@@ -84,6 +85,17 @@ public class S_RiverGame : S_RiverBuilder
         //pythonCommunicator.Start();
         rightHand.SetActive(false);
         leftHand.SetActive(false);
+
+        GameObject startReference = GameObject.Find("RiverPlayerSpawn");
+        for (int i = 0; i < startReference.transform.childCount; i++)
+        {
+            TeleportationArea test = startReference.transform.GetChild(i).GetComponent<TeleportationArea>();
+            if (startReference.transform.GetChild(i).GetComponent<TeleportationArea>())
+            {
+                Destroy(startReference.transform.GetChild(i).GetComponent<TeleportationArea>());
+                //startReference.transform.GetChild(i).GetComponent<TeleportationArea>().enabled = false;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -238,7 +250,8 @@ public class S_RiverGame : S_RiverBuilder
     {
         //Tells the python server the game has started
         //server.GameStart = true;
-
+        timeToMove = true;
+        server.GameStart = true;
         rightHandRay.SetActive(false);
         leftHandRay.SetActive(false);
         timerCanvas.SetActive(false);
