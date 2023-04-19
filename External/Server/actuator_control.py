@@ -170,7 +170,7 @@ def get_velocity(actuator):
             return plc.read('Left_ActualVelocity').value
 
 
-def riverRun(freq1, freq2, stop, diff=1.0):
+def riverRun(freq1, freq2, taskQueue: Queue, responseQueue: Queue, diff=0.5):
 
     left_position = LEVEL_POS
     right_position = LEVEL_POS
@@ -178,6 +178,15 @@ def riverRun(freq1, freq2, stop, diff=1.0):
     max_pos = MIN_UPPER_SPAN + (diff * (MAX_UPPER_SPAN - MIN_UPPER_SPAN))
 
     while True:
+
+        # Stop message
+        if not taskQueue.empty():
+            message = taskQueue.get()
+            if message[0] == 'stopActuators':
+                actuator_cleanup()
+                responseQueue.put("Stopped Actuators")
+                actuator_startup()
+                break
 
         if freq1 < freq2:
             right_speed = int(MAX_SPEED * diff)
@@ -196,10 +205,6 @@ def riverRun(freq1, freq2, stop, diff=1.0):
             left_position = max_pos
 
         actuator_move(right_speed, ACC, right_position, left_speed, ACC, left_position)
-
-        if stop.is_set():
-            stop.clear()
-            return
 
 def puzzlingTimes(diff=1.0):
 
@@ -316,26 +321,25 @@ def loop(taskQueue: Queue, responseQueue: Queue):
             # River Run message format:
             # riverRun <difficulty>
             if message[0] == 'riverRun':
-                riverRun(2, 1, stop, float(message[1]))
+                responseQueue.put("Actuator riverRun")
+                riverRun(2, 1, taskQueue, responseQueue, float(message[1]))
             
             # Puzzling Times message format:
             # puzzlingTimes <left position> <right position> <difficulty>
             if message[0] == 'puzzlingTimes':
+                responseQueue.put("Actuator puzzlingTimes")
                 puzzlingTimes(float(message[1]))
-            
-            # Stop message
-            if message[0] == 'stopActuators':
-                stop.set()
-                time.sleep(1)
-                stop.clear()
-                break
+
+            if message[0] == 'levelActuators':
+                responseQueue.put("Leveling actuators")
+                actuator_level()
 
 
 def run(taskQueue: Queue, responseQueue: Queue):
-    try:
-        while True:
-            actuator_startup()
-            loop(taskQueue, responseQueue)
-            actuator_cleanup()
-    except Exception as e:
+    #try:
+    while True:
+        actuator_startup()
+        loop(taskQueue, responseQueue)
         actuator_cleanup()
+    #except Exception as e:
+    #    actuator_cleanup()

@@ -18,7 +18,7 @@ import socket
 import math
 import os
 from threading import Thread, Event
-import matlab_data, planet_data_collection
+import planet_matlab, base_matlab, planet_data_collection
 import serial
 from queue import Queue
 import actuator_control
@@ -49,6 +49,7 @@ def sensorCalibration():
         # read unity for "Game start" or GAME MODE
         # when the game mode is not 0 or 3 then start the score collection
 
+        #TODO: Replace this with the start button in RiverRun, gameStart in PuzzlingTimes
         val = input("Step on sensor and type 'y' to begin or anykey to quit: ")
         if val == "y":
             ser.write(val.encode()) #arduino code waits for 'y' to start collecting data
@@ -62,15 +63,18 @@ def sensorCalibration():
         sensorCalibration()
 
 # Grab sensor data from the arduino
-def getdata(sock):
+def getdata(ser, stop_sensor: Event, sensor_taskQueue: Queue, sensor_responseQueue: Queue):
 
     balanceData = []
     dataEntry = []
 
-    # TODO: Change this loop to continue for however long the game lasts. 
-    
-    #for i in range(1000):
     while True:
+        if not sensor_taskQueue.empty():
+            message = sensor_taskQueue.get()
+            if message[0] == "stopSensors":
+                print("Stopping sensors")
+                break
+
         data = ser.readline().decode("ISO-8859-1").strip()       # read a byte string
         if data == "END":
             balanceData.append(dataEntry)
@@ -78,33 +82,13 @@ def getdata(sock):
         elif data == '' or data == "Calibration completed":
             continue
         else:
-            #print(data)
             dataEntry.append(float(data))
-        # on arduino side, when the game ends then stop getting the score by sending a message to arduino
-        decodedMessage = sock.ReadReceivedData()  # read data
+    sensor_responseQueue.put(balanceData)
 
-        # Handles messages that have 2 arguments. Such as "testing 123" -> ['testing2', '123']
-        if (decodedMessage == None):
-            decodedMessage = [' ']
-        else:
-            print(decodedMessage)
-
-        try:
-            decodedMessage = decodedMessage.split(' ')
-        except AttributeError:
-            pass
-
-        try: 
-            if (decodedMessage[0] == "gameOver"):
-                stop.set()
-                baseScore = s.getscore(balanceData)
-                print(baseScore)
-                sock.SendData("baseScore " + str(int(baseScore)))
-                break
-        except TypeError:
-            pass
-
-    return balanceData
+    if stop_sensor.is_set():
+        stop_sensor.clear()
+        ser.close()
+        return
 
 # PLANET events
 collect = Event()
@@ -113,6 +97,10 @@ log_data = Event()
 # Actuator queues
 actuator_taskQueue = Queue()
 actuator_responseQueue = Queue()
+
+sensor_taskQueue = Queue()
+sensor_responseQueue = Queue()
+stop_sensor = Event()
 
 def run(taskQueue: Queue, responseQueue: Queue):
 
@@ -182,6 +170,13 @@ def run(taskQueue: Queue, responseQueue: Queue):
                 break
 
         ############################################################
+        #                SENSOR COMMUNICATION LOOP                 #
+        ############################################################
+
+        if not actuator_responseQueue.empty():
+            print(actuator_responseQueue.get())
+
+        ############################################################
         #                UNITY COMMUNICATION LOOP                  #
         ############################################################
 
@@ -249,12 +244,11 @@ def run(taskQueue: Queue, responseQueue: Queue):
             if (decodedMessage.__contains__("collectBaseData")):
                 logging.info("Started actuator subroutines")
 
-                #TODO: Get level selected from game
                 if level == 'riverRun':
                     actuator_taskQueue.put(['riverRun', game_diff])
                 logging.info("Started to collect data")
-                #sensordata = getdata(sock)
-                sensordata=[]
+                getdata_Thread = Thread(target=getdata, args=(ser, stop_sensor, sensor_taskQueue, sensor_responseQueue))
+                getdata_Thread.start()
         
         elif (decodedMessage[0] == "trapTriggered"):
             actuator_taskQueue.put(['puzzlingTimes', game_diff])
@@ -262,21 +256,23 @@ def run(taskQueue: Queue, responseQueue: Queue):
         elif (decodedMessage[0] == "gameOver"):
             logging.info("Game has ended!")
             gameOver = True
+            sensor_taskQueue.put(['stopSensors'])
+            stop_sensor.set()
+            time.sleep(3)
+            if not sensor_responseQueue.empty():
+                balanceData = sensor_responseQueue.get()
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
-            actuator_taskQueue.put(['stopActuators'])
+            actuator_taskQueue.put(['stopActuators', 0.0])
             log_data.set()
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
-                planetScore = matlab_data.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
+                planetScore = planet_matlab.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
                 print(planetScore)
                 sock.SendData("planetScore " + str(int(planetScore)))
             elif (decodedMessage.__contains__("getBaseScore")):
-                # TODO: implement sending balance score from BASE
-                baseScore = s.getscore(sensordata)
+                baseScore = base_matlab.run("data.txt", 'Astronaut', 80.0, 60.0, 40.0)
                 sock.SendData("baseScore " + str(int(baseScore)))
-                pass
-
         elif (decodedMessage[0] == "startCalibrating"):
             logging.info("Game is trying to calibrate")
             getCalibration = sensorCalibration()
