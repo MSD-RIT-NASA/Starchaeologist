@@ -35,6 +35,6 @@ public class RaceGame : MonoBehaviour
 
     public void PlayerCrossed()
     {
-        displayTime.SetText("{0}.{1} Seconds!", secondCount, milliCount);
+        displayTime.SetText("{0} Seconds!", secondCount);
     }
 }
