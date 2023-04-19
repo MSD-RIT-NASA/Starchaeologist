@@ -51,22 +51,22 @@ level_select = [[sg.Button('BASE Levels', font=("Arial", 24, "bold"), image_data
 
 base_col1 = sg.Column([
     [sg.Frame('Control:',[[sg.Button('Start Server', key='-start_server-', size=BUTTON_SIZE, button_color=('white', 'red'))],[sg.Button('Stop Server', key='-stop_server-', size=BUTTON_SIZE, button_color=('white', 'black'), disabled=True)], \
-                                [sg.Button('Reset Actuators', key='-reset_actuators-', size=BUTTON_SIZE, button_color=('white', 'blue'), disabled=True)], \
+                                [sg.Button('Calibrate Floor', key='-calibrate_floor-', size=BUTTON_SIZE, button_color=('white', 'green'), disabled=True)], [sg.Button('Reset Actuators', key='-reset_actuators-', size=BUTTON_SIZE, button_color=('white', 'blue'), disabled=True)], \
                                 [sg.Button('Stop Actuators', key='-stop_actuators-', size=BUTTON_SIZE, button_color=('black', 'yellow'), disabled=True)]], element_justification='center', expand_x=True, expand_y=True),
     sg.Frame('Configuration:',[[sg.Text('COM Port Number:'), sg.DropDown(com_ports, key='-com_port-', auto_size_text=True, readonly=True, size=(7,1))], \
                                [sg.Button('Apply', key='-apply_com_port-', size=BUTTON_SIZE, button_color=('white', 'green'))], \
                                [sg.Button('Update List', key='-update_com_ports-', size=BUTTON_SIZE, button_color=('white', 'black'))], \
                                 [sg.Checkbox('Verbose Output', key='-verbose-', default=False, expand_x=True)]], expand_y=True, element_justification='center')],
     [sg.Frame('Difficulty:', [[sg.Slider(range=(0, 1), resolution=0.01, default_value=0.5, expand_x=True, enable_events=True, orientation='horizontal', key='-difficulty-'), sg.Button('Apply', key='-applyDifficulty-', size=(12,1), button_color=('white', 'blue'))]], expand_x=True, expand_y=True, element_justification='center')],
-    [sg.Frame('Console Output:', [[sg.Button('Save Output to File', key='-saveOutput-', size=BUTTON_SIZE, button_color=('white', 'blue')), sg.Button('Clear Output', key='-clearOutput-', size=BUTTON_SIZE, button_color=('white', 'black'))], [sg.Output(background_color='black', text_color='white', size=(60,30), font=("Courier New", 8), key="-consoleOutput-")]], expand_x=True, expand_y=True, element_justification='center')]],expand_x=True, expand_y=True)
+    [sg.Frame('Console Output:', [[sg.Button('Save Output to File', key='-saveOutput-', size=BUTTON_SIZE, button_color=('white', 'blue')), sg.Button('Clear Output', key='-clearOutput-', size=BUTTON_SIZE, button_color=('white', 'black'))]], expand_x=True, expand_y=True, element_justification='center')]],expand_x=True, expand_y=True)
     #])
 
 base_visualization = sg.Canvas(key='figCanvas')
 
-base_col2 = sg.Column([
-    [sg.Frame('Data Visualization:',[[sg.Button('Save Plots to File', key='-savePlot-', size=BUTTON_SIZE, button_color=('white', 'blue')), sg.Button('Clear Plots', key='-clearPlot-', size=BUTTON_SIZE, button_color=('white', 'black'))], [base_visualization]], expand_x=True, expand_y=True)]],expand_x=True, expand_y=True)
+#base_col2 = sg.Column([
+#    [sg.Frame('Data Visualization:',[[sg.Button('Save Plots to File', key='-savePlot-', size=BUTTON_SIZE, button_color=('white', 'blue')), sg.Button('Clear Plots', key='-clearPlot-', size=BUTTON_SIZE, button_color=('white', 'black'))], [base_visualization]], expand_x=True, expand_y=True)]],expand_x=True, expand_y=True)
 
-base_panel = [[base_col1, base_col2]]
+base_panel = [[base_col1]]
 planet_panel = [[]]
 
 layout = [[sg.Button('Level Select', key='level_select'), sg.Push(), sg.Button('Quit', key='Exit')], \
@@ -88,7 +88,7 @@ calibrate_start = 0
 #Animated plot test code
 def my_function(i):
     cpu.append(0)
-    #axes_1.plot(cpu, c='#EC5E29')
+   #axes_1.plot(cpu, c='#EC5E29')
     #axes_1.scatter(len(cpu)-1, cpu[-1], c='#EC5E29')
     axes_1 = plt.subplot(2, 1, 1)
     axes_1.scatter(len(cpu)-1, cpu[-1], c='#EC5E29', marker='none')
@@ -97,7 +97,6 @@ def my_function(i):
     axes_3 = plt.subplot(2, 2, 4)
     axes_3.scatter(len(cpu)-1, cpu[-1], c='#EC5E29', marker='none')
     fig.tight_layout()
-
 cpu = collections.deque()
 fig = plt.figure(figsize=(12,6), facecolor='#64778d')
 fig.tight_layout()
@@ -105,14 +104,14 @@ animation = FuncAnimation(plt.gcf(), my_function, interval=1000, cache_frame_dat
 animated_plot=draw_figure(base_visualization.TKCanvas, fig)
 #################################################################################################
 
-#def calibrateDisableButton(calibrate_start_time, calibrate_timer, stop_server):
-#    while calibrate_timer == 1:
-#        if stop_server.is_set():
-#            break
-#        current_time = time.time()
-#        if current_time - calibrate_start_time > CALIBRATION_COOLDOWN:
-#            window['-calibrate_floor-'].update(disabled=False)
-#            calibrate_timer = 0
+def calibrateDisableButton(calibrate_start_time, calibrate_timer, stop_server):
+    while calibrate_timer == 1:
+        if stop_server.is_set():
+            break
+        current_time = time.time()
+        if current_time - calibrate_start_time > CALIBRATION_COOLDOWN:
+            window['-calibrate_floor-'].update(disabled=False)
+            calibrate_timer = 0
 
 while True:
     event, values = window.read()
@@ -139,7 +138,7 @@ while True:
         taskQueue.put(['startServer'])
         window['-start_server-'].update(disabled=True)
         window['-stop_server-'].update(disabled=False)
-        #window['-calibrate_floor-'].update(disabled=False)
+        window['-calibrate_floor-'].update(disabled=False)
         window['-reset_actuators-'].update(disabled=False)
         window['-stop_actuators-'].update(disabled=False)
     # Kill server thread
@@ -147,15 +146,13 @@ while True:
         taskQueue.put(['stopServer'])
         window['-stop_server-'].update(disabled=True)
         window['-start_server-'].update(disabled=False)
-        #window['-calibrate_floor-'].update(disabled=True)
+        window['-calibrate_floor-'].update(disabled=True)
         window['-reset_actuators-'].update(disabled=True)
         window['-stop_actuators-'].update(disabled=True)
-    #if event == '-calibrate_floor-':
-    #    window['-calibrate_floor-'].update(disabled=True)
-    #    taskQueue.put(['calibrateFloor'])
+    if event == '-calibrate_floor-':
+        window['-calibrate_floor-'].update(disabled=True)
+        taskQueue.put(['calibrateFloor'])
     if event == '-apply_com_port-':
-        #com_port = values['-com_port-']
-        #taskQueue.put(['updateCOM', com_port])
         applyComPort(values['-com_port-'])
     if event in ('-update_com_ports-'):
         updateComPorts()

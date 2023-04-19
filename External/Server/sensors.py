@@ -73,7 +73,7 @@ def getscore(data):
     # calculate ratio of r
     score = 1 - ((2 * ravg) / (math.sqrt(2) * plate_len))
 
-    return score
+    return score*100
 
 
 # if __name__ == "__main__":
