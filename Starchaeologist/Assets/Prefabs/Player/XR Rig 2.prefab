@@ -889,10 +889,10 @@ MonoBehaviour:
   m_DirectionalAnchorRotationAction:
     m_UseReference: 0
     m_Action:
-      m_Name: 
+      m_Name: Directional Anchor Rotation
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 
+      m_Id: d7624207-9fb5-440f-844c-fc460985b130
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -2926,6 +2926,7 @@ GameObject:
   - component: {fileID: 7865517848709632929}
   - component: {fileID: 7865517848709632935}
   - component: {fileID: 890100591387315649}
+  - component: {fileID: 6184090837877220920}
   m_Layer: 0
   m_Name: XR Rig 2
   m_TagString: Player
@@ -3037,6 +3038,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6184090837877220920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7865517848709632958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b6532ff41830143a7b65c216e9a38c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreCanvas: {fileID: 0}
+  leaderBoard: {fileID: 0}
+  playerDataCanvas: {fileID: 0}
+  keyboardCanvas: {fileID: 0}
+  score: {fileID: 0}
+  playerName: {fileID: 0}
+  date: {fileID: 0}
+  playerDataBox: {fileID: 0}
+  rank: {fileID: 0}
+  leaderboardEntries: []
+  balanceScore: {fileID: 0}
+  storedMessage: {fileID: 0}
+  playerSearchName: {fileID: 0}
+  waitCanvas: {fileID: 0}
 --- !u!1 &7865517849034610668
 GameObject:
   m_ObjectHideFlags: 0
@@ -3263,10 +3290,10 @@ MonoBehaviour:
   m_DirectionalAnchorRotationAction:
     m_UseReference: 0
     m_Action:
-      m_Name: 
+      m_Name: Directional Anchor Rotation
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 
+      m_Id: 05115c6e-4452-4a6a-b3c2-b19810f81ebc
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -3517,14 +3544,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b9aa12663a044546982eb434328db27, type: 3}
---- !u!1 &4079846280006877993 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6177083109153100119, guid: 0b9aa12663a044546982eb434328db27, type: 3}
-  m_PrefabInstance: {fileID: 7865517848513254014}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4079846280006877996 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6177083109153100114, guid: 0b9aa12663a044546982eb434328db27, type: 3}
+  m_PrefabInstance: {fileID: 7865517848513254014}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4079846280006877993 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6177083109153100119, guid: 0b9aa12663a044546982eb434328db27, type: 3}
   m_PrefabInstance: {fileID: 7865517848513254014}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7865517848814891585
@@ -3584,13 +3611,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b9aa12663a044546982eb434328db27, type: 3}
---- !u!4 &4079846279909860115 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6177083109153100114, guid: 0b9aa12663a044546982eb434328db27, type: 3}
-  m_PrefabInstance: {fileID: 7865517848814891585}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4079846279909860118 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6177083109153100119, guid: 0b9aa12663a044546982eb434328db27, type: 3}
+  m_PrefabInstance: {fileID: 7865517848814891585}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4079846279909860115 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6177083109153100114, guid: 0b9aa12663a044546982eb434328db27, type: 3}
   m_PrefabInstance: {fileID: 7865517848814891585}
   m_PrefabAsset: {fileID: 0}

@@ -5,35 +5,51 @@ using System.Linq;
 using System;
 public class S_RiverBuilder : MonoBehaviour
 {
-    List<GameObject> spawnedSegments = new List<GameObject>();
-    //GameObject newSpawn;
+    //The river is split into segments each segemnt has 3 empty gameobjects that will hold 
     [SerializeField] GameObject RiverPlaysection;
     [SerializeField] List<GameObject> obstaclePrefabs = new List<GameObject>();
     [SerializeField] List<GameObject> treasurePrefabs = new List<GameObject>();
+    private bool itemsAdjusted = false;
+
+    [SerializeField] Camera playerCamera;
+
+    [SerializeField] GameObject playerHitBox;
     static protected List<Vector3> checkpoints = new List<Vector3>();
+
+    [SerializeField] S_RiverGame riverGameScript;
     //using system random system for varited seeds in a loop
     System.Random rand = new System.Random();
-    private const int maxObsticaleRotation = 50;
-    private const int maxCheckpointPosX = 7;
+    private const int maxObsticaleRotation = 30;
+    private const float adjustedObsticleHeight = 0.5f;
+
+    private const int testVar = 0;
     // Start is called before the first frame update
     void Start()
     {
-
-
-        //SegmentSetup();
-        RiverObjBuilder();
-
-        //give the game script the list of river pieces
-        GetComponent<S_RiverGame>().riverReferences = spawnedSegments;
+        // UdpSocket Testing
+        //GetComponent<UdpSocket>().test = true; 
+        
         GetComponent<UdpSocket>().GameMode = 1;
-        //GetComponent<UdpSocket>().CalibrateRig = true; 
+        GetComponent<UdpSocket>().SendData("gameMode 1");
+        GetComponent<UdpSocket>().CalibrateRig = true;
 
         //remove this script
-        Destroy(this);
+        //Destroy(this);
+        
+    }
+
+    private void Update()
+    {
+        if (!itemsAdjusted && riverGameScript.timeToMove)
+        {
+            Debug.Log(playerCamera.transform.position.y);
+            RiverObjBuilder(playerCamera.transform.position.y + adjustedObsticleHeight);
+            itemsAdjusted = true;
+        }
     }
 
     //will build all obsticales and treasures found throuough the game
-    private void RiverObjBuilder()
+    private void RiverObjBuilder(float playerHeight)
     {
         for (int x = 0;x < RiverPlaysection.transform.childCount;x++)
         {
@@ -41,10 +57,16 @@ public class S_RiverBuilder : MonoBehaviour
             if (RiverPlaysection.transform.GetChild(x).childCount > 3)
             {
                 //randomization of obsicaleType,placement, and position/rotation
-                //only the rotation of the attack animals are affected
-                GameObject randomObstacle1 = obstaclePrefabs[rand.Next(0,1)];
-                GameObject randomObstacle2 = obstaclePrefabs[rand.Next(0, 1)];
+                GameObject randomObstacle1 = obstaclePrefabs[rand.Next(0,5)];
+                GameObject randomObstacle2 = obstaclePrefabs[rand.Next(0, 5)];
                 GameObject randomTreasure = treasurePrefabs[rand.Next(0, 8)];
+
+                //each segment will spawn obsticales and treasures at differing orientations
+                /*
+                 * 1. treasure, ob1,ob2
+                 *  2. ob1,treasure,ob2
+                 *  3. ob1,ob2,treasure
+                 */
                 int randomTreasurePos = rand.Next(0, 3);
 
                 //variables that make setting local object positions easier
@@ -57,208 +79,200 @@ public class S_RiverBuilder : MonoBehaviour
                 GameObject objPoint3 = RiverPlaysection.transform.GetChild(x).GetChild(4).gameObject;
                 float point3Z = RiverPlaysection.transform.GetChild(x).GetChild(4).gameObject.transform.localPosition.z;
 
-                float obj1Rotation;
-                float obj2Rotation;
+                float obj1Rotation = 0.0f;
+                float obj2Rotation = 0.0f;
 
                 //treasure can either be in object positions 1,2, or 3 when chosen the other 2 points will be obstcales
                 if (randomTreasurePos == 0)
                 {
-                    /*
-                     * Why local space? 
-                     * This object will be the children within each object point
-                     * its easier to set the same local space over and over than place
-                     * and adjust in world space
-                     */
+                    //Setting the postion of treasure ob1 in this case and setting the rotations of the 2 other obsticales
+                    objPoint1.transform.localPosition = new Vector3(rand.Next(-7, 7 + 1), 0.0f, point1Z);
+                    GameObject tresure = Instantiate(randomTreasure, objPoint1.transform);
+                    Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
+                    checkpoints.Add(treasureRiverCheckpoint);
 
-                    objPoint1.transform.localPosition = new Vector3(rand.Next(-maxCheckpointPosX, maxCheckpointPosX + 1), 0, point1Z);
-                    objPoint2.transform.eulerAngles = new Vector3(0.0f,0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation+1));
-                    objPoint3.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
-
-
-
-                    GameObject tresure = Instantiate(randomTreasure,objPoint1.transform);
-                    GameObject ob1 = Instantiate(randomObstacle1, objPoint2.transform);
-                    GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
-
-                    //object point 1 is the first one encountered by the player so as checkpoints go they are handled in order
-                    //player will be moved towards treasures while they are moved away from obsticales
-                    tresure.transform.position.Set(tresure.transform.position.x + 0.5f, tresure.transform.position.y, tresure.transform.position.z);
-                    checkpoints.Add(tresure.transform.position);
-
-
-                    if (obj1Rotation < -maxObsticaleRotation/2)//in excess of -35 degrees we want to move the player closer to the obstcale so it is still a threat
+                    if (randomObstacle1.name == "Obst_TreeLeftNS" || randomObstacle1.name == "Obst_TreeLeftS")
                     {
-                        Vector3 tempObsticale1 = new Vector3(obj1Rotation/maxObsticaleRotation * -maxCheckpointPosX - 7, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
+                        objPoint2.transform.localPosition = new Vector3(-10,0.0f,point2Z);
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle1, objPoint2.transform);
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob1.transform.position.z));
                     }
-                    else if (obj1Rotation < 0)//between 0 and -35 degrees, position should increase to the edges 
+                    else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
                     {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / maxObsticaleRotation) * maxCheckpointPosX, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
+                        objPoint2.transform.localPosition = new Vector3(10, 0.0f, point2Z);
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle1, objPoint2.transform);
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob1.transform.position.z));
                     }
-                    else if (obj1Rotation > maxObsticaleRotation / 2)
+                    else
                     {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / maxObsticaleRotation) * -maxCheckpointPosX + 7, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
-                    }
-                    else if (obj1Rotation >= 0)
-                    {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / maxObsticaleRotation ) * maxCheckpointPosX, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
+                        objPoint2.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+
+                        //setting the height of all obsticales to correspond with the players height 
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
+
+                        //initalizing all treasures 
+                        GameObject ob1 = Instantiate(randomObstacle1, objPoint2.transform);
+
+                        //MathF.Tan() takes radians so we must convert angle from degrees to radians
+                        float rad1 = obj1Rotation * Mathf.PI / 180.0f;
+
+                        //Tan(theta) = opposite(playerHeight)/adjacent(desiredX or Calculaded Adjacent) --> opposite(playerHeight) * Tan(theta) = DesiredX
+                        float calculatedAdjacent1 = (playerHeight) * Mathf.Tan(rad1);
+
+                        //treasure is the same but we set the checkpoints Y to zero so we dont go flying into the air
+
+                        checkpoints.Add(new Vector3((float)calculatedAdjacent1, 0.0f, ob1.transform.position.z));
                     }
 
-                    //
-                    if (obj2Rotation < -maxObsticaleRotation / 2)//in excess of -35 degrees we want to move the player closer to the obstcale so it is still a threat
+                    if (randomObstacle2.name == "Obst_TreeLeftNS" || randomObstacle2.name == "Obst_TreeLeftS")
                     {
-                        Vector3 tempObsticale2 = new Vector3(obj2Rotation / maxObsticaleRotation * -maxCheckpointPosX - 7, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
+                        objPoint3.transform.localPosition = new Vector3(-10, 0.0f, point3Z);
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
+                        GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob2.transform.position.z));
                     }
-                    else if (obj2Rotation < 0)//between 0 and -35 degrees, position should increase to the edges 
+                    else if (randomObstacle2.name == "Obst_TreeRightNS" || randomObstacle2.name == "Obst_TreeRightS")
                     {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / maxObsticaleRotation ) * maxCheckpointPosX, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
+                        objPoint3.transform.localPosition = new Vector3(10, 0.0f, point3Z);
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
+                        GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob2.transform.position.z));
                     }
-                    else if (obj2Rotation > maxObsticaleRotation / 2)
+                    else
                     {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / maxObsticaleRotation) * -maxCheckpointPosX + 7, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
+                        objPoint3.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
+                        GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
+                        float rad2 = obj2Rotation * Mathf.PI / 180.0f;
+                        float calculatedAdjacent2 = (playerHeight) * Mathf.Tan(rad2);
+                        checkpoints.Add(new Vector3((float)calculatedAdjacent2, 0.0f, ob2.transform.position.z));
                     }
-                    else if (obj2Rotation >= 0)
-                    {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / maxObsticaleRotation ) * maxCheckpointPosX, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
-                    }
+                    
+
 
 
                 }
                 else if (randomTreasurePos == 1)
                 {
-                    objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 7), 0, point2Z);
-                    objPoint1.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
-                    objPoint3.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                    if (randomObstacle1.name == "Obst_TreeLeftNS" || randomObstacle1.name == "Obst_TreeLeftS")
+                    {
+                        objPoint1.transform.localPosition = new Vector3(-10, 0.0f, point1Z);
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle2, objPoint1.transform);
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob1.transform.position.z));
+                    }
+                    else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
+                    {
+                        objPoint1.transform.localPosition = new Vector3(10, 0.0f, point1Z);
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob1.transform.position.z));
+                    }
+                    else
+                    {
+                        objPoint1.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
+                        float rad1 = obj1Rotation * Mathf.PI / 180.0f;
+                        float calculatedAdjacent1 = (playerHeight) * Mathf.Tan(rad1);
+                        checkpoints.Add(new Vector3((float)calculatedAdjacent1, 0.0f, ob1.transform.position.z));
+                    }
 
-                    GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
+                    objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 7), 0.0f, point2Z);
                     GameObject tresure = Instantiate(randomTreasure, objPoint2.transform);
-                    GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
+                    Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
+                    checkpoints.Add(treasureRiverCheckpoint);
 
-
-                    if (obj1Rotation < -maxObsticaleRotation / 2)//in excess of -35 degrees we want to move the player closer to the obstcale so it is still a threat
+                    if (randomObstacle2.name == "Obst_TreeLeftNS" || randomObstacle2.name == "Obst_TreeLeftS")
                     {
-                        Vector3 tempObsticale1 = new Vector3(obj1Rotation / maxObsticaleRotation * -maxCheckpointPosX - 7, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
+                        objPoint3.transform.localPosition = new Vector3(-10, 0.0f, point3Z);
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
+                        GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob2.transform.position.z));
                     }
-                    else if (obj1Rotation < 0)//between 0 and -35 degrees, position should increase to the edges 
+                    else if (randomObstacle2.name == "Obst_TreeRightNS" || randomObstacle2.name == "Obst_TreeRightS")
                     {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / maxObsticaleRotation ) * maxCheckpointPosX, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
+                        objPoint3.transform.localPosition = new Vector3(10, 0.0f, point3Z);
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
+                        GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob2.transform.position.z));
                     }
-                    else if (obj1Rotation > maxObsticaleRotation / 2)
+                    else
                     {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / maxObsticaleRotation) * -maxCheckpointPosX + 7, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
-                    }
-                    else if (obj1Rotation >= 0)
-                    {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / maxObsticaleRotation ) * maxCheckpointPosX, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
-                    }
-
-                    tresure.transform.position.Set(tresure.transform.position.x + 0.5f, tresure.transform.position.y, tresure.transform.position.z);
-                    checkpoints.Add(tresure.transform.position);
-
-                    if (obj2Rotation < -maxObsticaleRotation / 2)//in excess of -35 degrees we want to move the player closer to the obstcale so it is still a threat
-                    {
-                        Vector3 tempObsticale2 = new Vector3(obj2Rotation / maxObsticaleRotation * -maxCheckpointPosX - 7, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
-                    }
-                    else if (obj2Rotation < 0)//between 0 and -35 degrees, position should increase to the edges 
-                    {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / maxObsticaleRotation) * maxCheckpointPosX, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
-                    }
-                    else if (obj2Rotation > maxObsticaleRotation / 2)
-                    {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / maxObsticaleRotation) * -maxCheckpointPosX + 7, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
-                    }
-                    else if (obj2Rotation >= 0)
-                    {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / maxObsticaleRotation) * maxCheckpointPosX, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
+                        objPoint3.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                        objPoint3.transform.position = new Vector3(objPoint3.transform.position.x, playerHeight, objPoint3.transform.position.z);
+                        GameObject ob2 = Instantiate(randomObstacle2, objPoint3.transform);
+                        float rad2 = obj2Rotation * Mathf.PI / 180.0f;
+                        float calculatedAdjacent2 = (playerHeight) * Mathf.Tan(rad2);
+                        checkpoints.Add(new Vector3((float)calculatedAdjacent2, 0.0f, ob2.transform.position.z));
                     }
 
                 }
                 else
                 {
-                    objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 7), 0, point3Z);
-                    objPoint1.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
-                    objPoint2.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                    
+                    if (randomObstacle1.name == "Obst_TreeLeftNS" || randomObstacle1.name == "Obst_TreeLeftS")
+                    {
+                        objPoint1.transform.localPosition = new Vector3(-10, 0.0f, point1Z);
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob1.transform.position.z));
+                    }
+                    else if (randomObstacle1.name == "Obst_TreeRightNS" || randomObstacle1.name == "Obst_TreeRightS")
+                    {
+                        objPoint1.transform.localPosition = new Vector3(10, 0.0f, point1Z);
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob1.transform.position.z));
+                    }
+                    else
+                    {
+                        objPoint1.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj1Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                        objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
+                        float rad1 = obj1Rotation * Mathf.PI / 180.0f;
+                        float calculatedAdjacent1 = (playerHeight) * Mathf.Tan(rad1);
+                        checkpoints.Add(new Vector3((float)calculatedAdjacent1, 0.0f, ob1.transform.position.z));
+                    }
 
-                    GameObject ob1 = Instantiate(randomObstacle1, objPoint1.transform);
-                    GameObject ob2 = Instantiate(randomObstacle2, objPoint2.transform);
+                    if (randomObstacle2.name == "Obst_TreeLeftNS" || randomObstacle2.name == "Obst_TreeLeftS")
+                    {
+                        objPoint2.transform.localPosition = new Vector3(-10, 0.0f, point2Z);
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle2, objPoint2.transform);
+                        checkpoints.Add(new Vector3(-5.5f, 0.0f, ob1.transform.position.z));
+                    }
+                    else if (randomObstacle2.name == "Obst_TreeRightNS" || randomObstacle2.name == "Obst_TreeRightS")
+                    {
+                        objPoint2.transform.localPosition = new Vector3(10, 0.0f, point2Z);
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle2, objPoint2.transform);
+                        checkpoints.Add(new Vector3(5.5f, 0.0f, ob1.transform.position.z));
+                    }
+                    else
+                    {
+                        objPoint2.transform.eulerAngles = new Vector3(0.0f, 0.0f, obj2Rotation = rand.Next(-maxObsticaleRotation, maxObsticaleRotation + 1));
+                        objPoint2.transform.position = new Vector3(objPoint2.transform.position.x, playerHeight, objPoint2.transform.position.z);
+                        GameObject ob1 = Instantiate(randomObstacle2, objPoint2.transform);
+                        float rad2 = obj2Rotation * Mathf.PI / 180.0f;
+                        float calculatedAdjacent2 = (playerHeight) * Mathf.Tan(rad2);
+                        checkpoints.Add(new Vector3((float)calculatedAdjacent2, 0.0f, ob1.transform.position.z));
+                    }
+
+                    objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 7), 0.0f, point3Z);
                     GameObject tresure = Instantiate(randomTreasure, objPoint3.transform);
-
-
-                    if (obj1Rotation < -maxObsticaleRotation / 2)//in excess of -35 degrees we want to move the player closer to the obstcale so it is still a threat
-                    {
-                        Vector3 tempObsticale1 = new Vector3(obj1Rotation / maxObsticaleRotation * -maxCheckpointPosX - 7, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
-                    }
-                    else if (obj1Rotation < 0)//between 0 and -35 degrees, position should increase to the edges 
-                    {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / maxObsticaleRotation) * maxCheckpointPosX, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
-                    }
-                    else if (obj1Rotation > maxObsticaleRotation / 2)
-                    {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / maxObsticaleRotation) * -maxCheckpointPosX + 7, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
-                    }
-                    else if (obj1Rotation >= 0)
-                    {
-                        Vector3 tempObsticale1 = new Vector3((obj1Rotation / maxObsticaleRotation ) * maxCheckpointPosX, 0.0f, ob1.transform.position.z);
-                        checkpoints.Add(tempObsticale1);
-                    }
-
-                    //
-                    if (obj2Rotation < -maxObsticaleRotation / 2)//in excess of -35 degrees we want to move the player closer to the obstcale so it is still a threat
-                    {
-                        Vector3 tempObsticale2 = new Vector3(obj2Rotation / maxObsticaleRotation * -maxCheckpointPosX - 7, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
-                    }
-                    else if (obj2Rotation < 0)//between 0 and -35 degrees, position should increase to the edges 
-                    {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / maxObsticaleRotation) * maxCheckpointPosX, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
-                    }
-                    else if (obj2Rotation > maxObsticaleRotation / 2)
-                    {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / maxObsticaleRotation) * -maxCheckpointPosX + 7, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
-                    }
-                    else if (obj2Rotation >= 0)
-                    {
-                        Vector3 tempObsticale2 = new Vector3((obj2Rotation / maxObsticaleRotation ) * maxCheckpointPosX, 0.0f, ob2.transform.position.z);
-                        checkpoints.Add(tempObsticale2);
-                    }
-
-                    tresure.transform.position.Set(tresure.transform.position.x + 0.5f, tresure.transform.position.y, tresure.transform.position.z);
-                    checkpoints.Add(tresure.transform.position);
+                    Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
+                    checkpoints.Add(treasureRiverCheckpoint);
 
 
                 }
             }
-            
         }
-        
-
+        //Adding the end of the river to the checkpoints 
         checkpoints.Add(GameObject.Find("RiverEnd").gameObject.transform.GetChild(1).transform.position);
-        Debug.Log(checkpoints);
-
-        foreach (Vector3 checkpoint in checkpoints)
-        {
-            Debug.Log(checkpoint);
-        }
+        
     }
 
 }

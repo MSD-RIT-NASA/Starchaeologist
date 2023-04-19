@@ -30,7 +30,7 @@ public class PlateScript : MonoBehaviour
     public List<Vector2> adjacentPlates;
     //public bool reactivate = false;
     public bool triggered = false;
-    //PuzzlingGame managerReference;
+    PuzzlingGame managerReference;
     public bool ready = false;
 
     //trap variables
@@ -67,7 +67,7 @@ public class PlateScript : MonoBehaviour
     public void DataSetup(Vector2 getPosition)
     {
         myPosition = getPosition;
-        //managerReference = GameObject.Find("Game Manager").GetComponent<PuzzlingGame>();
+        managerReference = GameObject.Find("Game Manager").GetComponent<PuzzlingGame>();
         twoWayScript = GetComponent<S_2_Wobble>();
         fourWayScript = GetComponent<S_4_Wobble>();
         desiredRotation = Quaternion.Euler(0, 0, 0);
@@ -117,9 +117,10 @@ public class PlateScript : MonoBehaviour
                 }
                 wobbleTimer = 0f;
                 wobbling = false;
-                PuzzlingGame.singleton.TrapTime();
-                //managerReference.TrapTime();
+                //PuzzlingGame.singleton.TrapTime();
+                managerReference.TrapTime();
                 Debug.Log("Back to zero");
+                Destroy(fourWayScript);
             }
             wobbleTimer = wobbleTimer + Time.deltaTime;
         }
@@ -132,26 +133,30 @@ public class PlateScript : MonoBehaviour
         if (other.gameObject.CompareTag("PlayerFoot") && !triggered && ready)
         {
             triggered = true;
-
+            Debug.Log("Player hit plate");
             //deactivate the platforms that are currently active
-            //managerReference.DeactivatePlatforms(myPosition);
-            PuzzlingGame.singleton.DeactivatePlatforms(myPosition);
-
+            managerReference.DeactivatePlatforms(myPosition);
+            //PuzzlingGame.singleton.DeactivatePlatforms(myPosition);
+            Debug.Log("past singleton");
             //if the platform is trapped starting wobbling, if not go straight to activating the adjacent tiles
             if (trapped)
             {
+                Debug.Log("trapped");
                 enabled = true;
                 //randomly  choose a wobble patern
                 wobbling = true;
                 wobbleType = Random.Range(0, 3);
-
+                // PuzzlingGame.singleton.vignetteOn();
+                managerReference.vignetteOn();
                 if(wobbleType == 0)//0 = 2-way wobble
                 {
+                    Debug.Log("call the wobble set");
                     twoWayScript.enabled = true;
                     twoWayScript.DataSetup();//get a new rotation every time
                 }
                 else//1 = 4-way circular, 2 = 4-way figure-8
                 {
+                    Debug.Log("call the wobble set");
                     fourWayScript.enabled = true;
                     fourWayScript.DataSetup(wobbleType);//get a new rotation every time
                 }
@@ -166,8 +171,8 @@ public class PlateScript : MonoBehaviour
     public void Reactivate()
     {
         Debug.Log("you can move now");
-        //managerReference.ActivatePlates(adjacentPlates);
-        PuzzlingGame.singleton.ActivatePlates(adjacentPlates);
+        managerReference.ActivatePlates(adjacentPlates);
+        //PuzzlingGame.singleton.ActivatePlates(adjacentPlates);
         triggered = false;
         enabled = false;
     }
