@@ -67,7 +67,7 @@ public class ScoreData : MonoBehaviour
         {
             currentScene = SceneManager.GetActiveScene().name + "Scores";
         }
-        if (SceneManager.GetActiveScene().name != "MainMenu")
+        if (SceneManager.GetActiveScene().name != "MainMenu") 
         {
             playerName.text = keyboardCanvas.NameEdit;
             date.text = keyboardCanvas.DateEdit;
