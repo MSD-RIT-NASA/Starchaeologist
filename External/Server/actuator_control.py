@@ -283,11 +283,12 @@ def actuator_startup():
     time.sleep(0.25)
     actuator_on(ACT.LEFT)
     actuator_on(ACT.RIGHT)
+    time.sleep(2)
 
     # Sending this move command and checking if the actual position is
     # updated tells us if we need to HOME the actuators.
     actuator_move(30000, 45000, LEVEL_POS, 30000, 45000, LEVEL_POS)
-    time.sleep(1)
+    time.sleep(2)
     left_position = get_position(ACT.LEFT)
     right_position = get_position(ACT.RIGHT)
     if abs(-LEVEL_POS + left_position) > ACTUATOR_VAR:
@@ -322,13 +323,13 @@ def loop(taskQueue: Queue, responseQueue: Queue):
 
     while True:
         if not taskQueue.empty():
-            responseQueue.put("OUTER")
             message = taskQueue.get()
 
             # River Run message format:
             # riverRun <difficulty>
             if message[0] == 'riverRun':
                 responseQueue.put("Actuator riverRun")
+
                 riverRun(2, 1, taskQueue, responseQueue, float(message[1]))
                 responseQueue.put("riverRun Done")
             
@@ -344,20 +345,25 @@ def loop(taskQueue: Queue, responseQueue: Queue):
                 actuator_level()
                 responseQueue.put("Leveling Done")
             
+            if message[0] == 'actuatorCleanup':
+                responseQueue.put("actuatorCleanup")
+                actuator_cleanup()
+                responseQueue.put("actuatorCleanup Done")
+
+            if message[0] == 'actuatorStartup':
+                responseQueue.put("actuatorStartup")
+                actuator_startup()
+                responseQueue.put("actuatorStartup Done")
+            
+            if message[0] == 'actuatorOn':
+                responseQueue.put("actuatorOn")
+                actuator_cleanup()
+                responseQueue.put("actuatorOn Done")
+            
             taskQueue.task_done()
 
 
 def run(taskQueue: Queue, responseQueue: Queue):
-    #try:
     actuator_startup()
     while True:
-        actuator_on(ACT.BOTH)
-        time.sleep(0.25)
-        actuator_level()
-        time.sleep(0.25)
         loop(taskQueue, responseQueue)
-        #actuator_cleanup()
-        actuator_stop()
-        time.sleep(3)
-    #except Exception as e:
-    #    actuator_cleanup()

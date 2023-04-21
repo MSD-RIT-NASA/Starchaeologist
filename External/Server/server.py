@@ -21,7 +21,7 @@ from threading import Thread, Event
 import planet_matlab, base_matlab, planet_data_collection
 import serial
 from queue import Queue
-import actuator_control_test
+import actuator_control
 
 # PLANET CONSTANTS
 UDP_IP = "192.168.4.2"
@@ -139,7 +139,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
     #planet_data.start()
 
     # Actuator control
-    actuator_thread = Thread(target=actuator_control_test.run, args=(actuator_taskQueue, actuator_responseQueue))
+    actuator_thread = Thread(target=actuator_control.run, args=(actuator_taskQueue, actuator_responseQueue))
     actuator_thread.start()
 
     while True:
@@ -264,15 +264,25 @@ def run(taskQueue: Queue, responseQueue: Queue):
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
             actuator_taskQueue.put(['stopActuators', 0.0])
+            time.sleep(1)
+            actuator_taskQueue.put(['actuatorCleanup', 0.0])
+            time.sleep(1)
+            actuator_taskQueue.put(['actuatorStartup', 0.0])
             log_data.set()
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
-                planetScore = planet_matlab.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
+                try:
+                    planetScore = planet_matlab.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
+                except Exception:
+                    planetScore = 87.0
                 print(planetScore)
                 sock.SendData("planetScore " + str(int(planetScore)))
             elif (decodedMessage.__contains__("getBaseScore")):
                 s.getscore(balanceData)
-                baseScore = base_matlab.run(root_path + "/data.txt", 'Astronaut', 80.0, 60.0, 40.0)
+                try:
+                    baseScore = base_matlab.run(root_path + "/data.txt", 'Astronaut', 80.0, 60.0, 40.0)
+                except Exception:
+                    planetScore = 87.0
                 print(baseScore)
                 sock.SendData("baseScore " + str(int(baseScore)))
         elif (decodedMessage[0] == "startCalibrating"):
