@@ -127,6 +127,10 @@ public class S_RiverGame : S_RiverBuilder
 
     void MoveRaft()
     {
+        if (currentSpeed == 0 && checkpointIndex == checkpoints.Count - 1)
+        {
+            checkpoints.Clear();
+        }
         float distance = checkpoints[checkpointIndex].z - raftReference.transform.position.z;
         //accelerate or decelerate the raft
         if (currentSpeed != raftSpeed && !slowDown)
@@ -152,8 +156,6 @@ public class S_RiverGame : S_RiverBuilder
         }
         currentSpeed = Mathf.Clamp(currentSpeed, 0.25f, raftSpeed);
         raftScript.tiltRange = Mathf.Clamp(raftScript.tiltRange, 0.25f, raftScript.maxRange);
-
-        //Vector3.RotateTowards(raftReference.transform.position,checkpoints[checkpointIndex],2*Mathf.PI,Mathf.PI);
 
         desiredDirection = Vector3.Normalize(checkpoints[checkpointIndex] - raftReference.transform.position);
         

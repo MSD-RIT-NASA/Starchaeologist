@@ -21,7 +21,7 @@ public class S_RiverBuilder : MonoBehaviour
     //using system random system for varited seeds in a loop
     System.Random rand = new System.Random();
     private const int maxObsticaleRotation = 30;
-    private const float adjustedObsticleHeight = 0.6f;
+    private const float adjustedObsticleHeight = 0;
 
     private const int testVar = 0;
     // Start is called before the first frame update
