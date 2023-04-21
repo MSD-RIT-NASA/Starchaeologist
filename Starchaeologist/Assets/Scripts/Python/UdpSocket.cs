@@ -104,6 +104,14 @@ public class UdpSocket : MonoBehaviour
     [SerializeField]
     private PuzzlingGame puzzleLevel;
 
+    [SerializeField]
+    private TMP_Text balanceScoreDisplay;
+    [SerializeField]
+    private TMP_Text rank;
+
+    [SerializeField]
+    public Canvas endCanvas;
+
     static public int Score;
 
     [SerializeField]

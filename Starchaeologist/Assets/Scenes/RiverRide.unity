@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44444633, g: 0.5292651, b: 0.57107574, a: 1}
+  m_IndirectSpecularColor: {r: 0.4443031, g: 0.5292234, b: 0.5711157, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2481,6 +2481,10 @@ PrefabInstance:
       propertyPath: score
       value: 
       objectReference: {fileID: 936166877}
+    - target: {fileID: 3230021107588288885, guid: 8ea484728334a9146ba4f8cf351afc67, type: 3}
+      propertyPath: server
+      value: 
+      objectReference: {fileID: 915549105}
     - target: {fileID: 3230021107588288885, guid: 8ea484728334a9146ba4f8cf351afc67, type: 3}
       propertyPath: playerName
       value: 
@@ -5232,7 +5236,6 @@ GameObject:
   - component: {fileID: 915549103}
   - component: {fileID: 915549104}
   - component: {fileID: 915549105}
-  - component: {fileID: 915549107}
   - component: {fileID: 915549106}
   - component: {fileID: 915549108}
   m_Layer: 0
@@ -5344,6 +5347,9 @@ MonoBehaviour:
   txPort: 8001
   mineLevel: {fileID: 0}
   puzzleLevel: {fileID: 0}
+  balanceScoreDisplay: {fileID: 1973703759}
+  rank: {fileID: 1836763186}
+  endCanvas: {fileID: 1279581521}
   scoreMgr: {fileID: 367002593}
 --- !u!114 &915549106
 MonoBehaviour:
@@ -5357,19 +5363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe932724875fcfe4185228d8d5843b24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &915549107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 915549101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eff5ba542d23b74a95dcf93298a93a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vignette: {fileID: 0}
 --- !u!114 &915549108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8265,6 +8258,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6421206980008689130, guid: 4961a09bc52af3949bf518310076ff25, type: 3}
   m_PrefabInstance: {fileID: 1279581515}
   m_PrefabAsset: {fileID: 0}
+--- !u!223 &1279581521 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 6421206980008689134, guid: 4961a09bc52af3949bf518310076ff25, type: 3}
+  m_PrefabInstance: {fileID: 1279581515}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1281767147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8639,7 +8637,7 @@ MonoBehaviour:
   leftHandRay: {fileID: 1852540167}
   server: {fileID: 915549105}
   audSrc: {fileID: 0}
-  timerCanvas: {fileID: 0}
+  timerCanvas: {fileID: 1249764704}
   scoreDisplay: {fileID: 936166877}
   score: {fileID: 1120738683}
 --- !u!1 &1333944952
@@ -11345,6 +11343,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 986322226529370686, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -60.74773
+      objectReference: {fileID: 0}
     - target: {fileID: 986322226529370687, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
       propertyPath: m_CameraYOffset
       value: 1.5
@@ -11434,7 +11436,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 915549105}
     m_RemovedComponents:
-    - {fileID: 8590352298456144458, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
     - {fileID: 3838682904949782434, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
 --- !u!1 &1852540167 stripped
