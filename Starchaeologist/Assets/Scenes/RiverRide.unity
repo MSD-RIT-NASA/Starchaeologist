@@ -10517,6 +10517,64 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 986322225908398618, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
   m_PrefabInstance: {fileID: 1852540166}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1725873220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1725873223}
+  - component: {fileID: 1725873222}
+  - component: {fileID: 1725873221}
+  m_Layer: 0
+  m_Name: StopRaftCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1725873221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725873220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bc4f15dda45dac46959d9f215cc95da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  game: {fileID: 915549104}
+--- !u!65 &1725873222
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725873220}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1725873223
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725873220}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.25, y: 2.32, z: 47.59}
+  m_LocalScale: {x: 11.94, y: 5.641, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1755084057
 GameObject:
   m_ObjectHideFlags: 0
@@ -11423,6 +11481,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -60.76
       objectReference: {fileID: 0}
+    - target: {fileID: 6989429397483468006, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
+      propertyPath: m_TagString
+      value: Raft
+      objectReference: {fileID: 0}
     - target: {fileID: 7543426601423386719, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
       propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Id
       value: e2b076ce-5fc5-4db3-afc2-b58e31c28af5
@@ -12051,6 +12113,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 367002593}
+        m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
+        m_MethodName: SetScoreCanvasActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 915549106}
         m_TargetAssemblyTypeName: Send_Me_Back, Assembly-CSharp
         m_MethodName: GoBack
