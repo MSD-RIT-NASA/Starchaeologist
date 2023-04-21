@@ -29,7 +29,7 @@ UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
 
 com_port = 'COM9'
-game_diff = 0.25
+game_diff = 1.0
 level = ""
 
 def sensorCalibration():
@@ -142,6 +142,12 @@ def run(taskQueue: Queue, responseQueue: Queue):
     actuator_thread = Thread(target=actuator_control.run, args=(actuator_taskQueue, actuator_responseQueue))
     actuator_thread.start()
 
+    time.sleep(1)
+
+    actuator_taskQueue.put(['actuatorCleanup', 0.0])
+    time.sleep(1)
+    actuator_taskQueue.put(['actuatorStartup', 0.0])
+
     while True:
 
         ############################################################
@@ -229,6 +235,10 @@ def run(taskQueue: Queue, responseQueue: Queue):
 
         elif (decodedMessage[0] == "gameStart"):
             logging.info("Game has started!")
+            time.sleep(0.5)
+            actuator_taskQueue.put(['actuatorCleanup', 0.0])
+            time.sleep(0.5)
+            actuator_taskQueue.put(['actuatorStartup', 0.0])
             sock.SendData("ACKgameStart")
             if (decodedMessage.__contains__("deadTime")):
                 logging.info("Receiving deadTime from Unity")
@@ -253,6 +263,11 @@ def run(taskQueue: Queue, responseQueue: Queue):
             actuator_taskQueue.put(['puzzlingTimes', game_diff])
 
         elif (decodedMessage[0] == "gameOver"):
+            actuator_taskQueue.put(['stopActuators', 0.0])
+            time.sleep(0.5)
+            actuator_taskQueue.put(['actuatorCleanup', 0.0])
+            time.sleep(0.5)
+            actuator_taskQueue.put(['actuatorStartup', 0.0])
             logging.info("Game has ended!")
             gameOver = True
             sensor_taskQueue.put(['stopSensors'])
@@ -263,12 +278,6 @@ def run(taskQueue: Queue, responseQueue: Queue):
                 print(balanceData)
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
-            actuator_taskQueue.put(['stopActuators', 0.0])
-            time.sleep(1)
-            actuator_taskQueue.put(['actuatorCleanup', 0.0])
-            time.sleep(1)
-            actuator_taskQueue.put(['actuatorStartup', 0.0])
-            log_data.set()
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
                 try:
