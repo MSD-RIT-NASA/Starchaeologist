@@ -90,20 +90,14 @@ def actuator_off(actuator: ACT):
 # NEVER USE THE STOP FLAG
 def actuator_stop(actuator: ACT):
 
-    #with LogixDriver(IP) as plc:
-    #    if actuator == ACT.RIGHT:
-    #        plc.write(('Cmd_Right_MAS', 1))
-    #    elif actuator == ACT.LEFT:
-    #        plc.write(('Cmd_Left_MAS', 1))
-    #    elif actuator == ACT.BOTH:
-    #        plc.write(('Cmd_Right_MAS', 1))
-    #        plc.write(('Cmd_Left_MAS', 1))
-    time.sleep(0.25)
-    actuator_off(ACT.LEFT)
-    actuator_off(ACT.RIGHT)
-    time.sleep(0.25)
-    actuator_on(ACT.LEFT)
-    actuator_on(ACT.RIGHT)
+    with LogixDriver(IP) as plc:
+        if actuator == ACT.RIGHT:
+            plc.write(('Cmd_Right_MAS', 1))
+        elif actuator == ACT.LEFT:
+            plc.write(('Cmd_Left_MAS', 1))
+        elif actuator == ACT.BOTH:
+            plc.write(('Cmd_Right_MAS', 1))
+            plc.write(('Cmd_Left_MAS', 1))
 
 
 def actuator_home(actuator: ACT):
@@ -188,9 +182,10 @@ def riverRun(freq1, freq2, taskQueue: Queue, responseQueue: Queue, diff=0.5):
         # Stop message
         if not taskQueue.empty():
             message = taskQueue.get()
-            responseQueue.put("Inner")
             if message[0] == 'stopActuators':
-                taskQueue.task_done()
+                actuator_cleanup()
+                responseQueue.put("Stopped Actuators")
+                actuator_startup()
                 break
 
         if freq1 < freq2:
@@ -280,7 +275,6 @@ def actuator_sinewave(freq1, freq2, duration):
 
 def actuator_startup():
 
-    time.sleep(0.25)
     actuator_on(ACT.LEFT)
     actuator_on(ACT.RIGHT)
 
@@ -296,7 +290,7 @@ def actuator_startup():
         actuator_home(ACT.LEFT)
     if abs(-LEVEL_POS + right_position) > ACTUATOR_VAR:
         if DEBUG:
-            logging.info("Sending ACT.RIGHT to HOME.")
+            logging.info("Sending ACT.LEFT to HOME.")
         actuator_home(ACT.RIGHT)
     actuator_level()
 
@@ -322,7 +316,6 @@ def loop(taskQueue: Queue, responseQueue: Queue):
 
     while True:
         if not taskQueue.empty():
-            responseQueue.put("OUTER")
             message = taskQueue.get()
 
             # River Run message format:
@@ -330,34 +323,23 @@ def loop(taskQueue: Queue, responseQueue: Queue):
             if message[0] == 'riverRun':
                 responseQueue.put("Actuator riverRun")
                 riverRun(2, 1, taskQueue, responseQueue, float(message[1]))
-                responseQueue.put("riverRun Done")
             
             # Puzzling Times message format:
             # puzzlingTimes <left position> <right position> <difficulty>
             if message[0] == 'puzzlingTimes':
                 responseQueue.put("Actuator puzzlingTimes")
                 puzzlingTimes(float(message[1]))
-                responseQueue.put("PuzzlingTimes Done")
 
             if message[0] == 'levelActuators':
                 responseQueue.put("Leveling actuators")
                 actuator_level()
-                responseQueue.put("Leveling Done")
-            
-            taskQueue.task_done()
 
 
 def run(taskQueue: Queue, responseQueue: Queue):
     #try:
-    actuator_startup()
     while True:
-        actuator_on(ACT.BOTH)
-        time.sleep(0.25)
-        actuator_level()
-        time.sleep(0.25)
+        actuator_startup()
         loop(taskQueue, responseQueue)
-        #actuator_cleanup()
-        actuator_stop()
-        time.sleep(3)
+        actuator_cleanup()
     #except Exception as e:
     #    actuator_cleanup()

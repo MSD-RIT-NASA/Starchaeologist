@@ -21,7 +21,7 @@ from threading import Thread, Event
 import planet_matlab, base_matlab, planet_data_collection
 import serial
 from queue import Queue
-import actuator_control
+import actuator_control_test
 
 # PLANET CONSTANTS
 UDP_IP = "192.168.4.2"
@@ -29,7 +29,7 @@ UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
 
 com_port = 'COM9'
-game_diff = 1.0
+game_diff = 0.25
 level = ""
 
 def sensorCalibration():
@@ -46,7 +46,7 @@ def sensorCalibration():
     if ser.readline().decode("ISO-8859-1").strip() == "Calibration completed" :
         print("Calibration completed\n")
         # send to start gathering data
-        # read unity for "Game start" or GAME MODE
+        # read unity for "Game start" or G  AME MODE
         # when the game mode is not 0 or 3 then start the score collection
 
         #TODO: Replace this with the start button in RiverRun, gameStart in PuzzlingTimes
@@ -139,10 +139,16 @@ def run(taskQueue: Queue, responseQueue: Queue):
     #planet_data.start()
 
     # Actuator control
-    actuator_thread = Thread(target=actuator_control.run, args=(actuator_taskQueue, actuator_responseQueue))
+    actuator_thread = Thread(target=actuator_control_test.run, args=(actuator_taskQueue, actuator_responseQueue))
     actuator_thread.start()
 
     while True:
+
+        ############################################################
+        #                ACTUATOR COMMUNICATION LOOP               #
+        ############################################################
+        if not actuator_responseQueue.empty():
+            print(actuator_responseQueue.get())
 
         ############################################################
         #                GUI COMMUNICATION LOOP                    #
