@@ -110,7 +110,7 @@ public class UdpSocket : MonoBehaviour
     private TMP_Text rank;
 
     [SerializeField]
-    public Canvas endCanas;
+    public Canvas endCanvas;
 
     static public int Score;
 

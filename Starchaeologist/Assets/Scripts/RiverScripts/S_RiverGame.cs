@@ -238,7 +238,8 @@ public class S_RiverGame : S_RiverBuilder
     {
         //Tells the python server the game has started
         //server.GameStart = true;
-
+        timeToMove = true;
+        server.GameStart = true;
         rightHandRay.SetActive(false);
         leftHandRay.SetActive(false);
         timerCanvas.SetActive(false);

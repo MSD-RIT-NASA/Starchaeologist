@@ -352,7 +352,6 @@ public class PuzzlingGame : MonoBehaviour
 
     public void TimeToMove()
     {
-        
         rightHandRay.SetActive(false);
         leftHandRay.SetActive(false);
         timerCanvas.SetActive(false);
