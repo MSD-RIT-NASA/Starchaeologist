@@ -9,6 +9,10 @@ public class VehicleController : MonoBehaviour
     [SerializeField] private ActionBasedController controller;
     [SerializeField] private Camera PlayerCam;
 
+    //Balance Board Controls
+    [SerializeField] private UdpSocket server;
+    private float boardRot;
+
     public Rigidbody carBody;
 
     public bool inControl = true;
@@ -36,9 +40,20 @@ public class VehicleController : MonoBehaviour
     {
         if(inControl)
         {
+            /*
+            //Tilt Board Controls -----------------------------------
+            boardRot = server.BoardRotation;
+            xTiltValue = boardRot;
+            //-------------------------------------------------------
+            */
+
+
+            //Head set controls -------------------------------------
             //Headset tilt values from main camera 
             xTiltValue = -PlayerCam.transform.localRotation.x;
             zTiltValue = PlayerCam.transform.localRotation.z;
+            //-------------------------------------------------------
+
 
             currentAccel = acccel * xTiltValue + 175f;
 
