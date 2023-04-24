@@ -57,13 +57,14 @@ def getscore(data):
         cords.append(x)
         cords.append(y)
         cords.append(r)
+        cords.append('\n')
         
-        # save coordinate data to txt file for matlab plotting
-        with open("C:/Users/p2201/OneDrive/Desktop/Sheridan-Test-Ground/GPBA/External/Server/data.txt", 'a') as f:
-            for item in cords:
-                f.write(str(item) + " ")
-            f.write("\n")
-        cords = []
+    # save coordinate data to txt file for matlab plotting
+    with open("C:/Users/p2201/OneDrive/Desktop/Sheridan-Test-Ground/GPBA/External/Server/data.txt", 'a') as f:
+        for item in cords:
+            f.write(str(item) + " ")
+        f.write("\n")
+    cords = []
 
     # get the average of r
     #for j in score_calc_array:  

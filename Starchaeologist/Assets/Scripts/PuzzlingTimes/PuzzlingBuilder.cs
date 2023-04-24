@@ -85,8 +85,8 @@ public class PuzzlingBuilder : MonoBehaviour
         
         GetComponent<UdpSocket>().GameMode = 2;
         GetComponent<UdpSocket>().SendData("gameMode 2");
-        GetComponent<UdpSocket>().CalibrateRig = true; 
-        
+        GetComponent<UdpSocket>().CalibrateRig = true;
+        Debug.Log("Callibrate rig should send");
 
         int lengthValue = (roomLength * 3);
 

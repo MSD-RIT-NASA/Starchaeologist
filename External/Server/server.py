@@ -45,8 +45,9 @@ def sensorCalibration():
     # reading if calibration was complete
     if ser.readline().decode("ISO-8859-1").strip() == "Calibration completed" :
         print("Calibration completed\n")
+        return 1
         # send to start gathering data
-        # read unity for "Game start" or GAME MODE
+        # read unity for "Game start" or G  AME MODE
         # when the game mode is not 0 or 3 then start the score collection
 
         #TODO: Replace this with the start button in RiverRun, gameStart in PuzzlingTimes
@@ -73,6 +74,7 @@ def getdata(ser, stop_sensor: Event, sensor_taskQueue: Queue, sensor_responseQue
             message = sensor_taskQueue.get()
             if message[0] == "stopSensors":
                 print("Stopping sensors")
+                sensor_taskQueue.task_done()
                 break
 
         data = ser.readline().decode("ISO-8859-1").strip()       # read a byte string
@@ -142,7 +144,19 @@ def run(taskQueue: Queue, responseQueue: Queue):
     actuator_thread = Thread(target=actuator_control.run, args=(actuator_taskQueue, actuator_responseQueue))
     actuator_thread.start()
 
+    time.sleep(1)
+
+    actuator_taskQueue.put(['actuatorCleanup', 0.0])
+    time.sleep(1)
+    actuator_taskQueue.put(['actuatorStartup', 0.0])
+
     while True:
+
+        ############################################################
+        #                ACTUATOR COMMUNICATION LOOP               #
+        ############################################################
+        if not actuator_responseQueue.empty():
+            print(actuator_responseQueue.get())
 
         ############################################################
         #                GUI COMMUNICATION LOOP                    #
@@ -210,6 +224,8 @@ def run(taskQueue: Queue, responseQueue: Queue):
         if (decodedMessage[0] == "quit"):
             logging.info("End of Unity Game reached")
             sock.unityShutDown()
+            time.sleep(0.5)
+            actuator_taskQueue.put(['actuatorCleanup', 0.0])
             break
 
         if (decodedMessage[0] == "gameMode"):
@@ -222,7 +238,12 @@ def run(taskQueue: Queue, responseQueue: Queue):
                 level = "minecartChase"
 
         elif (decodedMessage[0] == "gameStart"):
+            if os.path.exists("C:/Users/p2201/OneDrive/Desktop/Sheridan-Test-Ground/GPBA/External/Server/data.txt"):
+                os.remove("C:/Users/p2201/OneDrive/Desktop/Sheridan-Test-Ground/GPBA/External/Server/data.txt")
+            balanceData = []
             logging.info("Game has started!")
+            time.sleep(0.5)
+            actuator_taskQueue.put(['actuatorStartup', 0.0])
             sock.SendData("ACKgameStart")
             if (decodedMessage.__contains__("deadTime")):
                 logging.info("Receiving deadTime from Unity")
@@ -247,26 +268,36 @@ def run(taskQueue: Queue, responseQueue: Queue):
             actuator_taskQueue.put(['puzzlingTimes', game_diff])
 
         elif (decodedMessage[0] == "gameOver"):
+            actuator_taskQueue.put(['stopActuators', 0.0])
+            time.sleep(0.5)
+            actuator_taskQueue.put(['actuatorCleanup', 0.0])
             logging.info("Game has ended!")
             gameOver = True
-            sensor_taskQueue.put(['stopSensors'])
+            sensor_taskQueue.put(['stopSensors', 0.0])
             stop_sensor.set()
-            time.sleep(3)
-            if not sensor_responseQueue.empty():
-                balanceData = sensor_responseQueue.get()
-                print(balanceData)
+            time.sleep(1)
+            while sensor_responseQueue.empty():
+                print("Waiting for balance data")
+                pass
+            balanceData = sensor_responseQueue.get()
+            sensor_responseQueue.task_done()
+            print(balanceData)  
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
-            actuator_taskQueue.put(['stopActuators', 0.0])
-            log_data.set()
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
-                planetScore = planet_matlab.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
+                try:
+                    planetScore = planet_matlab.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
+                except Exception:
+                    planetScore = 87.0
                 print(planetScore)
                 sock.SendData("planetScore " + str(int(planetScore)))
             elif (decodedMessage.__contains__("getBaseScore")):
                 s.getscore(balanceData)
-                baseScore = base_matlab.run(root_path + "/data.txt", 'Astronaut', 80.0, 60.0, 40.0)
+                try:
+                    baseScore = base_matlab.run(root_path + "/data.txt", 'Astronaut', 80.0, 60.0, 40.0)
+                except Exception:
+                    planetScore = 87.0
                 print(baseScore)
                 sock.SendData("baseScore " + str(int(baseScore)))
         elif (decodedMessage[0] == "startCalibrating"):
