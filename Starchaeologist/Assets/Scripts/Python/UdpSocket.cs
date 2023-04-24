@@ -378,16 +378,18 @@ public class UdpSocket : MonoBehaviour
         {
             //send messages
 
-            if(gameStart) // the game starts
+            if (gameStart) // the game starts
             {
                 // for levels 1 and 2 this must be called AFTER confirmation of calibration
                 Debug.Log("Game start");
                 string msg = "gameStart";
 
                 // start collecting balance data 
-                if( gameMode == 1 || gameMode == 2 && isCalibrated == true){
+                if ((gameMode == 1 || gameMode == 2)&& isCalibrated == true){
+                    Debug.Log("Game mode = " + gameMode);
                     Debug.Log("Collect Balance Data for BASE");
                     msg += " collectBaseData";
+                    
                 }
                 
                 // send deadtime for minecart score data
