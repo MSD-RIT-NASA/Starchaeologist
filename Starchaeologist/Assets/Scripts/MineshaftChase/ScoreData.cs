@@ -46,7 +46,8 @@ public class ScoreData : MonoBehaviour
     private TMP_InputField playerSearchName;
 
     [SerializeField]
-    private GameObject waitCanvas;
+    private UdpSocket server;
+
 
     // Start is called before the first frame update
     void Start()
@@ -67,7 +68,7 @@ public class ScoreData : MonoBehaviour
         {
             currentScene = SceneManager.GetActiveScene().name + "Scores";
         }
-        if (SceneManager.GetActiveScene().name != "MainMenu")
+        if (SceneManager.GetActiveScene().name != "MainMenu") 
         {
             playerName.text = keyboardCanvas.NameEdit;
             date.text = keyboardCanvas.DateEdit;

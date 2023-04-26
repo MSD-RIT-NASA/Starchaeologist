@@ -11,7 +11,6 @@ import math
 #   N = kg * (m/s)^2
 #   N = kg * 9.81
 def convert_kg_to_N(data):
-
     for i in range(0, len(data), 1):
         for j in range(4):
             #TODO: Fix / catch occasional out of index error
@@ -25,10 +24,11 @@ def convert_kg_to_N(data):
 
 # calculate balance score
 def getscore(data):
+    #print(ndata)
     ndata = convert_kg_to_N(data)
     score_calc_array = []
     cords = []
-    ravg = 0
+    #ravg = 0
 
     # Assume forceplate and sensors are in a square
     # L = length of plate = 0.5381625
@@ -36,7 +36,7 @@ def getscore(data):
 
     # clear data.txt of old data
     # TODO: will later change to export data based on profile name and date
-    with open('data.txt', 'w') as f:
+    with open("C:/Users/p2201/OneDrive/Desktop/Sheridan-Test-Ground/GPBA/External/Server/data.txt", 'w') as f:
         f.write("")
 
     for i in range(0, len(ndata), 1):
@@ -57,23 +57,24 @@ def getscore(data):
         cords.append(x)
         cords.append(y)
         cords.append(r)
+        cords.append('\n')
         
-        # save coordinate data to txt file for matlab plotting
-        with open('data.txt', 'a') as f:
-            for item in cords:
-                f.write(str(item) + " ")
-            f.write("\n")
-        cords = []
+    # save coordinate data to txt file for matlab plotting
+    with open("C:/Users/p2201/OneDrive/Desktop/Sheridan-Test-Ground/GPBA/External/Server/data.txt", 'a') as f:
+        for item in cords:
+            f.write(str(item) + " ")
+        f.write("\n")
+    cords = []
 
     # get the average of r
-    for j in score_calc_array:  
-        ravg += j
-    ravg /= len(score_calc_array)
+    #for j in score_calc_array:  
+    #    ravg += j
+    #ravg /= len(score_calc_array)
 
     # calculate ratio of r
-    score = 1 - ((2 * ravg) / (math.sqrt(2) * plate_len))
+    #score = 1 - ((2 * ravg) / (math.sqrt(2) * plate_len))
 
-    return score
+    #return score*100
 
 
 # if __name__ == "__main__":

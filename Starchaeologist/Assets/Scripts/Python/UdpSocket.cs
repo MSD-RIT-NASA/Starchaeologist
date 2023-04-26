@@ -110,7 +110,7 @@ public class UdpSocket : MonoBehaviour
     private TMP_Text rank;
 
     [SerializeField]
-    public Canvas endCanas;
+    public Canvas endCanvas;
 
     static public int Score;
 
@@ -265,7 +265,13 @@ public class UdpSocket : MonoBehaviour
                 Debug.Log(baseScore.ToString());
                 //balanceScoreDisplay.text = "" + baseScore;
                 //scoreMgr.DetermineRank(baseScore); //Determines a letter rank based on the score and displays it
-                
+                sendBalScore = baseScore.ToString();
+                Debug.Log("Send Bal Score: " + sendBalScore);
+
+                StopThread();
+
+                scoreMgr.SetBalanceScore(sendBalScore);
+
                 StopThread();
                 break;
 
@@ -372,16 +378,18 @@ public class UdpSocket : MonoBehaviour
         {
             //send messages
 
-            if(gameStart) // the game starts
+            if (gameStart) // the game starts
             {
                 // for levels 1 and 2 this must be called AFTER confirmation of calibration
                 Debug.Log("Game start");
                 string msg = "gameStart";
 
                 // start collecting balance data 
-                if( gameMode == 1 || gameMode == 2 && isCalibrated == true){
+                if ((gameMode == 1 || gameMode == 2)&& isCalibrated == true){
+                    Debug.Log("Game mode = " + gameMode);
                     Debug.Log("Collect Balance Data for BASE");
                     msg += " collectBaseData";
+                    
                 }
                 
                 // send deadtime for minecart score data

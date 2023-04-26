@@ -20,7 +20,7 @@ public class Trap_Pillar : MonoBehaviour
     int bladeStep = 0;
     float lerpRatio = 0f;
     bool trapping = false;
-    bool rightSide;
+    public bool rightSide;
     float swingSpeed = 2f;
     float extendSpeed = 2f;
 

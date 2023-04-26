@@ -27,8 +27,8 @@ public class S_RaftCollision : MonoBehaviour
 
             //tell the platform to start moving
             //GameObject.Find("Game Manager").GetComponent<S_RiverGame>().timeToMove = true;
-            S_RiverGame.singleton.timeToMove = true;
-            server.GameStart = true;
+            //S_RiverGame.singleton.timeToMove = true;
+            //server.GameStart = true;
 
             //stop the player from teleporting back onto the raft
             GetComponent<TeleportationAnchor>().enabled = false;

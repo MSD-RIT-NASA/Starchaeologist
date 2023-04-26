@@ -48,6 +48,9 @@ public class PuzzlingBuilder : MonoBehaviour
     List<GameObject> swingList;
     List<GameObject>[] pillarArray;
 
+    [SerializeField]
+    private GameObject InitialColPrefab; 
+
 
     public GameObject perimeterPrefab;
     List<GameObject> perimeterList = new List<GameObject>();
@@ -81,8 +84,9 @@ public class PuzzlingBuilder : MonoBehaviour
         //GetComponent<UdpSocket>().test = true; 
         
         GetComponent<UdpSocket>().GameMode = 2;
-        GetComponent<UdpSocket>().CalibrateRig = true; 
-        
+        GetComponent<UdpSocket>().SendData("gameMode 2");
+        GetComponent<UdpSocket>().CalibrateRig = true;
+        Debug.Log("Callibrate rig should send");
 
         int lengthValue = (roomLength * 3);
 
@@ -274,6 +278,8 @@ public class PuzzlingBuilder : MonoBehaviour
 
 
         GetComponent<PuzzlingGame>().ActivatePlates(startScript.adjacentPlates);
+
+        Instantiate(InitialColPrefab, new Vector3(6f, -.54f, 1.05f), Quaternion.identity);
 
         //delete the script at the end
         Destroy(this);
