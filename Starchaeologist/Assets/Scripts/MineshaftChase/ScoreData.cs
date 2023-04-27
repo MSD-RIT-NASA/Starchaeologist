@@ -46,7 +46,8 @@ public class ScoreData : MonoBehaviour
     private TMP_InputField playerSearchName;
 
     [SerializeField]
-    private GameObject waitCanvas;
+    private UdpSocket server;
+
 
     // Start is called before the first frame update
     void Start()

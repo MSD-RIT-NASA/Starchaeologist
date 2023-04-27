@@ -258,5 +258,10 @@ public class S_RiverGame : S_RiverBuilder
         //GetComponent<UdpSocket>().GameStart = true;
         //Debug.Log("START BUTTON PRESSED");
     }
+
+    public void StopMove()
+    {
+        timeToMove = false;
+    }
 }
 

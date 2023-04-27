@@ -86,7 +86,7 @@ public class S_RiverBuilder : MonoBehaviour
                 if (randomTreasurePos == 0)
                 {
                     //Setting the postion of treasure ob1 in this case and setting the rotations of the 2 other obsticales
-                    objPoint1.transform.localPosition = new Vector3(rand.Next(-7, 7 + 1), 0.0f, point1Z);
+                    objPoint1.transform.localPosition = new Vector3(rand.Next(-7, 7 + 1), 2.0f, point1Z);
                     GameObject tresure = Instantiate(randomTreasure, objPoint1.transform);
                     Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
                     checkpoints.Add(treasureRiverCheckpoint);
@@ -158,7 +158,7 @@ public class S_RiverBuilder : MonoBehaviour
                 {
                     if (randomObstacle1.name == "Obst_TreeLeftNS" || randomObstacle1.name == "Obst_TreeLeftS")
                     {
-                        objPoint1.transform.localPosition = new Vector3(-10, 0.0f, point1Z);
+                        objPoint1.transform.localPosition = new Vector3(-10, 2.0f, point1Z);
                         objPoint1.transform.position = new Vector3(objPoint1.transform.position.x, playerHeight, objPoint1.transform.position.z);
                         GameObject ob1 = Instantiate(randomObstacle2, objPoint1.transform);
                         checkpoints.Add(new Vector3(-5.5f, 0.0f, ob1.transform.position.z));
@@ -261,7 +261,7 @@ public class S_RiverBuilder : MonoBehaviour
                         checkpoints.Add(new Vector3((float)calculatedAdjacent2, 0.0f, ob1.transform.position.z));
                     }
 
-                    objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 7), 0.0f, point3Z);
+                    objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 7), 2.0f, point3Z);
                     GameObject tresure = Instantiate(randomTreasure, objPoint3.transform);
                     Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
                     checkpoints.Add(treasureRiverCheckpoint);
