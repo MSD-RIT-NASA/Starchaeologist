@@ -24,7 +24,7 @@ from queue import Queue
 import actuator_control
 
 # PLANET CONSTANTS
-UDP_IP = "192.168.4.2"
+UDP_IP = "192.168.4.7"
 UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
 
@@ -104,6 +104,9 @@ sensor_taskQueue = Queue()
 sensor_responseQueue = Queue()
 stop_sensor = Event()
 
+planet_taskQueue = Queue()
+planet_responseQueue = Queue()
+
 def run(taskQueue: Queue, responseQueue: Queue):
 
     global com_port
@@ -137,12 +140,12 @@ def run(taskQueue: Queue, responseQueue: Queue):
     deadTime = 0
 
     # Start PLANET data collection
-    #planet_data = Thread(target=planet_data_collection.run, args=(collect, log_data))
-    #planet_data.start()
+    planet_data = Thread(target=planet_data_collection.run, args=(collect, log_data))
+    planet_data.start()
 
     # Actuator control
-    actuator_thread = Thread(target=actuator_control.run, args=(actuator_taskQueue, actuator_responseQueue))
-    actuator_thread.start()
+    #actuator_thread = Thread(target=actuator_control.run, args=(actuator_taskQueue, actuator_responseQueue))
+    #actuator_thread.start()
 
     time.sleep(1)
 
@@ -254,6 +257,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
                         deadTime = decodedMessage[counter]
                         print(deadTime)
                         sock.SendData("ACKdeadTime")
+                planet_taskQueue.put(['startRecording', 0.0])
                 collect.set()
             if (decodedMessage.__contains__("collectBaseData")):
                 logging.info("Started actuator subroutines")
@@ -268,26 +272,32 @@ def run(taskQueue: Queue, responseQueue: Queue):
             actuator_taskQueue.put(['puzzlingTimes', game_diff])
 
         elif (decodedMessage[0] == "gameOver"):
-            actuator_taskQueue.put(['stopActuators', 0.0])
-            time.sleep(0.5)
-            actuator_taskQueue.put(['actuatorCleanup', 0.0])
-            logging.info("Game has ended!")
+            log_data.set()
+            time.sleep(2)
+            #actuator_taskQueue.put(['stopActuators', 0.0])
+            #time.sleep(0.5)
+            #actuator_taskQueue.put(['actuatorCleanup', 0.0])
+            #logging.info("Game has ended!")
             gameOver = True
-            sensor_taskQueue.put(['stopSensors', 0.0])
-            stop_sensor.set()
-            time.sleep(1)
-            while sensor_responseQueue.empty():
-                print("Waiting for balance data")
-                pass
-            balanceData = sensor_responseQueue.get()
-            sensor_responseQueue.task_done()
-            print(balanceData)  
+            #sensor_taskQueue.put(['stopSensors', 0.0])
+            #stop_sensor.set()
+            #time.sleep(1)
+            #while sensor_responseQueue.empty():
+            #    print("Waiting for balance data")
+            #    pass
+            #alanceData = sensor_responseQueue.get()
+            #sensor_responseQueue.task_done()
+            #print(balanceData)  
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
                 try:
-                    planetScore = planet_matlab.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
+                    skeleton_path = 'C:/Users/p2201/OneDrive/Desktop/PLANET_Time/GPBA/External/Server/Planet Skeleton Data'
+                    directory_names = [x[0] for x in os.walk(skeleton_path)]
+                    timestamp_directory = directory_names[-1]
+                    # float(deadTime)
+                    planetScore = planet_matlab.run(timestamp_directory, "Astronaut", 5.0, 0.0, 1.5, 3.0, 10.0, 15.0)
                 except Exception:
                     planetScore = 87.0
                 print(planetScore)
