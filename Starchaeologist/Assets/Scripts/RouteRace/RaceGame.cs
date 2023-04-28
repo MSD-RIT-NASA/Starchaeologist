@@ -8,6 +8,7 @@ public class RaceGame : MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] GameObject finishLine;
     [SerializeField] TMP_Text displayTime;
+    [SerializeField] TMP_Text collisions;
 
     public float minuteCount;
     public float secondCount;
@@ -36,5 +37,8 @@ public class RaceGame : MonoBehaviour
     public void PlayerCrossed()
     {
         displayTime.SetText("{0} Seconds!", secondCount);
+
+        VehicleController temp = player.GetComponent<VehicleController>();
+        collisions.SetText("{0}", temp.timesCollided);
     }
 }

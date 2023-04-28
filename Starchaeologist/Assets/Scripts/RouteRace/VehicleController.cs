@@ -29,6 +29,15 @@ public class VehicleController : MonoBehaviour
     public float currentBreaking = 0f;
     public float turnPower = 5f;
 
+    //Number of collisions
+    private int collisions = 0;
+
+    public int timesCollided
+    {
+        get { return collisions; }
+        set { collisions = value; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -80,6 +89,7 @@ public class VehicleController : MonoBehaviour
         if (collision.gameObject.tag == "Obstacle")
         {
             Debug.Log("I Collided");
+            collisions++;
             carBody.velocity -= new Vector3(0, 0, 10f);
         }
         if (collision.gameObject.name == "RaceFinish")
