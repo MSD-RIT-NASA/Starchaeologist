@@ -16,7 +16,7 @@
     <img src="images/pcb_patch.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">NASA-Balance-Prototype</h3>
+  <h3 align="center">Starchaeologist</h3>
 
   <p align="center">
     The program for the Starchaeologist game, interfacing with hardware components, and 2 way communication server. 
