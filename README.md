@@ -74,7 +74,8 @@ Name | Purchase Link
 
 Setup: 
 
-    1. Run setup.bat   
+    1. Install Python 3.10.6 (newer versions are untested)
+    2. Run setup.bat   
 
 To run the program with BASE: (levels 1 and 2)
 
