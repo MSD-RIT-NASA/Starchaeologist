@@ -78,6 +78,7 @@ Setup:
     2. Install MATLAB R2022b
     3. Run setup.bat   
     4. Follow SlimeVR Docs (https://docs.slimevr.dev/) to set up PLANETs with SlimeVR Server
+    5. Ensure that the VRChat and OSC Router options in Settings are enabled using their default ports
 
 To run the program with BASE: (levels 1 and 2)
 
