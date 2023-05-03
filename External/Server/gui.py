@@ -1,4 +1,4 @@
-import os, time, base64
+import os, time, base64, subprocess
 import PySimpleGUI as sg
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -63,18 +63,22 @@ base_col1 = sg.Column([
 
 base_visualization = sg.Canvas(key='figCanvas')
 
-#base_col2 = sg.Column([
-#    [sg.Frame('Data Visualization:',[[sg.Button('Save Plots to File', key='-savePlot-', size=BUTTON_SIZE, button_color=('white', 'blue')), sg.Button('Clear Plots', key='-clearPlot-', size=BUTTON_SIZE, button_color=('white', 'black'))], [base_visualization]], expand_x=True, expand_y=True)]],expand_x=True, expand_y=True)
+planet_col1 = sg.Column([
+    [sg.Frame('Control:',[[sg.Button('Start Server', key='-start_planet_server-', size=BUTTON_SIZE, button_color=('white', 'red'))], \
+                          [sg.Button('Stop Server', key='-stop_planet_server-', size=BUTTON_SIZE, button_color=('white', 'black'), disabled=True)], \
+                          [sg.Button('Launch Game', key='-launch_planet_game-', size=BUTTON_SIZE, button_color=('white', 'cyan'), disabled=True)], \
+                          [sg.Button('Quit Game', key='-quit_planet_game-', size=BUTTON_SIZE, button_color=('white', 'magenta'), disabled=True)]], \
+                            element_justification='center', expand_x=True, expand_y=True)]])
 
 base_panel = [[base_col1]]
-planet_panel = [[]]
+planet_panel = [[planet_col1]]
 
 layout = [[sg.Button('Level Select', key='level_select'), sg.Push(), sg.Button('Quit', key='Exit')], \
           [sg.Push(), sg.Column(level_select, key='-level_select-'), sg.Column(base_panel, visible=False, key='-base_layout-'), sg.Column(planet_panel, visible=False, key='-planet_layout-'), sg.Push()]]
 
 window = sg.Window("Starchaeologist Control Panel", layout, auto_size_buttons=True, default_button_element_size=(12,1), \
                    use_default_focus=False, finalize=True, resizable=True)
-window.maximize()
+#window.maximize()
 
 #initial GUI layout, do not change
 current_layout = 'level_select'
@@ -130,6 +134,16 @@ while True:
     # BASE PANEL
     ###############################################################
     # Start server thread
+    if event == '-start_planet_server-':
+        taskQueue = Queue()
+        responseQueue = Queue()
+        server_thread = Thread(target=server.run, args=(taskQueue, responseQueue))
+        server_thread.start()
+        taskQueue.put(['startServer'])
+        window['-start_planet_server-'].update(disabled=True)
+        window['-stop_planet_server-'].update(disabled=False)
+        window['-launch_planet_game-'].update(disabled=False)
+        window['-quit_planet_game-'].update(disabled=False)
     if event == '-start_server-':
         taskQueue = Queue()
         responseQueue = Queue()
@@ -142,6 +156,12 @@ while True:
         window['-reset_actuators-'].update(disabled=False)
         window['-stop_actuators-'].update(disabled=False)
     # Kill server thread
+    if event == '-stop_planet_server-':
+        taskQueue.put(['stopServer'])
+        window['-stop_planet_server-'].update(disabled=True)
+        window['-start_planet_server-'].update(disabled=False)
+        window['-launch_planet_game-'].update(disabled=True)
+        window['-quit_planet_game-'].update(disabled=False)
     if event == '-stop_server-':
         taskQueue.put(['stopServer'])
         window['-stop_server-'].update(disabled=True)
@@ -149,6 +169,10 @@ while True:
         window['-calibrate_floor-'].update(disabled=True)
         window['-reset_actuators-'].update(disabled=True)
         window['-stop_actuators-'].update(disabled=True)
+    if event == '-launch_planet_game-':
+        p = subprocess.Popen([root_path+"/../../Starchaeologist.exe"])
+    if event == '-quit_planet_game-':
+        p.kill()
     if event == '-calibrate_floor-':
         window['-calibrate_floor-'].update(disabled=True)
         taskQueue.put(['calibrateFloor'])

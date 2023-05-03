@@ -15,9 +15,9 @@ data = []
 
 script_path = os.path.abspath(__file__)
 root_path = os.path.dirname(script_path)
-csv_root = root_path+"\\Planet Skeleton Data"
+csv_root = root_path+"\Planet Skeleton Data"
 
-def run(collect: Event, log_data: Event):
+def run(collect: Event, log_data: Event, stop_planet_data: Event):
 
     def default_handler(address, *args):
         global cur_line
@@ -50,6 +50,8 @@ def run(collect: Event, log_data: Event):
         start_time = 0
         started = 0
         while True:
+            if stop_planet_data.is_set():
+                break
             if collect.is_set():
                 if started == 0:
                     start_time = time.time()

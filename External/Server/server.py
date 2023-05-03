@@ -95,6 +95,7 @@ def getdata(ser, stop_sensor: Event, sensor_taskQueue: Queue, sensor_responseQue
 # PLANET events
 collect = Event()
 log_data = Event()
+stop_planet_data = Event()
 
 # Actuator queues
 actuator_taskQueue = Queue()
@@ -103,6 +104,9 @@ actuator_responseQueue = Queue()
 sensor_taskQueue = Queue()
 sensor_responseQueue = Queue()
 stop_sensor = Event()
+
+planet_taskQueue = Queue()
+planet_responseQueue = Queue()
 
 def run(taskQueue: Queue, responseQueue: Queue):
 
@@ -115,7 +119,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
 
     script_path = os.path.abspath(__file__)
     root_path = os.path.dirname(script_path)
-    csv_root = root_path+"\\Planet Skeleton Data"
+    csv_root = root_path+"\Planet Skeleton Data"
 
     boardSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # need to send any message over to initialize connection to sensor
@@ -137,12 +141,12 @@ def run(taskQueue: Queue, responseQueue: Queue):
     deadTime = 0
 
     # Start PLANET data collection
-    #planet_data = Thread(target=planet_data_collection.run, args=(collect, log_data))
-    #planet_data.start()
+    planet_data = Thread(target=planet_data_collection.run, args=(collect, log_data, stop_planet_data))
+    planet_data.start()
 
     # Actuator control
-    actuator_thread = Thread(target=actuator_control.run, args=(actuator_taskQueue, actuator_responseQueue))
-    actuator_thread.start()
+    #actuator_thread = Thread(target=actuator_control.run, args=(actuator_taskQueue, actuator_responseQueue))
+    #actuator_thread.start()
 
     time.sleep(1)
 
@@ -238,8 +242,8 @@ def run(taskQueue: Queue, responseQueue: Queue):
                 level = "minecartChase"
 
         elif (decodedMessage[0] == "gameStart"):
-            if os.path.exists("C:/Users/p2201/OneDrive/Desktop/Sheridan-Test-Ground/GPBA/External/Server/data.txt"):
-                os.remove("C:/Users/p2201/OneDrive/Desktop/Sheridan-Test-Ground/GPBA/External/Server/data.txt")
+            if os.path.exists(root_path + "\data.txt"):
+                os.remove(root_path + "\data.txt")
             balanceData = []
             logging.info("Game has started!")
             time.sleep(0.5)
@@ -254,6 +258,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
                         deadTime = decodedMessage[counter]
                         print(deadTime)
                         sock.SendData("ACKdeadTime")
+                planet_taskQueue.put(['startRecording', 0.0])
                 collect.set()
             if (decodedMessage.__contains__("collectBaseData")):
                 logging.info("Started actuator subroutines")
@@ -268,26 +273,32 @@ def run(taskQueue: Queue, responseQueue: Queue):
             actuator_taskQueue.put(['puzzlingTimes', game_diff])
 
         elif (decodedMessage[0] == "gameOver"):
-            actuator_taskQueue.put(['stopActuators', 0.0])
-            time.sleep(0.5)
-            actuator_taskQueue.put(['actuatorCleanup', 0.0])
-            logging.info("Game has ended!")
+            log_data.set()
+            time.sleep(2)
+            #actuator_taskQueue.put(['stopActuators', 0.0])
+            #time.sleep(0.5)
+            #actuator_taskQueue.put(['actuatorCleanup', 0.0])
+            #logging.info("Game has ended!")
             gameOver = True
-            sensor_taskQueue.put(['stopSensors', 0.0])
-            stop_sensor.set()
-            time.sleep(1)
-            while sensor_responseQueue.empty():
-                print("Waiting for balance data")
-                pass
-            balanceData = sensor_responseQueue.get()
-            sensor_responseQueue.task_done()
-            print(balanceData)  
+            #sensor_taskQueue.put(['stopSensors', 0.0])
+            #stop_sensor.set()
+            #time.sleep(1)
+            #while sensor_responseQueue.empty():
+            #    print("Waiting for balance data")
+            #    pass
+            #alanceData = sensor_responseQueue.get()
+            #sensor_responseQueue.task_done()
+            #print(balanceData)  
             end_time = time.time()
             timestamp = str(end_time).split('.')[0]
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
                 try:
-                    planetScore = planet_matlab.run(csv_root + "/" + timestamp, "Astronaut", 5.0, float(deadTime), 1.5, 3.0, 7.5, 15.0)
+                    skeleton_path = root_path + '/Planet Skeleton Data'
+                    directory_names = [x[0] for x in os.walk(skeleton_path)]
+                    timestamp_directory = directory_names[-1]
+                    # float(deadTime)
+                    planetScore = planet_matlab.run(timestamp_directory, "Astronaut", 5.0, 0.0, 1.5, 3.0, 10.0, 15.0)
                 except Exception:
                     planetScore = 87.0
                 print(planetScore)
@@ -335,8 +346,9 @@ def run(taskQueue: Queue, responseQueue: Queue):
                 if data == "hello":
                     print(decodedMessage[counter])
 
+    stop_planet_data.set()
     logging.info("Stopping Server")
 
-test1 = Queue()
-test2 = Queue()
-run(test1, test2)
+#test1 = Queue()
+#test2 = Queue()
+#run(test1, test2)
