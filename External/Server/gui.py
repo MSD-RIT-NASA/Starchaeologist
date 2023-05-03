@@ -66,7 +66,7 @@ base_visualization = sg.Canvas(key='figCanvas')
 planet_col1 = sg.Column([
     [sg.Frame('Control:',[[sg.Button('Start Server', key='-start_planet_server-', size=BUTTON_SIZE, button_color=('white', 'red'))], \
                           [sg.Button('Stop Server', key='-stop_planet_server-', size=BUTTON_SIZE, button_color=('white', 'black'), disabled=True)], \
-                          [sg.Button('Launch Game', key='-launch_planet_game-', size=BUTTON_SIZE, button_color=('white', 'cyan'), disabled=True)], \
+                          [sg.Button('Launch Game', key='-launch_planet_game-', size=BUTTON_SIZE, button_color=('white', 'purple'), disabled=True)], \
                           [sg.Button('Quit Game', key='-quit_planet_game-', size=BUTTON_SIZE, button_color=('white', 'magenta'), disabled=True)]], \
                             element_justification='center', expand_x=True, expand_y=True)]])
 
