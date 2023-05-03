@@ -24,7 +24,7 @@ from queue import Queue
 import actuator_control
 
 # PLANET CONSTANTS
-UDP_IP = "192.168.4.7"
+UDP_IP = "192.168.4.2"
 UDP_PORT = 4210
 MESSAGE = "We have liftoff!"
 
@@ -95,6 +95,7 @@ def getdata(ser, stop_sensor: Event, sensor_taskQueue: Queue, sensor_responseQue
 # PLANET events
 collect = Event()
 log_data = Event()
+stop_planet_data = Event()
 
 # Actuator queues
 actuator_taskQueue = Queue()
@@ -118,7 +119,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
 
     script_path = os.path.abspath(__file__)
     root_path = os.path.dirname(script_path)
-    csv_root = root_path+"\\Planet Skeleton Data"
+    csv_root = root_path+"\Planet Skeleton Data"
 
     boardSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # need to send any message over to initialize connection to sensor
@@ -140,7 +141,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
     deadTime = 0
 
     # Start PLANET data collection
-    planet_data = Thread(target=planet_data_collection.run, args=(collect, log_data))
+    planet_data = Thread(target=planet_data_collection.run, args=(collect, log_data, stop_planet_data))
     planet_data.start()
 
     # Actuator control
@@ -241,8 +242,8 @@ def run(taskQueue: Queue, responseQueue: Queue):
                 level = "minecartChase"
 
         elif (decodedMessage[0] == "gameStart"):
-            if os.path.exists("C:/Users/p2201/OneDrive/Desktop/Sheridan-Test-Ground/GPBA/External/Server/data.txt"):
-                os.remove("C:/Users/p2201/OneDrive/Desktop/Sheridan-Test-Ground/GPBA/External/Server/data.txt")
+            if os.path.exists(root_path + "\data.txt"):
+                os.remove(root_path + "\data.txt")
             balanceData = []
             logging.info("Game has started!")
             time.sleep(0.5)
@@ -293,7 +294,7 @@ def run(taskQueue: Queue, responseQueue: Queue):
             sock.SendData("ACKgameOver")
             if (decodedMessage.__contains__("getPlanetScore")):
                 try:
-                    skeleton_path = 'C:/Users/p2201/OneDrive/Desktop/PLANET_Time/GPBA/External/Server/Planet Skeleton Data'
+                    skeleton_path = root_path + '/Planet Skeleton Data'
                     directory_names = [x[0] for x in os.walk(skeleton_path)]
                     timestamp_directory = directory_names[-1]
                     # float(deadTime)
@@ -345,8 +346,9 @@ def run(taskQueue: Queue, responseQueue: Queue):
                 if data == "hello":
                     print(decodedMessage[counter])
 
+    stop_planet_data.set()
     logging.info("Stopping Server")
 
-test1 = Queue()
-test2 = Queue()
-run(test1, test2)
+#test1 = Queue()
+#test2 = Queue()
+#run(test1, test2)
