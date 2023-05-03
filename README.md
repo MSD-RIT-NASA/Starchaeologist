@@ -75,7 +75,7 @@ Name | Purchase Link
 Setup: 
 
     1. Install Python 3.10.6 (newer versions are untested)
-    2. Install MATLAB r2022b
+    2. Install MATLAB R2022b
     3. Run setup.bat   
     4. Follow SlimeVR Docs (https://docs.slimevr.dev/) to set up PLANETs with SlimeVR Server
 
