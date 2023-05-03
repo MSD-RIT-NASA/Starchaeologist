@@ -87,7 +87,7 @@ To run the program with BASE: (levels 1 and 2)
 To run the program with PLANETs: (level 3)
 
     1. Connect wifi to MSD_ISS raspberry pi  
-    2. Turn on board sensor. Wait until light turns from white -> blue (connecting to wifi) -> purple (waiting for server connection). 
+    2. Turn on board sensor. Wait until light turns from white -> blue (connecting to wifi) -> light green (waiting for server connection). 
     3. `python3 .\External\Server\server.py`  
     4. Once LED is green it is sending data.
     5. Start Game  
