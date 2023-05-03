@@ -1,4 +1,4 @@
-import os, time, base64
+import os, time, base64, subprocess
 import PySimpleGUI as sg
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -67,7 +67,7 @@ planet_col1 = sg.Column([
     [sg.Frame('Control:',[[sg.Button('Start Server', key='-start_planet_server-', size=BUTTON_SIZE, button_color=('white', 'red'))], \
                           [sg.Button('Stop Server', key='-stop_planet_server-', size=BUTTON_SIZE, button_color=('white', 'black'), disabled=True)], \
                           [sg.Button('Launch Game', key='-launch_planet_game-', size=BUTTON_SIZE, button_color=('white', 'cyan'), disabled=True)], \
-                          [sg.Button('Quit Game', key='-quit_planet_game-', size=BUTTON_SIZE, button_color=('white', 'magenta'), disabled=False)]], \
+                          [sg.Button('Quit Game', key='-quit_planet_game-', size=BUTTON_SIZE, button_color=('white', 'magenta'), disabled=True)]], \
                             element_justification='center', expand_x=True, expand_y=True)]])
 
 base_panel = [[base_col1]]
@@ -143,6 +143,7 @@ while True:
         window['-start_planet_server-'].update(disabled=True)
         window['-stop_planet_server-'].update(disabled=False)
         window['-launch_planet_game-'].update(disabled=False)
+        window['-quit_planet_game-'].update(disabled=False)
     if event == '-start_server-':
         taskQueue = Queue()
         responseQueue = Queue()
@@ -160,6 +161,7 @@ while True:
         window['-stop_planet_server-'].update(disabled=True)
         window['-start_planet_server-'].update(disabled=False)
         window['-launch_planet_game-'].update(disabled=True)
+        window['-quit_planet_game-'].update(disabled=False)
     if event == '-stop_server-':
         taskQueue.put(['stopServer'])
         window['-stop_server-'].update(disabled=True)
@@ -167,6 +169,10 @@ while True:
         window['-calibrate_floor-'].update(disabled=True)
         window['-reset_actuators-'].update(disabled=True)
         window['-stop_actuators-'].update(disabled=True)
+    if event == '-launch_planet_game-':
+        p = subprocess.Popen([root_path+"/../../Starchaeologist.exe"])
+    if event == '-quit_planet_game-':
+        p.kill()
     if event == '-calibrate_floor-':
         window['-calibrate_floor-'].update(disabled=True)
         taskQueue.put(['calibrateFloor'])
