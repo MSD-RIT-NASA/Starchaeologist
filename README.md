@@ -76,7 +76,7 @@ Setup:
 
     1. Install Python 3.10.6 (newer versions are untested)
     2. Run setup.bat   
-    3. Follow [SlimeVR Docs](https://docs.slimevr.dev/) to set up PLANETs with SlimeVR Server
+    3. Follow SlimeVR Docs (https://docs.slimevr.dev/) to set up PLANETs with SlimeVR Server
 
 To run the program with BASE: (levels 1 and 2)
 
