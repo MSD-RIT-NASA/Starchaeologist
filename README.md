@@ -76,6 +76,7 @@ Setup:
 
     1. Install Python 3.10.6 (newer versions are untested)
     2. Run setup.bat   
+    3. Follow [SlimeVR Docs](https://docs.slimevr.dev/) to set up PLANETs with SlimeVR Server
 
 To run the program with BASE: (levels 1 and 2)
 
@@ -94,7 +95,7 @@ To run the program with PLANETs: (level 3)
     4. Select the 'BASE Levels' button.
     5. Click 'Start Server'.
     6. Click 'Launch Game'. 
-    5. Once balance board LED is green, controller data is being sent to the PC.
+    7. Once balance board LED is green, controller data is being sent to the PC.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
