@@ -66,32 +66,6 @@ public class RoadBuilder : MonoBehaviour
     {
         GameObject currentObstacle = GameObject.Find("Obstacles");
 
-        /*
-        int i = 0;
-        while(i < distance)
-        {
-            //Choose a random segment to add obstacles to
-            int segmentNumber = Random.Range(0, roadSegments.Count/2);
-            GameObject segment = roadSegments[segmentNumber];
-
-            //Only spawn on the road built
-            if (segment.name == "Ground(Clone)")
-            {
-                //Get a possible spawn point
-                List<GameObject> possibleSpawns = new List<GameObject>();
-                for (int j = 0; j < 5; j++)
-                {
-                    possibleSpawns.Add(segment.transform.GetChild(j + 2).gameObject);
-                }
-
-                GameObject newObstacle = Instantiate(currentObstacle, possibleSpawns[Random.Range(0, possibleSpawns.Count)].transform);
-                vehicleObstacles.Add(newObstacle);
-                //newObstacle.transform.parent = currentObstacle.transform;
-            }
-            i++;
-        }
-        */
-
         //Get lane position for obstacles to follow
         lane1.Add(placedPiece.transform.Find("Lane1Point"));
         lane2.Add(placedPiece.transform.Find("Lane2Point"));

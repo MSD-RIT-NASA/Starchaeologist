@@ -15,11 +15,10 @@ public class SetUp : MonoBehaviour
     }
 
     /*
-    //Show controls and objective
-    IEnumerator rules()
+    //Wait to connect to server for balance board controls 
+    IEnumerator connect()
     {
         yield return new WaitForSeconds(8);
-        playerRef.transform.GetChild(2).gameObject.SetActive(false);
     }
     */
 }
