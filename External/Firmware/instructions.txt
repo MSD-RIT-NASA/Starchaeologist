@@ -1,0 +1,24 @@
+Balance Board Firmware:
+
+To create and upload the firmware for the balance board:
+
+1. Install the Arduino IDE
+2. Install the Adafruit BNO08x library
+3. Open the balance_board.ino file in the Arduino IDE
+4. Verify and Upload the firmware to the balance board sensor using the USB-C connection on the microcontroller (May need to remove the PCB from the case to access)
+
+Body Tracker Firmware:
+
+To create and upload the firmware for the body trackers:
+
+EITHER:
+1. Follow the SlimeVR docs (https://docs.slimevr.dev/firmware/) and use their online firmware flasher (WEMOSD1MINI, IMU_BNO085, IMU rotation 180, and enter WiFi credentials)
+This method loses the external LED functionality, but is the most up to date
+
+OR
+
+1. Install the PlatformIO extension on VSCode (SlimeVR Docs should have a section for this too)
+2. Open the SlimeVR-Tracker-ESP-0.3.2 folder as a project
+3. Click the checkmark on the bottom toolbar of VSCode to build the firmware
+4. Connect the tracker to the PC using the USB-C connection on the microcontroller (May need to remove the PCB from the case to access)
+5. Click the arrow on the bottom toolbar to upload the firmware to the tracker
