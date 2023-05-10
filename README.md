@@ -16,7 +16,7 @@
     <img src="images/pcb_patch.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">NASA-Balance-Prototype</h3>
+  <h3 align="center">Starchaeologist</h3>
 
   <p align="center">
     The program for the Starchaeologist game, interfacing with hardware components, and 2 way communication server. 
@@ -74,25 +74,30 @@ Name | Purchase Link
 
 Setup: 
 
-    1. `pip install -r requirements.txt`    
-    2. Load Starcheologist into unity  
+    1. Install Python 3.10.6 (newer versions are untested)
+    2. Install MATLAB R2022b
+    3. Run setup.bat   
+    4. Follow SlimeVR Docs (https://docs.slimevr.dev/) to set up PLANETs with SlimeVR Server
+    5. Ensure that the VRChat and OSC Router options in Settings are enabled for Chest, Waist, Knees, and Feet using their default ports
 
 To run the program with BASE: (levels 1 and 2)
 
-    1. Connect kill switch and sensors to COM ports. Adjust COM numbers as needed.   
-    2. Connect to drivers with ethernet cable  
-    3. `python3 .\External\Server\server.py`  
-    4. Start game.  
+    1. Connect kill switch and sensors to COM ports. Adjust COM numbers as needed in GUI.   
+    2. Connect to drivers with ethernet cable.
+    3. Run run.bat.
+    4. Select the 'BASE Levels' button.
+    5. Click 'Start Server'.
+    6. Click 'Launch Game'. 
 
 To run the program with PLANETs: (level 3)
 
-    1. Connect wifi to MSD_ISS raspberry pi  
-    2. Turn on board sensor. Wait until light turns from white -> blue (connecting to wifi) -> purple (waiting for server connection). 
-    3. `python3 .\External\Server\server.py`  
-    4. Once LED is green it is sending data.
-    5. Start Game  
-    
-
+    1. Connect PC to MSD_ISS Raspberry Pi WiFi network
+    2. Turn on balance board sensor. Wait until light turns from white -> blue (connecting to wifi) -> light green (waiting for server connection). 
+    3. Double click run.bat.
+    4. Select the 'BASE Levels' button.
+    5. Click 'Start Server'.
+    6. Click 'Launch Game'. 
+    7. Once balance board LED is green, controller data is being sent to the PC.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
