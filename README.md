@@ -92,9 +92,9 @@ To run the program with BASE: (levels 1 and 2)
 To run the program with PLANETs: (level 3)
 
     1. Connect PC to MSD_ISS Raspberry Pi WiFi network
-    2. Turn on balance board sensor. Wait until light turns from white -> blue (connecting to wifi) -> light green (waiting for server connection). 
+    2. Turn on balance board sensor. Wait until light turns from white -> blue (connecting to wifi) -> yellow (waiting for server connection). 
     3. Double click run.bat.
-    4. Select the 'BASE Levels' button.
+    4. Select the 'PLANET Levels' button.
     5. Click 'Start Server'.
     6. Click 'Launch Game'. 
     7. Once balance board LED is green, controller data is being sent to the PC.
