@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -233,8 +233,12 @@ PrefabInstance:
       value: Directional Anchor Rotation
       objectReference: {fileID: 0}
     - target: {fileID: 7865517847723088715, guid: cf24a06dd885e1f45813467bac31a3a6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7865517847723088715, guid: cf24a06dd885e1f45813467bac31a3a6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 2.25
       objectReference: {fileID: 0}
     - target: {fileID: 7865517848709632932, guid: cf24a06dd885e1f45813467bac31a3a6, type: 3}
       propertyPath: m_RootOrder
@@ -7722,7 +7726,6 @@ Transform:
   - {fileID: 2107525746}
   - {fileID: 1052434921}
   - {fileID: 1169347438}
-  - {fileID: 1671779591}
   - {fileID: 162375697}
   - {fileID: 432540818}
   - {fileID: 1189214468}
@@ -7730,18 +7733,19 @@ Transform:
   - {fileID: 1282160919}
   - {fileID: 1973203896}
   - {fileID: 425980890}
+  - {fileID: 1071049601}
   - {fileID: 1864662904}
   - {fileID: 989203952}
   - {fileID: 51871838}
   - {fileID: 2050230654}
   - {fileID: 505376643}
   - {fileID: 1620831898}
-  - {fileID: 1071049601}
   - {fileID: 1026197654}
   - {fileID: 88177109}
   - {fileID: 1600358170}
   - {fileID: 2024925975}
   - {fileID: 278576142}
+  - {fileID: 1671779591}
   - {fileID: 211394389}
   - {fileID: 91222487}
   - {fileID: 1103820015}
@@ -10344,7 +10348,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 906008367}
-  m_RootOrder: 21
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: -3.292, y: 1.313, z: 159.36}
 --- !u!108 &1071049602
 Light:
@@ -15647,7 +15651,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9e2189bb7bf8bcd40a9a0b1c38eebdc0, type: 3}
 --- !u!4 &1671779591 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9e2189bb7bf8bcd40a9a0b1c38eebdc0, type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 1671779590}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1677904078
