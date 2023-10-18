@@ -19,6 +19,8 @@ public class S_GemCollision : MonoBehaviour
             Debug.Log(scoreScript.Score);
             Debug.Log("score updated");
             scoreText.text = "Score: " + scoreScript.Score;
+
+            Destroy(other.gameObject);
         }
     }
 }
