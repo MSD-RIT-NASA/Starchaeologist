@@ -60,11 +60,11 @@ public class TreasureCollision : MonoBehaviour
         {
             int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
             txt.text = "Score: " + (currentScore + 1);
+            Debug.Log("Deleted");
+            Destroy(gameObject);
 
             audSrc.PlayOneShot(treasureCollect);
             Debug.Log("Gathered Treasure");
-            Destroy(gameObject);
-            Debug.Log("Deleted");
         }
     }
 }
