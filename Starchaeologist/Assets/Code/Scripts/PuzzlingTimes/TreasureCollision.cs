@@ -17,6 +17,8 @@ public class TreasureCollision : MonoBehaviour
     private AudioSource audSrc;
     [SerializeField]
     private AudioClip treasureCollect;
+    [Space]
+    [SerializeField] GameObject collFX;
 
     private Text txt;
     private Text txtBlip;
@@ -26,6 +28,16 @@ public class TreasureCollision : MonoBehaviour
         txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
         txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
         txtBlip.enabled = false;
+    }
+
+    public void ActivateFX()
+    {
+        // Yes this is a little wierd to spawn on parent but t
+        // was just how the treasures are organized and when
+        // trying to fix it the game yells at me. There is too
+        // much dependent on transform.getchild in the logic 
+        Instantiate(collFX, this.transform.parent.position, Quaternion.identity);
+        collFX.GetComponent<ParticleSystem>().Play();
     }
 
 
@@ -47,7 +59,10 @@ public class TreasureCollision : MonoBehaviour
     //    }
     //}
 
-    private void OnTriggerEnter(Collider collision)
+
+    // COLLISION IS HANDLED BY HANDS -Narai 
+
+   /* private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("PlayerHand"))
         {
@@ -66,5 +81,5 @@ public class TreasureCollision : MonoBehaviour
             Destroy(gameObject);
             Debug.Log("Deleted");
         }
-    }
+    }*/
 }
