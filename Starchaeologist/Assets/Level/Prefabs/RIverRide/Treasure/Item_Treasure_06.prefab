@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 2768938461113472400}
   - component: {fileID: 6609917229404112205}
   - component: {fileID: 4938734671447399037}
+  - component: {fileID: 2909246359762538584}
   - component: {fileID: 4945243901252051281}
+  - component: {fileID: 8035389749382141560}
   m_Layer: 0
   m_Name: six_sided_gem
   m_TagString: Treasure
@@ -82,6 +84,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2909246359762538584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77461140842569276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a9399b54272bae49a9282dda7b59d48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flyDuration: 1
+  additionalOffset: {x: 0, y: 0, z: 0}
 --- !u!64 &4945243901252051281
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -91,11 +107,25 @@ MeshCollider:
   m_GameObject: {fileID: 77461140842569276}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6437410396529656253, guid: 9fe476fe047c963418ff04cd98275058, type: 3}
+--- !u!114 &8035389749382141560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77461140842569276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dee664c630f7a945bafd7ec9b31dcdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audSrc: {fileID: 0}
+  treasureCollect: {fileID: 0}
 --- !u!1 &8779571309560358197
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,9 +135,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8028720516707803739}
-  - component: {fileID: 5802762746993464036}
-  - component: {fileID: 9065270129092280434}
-  - component: {fileID: 4206106820189196411}
   m_Layer: 0
   m_Name: Item_Treasure_06
   m_TagString: Treasure
@@ -130,44 +157,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &5802762746993464036
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8779571309560358197}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.17
-  m_Center: {x: 0, y: 0.09, z: 0}
---- !u!114 &9065270129092280434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8779571309560358197}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dee664c630f7a945bafd7ec9b31dcdb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audSrc: {fileID: 0}
-  treasureCollect: {fileID: 0}
---- !u!114 &4206106820189196411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8779571309560358197}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a9399b54272bae49a9282dda7b59d48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flyDuration: 1
-  additionalOffset: {x: 0, y: 0, z: 0}
