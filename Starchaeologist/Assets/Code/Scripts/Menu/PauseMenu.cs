@@ -10,7 +10,7 @@ public class PauseMenu : MonoBehaviour
     //singleton
     public static PauseMenu singleton { get; private set; }
 
-
+    [SerializeField] private bool startPaused;
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
     [SerializeField] GameObject playerReference;
@@ -26,6 +26,10 @@ public class PauseMenu : MonoBehaviour
             singleton = this;
         }
         pauseMenuUI = this.transform.GetChild(0).gameObject;
+        if (startPaused)
+        {
+            Pause();
+        }
     }
 
     private void UpdateMenuPosition()
