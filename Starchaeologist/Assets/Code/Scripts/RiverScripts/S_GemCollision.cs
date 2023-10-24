@@ -9,6 +9,7 @@ public class S_GemCollision : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        print("Trigger");
         //when the player hits the obstacle, tell the game manager to deduct points
         if (other.gameObject.CompareTag("Treasure"))
         {
@@ -16,7 +17,11 @@ public class S_GemCollision : MonoBehaviour
             GameObject manager = GameObject.Find("Game Manager");
             if(manager)
             {
-                manager.GetComponent<S_RiverGame>().ObstacleHit();
+                S_RiverGame riverManager = manager.GetComponent<S_RiverGame>();
+                if(riverManager != null)
+                {
+                    manager.GetComponent<S_RiverGame>().ObstacleHit();
+                }
             }
             scoreScript scoreScript = scoreScript.Instance;
             if(scoreScript)
