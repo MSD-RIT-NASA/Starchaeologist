@@ -117,7 +117,9 @@ public class PuzzlingGame : MonoBehaviour
             countdownCanvas.SetActive(false);
             readyCanvas.SetActive(true);
             rightHand.SetActive(true);
+            rightHand.getComponent<S_HandAction>().DisableTeleport(true);
             leftHand.SetActive(true);
+            leftHand.getComponent<S_HandAction>().DisableTeleport(true);
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
         }
@@ -353,7 +355,9 @@ public class PuzzlingGame : MonoBehaviour
     public void TimeToMove()
     {
         rightHandRay.SetActive(false);
+        rightHand.getComponent<S_HandAction>().DisableTeleport(false);
         leftHandRay.SetActive(false);
+        leftHand.getComponent<S_HandAction>().DisableTeleport(false);
         timerCanvas.SetActive(false);
         //Tells the python server the game has started
         //GetComponent<UdpSocket>().GameStart = true;
