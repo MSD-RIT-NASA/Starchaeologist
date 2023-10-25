@@ -59,7 +59,7 @@ public class TreasureCollision : MonoBehaviour
         if (collision.gameObject.CompareTag("PlayerHand"))
         {
             int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
-            txt.text = "Score: " + (currentScore + 1);
+            txt.text = "Score: " + (currentScore + 250);
 
             audSrc.PlayOneShot(treasureCollect);
             Debug.Log("Gathered Treasure");
