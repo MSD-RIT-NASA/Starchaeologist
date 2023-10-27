@@ -25,12 +25,8 @@ public class ScoreData : MonoBehaviour
     [SerializeField]
     private TMP_Text balanceScore;
     private int balanceScoreint;
-    private StreamReader reader;
-    private StreamWriter writer;
 
-    private List<PlayerData> players;
-    private List<PlayerData> leaders;
-    private List<PlayerData> singlePlayerData;
+    private ScoreEntries scoreEntries;
 
     private bool receivedBalanceScore;
 
@@ -52,29 +48,28 @@ public class ScoreData : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        players = new List<PlayerData>();
-        leaders = new List<PlayerData>();
-        singlePlayerData = new List<PlayerData>();
         hasPopulated = false;
         scoreCanvasActive = true;
         receivedBalanceScore = false;
         balanceScoreint = 0;
+
+        if (SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            // Store all score files in the Scores folder
+            if (!Directory.Exists("Scores"))
+                Directory.CreateDirectory("Scores");
+            currentScene = "Scores/" + SceneManager.GetActiveScene().name + "Scores";
+
+            playerName.text = keyboardCanvas.NameEdit;
+            date.text = keyboardCanvas.DateEdit;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (SceneManager.GetActiveScene().name != "MainMenu")
-        {
-            currentScene = SceneManager.GetActiveScene().name + "Scores";
-        }
-        if (SceneManager.GetActiveScene().name != "MainMenu") 
-        {
-            playerName.text = keyboardCanvas.NameEdit;
-            date.text = keyboardCanvas.DateEdit;
-        }
         playerSearchName.text = keyboardCanvas.SearchNameEdit;
-        if(receivedBalanceScore == true)
+        if (receivedBalanceScore == true)
         {
             DisplayBalanceScore(balanceScoreint);
             receivedBalanceScore = false;
@@ -126,18 +121,35 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void StorePlayerData()
     {
-        string fileName = currentScene + ".txt";
-        writer = new StreamWriter(fileName, true);
+        // Ensure that the player list has been populated since we are updating the JSON of existing scores
+        PopulatePlayers();
 
-        writer.WriteLine("Player: " + playerName.text);
-        writer.WriteLine("Date: " + date.text);
-        writer.WriteLine("Score: " + score.text);
-        writer.WriteLine("Rank: " + rank.text);
+        // Add a new score entry to the player list. If this is the player's second score on this date, override the existing one
+        PlayerData newPlayerData = new PlayerData(playerName.text, date.text, float.Parse(score.text), rank.text);
+        int existingIndex = scoreEntries.players.FindIndex(p =>
+            p.PlayerName == newPlayerData.PlayerName
+            && p.Date == newPlayerData.Date);
+        if (existingIndex != -1)
+        {
+            // Only override lower scores
+            if (newPlayerData.Score >= scoreEntries.players[existingIndex].Score)
+                scoreEntries.players[existingIndex] = newPlayerData;
+        }
+        else
+            scoreEntries.players.Add(newPlayerData);
+        scoreEntries.lastWrite = System.DateTime.Now.ToShortDateString();
 
-        writer.Close();
+        // Reserialize the scores into a JSON file
+        SerializeScores();
 
         storedMessage.SetActive(true);
         Debug.Log("Stored");
+    }
+
+    private void SerializeScores()
+    {
+        string fileName = currentScene + ".json";
+        File.WriteAllText(fileName, JsonUtility.ToJson(scoreEntries, true));
     }
 
 
@@ -147,35 +159,9 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void PopulatePlayers()
     {
-        string fileName = currentScene + ".txt";
-        reader = new StreamReader(fileName);
-
-        string newLine = reader.ReadLine();
-        while(newLine != null)
-        {
-            string[] data = newLine.Split(' ');
-            string pName = data[1];
-
-            newLine = reader.ReadLine();
-            data = newLine.Split(' ');
-            string pDate = data[1];
-
-            newLine = reader.ReadLine();
-            data = newLine.Split(' ');
-            string pScore = data[1];
-            float pScoreNum = float.Parse(pScore, CultureInfo.InvariantCulture.NumberFormat);
-
-            newLine = reader.ReadLine();
-            data = newLine.Split(' ');
-            string pRank = data[1];
-
-            //Creates new instance of PlayerData object
-            players.Add(new PlayerData(pName, pDate, pScoreNum, pRank));
-
-            newLine = reader.ReadLine();
-        }
-
-        reader.Close();
+        string fileName = currentScene + ".json";
+        string json = File.Exists(fileName) ? File.ReadAllText(fileName) : "{}";
+        scoreEntries = JsonUtility.FromJson<ScoreEntries>(json);
         hasPopulated = true;
     }
 
@@ -191,27 +177,10 @@ public class ScoreData : MonoBehaviour
             PopulatePlayers();
         }
 
-        leaders.Clear();
-
-        SortPlayers();//Orders the list of players
-
-        if (players.Count >= 9)//Just take the top 9 scores
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                leaders.Add(players[i]);
-            }
-        }
-        else//If there are less than 10 scores, just take whatever is there
-        {
-            for (int i = 0; i < players.Count; i++)
-            {
-                leaders.Add(players[i]);
-            }
-        }
+        List<PlayerData> leaders = SortPlayers(9);
 
         //Display the contents of leaders on the leaderboard canvas
-        for(int i = 0; i < leaders.Count; i++)
+        for (int i = 0; i < leaders.Count; i++)
         {
             leaderboardEntries[i].text = (i + 1) + " - " + leaders[i].PlayerName + ": " + leaders[i].Score + " " + leaders[i].Date;
         }
@@ -224,26 +193,24 @@ public class ScoreData : MonoBehaviour
     /// <param name="name"></param>
     public void ShowPlayerData(TMP_InputField name)
     {
-        if (players.Count == 0)
-        {
+        if (!hasPopulated)
             PopulatePlayers();
-        }
 
-        singlePlayerData.Clear();
+        List<PlayerData> singlePlayerData = new List<PlayerData>();
 
         //Finds all data with the player name that matches the one being searched
-        for(int i = 0; i < players.Count; i++)
+        for (int i = 0; i < scoreEntries.players.Count; i++)
         {
-            if(players[i].PlayerName == name.text)
+            if (scoreEntries.players[i].PlayerName == name.text)
             {
-                singlePlayerData.Add(players[i]);
+                singlePlayerData.Add(scoreEntries.players[i]);
             }
         }
 
         string dataText = "";
 
         //Display contents of the single player's game data
-        for(int i = 0; i < singlePlayerData.Count; i++)
+        for (int i = 0; i < singlePlayerData.Count; i++)
         {
             dataText += singlePlayerData[i].Date + " - " + singlePlayerData[i].PlayerName + ": " + singlePlayerData[i].Score + "\n";
         }
@@ -255,25 +222,15 @@ public class ScoreData : MonoBehaviour
     /// <summary>
     /// Puts the player data in order by score
     /// </summary>
-    private void SortPlayers()
+    /// <param name="maxCount">Maximum number of players to include</param>
+    /// <returns>List of the top N score entries by score</returns>
+    private List<PlayerData> SortPlayers(int maxCount)
     {
-        int topScorerIndex = 0;
-
-        //Sort players list from greatest to least score
-        for (int o = 0; o < players.Count; o++)
-        {
-            topScorerIndex = o;
-            for (int i = o; i < players.Count; i++)
-            {
-                if (players[i].Score > players[topScorerIndex].Score)
-                {
-                    topScorerIndex = i;
-                }
-            }
-            PlayerData tempPlayer = players[o];
-            players[o] = players[topScorerIndex];
-            players[topScorerIndex] = tempPlayer;
-        }
+        List<PlayerData> sorted = new List<PlayerData>(scoreEntries.players);
+        sorted.Sort((a, b) => b.Score.CompareTo(a.Score));
+        if (sorted.Count > 9)
+            sorted.RemoveRange(9, sorted.Count - 9);
+        return sorted;
     }
 
     public void ShowKeyboard()
@@ -310,23 +267,23 @@ public class ScoreData : MonoBehaviour
     public void DetermineRank(int score)
     {
         Debug.Log("Determining Rank...");
-        if(score < 40)
+        if (score < 40)
         {
             rank.text = "D";
         }
-        else if(score >= 40 && score < 60)
+        else if (score >= 40 && score < 60)
         {
             rank.text = "C";
         }
-        else if(score >= 60 && score < 80)
+        else if (score >= 60 && score < 80)
         {
             rank.text = "B";
         }
-        else if(score >= 80 && score < 95)
+        else if (score >= 80 && score < 95)
         {
             rank.text = "A";
         }
-        else if(score >= 95)
+        else if (score >= 95)
         {
             rank.text = "S";
         }
