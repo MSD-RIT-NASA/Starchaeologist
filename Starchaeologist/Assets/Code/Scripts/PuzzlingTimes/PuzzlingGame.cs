@@ -73,12 +73,15 @@ public class PuzzlingGame : MonoBehaviour
     [SerializeField] GameObject leftHandRay;
     [SerializeField] GameObject countdownCanvas;
     [SerializeField] GameObject readyCanvas;
-
+    [SerializeField] GameObject teleportationProviderGameObject;
+    private TeleportationProvider teleportationProvider;
 
     void Start()
     {
         rightHand.SetActive(false);
         leftHand.SetActive(false);
+        teleportationProvider = teleportationProviderGameObject.GetComponent<TeleportationProvider>();
+        teleportationProvider.enabled = false;
 
         if (singleton != null && singleton != this)
         {
@@ -117,9 +120,9 @@ public class PuzzlingGame : MonoBehaviour
             countdownCanvas.SetActive(false);
             readyCanvas.SetActive(true);
             rightHand.SetActive(true);
-            rightHand.getComponent<S_HandAction>().DisableTeleport(true);
+            rightHand.GetComponent<S_HandAction>().DisableTeleport(false);
             leftHand.SetActive(true);
-            leftHand.getComponent<S_HandAction>().DisableTeleport(true);
+            leftHand.GetComponent<S_HandAction>().DisableTeleport(false);
             rightHandRay.SetActive(true);
             leftHandRay.SetActive(true);
         }
@@ -355,10 +358,16 @@ public class PuzzlingGame : MonoBehaviour
     public void TimeToMove()
     {
         rightHandRay.SetActive(false);
-        rightHand.getComponent<S_HandAction>().DisableTeleport(false);
+        rightHand.GetComponent<S_HandAction>().DisableTeleport(false);
         leftHandRay.SetActive(false);
-        leftHand.getComponent<S_HandAction>().DisableTeleport(false);
+        leftHand.GetComponent<S_HandAction>().DisableTeleport(false);
         timerCanvas.SetActive(false);
+
+
+        if (!teleportationProvider.enabled)
+        {
+            teleportationProvider.enabled = true;
+        }
         //Tells the python server the game has started
         //GetComponent<UdpSocket>().GameStart = true;
         //Debug.Log("START BUTTON PRESSED");
