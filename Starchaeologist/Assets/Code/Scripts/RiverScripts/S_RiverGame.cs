@@ -200,10 +200,7 @@ public class S_RiverGame : S_RiverBuilder
             }
             else if (checkpointIndex == checkpoints.Count)//if the raft has reached the last checkpoint, stop
             {
-                slowDown = false;
-                timeToMove = false;
-                playerAttached = false;
-                playerReference.transform.parent = null;
+                StopMove();
             }
             else//otherwise set the new destination tot he next checkpoint
             {
@@ -261,7 +258,14 @@ public class S_RiverGame : S_RiverBuilder
 
     public void StopMove()
     {
+        // End the level
+        slowDown = false;
         timeToMove = false;
+        playerAttached = false;
+        playerReference.transform.parent = null;
+
+        // Show the canvas at the end of the level
+        FindObjectOfType<ScoreData>().SetScoreCanvasActive(true);
     }
 }
 
