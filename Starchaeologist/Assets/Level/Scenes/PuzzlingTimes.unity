@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427135, b: 0.5645232, a: 1}
+  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2348,6 +2348,8 @@ MonoBehaviour:
   rightHandRay: {fileID: 7387500813503913827}
   leftHandRay: {fileID: 7723398613073621425}
   server: {fileID: 839490672}
+  XRrig: {fileID: 7865517847945838355}
+  LockPos: {x: 6.3, y: 0.5, z: 14}
   audSrc: {fileID: 839490671}
   timerCanvas: {fileID: 1143009461}
   scoreDisplay: {fileID: 909872868}
@@ -6097,6 +6099,7 @@ MonoBehaviour:
   leftHandRay: {fileID: 7723398613073621425}
   countdownCanvas: {fileID: 859921289}
   readyCanvas: {fileID: 2036501024}
+  teleportationProviderGameObject: {fileID: 7865517847945838355}
 --- !u!82 &839490671
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8020,7 +8023,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 518c00746e903504fb950e9b8e70a4bd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.08
+      value: -6.09
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 518c00746e903504fb950e9b8e70a4bd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -10700,7 +10703,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 518c00746e903504fb950e9b8e70a4bd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.08
+      value: -6.09
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 518c00746e903504fb950e9b8e70a4bd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16759,7 +16762,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2603177177038992642, guid: 51180fda9ad2ad548a83c40ff0f492af, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.81
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2603177177038992642, guid: 51180fda9ad2ad548a83c40ff0f492af, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16779,7 +16782,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2603177177038992642, guid: 51180fda9ad2ad548a83c40ff0f492af, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 7.01
+      value: 6.3
       objectReference: {fileID: 0}
     - target: {fileID: 2603177177038992642, guid: 51180fda9ad2ad548a83c40ff0f492af, type: 3}
       propertyPath: m_AnchoredPosition.y

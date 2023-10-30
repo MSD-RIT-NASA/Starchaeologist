@@ -10,7 +10,6 @@ public class PauseMenu : MonoBehaviour
     //singleton
     public static PauseMenu singleton { get; private set; }
 
-
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
     [SerializeField] GameObject playerReference;
