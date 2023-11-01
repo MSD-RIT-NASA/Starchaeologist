@@ -9,6 +9,7 @@ using TMPro;
 using System.Globalization;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 public class ScoreData : MonoBehaviour
 {
@@ -32,8 +33,10 @@ public class ScoreData : MonoBehaviour
 
     private string currentScene;
 
-    [SerializeField]
-    private GameObject storedMessage;
+    [SerializeField] private TMP_Text storeStatusText;
+    [SerializeField] private string storedMessage;
+    [SerializeField] private string emptyNameMessage;
+    [SerializeField] private string invalidDateMessage;
 
     private bool hasPopulated;
     private bool scoreCanvasActive;
@@ -90,7 +93,7 @@ public class ScoreData : MonoBehaviour
         ////}
         //waitCanvas.SetActive(false);
         scoreCanvas.SetActive(isActive);
-        storedMessage.SetActive(false);
+        storeStatusText.text = "";
         if (isActive)
         {
             scoreCanvasActive = true;
@@ -121,11 +124,25 @@ public class ScoreData : MonoBehaviour
     /// </summary>
     public void StorePlayerData()
     {
+        // Do not store empty or invalid data
+        string inputName = playerName.text.Trim();
+        string inputDateText = date.text.Trim();
+        if (inputName.Length == 0)
+        {
+            storeStatusText.text = emptyNameMessage;
+            return;
+        }
+        if (!DateTime.TryParse(inputDateText, out DateTime inputDate))
+        {
+            storeStatusText.text = invalidDateMessage;
+            return;
+        }
+
         // Ensure that the player list has been populated since we are updating the JSON of existing scores
         PopulatePlayers();
 
         // Add a new score entry to the player list. If this is the player's second score on this date, override the existing one
-        PlayerData newPlayerData = new PlayerData(playerName.text, date.text, float.Parse(score.text), rank.text);
+        PlayerData newPlayerData = new PlayerData(inputName, inputDate.ToShortDateString(), float.Parse(score.text), rank.text);
         int existingIndex = scoreEntries.players.FindIndex(p =>
             p.PlayerName == newPlayerData.PlayerName
             && p.Date == newPlayerData.Date);
@@ -137,12 +154,12 @@ public class ScoreData : MonoBehaviour
         }
         else
             scoreEntries.players.Add(newPlayerData);
-        scoreEntries.lastWrite = System.DateTime.Now.ToShortDateString();
+        scoreEntries.lastWrite = DateTime.Now;
 
         // Reserialize the scores into a JSON file
         SerializeScores();
 
-        storedMessage.SetActive(true);
+        storeStatusText.text = storedMessage;
         Debug.Log("Stored");
     }
 

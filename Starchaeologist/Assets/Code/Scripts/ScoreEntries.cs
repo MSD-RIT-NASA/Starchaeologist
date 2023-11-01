@@ -5,6 +5,6 @@ using UnityEngine;
 [Serializable]
 public class ScoreEntries
 {
-    public string lastWrite;
+    public DateTime lastWrite;
     public List<PlayerData> players;
 }
