@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class EndCollision : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class EndCollision : MonoBehaviour
     public GameObject leftHandRay;
     [SerializeField]
     private UdpSocket server;
+    [SerializeField]
+    private GameObject XRrig;
+    [SerializeField] private Vector3 LockPos;
 
     [SerializeField]
     private AudioSource audSrc;
@@ -38,6 +42,12 @@ public class EndCollision : MonoBehaviour
             {
                 timerCanvas.SetActive(false);
                 audSrc.Stop();
+            }
+
+            if(XRrig!= null)
+            {
+                XRrig.GetComponent<TeleportationProvider>().enabled = false;
+                XRrig.transform.position = LockPos;
             }
             Destroy(this);
         }

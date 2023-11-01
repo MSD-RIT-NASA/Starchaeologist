@@ -19,6 +19,7 @@ public class S_HandAction : MonoBehaviour
     GameObject teleportReticle;
     float activationThreshold = 0.2f;
     bool teleportActive = false;
+    bool teleportDisabled = true;
     //enable this if this script is attached to the left hand of the rig
     //This is enabled automatically in the prefab
     public bool leftHand = false;
@@ -112,16 +113,20 @@ public class S_HandAction : MonoBehaviour
         }
     }
 
+    public void DisableTeleport(bool isDisabled)
+    {
+        teleportDisabled = isDisabled;
+    }
     
 
     // Update is called once per frame
     void Update()
     {
-        if(teleportRay && teleportLine)
+        if (teleportRay && teleportLine && !teleportDisabled)
         {
             teleportLine.enabled = teleportActive;
             teleportRay.enabled = teleportActive;
-            if(!teleportActive)
+            if (!teleportActive)
             {
                 teleportReticle.SetActive(teleportActive);
             }
