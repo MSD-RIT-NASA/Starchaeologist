@@ -6034,14 +6034,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treasurePrefabs:
-  - {fileID: 7741937711840232210, guid: c101757b5c15ac6459f01235e93803a5, type: 3}
-  - {fileID: 2427158349449963868, guid: e8e3273f8d05d6b48b67564b1b48152c, type: 3}
-  - {fileID: 2240620234968401645, guid: a2ff789a172933c40925bcb6349b6456, type: 3}
-  - {fileID: 8779571309560358197, guid: c8b0876f93899084c8fce04b2c82d777, type: 3}
-  - {fileID: 2218973407346580244, guid: 075dcf59537ab4a49a46970c36c8cebd, type: 3}
-  - {fileID: 4328456171610270049, guid: af900a58398c8074e830f373e0ec750d, type: 3}
-  - {fileID: 5286565569865051167, guid: f66a2408533de9d42a8b781b5f68a1ec, type: 3}
-  - {fileID: 2899595631582243972, guid: 352501bcc2dd0e74eb9047494079c81f, type: 3}
+  - {fileID: 2899595631582243972, guid: da6a542d7cee7894fbbb8920eab21382, type: 3}
+  - {fileID: 5286565569865051167, guid: 1df7cdf33f855c743bdd56621e5fddae, type: 3}
+  - {fileID: 4328456171610270049, guid: 3745d7cb1d50209419566bc01d199627, type: 3}
+  - {fileID: 8779571309560358197, guid: 211d7305f1f1dc34dbee8bcf8eafe8ed, type: 3}
+  - {fileID: 2240620234968401645, guid: d4df05f5df7ca474ab9b795529d06097, type: 3}
+  - {fileID: 2427158349449963868, guid: 333b77bb1a98e23409d5d462f47d65c1, type: 3}
+  - {fileID: 7741937711840232210, guid: 0c242ccc4b90f7149bda88024732d3ed, type: 3}
   tilePrefab: {fileID: 756580137234253135, guid: 2193ee956ba53e849ac74aeb47ade0a2, type: 3}
   ceilingPrefab: {fileID: 6548673210526659539, guid: 3a1324afc6ca398498619a186be650ba, type: 3}
   swingPrefab: {fileID: 6053136410156316217, guid: f43ab709a97893141a0dd0d824fd2308, type: 3}
@@ -17447,6 +17446,14 @@ PrefabInstance:
     - target: {fileID: 5873311957781832278, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
       propertyPath: m_Name
       value: XR Rig 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5873311958240752272, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
+      propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Id
+      value: e4aeeaf1-c4b6-4a14-bd9f-ca6af5eb57f0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5873311958240752272, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
+      propertyPath: m_DirectionalAnchorRotationAction.m_Action.m_Name
+      value: Directional Anchor Rotation
       objectReference: {fileID: 0}
     - target: {fileID: 5873311958941772575, guid: 1f96cee9cfce7f04b99f2a5726b71f0d, type: 3}
       propertyPath: menuInputReference

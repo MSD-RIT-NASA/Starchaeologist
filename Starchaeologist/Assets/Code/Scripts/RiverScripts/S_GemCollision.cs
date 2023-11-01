@@ -9,16 +9,38 @@ public class S_GemCollision : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        print("Trigger");
         //when the player hits the obstacle, tell the game manager to deduct points
-        if (other.gameObject.CompareTag("Tresure"))
+        if (other.gameObject.CompareTag("Treasure"))
         {
 
+            GameObject manager = GameObject.Find("Game Manager");
+            if(manager)
+            {
+                S_RiverGame riverManager = manager.GetComponent<S_RiverGame>();
+                if(riverManager != null)
+                {
+                    manager.GetComponent<S_RiverGame>().ObstacleHit();
+                }
+            }
+            scoreScript scoreScript = scoreScript.Instance;
+            if(scoreScript)
+            {
+                scoreScript.treasureScore();
 
-            GameObject.Find("Game Manager").GetComponent<S_RiverGame>().ObstacleHit();
-            scoreScript.Instance.treasureScore();
-            Debug.Log(scoreScript.Score);
-            Debug.Log("score updated");
-            scoreText.text = "Score: " + scoreScript.Score;
+                Debug.Log(scoreScript.Score);
+                Debug.Log("score updated");
+
+                scoreText.text = "Score: " + scoreScript.Score;
+
+            }
+            else
+            {
+                Debug.LogWarning("Score script instance was not found");
+            }
+
+            other.gameObject.GetComponent<TreasureCollision>().ActivateFX();
+            Destroy(other.gameObject.transform.parent.gameObject);
         }
     }
 }

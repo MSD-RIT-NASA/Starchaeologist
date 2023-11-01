@@ -57,9 +57,9 @@ public class S_RiverBuilder : MonoBehaviour
             if (RiverPlaysection.transform.GetChild(x).childCount > 3)
             {
                 //randomization of obsicaleType,placement, and position/rotation
-                GameObject randomObstacle1 = obstaclePrefabs[rand.Next(0,5)];
-                GameObject randomObstacle2 = obstaclePrefabs[rand.Next(0, 5)];
-                GameObject randomTreasure = treasurePrefabs[rand.Next(0, 8)];
+                GameObject randomObstacle1 = obstaclePrefabs[rand.Next(0, obstaclePrefabs.Count)];
+                GameObject randomObstacle2 = obstaclePrefabs[rand.Next(0, obstaclePrefabs.Count)];
+                GameObject randomTreasure = treasurePrefabs[rand.Next(0, treasurePrefabs.Count)];
 
                 //each segment will spawn obsticales and treasures at differing orientations
                 /*
