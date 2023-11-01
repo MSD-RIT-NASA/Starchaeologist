@@ -64,6 +64,7 @@ public class ScoreData : MonoBehaviour
             currentScene = "Scores/" + SceneManager.GetActiveScene().name + "Scores";
 
             playerName.text = keyboardCanvas.NameEdit;
+            keyboardCanvas.DateEdit = DateTime.Now.ToShortDateString();
             date.text = keyboardCanvas.DateEdit;
         }
     }
@@ -245,8 +246,8 @@ public class ScoreData : MonoBehaviour
     {
         List<PlayerData> sorted = new List<PlayerData>(scoreEntries.players);
         sorted.Sort((a, b) => b.Score.CompareTo(a.Score));
-        if (sorted.Count > 9)
-            sorted.RemoveRange(9, sorted.Count - 9);
+        if (sorted.Count > maxCount)
+            sorted.RemoveRange(maxCount, sorted.Count - maxCount);
         return sorted;
     }
 
