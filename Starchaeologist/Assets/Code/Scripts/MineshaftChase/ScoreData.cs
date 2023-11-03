@@ -100,6 +100,7 @@ public class ScoreData : MonoBehaviour
         {
             scoreCanvasActive = true;
             keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
+            keyboardCanvas.gameObject.SetActive(true);
         }
     }
 
