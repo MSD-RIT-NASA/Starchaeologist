@@ -80,6 +80,10 @@ public class PuzzlingGame : MonoBehaviour
     {
         rightHand.SetActive(false);
         leftHand.SetActive(false);
+
+        rightHandRay.SetActive(false);
+        leftHandRay.SetActive(false);
+
         teleportationProvider = teleportationProviderGameObject.GetComponent<TeleportationProvider>();
         teleportationProvider.enabled = false;
 
