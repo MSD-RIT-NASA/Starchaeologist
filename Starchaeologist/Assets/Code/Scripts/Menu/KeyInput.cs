@@ -1,117 +1,109 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using UnityEngine.EventSystems;
 
 public class KeyInput : MonoBehaviour
 {
-    [SerializeField]
-    private List<Button> keys;
+    /// <summary>
+    /// Input field that the keyboard is currently typing in
+    /// </summary>
+    public TMP_InputField EditingField { get; private set; }
 
-    [SerializeField]
-    private Button keyA;
+    /// <summary>
+    /// Indicates how recently the user interacted with the keyboard. If the timer is 0 when the input field is deselected,
+    /// the user did not recently interact with the keyboard so we can disable it.
+    /// Based on how Unity events work, it must be set to 2 when the user interacts with the keyboard in order for it to stay on screen.
+    /// (This timer basically creates its own "selection system" to keep the keyboard on screen when pushing keys.)
+    /// </summary>
+    private int refocusTimer = 0;
 
-    [SerializeField]
-    private string nameEdit;
-
-    [SerializeField]
-    private string dateEdit;
-
-    [SerializeField]
-    private string searchNameEdit;
-
-    private bool editingName;
-
-    private bool scoreCanvasActive;
-
-    public string NameEdit
+    /// <summary>
+    /// Activates the keyboard
+    /// </summary>
+    /// <param name="editingField">Input field to type in</param>
+    public void BeginEditing(TMP_InputField editingField)
     {
-        get { return nameEdit; }
-        set { nameEdit = value; }
-    }
-    public string DateEdit
-    {
-        get { return dateEdit; }
-        set { dateEdit = value; }
-    }
-    public string SearchNameEdit
-    {
-        get { return searchNameEdit; }
-        set { searchNameEdit = value; }
+        EditingField = editingField;
+        gameObject.SetActive(true);
+        refocusTimer = 2;
     }
 
-    public bool EditingName
+    /// <summary>
+    /// Manually maintains focus on the editing field and ensures that the keyboard stays on screen
+    /// </summary>
+    public void ContinueEditing()
     {
-        get { return editingName; }
-        set { editingName = value; }
-    }
-    public bool ScoreCanvasActive
-    {
-        get { return scoreCanvasActive; }
-        set { scoreCanvasActive = value; }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        editingName = true;
-        scoreCanvasActive = true;
+        refocusTimer = 2;
+        if (EditingField != null)
+            EventSystem.current.SetSelectedGameObject(EditingField.gameObject);
     }
 
+    /// <summary>
+    /// Attempts to stop editing the input field. If the user has not just clicked a key on the keyboard,
+    /// then the keyboard will disappear and the input field will fully be deselected.
+    /// </summary>
+    public void EndEditing()
+    {
+        StartCoroutine(AttemptDeactivate());
+    }
+
+    /// <summary>
+    /// Every frame, decrement the refocus timer
+    /// </summary>
+    private void Update()
+    {
+        if (refocusTimer > 0)
+            refocusTimer--;
+    }
+
+    /// <summary>
+    /// Reselects the input field and adds a character to it
+    /// </summary>
+    /// <param name="label">Text component containing the character to add</param>
     public void AddKeyInput(TMP_Text label)
     {
-        if (!scoreCanvasActive)
+        if (EditingField != null)
         {
-            if (label.text == "<[x]" && searchNameEdit.Length > 0)
-            {
-                string newText = searchNameEdit.Substring(0, searchNameEdit.Length - 1);
-                searchNameEdit = newText;
-            }
-            else if(label.text == "<[x]")
-            {
+            // Maintain focus on the editing field
+            ContinueEditing();
 
-            }
-            else
-            {
-                searchNameEdit += label.text;
-            }
+            // Simulate a capital letter key press
+            Event e = Event.KeyboardEvent(label.text);
+            e.character = char.ToUpper(e.character);
+            EditingField.ProcessEvent(e);
+            EditingField.ForceLabelUpdate();
         }
-        else
+    }
+
+    /// <summary>
+    /// Reselects the input field and removes a character from it (emulating the backspace key)
+    /// </summary>
+    public void RemoveKeyInput()
+    {
+        if (EditingField != null)
         {
-            switch (editingName)
-            {
-                case true:
-                    if (label.text == "<[x]" && nameEdit.Length > 0)
-                    {
-                        string newText = nameEdit.Substring(0, nameEdit.Length - 1);
-                        nameEdit = newText;
-                    }
-                    else if (label.text == "<[x]")
-                    {
+            // Maintain focus on the editing field
+            ContinueEditing();
 
-                    }
-                    else
-                    {
-                        nameEdit += label.text;
-                    }
-                    break;
-                case false:
-                    if (label.text == "<[x]" && dateEdit.Length > 0)
-                    {
-                        string newText = dateEdit.Substring(0, dateEdit.Length - 1);
-                        dateEdit = newText;
-                    }
-                    else if (label.text == "<[x]")
-                    {
+            // Simulate a backscape key press
+            Event e = Event.KeyboardEvent("backspace");
+            EditingField.ProcessEvent(e);
+            EditingField.ForceLabelUpdate();
+        }
+    }
 
-                    }
-                    else
-                    {
-                        dateEdit += label.text;
-                    }
-                    break;
-            }
+    /// <summary>
+    /// Whenever the input field is deselected, wait one frame for events to propagate and then
+    /// deactivate the keyboard if the input field has truly been deselected (i.e. if the user clicked out of the keyboard)
+    /// </summary>
+    private IEnumerator AttemptDeactivate()
+    {
+        yield return new WaitForEndOfFrame();
+        if (EditingField == null || refocusTimer == 0)
+        {
+            EditingField = null;
+            gameObject.SetActive(false);
         }
     }
 }

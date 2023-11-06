@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 5919337515679912980}
   - component: {fileID: 5281996963232938562}
   - component: {fileID: 5033360212270458090}
+  - component: {fileID: 6388493299108150115}
   m_Layer: 5
   m_Name: KeyF
   m_TagString: Untagged
@@ -166,7 +167,7 @@ RectTransform:
   m_Children:
   - {fileID: 8960335752898951921}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -224,7 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -254,19 +255,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5281996963232938562}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 5056177916677229696}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &6388493299108150115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370214097016147565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 5056177916677229696}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &399338603832317037
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,6 +431,7 @@ GameObject:
   - component: {fileID: 7603485526461566354}
   - component: {fileID: 5673763475845574588}
   - component: {fileID: 4906264645637977342}
+  - component: {fileID: 4938191581829801243}
   m_Layer: 5
   m_Name: Key6
   m_TagString: Untagged
@@ -433,7 +452,7 @@ RectTransform:
   m_Children:
   - {fileID: 6022586594654200017}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 33
+  m_RootOrder: 34
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -491,7 +510,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -521,19 +540,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5673763475845574588}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 7465658663992499978}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &4938191581829801243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839371002032686689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 7465658663992499978}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &993715999544425796
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,6 +716,7 @@ GameObject:
   - component: {fileID: 5787789586334151210}
   - component: {fileID: 2668525110424033274}
   - component: {fileID: 6036991492206079030}
+  - component: {fileID: 6967099091737662535}
   m_Layer: 5
   m_Name: KeyX
   m_TagString: Untagged
@@ -700,7 +737,7 @@ RectTransform:
   m_Children:
   - {fileID: 309285506916900644}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 23
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -758,7 +795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -788,19 +825,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2668525110424033274}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2704857102497276638}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &6967099091737662535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1093078820428670841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2704857102497276638}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1293369609403305949
 GameObject:
   m_ObjectHideFlags: 0
@@ -1081,6 +1135,7 @@ GameObject:
   - component: {fileID: 7789799849439359260}
   - component: {fileID: 8812266971016102308}
   - component: {fileID: 5917314655621332125}
+  - component: {fileID: 942808571116291715}
   m_Layer: 5
   m_Name: KeyS
   m_TagString: Untagged
@@ -1101,7 +1156,7 @@ RectTransform:
   m_Children:
   - {fileID: 177643667060897918}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 18
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1159,7 +1214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1189,19 +1244,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8812266971016102308}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 504658984927371514}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &942808571116291715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446530045657132928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 504658984927371514}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1460508532802751286
 GameObject:
   m_ObjectHideFlags: 0
@@ -1214,6 +1286,7 @@ GameObject:
   - component: {fileID: 7859562978926697292}
   - component: {fileID: 8726248894134995680}
   - component: {fileID: 5751421406825652993}
+  - component: {fileID: 5697821396668257124}
   m_Layer: 5
   m_Name: Key5
   m_TagString: Untagged
@@ -1234,7 +1307,7 @@ RectTransform:
   m_Children:
   - {fileID: 2887717623195170376}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 32
+  m_RootOrder: 33
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1292,7 +1365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1322,19 +1395,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8726248894134995680}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 949792611657542658}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &5697821396668257124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460508532802751286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 949792611657542658}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1460608632517284631
 GameObject:
   m_ObjectHideFlags: 0
@@ -1347,6 +1437,7 @@ GameObject:
   - component: {fileID: 451276063987973508}
   - component: {fileID: 1535599257623696951}
   - component: {fileID: 1176860376650140757}
+  - component: {fileID: 6655620877738033666}
   m_Layer: 5
   m_Name: KeyI
   m_TagString: Untagged
@@ -1367,7 +1458,7 @@ RectTransform:
   m_Children:
   - {fileID: 4406439411780724441}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1425,7 +1516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1455,19 +1546,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1535599257623696951}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8650470727070292733}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &6655620877738033666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460608632517284631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8650470727070292733}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1516398243287259795
 GameObject:
   m_ObjectHideFlags: 0
@@ -1614,6 +1722,7 @@ GameObject:
   - component: {fileID: 9120501969995615334}
   - component: {fileID: 3019003378232429512}
   - component: {fileID: 6126592451933848677}
+  - component: {fileID: 2517049483561567848}
   m_Layer: 5
   m_Name: Key9
   m_TagString: Untagged
@@ -1634,7 +1743,7 @@ RectTransform:
   m_Children:
   - {fileID: 6898912843960324947}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 36
+  m_RootOrder: 37
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1692,7 +1801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1722,19 +1831,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3019003378232429512}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2240142033140495861}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &2517049483561567848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516541891529373667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2240142033140495861}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1931331982982010896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1747,6 +1873,7 @@ GameObject:
   - component: {fileID: 1644110215939488149}
   - component: {fileID: 6143001032352988647}
   - component: {fileID: 5396015894282912325}
+  - component: {fileID: 7895600738365091458}
   m_Layer: 5
   m_Name: KeyJ
   m_TagString: Untagged
@@ -1767,7 +1894,7 @@ RectTransform:
   m_Children:
   - {fileID: 47312423827633756}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1825,7 +1952,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1855,19 +1982,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6143001032352988647}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2859928996698326905}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &7895600738365091458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931331982982010896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2859928996698326905}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &2077464784936790357
 GameObject:
   m_ObjectHideFlags: 0
@@ -1880,6 +2024,7 @@ GameObject:
   - component: {fileID: 6301941853682726336}
   - component: {fileID: 2017154907470783263}
   - component: {fileID: 345301750936266160}
+  - component: {fileID: 697012091969536906}
   m_Layer: 5
   m_Name: Key3
   m_TagString: Untagged
@@ -1900,7 +2045,7 @@ RectTransform:
   m_Children:
   - {fileID: 8686996193247256135}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 30
+  m_RootOrder: 31
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1958,7 +2103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1988,19 +2133,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2017154907470783263}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 5936348705921243103}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &697012091969536906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077464784936790357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 5936348705921243103}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &2409110489299662030
 GameObject:
   m_ObjectHideFlags: 0
@@ -2147,6 +2309,7 @@ GameObject:
   - component: {fileID: 6862443418295102474}
   - component: {fileID: 7286756512634240135}
   - component: {fileID: 4723638124005187039}
+  - component: {fileID: 4091006729253408993}
   m_Layer: 5
   m_Name: KeyP
   m_TagString: Untagged
@@ -2167,7 +2330,7 @@ RectTransform:
   m_Children:
   - {fileID: 1796476575039670154}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2225,7 +2388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -2255,19 +2418,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7286756512634240135}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 7799905799768043109}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &4091006729253408993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2442233744892945376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 7799905799768043109}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &2515586029486003384
 GameObject:
   m_ObjectHideFlags: 0
@@ -2280,6 +2460,7 @@ GameObject:
   - component: {fileID: 8098244670331183935}
   - component: {fileID: 2049611737357698438}
   - component: {fileID: 7628698417166893397}
+  - component: {fileID: 3211351011580516559}
   m_Layer: 5
   m_Name: Key8
   m_TagString: Untagged
@@ -2300,7 +2481,7 @@ RectTransform:
   m_Children:
   - {fileID: 6866746184211348496}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 35
+  m_RootOrder: 36
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2358,7 +2539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -2388,19 +2569,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2049611737357698438}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 4211074857965898279}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &3211351011580516559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2515586029486003384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 4211074857965898279}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &2603177177038992645
 GameObject:
   m_ObjectHideFlags: 0
@@ -2433,6 +2631,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.06389, y: 0.06389, z: 0.06389}
   m_Children:
+  - {fileID: 4754796601654556108}
   - {fileID: 7677338793719018456}
   - {fileID: 5069760333157374066}
   - {fileID: 7406005526965509014}
@@ -2573,51 +2772,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c6518d57450abc47840c3fd6141d813, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keys:
-  - {fileID: 3832301613768658965}
-  - {fileID: 5892393255059636089}
-  - {fileID: 5622726858387607043}
-  - {fileID: 2852379507630119161}
-  - {fileID: 7519214634438977851}
-  - {fileID: 5033360212270458090}
-  - {fileID: 4187342838246203765}
-  - {fileID: 8394086159618341241}
-  - {fileID: 1176860376650140757}
-  - {fileID: 5396015894282912325}
-  - {fileID: 3215827788472437461}
-  - {fileID: 2104267079322205914}
-  - {fileID: 7181469434419068368}
-  - {fileID: 3135022536413643946}
-  - {fileID: 8524418124430574572}
-  - {fileID: 4723638124005187039}
-  - {fileID: 507430675729944260}
-  - {fileID: 524155033990144712}
-  - {fileID: 5917314655621332125}
-  - {fileID: 491475810774903527}
-  - {fileID: 5021357560142120472}
-  - {fileID: 5404766403671678976}
-  - {fileID: 5910561850944032947}
-  - {fileID: 6036991492206079030}
-  - {fileID: 7079226083375179386}
-  - {fileID: 5710202526871702500}
-  - {fileID: 7211727394912636392}
-  - {fileID: 8287255031992638841}
-  - {fileID: 7956480774571838350}
-  - {fileID: 1226344660573359687}
-  - {fileID: 345301750936266160}
-  - {fileID: 7041878359559445294}
-  - {fileID: 5751421406825652993}
-  - {fileID: 4906264645637977342}
-  - {fileID: 5583225071498150082}
-  - {fileID: 7628698417166893397}
-  - {fileID: 6126592451933848677}
-  - {fileID: 37247083489492428}
-  - {fileID: 4984092177285873432}
-  - {fileID: 7108198020946062738}
-  keyA: {fileID: 0}
-  nameEdit: 
-  dateEdit: 
-  searchNameEdit: 
 --- !u!1 &2642659171819751996
 GameObject:
   m_ObjectHideFlags: 0
@@ -3032,6 +3186,7 @@ GameObject:
   - component: {fileID: 6591306902454114856}
   - component: {fileID: 1645509194396493913}
   - component: {fileID: 5583225071498150082}
+  - component: {fileID: 2400603866274270210}
   m_Layer: 5
   m_Name: Key7
   m_TagString: Untagged
@@ -3052,7 +3207,7 @@ RectTransform:
   m_Children:
   - {fileID: 4994934341885100009}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 34
+  m_RootOrder: 35
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3110,7 +3265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -3140,19 +3295,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1645509194396493913}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 4205754873539259859}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &2400603866274270210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3149242021422786691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 4205754873539259859}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &3287338163524680668
 GameObject:
   m_ObjectHideFlags: 0
@@ -3165,6 +3337,7 @@ GameObject:
   - component: {fileID: 5910651583589104651}
   - component: {fileID: 4511880663827870372}
   - component: {fileID: 7519214634438977851}
+  - component: {fileID: 139651108085856862}
   m_Layer: 5
   m_Name: KeyE
   m_TagString: Untagged
@@ -3185,7 +3358,7 @@ RectTransform:
   m_Children:
   - {fileID: 2963171089558083265}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3243,7 +3416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -3273,19 +3446,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4511880663827870372}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 6937319875654204028}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &139651108085856862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3287338163524680668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 6937319875654204028}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &3300216543548744265
 GameObject:
   m_ObjectHideFlags: 0
@@ -3834,6 +4024,7 @@ GameObject:
   - component: {fileID: 4756609664833658712}
   - component: {fileID: 785949156341039541}
   - component: {fileID: 2852379507630119161}
+  - component: {fileID: 6047579792201535046}
   m_Layer: 5
   m_Name: KeyD
   m_TagString: Untagged
@@ -3854,7 +4045,7 @@ RectTransform:
   m_Children:
   - {fileID: 5428814109224037992}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3912,7 +4103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -3942,19 +4133,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 785949156341039541}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 6307478970068504579}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &6047579792201535046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3616154183771010591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 6307478970068504579}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &3679717546076649429
 GameObject:
   m_ObjectHideFlags: 0
@@ -3967,6 +4175,7 @@ GameObject:
   - component: {fileID: 3654758821651759957}
   - component: {fileID: 7999438446748049317}
   - component: {fileID: 2104267079322205914}
+  - component: {fileID: 2793078836736351235}
   m_Layer: 5
   m_Name: KeyL
   m_TagString: Untagged
@@ -3987,7 +4196,7 @@ RectTransform:
   m_Children:
   - {fileID: 5447528452179578692}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4045,7 +4254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -4075,19 +4284,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7999438446748049317}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8904883591779738923}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &2793078836736351235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3679717546076649429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8904883591779738923}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &4261647315496588568
 GameObject:
   m_ObjectHideFlags: 0
@@ -4234,6 +4460,7 @@ GameObject:
   - component: {fileID: 4489867604085710614}
   - component: {fileID: 1418051585665102958}
   - component: {fileID: 3135022536413643946}
+  - component: {fileID: 8340293406097523226}
   m_Layer: 5
   m_Name: KeyN
   m_TagString: Untagged
@@ -4254,7 +4481,7 @@ RectTransform:
   m_Children:
   - {fileID: 5438512807318537604}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4312,7 +4539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -4342,19 +4569,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1418051585665102958}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 4427374486402096620}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &8340293406097523226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4376961806229365218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 4427374486402096620}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &4439895864621468301
 GameObject:
   m_ObjectHideFlags: 0
@@ -4635,6 +4879,7 @@ GameObject:
   - component: {fileID: 2197239088670641399}
   - component: {fileID: 5671949076449323541}
   - component: {fileID: 5910561850944032947}
+  - component: {fileID: 8062032578489612700}
   m_Layer: 5
   m_Name: KeyW
   m_TagString: Untagged
@@ -4655,7 +4900,7 @@ RectTransform:
   m_Children:
   - {fileID: 5780117121180950616}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 22
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4713,7 +4958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -4743,19 +4988,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5671949076449323541}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8960413282160656788}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &8062032578489612700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4772536089426190758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8960413282160656788}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &4790910094134571603
 GameObject:
   m_ObjectHideFlags: 0
@@ -4768,6 +5030,7 @@ GameObject:
   - component: {fileID: 7794706498980647039}
   - component: {fileID: 5202506761679491302}
   - component: {fileID: 7041878359559445294}
+  - component: {fileID: 8277620112187685947}
   m_Layer: 5
   m_Name: Key4
   m_TagString: Untagged
@@ -4788,7 +5051,7 @@ RectTransform:
   m_Children:
   - {fileID: 2862343170299571776}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 31
+  m_RootOrder: 32
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4846,7 +5109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -4876,19 +5139,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5202506761679491302}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2664543296743238771}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &8277620112187685947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4790910094134571603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2664543296743238771}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &4835824933527800311
 GameObject:
   m_ObjectHideFlags: 0
@@ -5023,6 +5303,111 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &4836808068451593078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4754796601654556108}
+  - component: {fileID: 658165096829982882}
+  - component: {fileID: 193923163114263897}
+  - component: {fileID: 5137801248483907357}
+  m_Layer: 5
+  m_Name: FocusBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4754796601654556108
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4836808068451593078}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2603177177038992642}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 400, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &658165096829982882
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4836808068451593078}
+  m_CullTransparentMesh: 1
+--- !u!114 &193923163114263897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4836808068451593078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.101960786}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5137801248483907357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4836808068451593078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: ContinueEditing
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &4903920127051273904
 GameObject:
   m_ObjectHideFlags: 0
@@ -5035,6 +5420,7 @@ GameObject:
   - component: {fileID: 4120104229265796980}
   - component: {fileID: 5449550891266063287}
   - component: {fileID: 8524418124430574572}
+  - component: {fileID: 8214037616481995876}
   m_Layer: 5
   m_Name: KeyO
   m_TagString: Untagged
@@ -5055,7 +5441,7 @@ RectTransform:
   m_Children:
   - {fileID: 5733554101225479790}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5113,7 +5499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -5143,19 +5529,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5449550891266063287}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2934775990123279457}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &8214037616481995876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4903920127051273904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2934775990123279457}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &4996843653744815180
 GameObject:
   m_ObjectHideFlags: 0
@@ -5302,6 +5705,7 @@ GameObject:
   - component: {fileID: 1259779442284827994}
   - component: {fileID: 8688832037389786756}
   - component: {fileID: 1226344660573359687}
+  - component: {fileID: 1067270081316477969}
   m_Layer: 5
   m_Name: Key2
   m_TagString: Untagged
@@ -5322,7 +5726,7 @@ RectTransform:
   m_Children:
   - {fileID: 3087199245380358768}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 29
+  m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5380,7 +5784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -5410,19 +5814,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8688832037389786756}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 5832956177457224001}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &1067270081316477969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5151475733450071490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 5832956177457224001}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &5214579713535203898
 GameObject:
   m_ObjectHideFlags: 0
@@ -5435,6 +5856,7 @@ GameObject:
   - component: {fileID: 1758028873877009486}
   - component: {fileID: 1809619323987947761}
   - component: {fileID: 5622726858387607043}
+  - component: {fileID: 8222552058385627962}
   m_Layer: 5
   m_Name: KeyC
   m_TagString: Untagged
@@ -5455,7 +5877,7 @@ RectTransform:
   m_Children:
   - {fileID: 2344106219106697194}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5513,7 +5935,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -5543,19 +5965,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1809619323987947761}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2975774067409450067}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &8222552058385627962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5214579713535203898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2975774067409450067}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &5416782350674114464
 GameObject:
   m_ObjectHideFlags: 0
@@ -5970,6 +6409,7 @@ GameObject:
   - component: {fileID: 8527527451339082627}
   - component: {fileID: 7117459433379866186}
   - component: {fileID: 4984092177285873432}
+  - component: {fileID: 7445015318505467064}
   m_Layer: 5
   m_Name: KeyPeriod
   m_TagString: Untagged
@@ -5990,7 +6430,7 @@ RectTransform:
   m_Children:
   - {fileID: 862776016667249135}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 38
+  m_RootOrder: 39
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6048,7 +6488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -6078,19 +6518,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7117459433379866186}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8090182848251860857}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &7445015318505467064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5975541039582925145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8090182848251860857}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6027013815929892331
 GameObject:
   m_ObjectHideFlags: 0
@@ -6237,6 +6694,7 @@ GameObject:
   - component: {fileID: 2707554774204704963}
   - component: {fileID: 9209631687168044907}
   - component: {fileID: 3832301613768658965}
+  - component: {fileID: 7842470561674427429}
   m_Layer: 5
   m_Name: KeyA
   m_TagString: Untagged
@@ -6257,7 +6715,7 @@ RectTransform:
   m_Children:
   - {fileID: 223602001149610587}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6315,7 +6773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -6345,19 +6803,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9209631687168044907}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 6882727698723996121}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &7842470561674427429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066985026409128965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 6882727698723996121}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6123339791261330223
 GameObject:
   m_ObjectHideFlags: 0
@@ -6772,6 +7247,7 @@ GameObject:
   - component: {fileID: 6804240425139176921}
   - component: {fileID: 8497334655234329727}
   - component: {fileID: 3215827788472437461}
+  - component: {fileID: 4783546142750303299}
   m_Layer: 5
   m_Name: KeyK
   m_TagString: Untagged
@@ -6792,7 +7268,7 @@ RectTransform:
   m_Children:
   - {fileID: 2603238743246898667}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6850,7 +7326,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -6880,19 +7356,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8497334655234329727}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 606738875952146032}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &4783546142750303299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6237644352279944500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 606738875952146032}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6288443961792099292
 GameObject:
   m_ObjectHideFlags: 0
@@ -7173,6 +7666,7 @@ GameObject:
   - component: {fileID: 1056129010060726788}
   - component: {fileID: 7035790115368518573}
   - component: {fileID: 7108198020946062738}
+  - component: {fileID: 4718116037626174119}
   m_Layer: 5
   m_Name: KeySlash
   m_TagString: Untagged
@@ -7193,7 +7687,7 @@ RectTransform:
   m_Children:
   - {fileID: 4387516368732295063}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 39
+  m_RootOrder: 40
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7251,7 +7745,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -7281,19 +7775,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7035790115368518573}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2193395446936820071}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &4718116037626174119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6564903805489921232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2193395446936820071}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6611150956051475013
 GameObject:
   m_ObjectHideFlags: 0
@@ -7306,6 +7817,7 @@ GameObject:
   - component: {fileID: 3361990560754830216}
   - component: {fileID: 3828993321324931457}
   - component: {fileID: 7181469434419068368}
+  - component: {fileID: 283255222624608093}
   m_Layer: 5
   m_Name: KeyM
   m_TagString: Untagged
@@ -7326,7 +7838,7 @@ RectTransform:
   m_Children:
   - {fileID: 1515203078943415137}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7384,7 +7896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -7414,19 +7926,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3828993321324931457}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2283573347097258584}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &283255222624608093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6611150956051475013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2283573347097258584}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6681912770792635082
 GameObject:
   m_ObjectHideFlags: 0
@@ -7439,6 +7968,7 @@ GameObject:
   - component: {fileID: 4027694900393814256}
   - component: {fileID: 8967548161508332661}
   - component: {fileID: 7956480774571838350}
+  - component: {fileID: 5018724400691679584}
   m_Layer: 5
   m_Name: Key1
   m_TagString: Untagged
@@ -7459,7 +7989,7 @@ RectTransform:
   m_Children:
   - {fileID: 2300082368414185714}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 28
+  m_RootOrder: 29
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7517,7 +8047,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -7547,19 +8077,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8967548161508332661}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 3995466003440136669}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &5018724400691679584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6681912770792635082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 3995466003440136669}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6758163617726031493
 GameObject:
   m_ObjectHideFlags: 0
@@ -7572,6 +8119,7 @@ GameObject:
   - component: {fileID: 6219974410029317828}
   - component: {fileID: 5175231663818645802}
   - component: {fileID: 37247083489492428}
+  - component: {fileID: 8783377931376603938}
   m_Layer: 5
   m_Name: Key0
   m_TagString: Untagged
@@ -7592,7 +8140,7 @@ RectTransform:
   m_Children:
   - {fileID: 6678163970997304827}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 37
+  m_RootOrder: 38
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7650,7 +8198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -7680,19 +8228,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5175231663818645802}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 4828303734757363156}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &8783377931376603938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6758163617726031493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 4828303734757363156}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6775056466853135424
 GameObject:
   m_ObjectHideFlags: 0
@@ -7705,6 +8270,7 @@ GameObject:
   - component: {fileID: 2756752915226867751}
   - component: {fileID: 2422063274536437965}
   - component: {fileID: 507430675729944260}
+  - component: {fileID: 8602818787667673279}
   m_Layer: 5
   m_Name: KeyQ
   m_TagString: Untagged
@@ -7725,7 +8291,7 @@ RectTransform:
   m_Children:
   - {fileID: 8219857629214580574}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7783,7 +8349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -7813,19 +8379,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2422063274536437965}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 7209548860368118221}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &8602818787667673279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6775056466853135424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 7209548860368118221}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7022732835824157652
 GameObject:
   m_ObjectHideFlags: 0
@@ -7972,6 +8555,7 @@ GameObject:
   - component: {fileID: 3091343152034979197}
   - component: {fileID: 3305580681953360840}
   - component: {fileID: 5404766403671678976}
+  - component: {fileID: 3604946844850230882}
   m_Layer: 5
   m_Name: KeyV
   m_TagString: Untagged
@@ -7992,7 +8576,7 @@ RectTransform:
   m_Children:
   - {fileID: 1806988628968379735}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 21
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8050,7 +8634,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -8080,19 +8664,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3305580681953360840}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 4855716965210563532}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &3604946844850230882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7039572341145745996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 4855716965210563532}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7109269390254691848
 GameObject:
   m_ObjectHideFlags: 0
@@ -8507,6 +9108,7 @@ GameObject:
   - component: {fileID: 5726323799997714907}
   - component: {fileID: 6556037697866833267}
   - component: {fileID: 8287255031992638841}
+  - component: {fileID: 355869224057536802}
   m_Layer: 5
   m_Name: KeyDelete
   m_TagString: Untagged
@@ -8527,7 +9129,7 @@ RectTransform:
   m_Children:
   - {fileID: 4520807387744544358}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 27
+  m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8585,7 +9187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -8615,19 +9217,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6556037697866833267}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8650972478277271123}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &355869224057536802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7299804505331912933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: RemoveKeyInput
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7383087493688476429
 GameObject:
   m_ObjectHideFlags: 0
@@ -8640,6 +9259,7 @@ GameObject:
   - component: {fileID: 4580703238954362759}
   - component: {fileID: 1287330475523283520}
   - component: {fileID: 491475810774903527}
+  - component: {fileID: 4922395340615598750}
   m_Layer: 5
   m_Name: KeyT
   m_TagString: Untagged
@@ -8660,7 +9280,7 @@ RectTransform:
   m_Children:
   - {fileID: 5588635335942811966}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 19
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8718,7 +9338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -8748,19 +9368,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1287330475523283520}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2439638755647163201}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &4922395340615598750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7383087493688476429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2439638755647163201}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7426283746774342175
 GameObject:
   m_ObjectHideFlags: 0
@@ -8773,6 +9410,7 @@ GameObject:
   - component: {fileID: 3359957474627337580}
   - component: {fileID: 634301977968306469}
   - component: {fileID: 7211727394912636392}
+  - component: {fileID: 758361043886321073}
   m_Layer: 5
   m_Name: KeyHyphen
   m_TagString: Untagged
@@ -8793,7 +9431,7 @@ RectTransform:
   m_Children:
   - {fileID: 5945125067752231861}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 26
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8851,7 +9489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -8881,19 +9519,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 634301977968306469}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 3388357098516388730}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &758361043886321073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7426283746774342175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 3388357098516388730}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7560195752831318311
 GameObject:
   m_ObjectHideFlags: 0
@@ -8906,6 +9561,7 @@ GameObject:
   - component: {fileID: 860141642066670175}
   - component: {fileID: 7522933899582071675}
   - component: {fileID: 8394086159618341241}
+  - component: {fileID: 2748691780774076888}
   m_Layer: 5
   m_Name: KeyH
   m_TagString: Untagged
@@ -8926,7 +9582,7 @@ RectTransform:
   m_Children:
   - {fileID: 57095950806167591}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8984,7 +9640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -9014,19 +9670,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7522933899582071675}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2468631046674002364}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &2748691780774076888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7560195752831318311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2468631046674002364}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7772762477487762009
 GameObject:
   m_ObjectHideFlags: 0
@@ -9039,6 +9712,7 @@ GameObject:
   - component: {fileID: 4348153173167226359}
   - component: {fileID: 8143542098031449322}
   - component: {fileID: 5710202526871702500}
+  - component: {fileID: 7346273907286347687}
   m_Layer: 5
   m_Name: KeyZ
   m_TagString: Untagged
@@ -9059,7 +9733,7 @@ RectTransform:
   m_Children:
   - {fileID: 8476176430377496117}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 25
+  m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9117,7 +9791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -9147,19 +9821,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8143542098031449322}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 6421356681768050993}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &7346273907286347687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7772762477487762009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 6421356681768050993}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7880096314505728887
 GameObject:
   m_ObjectHideFlags: 0
@@ -9172,6 +9863,7 @@ GameObject:
   - component: {fileID: 6525493140165452898}
   - component: {fileID: 2677814953030386737}
   - component: {fileID: 4187342838246203765}
+  - component: {fileID: 5738332288537597424}
   m_Layer: 5
   m_Name: KeyG
   m_TagString: Untagged
@@ -9192,7 +9884,7 @@ RectTransform:
   m_Children:
   - {fileID: 5470586014679259071}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9250,7 +9942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -9280,19 +9972,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2677814953030386737}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 9129990095057198424}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &5738332288537597424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880096314505728887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 9129990095057198424}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7991088684066195473
 GameObject:
   m_ObjectHideFlags: 0
@@ -9439,6 +10148,7 @@ GameObject:
   - component: {fileID: 4345729271105620257}
   - component: {fileID: 2161143938180311308}
   - component: {fileID: 7079226083375179386}
+  - component: {fileID: 1322461067363679131}
   m_Layer: 5
   m_Name: KeyY
   m_TagString: Untagged
@@ -9459,7 +10169,7 @@ RectTransform:
   m_Children:
   - {fileID: 1957732531961201780}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 24
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9517,7 +10227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -9547,19 +10257,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2161143938180311308}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 7397800376675277114}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &1322461067363679131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8067832657109784137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 7397800376675277114}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &8146963165859628157
 GameObject:
   m_ObjectHideFlags: 0
@@ -9572,6 +10299,7 @@ GameObject:
   - component: {fileID: 407826017721990654}
   - component: {fileID: 2989265867905399213}
   - component: {fileID: 5892393255059636089}
+  - component: {fileID: 6802365119670880838}
   m_Layer: 5
   m_Name: KeyB
   m_TagString: Untagged
@@ -9592,7 +10320,7 @@ RectTransform:
   m_Children:
   - {fileID: 228622463602399872}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9650,7 +10378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -9680,19 +10408,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2989265867905399213}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 283300201601569007}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &6802365119670880838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8146963165859628157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 283300201601569007}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &8431317221329108811
 GameObject:
   m_ObjectHideFlags: 0
@@ -10107,6 +10852,7 @@ GameObject:
   - component: {fileID: 7769459764899217553}
   - component: {fileID: 7887619301966475297}
   - component: {fileID: 524155033990144712}
+  - component: {fileID: 1753333835150113510}
   m_Layer: 5
   m_Name: KeyR
   m_TagString: Untagged
@@ -10127,7 +10873,7 @@ RectTransform:
   m_Children:
   - {fileID: 3359565674563753303}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -10185,7 +10931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -10215,19 +10961,36 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7887619301966475297}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8196862205107713213}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &1753333835150113510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8629778344667452397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8196862205107713213}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &8747552486953229285
 GameObject:
   m_ObjectHideFlags: 0
@@ -10776,6 +11539,7 @@ GameObject:
   - component: {fileID: 4395490855295585955}
   - component: {fileID: 7467602317027447735}
   - component: {fileID: 5021357560142120472}
+  - component: {fileID: 6404633662613221731}
   m_Layer: 5
   m_Name: KeyU
   m_TagString: Untagged
@@ -10796,7 +11560,7 @@ RectTransform:
   m_Children:
   - {fileID: 254661991137441108}
   m_Father: {fileID: 2603177177038992642}
-  m_RootOrder: 20
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -10854,7 +11618,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -10884,16 +11648,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7467602317027447735}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 170224798182289036}
-        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
-        m_MethodName: AddKeyInput
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 6114451452538001961}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &6404633662613221731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9019780326841666932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 170224798182289036}
+          m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+          m_MethodName: AddKeyInput
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 6114451452538001961}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
