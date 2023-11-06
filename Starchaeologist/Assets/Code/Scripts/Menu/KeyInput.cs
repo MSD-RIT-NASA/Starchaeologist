@@ -28,14 +28,17 @@ public class KeyInput : MonoBehaviour
     public string NameEdit
     {
         get { return nameEdit; }
+        set { nameEdit = value; }
     }
     public string DateEdit
     {
         get { return dateEdit; }
+        set { dateEdit = value; }
     }
     public string SearchNameEdit
     {
         get { return searchNameEdit; }
+        set { searchNameEdit = value; }
     }
 
     public bool EditingName
