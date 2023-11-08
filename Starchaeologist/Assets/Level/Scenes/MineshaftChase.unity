@@ -3441,7 +3441,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 373649385991994157, guid: 79552dd5100f08b4a840e3762baf0b16, type: 3}
       propertyPath: m_RootOrder
-      value: 24
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 548537686270022111, guid: 79552dd5100f08b4a840e3762baf0b16, type: 3}
       propertyPath: m_RootOrder
@@ -3585,7 +3585,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7608761741144858403, guid: 79552dd5100f08b4a840e3762baf0b16, type: 3}
       propertyPath: m_RootOrder
-      value: 23
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 8552260375809248075, guid: 79552dd5100f08b4a840e3762baf0b16, type: 3}
       propertyPath: m_RootOrder
@@ -6414,25 +6414,13 @@ MonoBehaviour:
   m_OnSelect:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 742164558}
-        m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
-        m_MethodName: ShowKeyboard
-        m_Mode: 1
+      - m_Target: {fileID: 372403460}
+        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+        m_MethodName: BeginEditing
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 742164558}
-        m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
-        m_MethodName: EditingName
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 998950081}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -6440,7 +6428,19 @@ MonoBehaviour:
         m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 372403460}
+        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+        m_MethodName: EndEditing
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTextSelection:
     m_PersistentCalls:
       m_Calls: []
@@ -6462,7 +6462,7 @@ MonoBehaviour:
   m_ReadOnly: 0
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_OnFocusSelectAll: 1
+  m_OnFocusSelectAll: 0
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
   m_isRichTextEditingAllowed: 0
@@ -8039,25 +8039,13 @@ MonoBehaviour:
   m_OnSelect:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 742164558}
-        m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
-        m_MethodName: ShowKeyboard
-        m_Mode: 1
+      - m_Target: {fileID: 372403460}
+        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+        m_MethodName: BeginEditing
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 742164558}
-        m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
-        m_MethodName: EditingDate
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1253689074}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -8065,7 +8053,19 @@ MonoBehaviour:
         m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 372403460}
+        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+        m_MethodName: EndEditing
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTextSelection:
     m_PersistentCalls:
       m_Calls: []
@@ -8087,7 +8087,7 @@ MonoBehaviour:
   m_ReadOnly: 0
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_OnFocusSelectAll: 1
+  m_OnFocusSelectAll: 0
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
   m_isRichTextEditingAllowed: 0
@@ -10394,9 +10394,24 @@ MonoBehaviour:
   m_OnSelect:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 372403460}
+        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+        m_MethodName: BeginEditing
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1658055158}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnDeselect:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 372403460}
+        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+        m_MethodName: EndEditing
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10406,9 +10421,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnDeselect:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnTextSelection:
     m_PersistentCalls:
       m_Calls: []
@@ -10430,7 +10442,7 @@ MonoBehaviour:
   m_ReadOnly: 0
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_OnFocusSelectAll: 1
+  m_OnFocusSelectAll: 0
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
   m_isRichTextEditingAllowed: 0
@@ -13446,9 +13458,41 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 568055621}
     - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: treasurePrefabs.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
       propertyPath: segmentPrefabs_2M.Array.size
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: treasurePrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 2899595631582243972, guid: da6a542d7cee7894fbbb8920eab21382, type: 3}
+    - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: treasurePrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 5286565569865051167, guid: 1df7cdf33f855c743bdd56621e5fddae, type: 3}
+    - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: treasurePrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 4328456171610270049, guid: 3745d7cb1d50209419566bc01d199627, type: 3}
+    - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: treasurePrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 8779571309560358197, guid: 211d7305f1f1dc34dbee8bcf8eafe8ed, type: 3}
+    - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: treasurePrefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 2240620234968401645, guid: d4df05f5df7ca474ab9b795529d06097, type: 3}
+    - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: treasurePrefabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 2427158349449963868, guid: 333b77bb1a98e23409d5d462f47d65c1, type: 3}
+    - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
+      propertyPath: treasurePrefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 7741937711840232210, guid: 0c242ccc4b90f7149bda88024732d3ed, type: 3}
     - target: {fileID: 2061620862234433718, guid: 695bb5bc152451747941013dc2c7ca72, type: 3}
       propertyPath: segmentPrefabs_2M.Array.data[4]
       value: 

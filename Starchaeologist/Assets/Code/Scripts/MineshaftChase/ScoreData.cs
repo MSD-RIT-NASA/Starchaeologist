@@ -63,16 +63,14 @@ public class ScoreData : MonoBehaviour
                 Directory.CreateDirectory("Scores");
             currentScene = "Scores/" + SceneManager.GetActiveScene().name + "Scores";
 
-            playerName.text = keyboardCanvas.NameEdit;
-            keyboardCanvas.DateEdit = DateTime.Now.ToShortDateString();
-            date.text = keyboardCanvas.DateEdit;
+            playerName.text = "";
+            date.text = DateTime.Now.ToShortDateString();
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        playerSearchName.text = keyboardCanvas.SearchNameEdit;
         if (receivedBalanceScore == true)
         {
             DisplayBalanceScore(balanceScoreint);
@@ -98,8 +96,6 @@ public class ScoreData : MonoBehaviour
         if (isActive)
         {
             scoreCanvasActive = true;
-            keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
-            keyboardCanvas.gameObject.SetActive(true);
         }
     }
 
@@ -116,7 +112,6 @@ public class ScoreData : MonoBehaviour
         if (isActive)
         {
             scoreCanvasActive = false;
-            keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
         }
     }
 
@@ -250,22 +245,6 @@ public class ScoreData : MonoBehaviour
         if (sorted.Count > maxCount)
             sorted.RemoveRange(maxCount, sorted.Count - maxCount);
         return sorted;
-    }
-
-    public void ShowKeyboard()
-    {
-        keyboardCanvas.gameObject.SetActive(true);
-        keyboardCanvas.ScoreCanvasActive = scoreCanvasActive;
-    }
-
-    public void EditingName()
-    {
-        keyboardCanvas.EditingName = true;
-    }
-
-    public void EditingDate()
-    {
-        keyboardCanvas.EditingName = false;
     }
 
     public void SetBalanceScore(string balScore)

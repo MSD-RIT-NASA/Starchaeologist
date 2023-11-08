@@ -2890,6 +2890,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51180fda9ad2ad548a83c40ff0f492af, type: 3}
+--- !u!114 &234855161 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 170224798182289036, guid: 51180fda9ad2ad548a83c40ff0f492af, type: 3}
+  m_PrefabInstance: {fileID: 234855160}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c6518d57450abc47840c3fd6141d813, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &237075666
 GameObject:
   m_ObjectHideFlags: 0
@@ -11792,9 +11803,24 @@ MonoBehaviour:
   m_OnSelect:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1677904079}
-        m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
-        m_MethodName: ShowKeyboard
+      - m_Target: {fileID: 234855161}
+        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+        m_MethodName: BeginEditing
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1205995276}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnDeselect:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 234855161}
+        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+        m_MethodName: EndEditing
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11804,9 +11830,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnDeselect:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnTextSelection:
     m_PersistentCalls:
       m_Calls: []
@@ -11828,7 +11851,7 @@ MonoBehaviour:
   m_ReadOnly: 0
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_OnFocusSelectAll: 1
+  m_OnFocusSelectAll: 0
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
   m_isRichTextEditingAllowed: 0
@@ -16780,9 +16803,24 @@ MonoBehaviour:
   m_OnSelect:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1677904079}
-        m_TargetAssemblyTypeName: ScoreData, Assembly-CSharp
-        m_MethodName: ShowKeyboard
+      - m_Target: {fileID: 234855161}
+        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+        m_MethodName: BeginEditing
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1766520306}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnDeselect:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 234855161}
+        m_TargetAssemblyTypeName: KeyInput, Assembly-CSharp
+        m_MethodName: EndEditing
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16792,9 +16830,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnDeselect:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnTextSelection:
     m_PersistentCalls:
       m_Calls: []
@@ -16816,7 +16851,7 @@ MonoBehaviour:
   m_ReadOnly: 0
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_OnFocusSelectAll: 1
+  m_OnFocusSelectAll: 0
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
   m_isRichTextEditingAllowed: 0
