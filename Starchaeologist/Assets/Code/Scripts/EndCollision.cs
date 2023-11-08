@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
+using System;
 
 public class EndCollision : MonoBehaviour
 {
@@ -12,8 +13,7 @@ public class EndCollision : MonoBehaviour
     public GameObject leftHandRay;
     [SerializeField]
     private UdpSocket server;
-    [SerializeField]
-    private GameObject XRrig;
+    [SerializeField] private GameObject XR_Rig;
     [SerializeField] private Vector3 LockPos;
 
     [SerializeField]
@@ -36,18 +36,18 @@ public class EndCollision : MonoBehaviour
             server.GameOver = true;
             canvasRef.SetActive(true);
             scoreDisplay.text = score.text.Split(' ')[1];
-            rightHandRay.SetActive(true);
-            leftHandRay.SetActive(true);
-            if (timerCanvas != null)
+            if (timerCanvas != null && audSrc != null)
             {
                 timerCanvas.SetActive(false);
                 audSrc.Stop();
             }
 
-            if(XRrig!= null)
+            if(XR_Rig!= null)
             {
-                XRrig.GetComponent<TeleportationProvider>().enabled = false;
-                XRrig.transform.position = LockPos;
+                XR_Rig.GetComponent<TeleportationProvider>().enabled = false;
+                XR_Rig.transform.position = LockPos;
+                rightHandRay.SetActive(false);
+                leftHandRay.SetActive(false);
             }
             Destroy(this);
         }
