@@ -267,7 +267,7 @@ public class PuzzlingGame : MonoBehaviour
                 //UIManager.GetComponent<Trap_Indicator>().SetTarget(1);
 
                 dangerIndicator.gameObject.SetActive(true);
-                dangerIndicator.SetTarget(ceilingArray[xIndex][yIndex].transform);
+                dangerIndicator.SetTarget(Vector3.down * 20.0f);
                 break;
             case 1:
                 trap_warning.PlayOneShot(trap_warning2);
@@ -286,7 +286,9 @@ public class PuzzlingGame : MonoBehaviour
                  }*/
 
                 dangerIndicator.gameObject.SetActive(true);
-                dangerIndicator.SetTarget(ceilingArray[xIndex][yIndex].transform);
+
+                // Face left or right 
+                dangerIndicator.SetTarget(wallArray[yIndex][thisSide].transform.position.x < dangerIndicator.transform.position.x ? Vector3.left : Vector3.right * 20.0f);
                 break;
             case 2:
                 trap_warning.PlayOneShot(trap_warning3);
@@ -304,7 +306,7 @@ public class PuzzlingGame : MonoBehaviour
                 }*/
 
                 dangerIndicator.gameObject.SetActive(true);
-                dangerIndicator.SetTarget(ceilingArray[xIndex][yIndex].transform);
+                dangerIndicator.SetTarget(Vector3.right * 20.0f);
                 break;
             case 3:
                 trap_warning.PlayOneShot(trap_warning4);
@@ -329,7 +331,7 @@ public class PuzzlingGame : MonoBehaviour
                 }*/
 
                 dangerIndicator.gameObject.SetActive(true);
-                dangerIndicator.SetTarget(ceilingArray[xIndex][yIndex].transform);
+                dangerIndicator.SetTarget(Vector3.left * 20.0f);
                 break;
             default:
                 break;

@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class CycleAnim : MonoBehaviour
 {
-    [SerializeField] Transform target;
+    [SerializeField] Vector3 offsetToTarget;
 
-    public void SetTarget(Transform nextTarget)
+    public void SetTarget(Vector3 nextTarget)
     {
-        target = nextTarget;
+        offsetToTarget = nextTarget;
     }
 
     void Update()
     {
         // Simply tracks and orients 
-        this.transform.right = target.position - this.transform.position;
+        this.transform.right = this.transform.position +offsetToTarget;
     }
 
 }
