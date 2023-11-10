@@ -76,6 +76,9 @@ public class PuzzlingGame : MonoBehaviour
     [SerializeField] GameObject teleportationProviderGameObject;
     private TeleportationProvider teleportationProvider;
 
+    // Indicator 
+    [SerializeField] CycleAnim dangerIndicator;
+
     void Start()
     {
         rightHand.SetActive(false);
@@ -261,7 +264,10 @@ public class PuzzlingGame : MonoBehaviour
                 ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().DataSetup(currentScript);
                 activeTrapPos = ceilingArray[xIndex][yIndex].GetComponent<Trap_Ceiling>().transform.position;
                 activeTrapPos.y += 1000;
-                UIManager.GetComponent<Trap_Indicator>().SetTarget(1);
+                //UIManager.GetComponent<Trap_Indicator>().SetTarget(1);
+
+                dangerIndicator.gameObject.SetActive(true);
+                dangerIndicator.SetTarget(ceilingArray[xIndex][yIndex].transform);
                 break;
             case 1:
                 trap_warning.PlayOneShot(trap_warning2);
@@ -270,14 +276,17 @@ public class PuzzlingGame : MonoBehaviour
                 wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().enabled = true;
                 wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().DataSetup(currentScript);
                 activeTrapPos = wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().transform.position;
-                if(wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().rightSide)
-                {
-                    UIManager.GetComponent<Trap_Indicator>().SetTarget(2);
-                }
-                else
-                {
-                    UIManager.GetComponent<Trap_Indicator>().SetTarget(3);
-                }
+                /* if(wallArray[yIndex][thisSide].GetComponent<Trap_Arrow>().rightSide)
+                 {
+                     UIManager.GetComponent<Trap_Indicator>().SetTarget(2);
+                 }
+                 else
+                 {
+                     UIManager.GetComponent<Trap_Indicator>().SetTarget(3);
+                 }*/
+
+                dangerIndicator.gameObject.SetActive(true);
+                dangerIndicator.SetTarget(ceilingArray[xIndex][yIndex].transform);
                 break;
             case 2:
                 trap_warning.PlayOneShot(trap_warning3);
@@ -285,14 +294,17 @@ public class PuzzlingGame : MonoBehaviour
                 swingList[yIndex].GetComponent<Trap_Log>().enabled = true;
                 swingList[yIndex].GetComponent<Trap_Log>().DataSetup(currentScript);
                 activeTrapPos = swingList[yIndex].GetComponent<Trap_Log>().transform.position;
-                if (swingList[yIndex].GetComponent<Trap_Log>().rightSide)
+                /*if (swingList[yIndex].GetComponent<Trap_Log>().rightSide)
                 {
                     UIManager.GetComponent<Trap_Indicator>().SetTarget(2);
                 }
                 else
                 {
                     UIManager.GetComponent<Trap_Indicator>().SetTarget(3);
-                }
+                }*/
+
+                dangerIndicator.gameObject.SetActive(true);
+                dangerIndicator.SetTarget(ceilingArray[xIndex][yIndex].transform);
                 break;
             case 3:
                 trap_warning.PlayOneShot(trap_warning4);
@@ -307,14 +319,17 @@ public class PuzzlingGame : MonoBehaviour
                 pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().enabled = true;
                 pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().DataSetup(currentScript);
                 activeTrapPos = pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().transform.position;
-                if (pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().rightSide)
+                /*if (pillarArray[pillarDepth][pillarSide].GetComponent<Trap_Pillar>().rightSide)
                 {
                     UIManager.GetComponent<Trap_Indicator>().SetTarget(2);
                 }
                 else
                 {
                     UIManager.GetComponent<Trap_Indicator>().SetTarget(3);
-                }
+                }*/
+
+                dangerIndicator.gameObject.SetActive(true);
+                dangerIndicator.SetTarget(ceilingArray[xIndex][yIndex].transform);
                 break;
             default:
                 break;
