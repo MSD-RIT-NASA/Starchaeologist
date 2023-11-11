@@ -35,6 +35,7 @@ public class PuzzlingManager : MonoBehaviour
 
     // Whether or not a trap is already active 
     private bool trapIsActive;
+    private List<PuzzlePlate> plates;
 
     private enum GenerationType
     { 
@@ -44,6 +45,10 @@ public class PuzzlingManager : MonoBehaviour
         AllRandomTraps
     }
 
+    // What plate was the player on during 
+    // the last frame 
+    private PuzzlePlate currentPlate;
+
 
     public void ActivateTrap()
     {
@@ -52,18 +57,44 @@ public class PuzzlingManager : MonoBehaviour
             return;
     }
 
+    public PuzzlePlate FindPlateFromPos(Vector3 pos)
+    {
+        // Get the x and y index of cell based on 
+        // simple grid equation 
+        int x = Mathf.FloorToInt((pos.x - offset.x + (cellSize.x / 2.0f)) / (cellSize.x));
+        int y = Mathf.FloorToInt((pos.z - offset.y + (cellSize.y / 2.0f)) / (cellSize.y));
+
+        print(new Vector2(x, y));
+
+        // Check if in range 
+        if(x < 0 || x >= xCells || y < 0 || y >= yCells)
+            return null;
+
+        // Each row has cellSize.x amount of cells
+        // and then add remaining x index amount 
+        return plates[y * xCells + x];
+    }
 
     void Start()
     {
+        plates = new List<PuzzlePlate>();
+
         GeneratePlates();
     }
 
     void Update()
     {
-
+        PuzzlePlate next = FindPlateFromPos(head.transform.position);
+        if(currentPlate != next)
+        {
+            next.SetWalkStatus(false);
+        }
     }
 
-
+    /// <summary>
+    /// Initialize the generation of paltes based on 
+    /// given settings BEFORE runtime 
+    /// </summary>
     private void GeneratePlates()
     {
         switch(generationType)
@@ -101,11 +132,14 @@ public class PuzzlingManager : MonoBehaviour
 
             int rand = UnityEngine.Random.Range(0, plateCount);
 
-            Instantiate(
+            GameObject temp =Instantiate(
                 rand == 0 ? defaultPlate : trappedPlatePool[rand - 1],
                 point,
                 Quaternion.identity
                 );
+
+            // Assumes obj has puzzleplate component 
+            plates.Add(temp.GetComponent<PuzzlePlate>());
         }
     }
 
