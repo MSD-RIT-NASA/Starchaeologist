@@ -88,6 +88,7 @@ public class PuzzlingManager : MonoBehaviour
         if(currentPlate != next)
         {
             next.SetWalkStatus(false);
+            next.ActivateTrap();
         }
     }
 
