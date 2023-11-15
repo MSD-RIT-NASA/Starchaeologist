@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Events;
 
 public class MineGame : MonoBehaviour
 {
@@ -74,6 +75,14 @@ public class MineGame : MonoBehaviour
         get { return deadTime; }
     }
 
+    [SerializeField]
+    [Tooltip("Called whenever the minecart begins to move, so that other events can easily hook into it")]
+    private UnityEvent onGameStart;
+
+    [SerializeField]
+    [Tooltip("Called whenever the minecart stops at the end, so that other events can easily hook into it")]
+    private UnityEvent onGameEnd;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -122,6 +131,7 @@ public class MineGame : MonoBehaviour
             else if (routeToGo == trackReferences.Count)
             {
                 timeToMove = false;
+                onGameEnd.Invoke();
                 //Tell python the game is not running
                 //server.GameStart = false;
                 //server.GameOver = true;
@@ -242,5 +252,7 @@ public class MineGame : MonoBehaviour
         leftHandRay.SetActive(false);
         timeToMove = true;
         deadTime = timer.TimePassed - deadTimeStart;
+
+        onGameStart.Invoke();
     }
 }
