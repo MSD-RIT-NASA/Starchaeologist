@@ -17,7 +17,19 @@ public class PuzzlePlate : MonoBehaviour
 
 
     private bool hasBeenTriggered = false;
+    private int index; 
+
+    public int Index { get { return index; } }   
  
+    /// <summary>
+    /// Sets the index of this plate along the grid.
+    /// Does not store x and y seperately 
+    /// </summary>
+    public void SetIndex(int index )
+    {
+        this.index = index;
+    }
+
     /// <summary>
     /// Allows this plate to be teleported onto or not 
     /// </summary>

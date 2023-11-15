@@ -38,7 +38,7 @@ public class PuzzlingManager : MonoBehaviour
     private List<PuzzlePlate> plates;
 
     private enum GenerationType
-    { 
+    {
         Random,
         ReadFile,
         NoTraps,
@@ -67,7 +67,7 @@ public class PuzzlingManager : MonoBehaviour
         print(new Vector2(x, y));
 
         // Check if in range 
-        if(x < 0 || x >= xCells || y < 0 || y >= yCells)
+        if (x < 0 || x >= xCells || y < 0 || y >= yCells)
             return null;
 
         // Each row has cellSize.x amount of cells
@@ -85,10 +85,34 @@ public class PuzzlingManager : MonoBehaviour
     void Update()
     {
         PuzzlePlate next = FindPlateFromPos(head.transform.position);
-        if(currentPlate != next)
+        if (currentPlate != next)
         {
+            // Set this next plate as unsteppable 
             next.SetWalkStatus(false);
+            // Activates trap & animates plate going down 
             next.ActivateTrap();
+
+            // TODO - Optimize to only change difference 
+            SetNeighborsWalkable(currentPlate, false);
+            SetNeighborsWalkable(next, true); 
+
+            currentPlate = next;
+        }
+    }
+
+    private void SetNeighborsWalkable(PuzzlePlate plate, bool walkable)
+    {
+        int y = plate.Index / xCells;
+        int x = plate.Index % xCells;
+
+        // Go through each cell surronding the current one 
+        for (int i = 0; i < 9; i++)
+        {
+            // Offset surronding index  
+            int nextY = (i / 3) - 1;
+            int nextX = (i % 3) - 1;
+
+            // Check for bounds 
         }
     }
 
@@ -133,14 +157,17 @@ public class PuzzlingManager : MonoBehaviour
 
             int rand = UnityEngine.Random.Range(0, plateCount);
 
-            GameObject temp =Instantiate(
+            PuzzlePlate temp = Instantiate(
                 rand == 0 ? defaultPlate : trappedPlatePool[rand - 1],
                 point,
                 Quaternion.identity
-                );
+                ).GetComponent<PuzzlePlate>();
+
+            // Set the plate's index 
+            temp.SetIndex(i);
 
             // Assumes obj has puzzleplate component 
-            plates.Add(temp.GetComponent<PuzzlePlate>());
+            plates.Add(temp);
         }
     }
 
