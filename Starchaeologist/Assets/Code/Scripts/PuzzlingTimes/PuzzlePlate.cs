@@ -58,6 +58,7 @@ public class PuzzlePlate : MonoBehaviour
             trap.ActivateTrap();
     }
 
+
     private IEnumerator PressPlateDown()
     {
         float startHeight = this.transform.position.y;

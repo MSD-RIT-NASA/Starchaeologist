@@ -93,26 +93,44 @@ public class PuzzlingManager : MonoBehaviour
             next.ActivateTrap();
 
             // TODO - Optimize to only change difference 
-            SetNeighborsWalkable(currentPlate, false);
-            SetNeighborsWalkable(next, true); 
+            if(currentPlate != null)
+                SetNeighborsWalkable(currentPlate, false);
+
+            if(next != null)
+                SetNeighborsWalkable(next, true);
 
             currentPlate = next;
         }
     }
 
+    /// <summary>
+    /// Set neighbors of given plate to a given walkable state 
+    /// </summary>
+    /// <param name="plate"></param>
+    /// <param name="walkable"></param>
     private void SetNeighborsWalkable(PuzzlePlate plate, bool walkable)
     {
+        // Given plate's index values
         int y = plate.Index / xCells;
         int x = plate.Index % xCells;
+
 
         // Go through each cell surronding the current one 
         for (int i = 0; i < 9; i++)
         {
-            // Offset surronding index  
-            int nextY = (i / 3) - 1;
-            int nextX = (i % 3) - 1;
+            // Offset to surronding index  
+            int nextY = y + (i / 3) - 1;
+            int nextX = x + (i % 3) - 1;
 
             // Check for bounds 
+            if (nextY < 0 || nextX < 0)
+                continue;
+            if (nextY >= yCells || nextX >= xCells)
+                continue;
+
+            print(nextX + ", " + nextY);
+            int index = nextY * xCells + nextX;
+            plates[index].SetWalkStatus(walkable);
         }
     }
 
@@ -166,6 +184,9 @@ public class PuzzlingManager : MonoBehaviour
             // Set the plate's index 
             temp.SetIndex(i);
 
+            if (y == 0)
+                temp.SetWalkStatus(true);
+
             // Assumes obj has puzzleplate component 
             plates.Add(temp);
         }
@@ -209,6 +230,13 @@ public class PuzzlingManager : MonoBehaviour
         {
             int y = i / xCells;
             int x = i % xCells;
+
+            if (y == 0)
+                Gizmos.color = Color.red;
+            else
+            {
+                Gizmos.color = gizmosColor;
+            }
 
             Vector3 point = new Vector3(offset.x + cellSize.x * x, 0, offset.y + cellSize.y * y);
             Gizmos.DrawWireCube(point, new Vector3(cellSize.x, cellSize.y, 1));
