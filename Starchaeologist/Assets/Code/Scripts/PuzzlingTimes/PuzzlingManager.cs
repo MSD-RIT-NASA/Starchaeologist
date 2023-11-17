@@ -40,6 +40,8 @@ public class PuzzlingManager : MonoBehaviour
     private bool trapIsActive;
     private List<PuzzlePlate> plates;
 
+    private Dictionary<PuzzlePlate, Trap> plateToTrap;
+
     private enum GenerationType
     {
         Random,
@@ -55,7 +57,7 @@ public class PuzzlingManager : MonoBehaviour
 
     public void ActivateTrap()
     {
-        // Don't activate more than one 
+        // Don't activate more than one or multiple times 
         if (trapIsActive)
             return;
     }
@@ -81,6 +83,7 @@ public class PuzzlingManager : MonoBehaviour
     void Start()
     {
         plates = new List<PuzzlePlate>();
+        plateToTrap = new Dictionary<PuzzlePlate, Trap>();
 
         GeneratePlates();
     }
@@ -192,6 +195,8 @@ public class PuzzlingManager : MonoBehaviour
 
             // Assumes obj has puzzleplate component 
             plates.Add(temp);
+
+            
         }
     }
 
