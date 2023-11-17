@@ -30,6 +30,9 @@ public class PuzzlingManager : MonoBehaviour
     [Header("Treasure Generation Settings")]
     [SerializeField] List<GameObject> treasurePool;
 
+    [Header("Traps")]
+    [SerializeField] List<Trap> traps;
+
     [Header("Gizmos")]
     [SerializeField] Color gizmosColor;
 
@@ -242,6 +245,32 @@ public class PuzzlingManager : MonoBehaviour
             Gizmos.DrawWireCube(point, new Vector3(cellSize.x, cellSize.y, 1));
             Gizmos.DrawSphere(point, 0.1f);
         }
-    }
 
+
+        // Show trap hitboxes 
+        for (int i = 0; i < traps.Count; i++)
+        {
+            Trap current = traps[i];
+
+            for (int a = 0; a < current.PossiblePlates.Count; a++)
+            {
+                int index = (int)current.PossiblePlates[a].y * xCells + (int)current.PossiblePlates[a].x;
+                // Range check 
+                if (index < 0)
+                    continue;
+                if (index >= (xCells * yCells))
+                    continue;
+
+                Gizmos.color = Color.red;
+
+                Vector3 point = new Vector3(
+                    offset.x + cellSize.x * (int)current.PossiblePlates[a].x, 
+                    0, 
+                    offset.y + cellSize.y * (int)current.PossiblePlates[a].y
+                    );
+
+                Gizmos.DrawCube(point + current.HitBoxOffset, current.HitBoxSize);
+            }
+        }
+    }
 }
