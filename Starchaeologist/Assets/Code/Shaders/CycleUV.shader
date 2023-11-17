@@ -3,7 +3,8 @@ Shader "Unlit/CycleUV"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _TexScale("Texture Scale", Float) = 1
+        _TexScaleX("Texture Scale", Float) = 1
+        _TexScaleY("Texture Scale", Float) = 1
         _ScrollSpeed("Scroll Speed", Float) = 1
     }
     SubShader
@@ -36,9 +37,10 @@ Shader "Unlit/CycleUV"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            float _TexScale;
+            float _TexScaleX;
+            float _TexScaleY;
             float _ScrollSpeed;
-
+             
             v2f vert (appdata v)
             {
                 v2f o;
@@ -52,7 +54,7 @@ Shader "Unlit/CycleUV"
                 float offset = _ScrollSpeed * _Time;
 
                 // sample the texture
-                fixed4 col = tex2D(_MainTex, (i.uv * _TexScale) + float2(0, offset));
+                fixed4 col = tex2D(_MainTex, ( float2(i.uv.x * _TexScaleX, i.uv.y *_TexScaleY) + float2(offset, 0)));
                 return col;
             }
             ENDCG

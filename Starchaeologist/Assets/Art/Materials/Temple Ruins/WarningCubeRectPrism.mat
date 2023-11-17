@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Warning
+  m_Name: WarningCubeRectPrism
   m_Shader: {fileID: 4800000, guid: d51eed72e7a95134a83b75f27d2b2c62, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -24,7 +24,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 1}
     m_Floats:
-    - _ScrollSpeed: -90
-    - _TexScale: 40
+    - _ScrollSpeed: -45
+    - _TexScale: 4
+    - _TexScaleX: 1
+    - _TexScaleX_TexScaleX: 1
+    - _TexScaleY: 2
     m_Colors: []
   m_BuildTextureStacks: []
