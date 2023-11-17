@@ -5,6 +5,8 @@ using UnityEngine;
 using Unity.XR.CoreUtils;
 using TMPro;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.Events;
+
 public class S_RiverGame : S_RiverBuilder
 {
 
@@ -64,6 +66,13 @@ public class S_RiverGame : S_RiverBuilder
 
     //PythonCommunicator communicateReference;
 
+    [SerializeField]
+    [Tooltip("Called whenever the game begins, so that other events can easily hook into it")]
+    private UnityEvent onGameStart;
+
+    [SerializeField]
+    [Tooltip("Called whenever the game ends, so that other events can easily hook into it")]
+    private UnityEvent onGameEnd;
 
 
 
@@ -254,6 +263,8 @@ public class S_RiverGame : S_RiverBuilder
         timerCanvas.SetActive(false);
         //GetComponent<UdpSocket>().GameStart = true;
         //Debug.Log("START BUTTON PRESSED");
+
+        onGameStart.Invoke();
     }
 
     public void StopMove()
@@ -266,6 +277,8 @@ public class S_RiverGame : S_RiverBuilder
 
         // Show the canvas at the end of the level
         FindObjectOfType<ScoreData>().SetScoreCanvasActive(true);
+
+        onGameEnd.Invoke();
     }
 }
 

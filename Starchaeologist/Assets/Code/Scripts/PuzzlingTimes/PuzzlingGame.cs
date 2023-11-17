@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
+using UnityEngine.Events;
 
 public class PuzzlingGame : MonoBehaviour
 {
@@ -75,6 +76,12 @@ public class PuzzlingGame : MonoBehaviour
     [SerializeField] GameObject readyCanvas;
     [SerializeField] GameObject teleportationProviderGameObject;
     private TeleportationProvider teleportationProvider;
+
+    [SerializeField]
+    [Tooltip("Called whenever the game begins, so that other events can easily hook into it")]
+    private UnityEvent onGameStart;
+
+    // This script does not handle game ending, so there is no game end event to hook into. (One isn't currently needed anyway.)
 
     void Start()
     {
@@ -375,6 +382,8 @@ public class PuzzlingGame : MonoBehaviour
         //Tells the python server the game has started
         //GetComponent<UdpSocket>().GameStart = true;
         //Debug.Log("START BUTTON PRESSED");
+
+        onGameStart.Invoke();
 
     }
 }
