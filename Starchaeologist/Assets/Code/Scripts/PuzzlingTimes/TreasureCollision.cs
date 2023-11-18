@@ -20,14 +20,14 @@ public class TreasureCollision : MonoBehaviour
     [Space]
     [SerializeField] GameObject collFX;
 
-    private Text txt;
+    public Text txt;
     private Text txtBlip;
 
     void Start()
     {
-        txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
-        txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
-        txtBlip.enabled = false;
+        //txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
+        //txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
+        //txtBlip.enabled = false;
     }
 
     public void ActivateFX()
@@ -38,6 +38,9 @@ public class TreasureCollision : MonoBehaviour
         // much dependent on transform.getchild in the logic 
         Instantiate(collFX, this.transform.parent.position, Quaternion.identity);
         collFX.GetComponent<ParticleSystem>().Play();
+        Debug.Log(txt);
+
+        txt.text = "Score: " + (int.Parse(txt.text.Split(' ')[1]) + 1).ToString();
     }
 
 
