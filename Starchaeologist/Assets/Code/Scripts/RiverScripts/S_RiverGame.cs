@@ -28,11 +28,14 @@ public class S_RiverGame : S_RiverBuilder
     Vector3 desiredDirection = new Vector3(0, 0, 1);
     private float raftAcceleration = 0.1f;
     private float raftSpeed = 4.0f;
+    private float turningSpeed = 0.15f;
     private float currentSpeed = 0f;
     public bool timeToMove = false; //turned true the first time the player teleports to the raft from the S_RaftCollision script
     bool slowDown = false;
     bool playerAttached = false;
     int checkpointIndex = 0;
+    private Quaternion previousRotation = Quaternion.identity;
+    private float timeOfLastCheckpoint;
 
     [SerializeField] Timer timer;
     [SerializeField] UdpSocket server;
@@ -96,6 +99,8 @@ public class S_RiverGame : S_RiverBuilder
                 //startReference.transform.GetChild(i).GetComponent<TeleportationArea>().enabled = false;
             }
         }
+
+        previousRotation = raftReference.transform.rotation;
     }
 
     // Update is called once per frame
@@ -168,6 +173,8 @@ public class S_RiverGame : S_RiverBuilder
 
         //Vector3.RotateTowards(raftReference.transform.position,checkpoints[checkpointIndex],2*Mathf.PI,Mathf.PI);
 
+        
+
         desiredDirection = Vector3.Normalize(checkpoints[checkpointIndex] - raftReference.transform.position);
         
 
@@ -184,27 +191,32 @@ public class S_RiverGame : S_RiverBuilder
         {
             //Quaternion toRotation = Quaternion.FromToRotation(raftReference.transform.forward, desiredDirection); // instead of LookRotation( )
             //raftReference.transform.rotation = Quaternion.Lerp(raftReference.transform.rotation, toRotation, (currentSpeed * Time.deltaTime));
-            Quaternion lookRotation = Quaternion.LookRotation(desiredDirection);
-            raftReference.transform.rotation = Quaternion.Slerp(raftReference.transform.rotation,lookRotation,Time.deltaTime* (currentSpeed/3));
+            Quaternion desiredRotation = Quaternion.LookRotation(desiredDirection);
+            float progress = (Time.time - timeOfLastCheckpoint) * (currentSpeed * turningSpeed);
+            progress = Mathf.Clamp01(progress);
+            raftReference.transform.rotation = Quaternion.Slerp(previousRotation, desiredRotation, EasingFunctions.EaseInOutQuad(0, 1, progress));
             raftReference.transform.position += raftReference.transform.forward * currentSpeed * Time.deltaTime;
         }
 
         if (Mathf.Abs((raftReference.transform.position.z - nextDestination.z)) < 1f)
         {
             checkpointIndex++;
+            timeOfLastCheckpoint = Time.time;
 
             if (checkpointIndex == checkpoints.Count-1)//if this is the last checkpoint to go to, start slowing down the raft
             {
                 slowDown = true;
                 nextDestination = checkpoints[checkpointIndex];
+                previousRotation = raftReference.transform.rotation;
             }
             else if (checkpointIndex == checkpoints.Count)//if the raft has reached the last checkpoint, stop
             {
                 StopMove();
             }
-            else//otherwise set the new destination tot he next checkpoint
+            else//otherwise set the new destination to the next checkpoint
             {
                 nextDestination = checkpoints[checkpointIndex];
+                previousRotation = raftReference.transform.rotation;
             }
         }
     }
