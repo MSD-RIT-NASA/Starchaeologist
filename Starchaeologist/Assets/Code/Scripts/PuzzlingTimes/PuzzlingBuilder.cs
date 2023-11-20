@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class PuzzlingBuilder : MonoBehaviour
@@ -49,8 +50,9 @@ public class PuzzlingBuilder : MonoBehaviour
     List<GameObject>[] pillarArray;
 
     [SerializeField]
-    private GameObject InitialColPrefab; 
+    private GameObject InitialColPrefab;
 
+    [SerializeField] Text scoreText;
 
     public GameObject perimeterPrefab;
     List<GameObject> perimeterList = new List<GameObject>();
@@ -229,6 +231,8 @@ public class PuzzlingBuilder : MonoBehaviour
                         }
                         treasureArray[i][yIndex] = true;
                         GameObject placeTreasure = Instantiate(treasurePrefabs[Random.Range(0, treasurePrefabs.Count)]);
+                        placeTreasure.GetComponentInChildren<TreasureCollision>().txt = scoreText;
+                        scoreText.text = "Score: 0";
                         Vector3 anchorPosition = tileArray[i][yIndex].transform.GetChild(1).transform.position;
                         placeTreasure.transform.position = new Vector3(anchorPosition.x + Random.Range(-0.5f, 0.5f), anchorPosition.y, anchorPosition.z + Random.Range(0f, 0.5f));
                         placeTreasure.transform.localRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);

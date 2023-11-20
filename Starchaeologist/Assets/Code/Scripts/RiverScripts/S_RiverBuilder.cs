@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
-using System;
+using UnityEngine.UI;
 public class S_RiverBuilder : MonoBehaviour
 {
     //The river is split into segments each segemnt has 3 empty gameobjects that will hold 
@@ -17,6 +16,7 @@ public class S_RiverBuilder : MonoBehaviour
     static protected List<Vector3> checkpoints = new List<Vector3>();
 
     [SerializeField] S_RiverGame riverGameScript;
+    [SerializeField] Text scoreText;
     //using system random system for varited seeds in a loop
     System.Random rand = new System.Random();
     private const int maxObsticaleRotation = 30;
@@ -35,7 +35,8 @@ public class S_RiverBuilder : MonoBehaviour
 
         //remove this script
         //Destroy(this);
-        
+
+        scoreText.text = "Score: 0";
     }
 
     private void Update()
@@ -88,6 +89,7 @@ public class S_RiverBuilder : MonoBehaviour
                     //Setting the postion of treasure ob1 in this case and setting the rotations of the 2 other obsticales
                     objPoint1.transform.localPosition = new Vector3(rand.Next(-7, 7 + 1), 2.0f, point1Z);
                     GameObject tresure = Instantiate(randomTreasure, objPoint1.transform);
+                    tresure.GetComponentInChildren<TreasureCollision>().txt = scoreText;
                     Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
                     checkpoints.Add(treasureRiverCheckpoint);
 
@@ -182,6 +184,7 @@ public class S_RiverBuilder : MonoBehaviour
 
                     objPoint2.transform.localPosition = new Vector3(rand.Next(-6, 7), 0.0f, point2Z);
                     GameObject tresure = Instantiate(randomTreasure, objPoint2.transform);
+
                     Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
                     checkpoints.Add(treasureRiverCheckpoint);
 
@@ -263,6 +266,7 @@ public class S_RiverBuilder : MonoBehaviour
 
                     objPoint3.transform.localPosition = new Vector3(rand.Next(-6, 7), 2.0f, point3Z);
                     GameObject tresure = Instantiate(randomTreasure, objPoint3.transform);
+                    tresure.GetComponentInChildren<TreasureCollision>().txt = scoreText;
                     Vector3 treasureRiverCheckpoint = new Vector3(tresure.transform.position.x, 0.0f, tresure.transform.position.z);
                     checkpoints.Add(treasureRiverCheckpoint);
 
