@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using static System.Net.Mime.MediaTypeNames;
 
 public class PuzzlingManager : MonoBehaviour
@@ -53,6 +54,8 @@ public class PuzzlingManager : MonoBehaviour
     // What plate was the player on during 
     // the last frame 
     private PuzzlePlate currentPlate;
+    private bool takenFirstStep = false;
+    private List<PuzzlePlate> firstRow;
 
 
     public void ActivateTrap()
@@ -83,6 +86,7 @@ public class PuzzlingManager : MonoBehaviour
     void Start()
     {
         plates = new List<PuzzlePlate>();
+        firstRow = new List<PuzzlePlate> ();
         plateToTrap = new Dictionary<PuzzlePlate, Trap>();
 
         GeneratePlates();
@@ -93,6 +97,16 @@ public class PuzzlingManager : MonoBehaviour
         PuzzlePlate next = FindPlateFromPos(head.transform.position);
         if (currentPlate != next)
         {
+            if(!takenFirstStep)
+            {
+                // Reset first row 
+                for (int i = 0; i < firstRow.Count; ++i)
+                {
+                    takenFirstStep = true;
+                    firstRow[i].SetWalkStatus(false);
+                }
+            }
+
             // Set this next plate as unsteppable 
             next.SetWalkStatus(false);
             // Activates trap & animates plate going down 
@@ -190,8 +204,11 @@ public class PuzzlingManager : MonoBehaviour
             // Set the plate's index 
             temp.SetIndex(i);
 
-            if (y == 0)
+            if (y == 0) // Set first row to walkable 
+            {
                 temp.SetWalkStatus(true);
+                firstRow.Add(temp);
+            }
 
             // Assumes obj has puzzleplate component 
             plates.Add(temp);
@@ -248,7 +265,8 @@ public class PuzzlingManager : MonoBehaviour
 
             Vector3 point = new Vector3(offset.x + cellSize.x * x, 0, offset.y + cellSize.y * y);
             Gizmos.DrawWireCube(point, new Vector3(cellSize.x, cellSize.y, 1));
-            Gizmos.DrawSphere(point, 0.1f);
+            //Gizmos.DrawSphere(point, 0.1f);
+            Handles.Label(point, x +", " + y);
         }
 
 
