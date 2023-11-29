@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics;
 
 public class PuzzlingManager : MonoBehaviour
 {
@@ -22,11 +23,14 @@ public class PuzzlingManager : MonoBehaviour
     /// Size of a cell 
     [SerializeField] Vector2 cellSize;
 
+    [SerializeField] Vector3 endPlatePos;
+
     [Header("Plates")]
     // Non-trapped plate 
     [SerializeField] GameObject defaultPlate;
     // The types of plates that can be spawned 
     [SerializeField] List<GameObject> trappedPlatePool;
+    
 
     [Header("Treasure Generation Settings")]
     [SerializeField] List<GameObject> treasurePool;
@@ -42,6 +46,7 @@ public class PuzzlingManager : MonoBehaviour
     private List<PuzzlePlate> plates;
 
     private Dictionary<PuzzlePlate, Trap> plateToTrap;
+    private PuzzlePlate end;
 
     private enum GenerationType
     {
@@ -56,6 +61,14 @@ public class PuzzlingManager : MonoBehaviour
     private PuzzlePlate currentPlate;
     private bool takenFirstStep = false;
     private List<PuzzlePlate> firstRow;
+
+    private PuzzlingTimeState gameState = PuzzlingTimeState.Load;
+    private enum PuzzlingTimeState
+    { 
+        Load,
+        Play,
+        End
+    }
 
 
     public void ActivateTrap()
@@ -88,16 +101,55 @@ public class PuzzlingManager : MonoBehaviour
         plates = new List<PuzzlePlate>();
         firstRow = new List<PuzzlePlate> ();
         plateToTrap = new Dictionary<PuzzlePlate, Trap>();
-
-        GeneratePlates();
     }
 
     void Update()
     {
-        PuzzlePlate next = FindPlateFromPos(head.transform.position);
-        if (currentPlate != next)
+        switch(gameState)
         {
-            if(!takenFirstStep)
+            case PuzzlingTimeState.Load:
+                GeneratePlates();
+                break;
+            case PuzzlingTimeState.Play:
+                PlayState();
+                break;
+            case PuzzlingTimeState.End: // TODO 
+                break;
+
+        }
+
+        
+    }
+
+    private void PlayState()
+    {
+
+        PuzzlePlate next = FindPlateFromPos(head.transform.position);
+
+        if (currentPlate != next) // Whether on a new plate or not 
+        {
+            if (next == null && takenFirstStep) // On final plate which doesn't actually exist in grid
+            {
+                print("On End");
+
+                // End game 
+                currentPlate.SetWalkStatus(false);
+                SetNeighborsWalkable(currentPlate, false);
+
+                currentPlate = null;
+
+                gameState = PuzzlingTimeState.End;
+                return;
+            }
+
+            else if (next.Index / xCells == yCells - 1)
+            {
+                // Set final to walkable 
+                end.SetWalkStatus(true);
+            }
+            
+
+            if (!takenFirstStep)
             {
                 // Reset first row 
                 for (int i = 0; i < firstRow.Count; ++i)
@@ -113,10 +165,10 @@ public class PuzzlingManager : MonoBehaviour
             next.ActivateTrap();
 
             // TODO - Optimize to only change difference 
-            if(currentPlate != null)
+            if (currentPlate != null)
                 SetNeighborsWalkable(currentPlate, false);
 
-            if(next != null)
+            if (next != null)
                 SetNeighborsWalkable(next, true);
 
             currentPlate = next;
@@ -155,7 +207,7 @@ public class PuzzlingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Initialize the generation of paltes based on 
+    /// Initialize the generation of plates based on 
     /// given settings BEFORE runtime 
     /// </summary>
     private void GeneratePlates()
@@ -175,6 +227,15 @@ public class PuzzlingManager : MonoBehaviour
                 GenerateAllRandomTraps();
                 break;
         }
+
+        end = Instantiate(
+                defaultPlate,
+                endPlatePos,
+                Quaternion.identity
+                ).GetComponent<PuzzlePlate>();
+
+        // Finished loading 
+        gameState = PuzzlingTimeState.Play;
     }
 
     /// <summary>
@@ -268,6 +329,9 @@ public class PuzzlingManager : MonoBehaviour
             //Gizmos.DrawSphere(point, 0.1f);
             Handles.Label(point, x +", " + y);
         }
+
+        Gizmos.DrawWireCube(endPlatePos, new Vector3(cellSize.x, cellSize.y, 1));
+        Handles.Label(endPlatePos, "End");
 
 
         // Show trap hitboxes 
