@@ -28,6 +28,12 @@ public class TreasureCollision : MonoBehaviour
         txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
         txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
         txtBlip.enabled = false;
+
+        // If the gem would spawn in the floor, move it up
+        if (transform.position.y < 0.75f)
+        {
+            transform.position = new Vector3(transform.position.x, 0.75f, transform.position.z);
+        }
     }
 
     public void ActivateFX()
