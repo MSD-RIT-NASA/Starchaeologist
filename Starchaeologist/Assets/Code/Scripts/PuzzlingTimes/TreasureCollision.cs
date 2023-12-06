@@ -20,7 +20,7 @@ public class TreasureCollision : MonoBehaviour
     [Space]
     [SerializeField] GameObject collFX;
 
-    private Text txt;
+    public Text txt { get; set; }
     private Text txtBlip;
 
     void Start()
