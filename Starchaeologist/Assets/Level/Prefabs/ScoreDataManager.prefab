@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3230021107588288882}
   - component: {fileID: 3230021107588288885}
+  - component: {fileID: 7510471104747398041}
   m_Layer: 0
   m_Name: ScoreDataManager
   m_TagString: Untagged
@@ -70,3 +71,16 @@ MonoBehaviour:
   invalidDateMessage: Type in a valid date (MM/DD/YYYY)
   playerSearchName: {fileID: 0}
   server: {fileID: 0}
+--- !u!114 &7510471104747398041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230021107588288884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eff5ba542d23b74a95dcf93298a93a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vignette: {fileID: 0}

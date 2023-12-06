@@ -7015,24 +7015,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 975939305}
   m_CullTransparentMesh: 1
---- !u!1 &976867690 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2916813187855108939, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
-  m_PrefabInstance: {fileID: 1852540166}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &976867695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 976867690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1946c472cd629d348b7798a1dcccec4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreText: {fileID: 33043652}
 --- !u!1 &1025079553
 GameObject:
   m_ObjectHideFlags: 0
@@ -8664,7 +8646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6421206980008689130, guid: 4961a09bc52af3949bf518310076ff25, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6421206980008689134, guid: 4961a09bc52af3949bf518310076ff25, type: 3}
       propertyPath: m_Camera
@@ -9367,7 +9349,7 @@ MonoBehaviour:
   audSrc: {fileID: 0}
   timerCanvas: {fileID: 1249764704}
   scoreDisplay: {fileID: 936166877}
-  score: {fileID: 0}
+  score: {fileID: 33043652}
 --- !u!1 &1333944952
 GameObject:
   m_ObjectHideFlags: 0
@@ -12267,24 +12249,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2535890044988101105, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
   m_PrefabInstance: {fileID: 1852540166}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1866528286 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2916813187513216582, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
-  m_PrefabInstance: {fileID: 1852540166}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1866528291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1866528286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1946c472cd629d348b7798a1dcccec4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreText: {fileID: 33043652}
 --- !u!1 &1897099648 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 986322226529370660, guid: ec7bcd3d5e5d56f49aad1fc64b5afe37, type: 3}
