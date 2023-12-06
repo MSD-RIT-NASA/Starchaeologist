@@ -48,10 +48,6 @@ public class MineGame : MonoBehaviour
     public AudioClip treasure_SFX;
     public AudioClip obstacleHit_SFX;
 
-    private Vector3 playerFallPos;
-    private Vector3 playerFallVel;
-    private Vector3 playerFallAccel;
-
     //[SerializeField]
     public List<Transform> routes;
 
@@ -86,10 +82,6 @@ public class MineGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerFallPos = playerReference.transform.position;
-        playerFallVel = new Vector3(0f, -50f, 0f);
-        playerFallAccel = new Vector3(0f, -10f, 0f);
-
         if (singleton != null && singleton != this)
         {
             Destroy(this);
@@ -143,9 +135,7 @@ public class MineGame : MonoBehaviour
             if (timer.TimeRemaining > 0)
             {
                 countdownText.text = "" + ((int)timer.TimeRemaining + 1);
-                playerFallVel += playerFallAccel * timer.GetTime;
-                playerFallPos += playerFallVel * timer.GetTime;
-                playerReference.transform.position = new Vector3(playerFallPos.x, playerFallPos.y, playerFallPos.z);
+                playerReference.transform.position = raftReference.transform.position + new Vector3(0, 2, 0); // Initially lock the player position to the minecart
             }
             else
             {
