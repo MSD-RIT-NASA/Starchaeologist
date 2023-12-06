@@ -122,10 +122,16 @@ public class S_HandAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        teleportLine.enabled = !teleportDisabled;
+        teleportRay.enabled = !teleportDisabled;
+
         if (teleportRay && teleportLine && !teleportDisabled)
         {
-            teleportLine.enabled = teleportActive;
-            teleportRay.enabled = teleportActive;
+            if(!teleportDisabled)
+            {
+                teleportLine.enabled = teleportActive;
+                teleportRay.enabled = teleportActive;
+            }
             if (!teleportActive)
             {
                 teleportReticle.SetActive(teleportActive);
