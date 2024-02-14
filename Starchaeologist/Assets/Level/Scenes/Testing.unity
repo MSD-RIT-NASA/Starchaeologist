@@ -515,6 +515,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3970b68fb74c06544b8dbe0d9c065e4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameState: 0
+  fourSquareState: 0
+  patternSize: 5
+  tilesPos:
+  - {x: 0.5, y: 0, z: 0.5}
+  - {x: 0.5, y: 0, z: -0.5}
+  - {x: -0.5, y: 0, z: 0.5}
+  - {x: -0.5, y: 0, z: -0.5}
+  tileSize: {x: 1, y: 0.1, z: 1}
 --- !u!4 &595775225
 Transform:
   m_ObjectHideFlags: 0

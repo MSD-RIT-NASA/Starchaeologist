@@ -5,6 +5,19 @@ using UnityEngine;
 
 public class TempleGameManager : MonoBehaviour
 {
+    [Header("Overal Game Management")]
+    [SerializeField] TempleGameStates gameState = TempleGameStates.CHOOSE_GAME_MODE;
+
+    [Header("Four Squares")]
+    [SerializeField] FourSquareStates fourSquareState = FourSquareStates.GENERATE_PATTERNS;
+    [Tooltip("How many squares will the player need to travel to before the round ends")]
+    [SerializeField] int patternSize;
+    [SerializeField] List<Vector3> tilesPos;
+    [SerializeField] Vector3 tileSize;
+
+    //[Header("Pose Copy")]
+    //[SerializeField]
+
     void Start()
     {
 
@@ -12,12 +25,10 @@ public class TempleGameManager : MonoBehaviour
 
     void Update()
     {
-
+        TempleSM();
     }
 
     #region GAME_MANAGER
-
-    TempleGameStates gameState = TempleGameStates.CHOOSE_GAME_MODE;
 
     /// <summary>
     /// State machine that runs the temple game modes 
@@ -27,15 +38,27 @@ public class TempleGameManager : MonoBehaviour
         switch (gameState)
         {
             case TempleGameStates.CHOOSE_GAME_MODE:
+                ChooseGameMode();
                 break;
             case TempleGameStates.POSE_MATCH:
+
                 break;
             case TempleGameStates.FOUR_SQUARE:
                 FourSquareSM();
                 break;
             case TempleGameStates.DISPLAY_SCORE:
+
                 break;
         }
+    }
+
+    /// <summary>
+    /// Lets the user choose what game to play 
+    /// </summary>
+    void ChooseGameMode()
+    {
+        // Temporary 
+        gameState = TempleGameStates.FOUR_SQUARE;
     }
 
     /// <summary>
@@ -63,10 +86,11 @@ public class TempleGameManager : MonoBehaviour
 
     #region FOUR_SQUARES
 
-    FourSquareStates fourSquareState = FourSquareStates.GENERATE_PATTERNS;
 
     // Arr of indexes each refer to differnt square 
     int[] pattern;
+    // Selected tile 
+    int currentTile;
 
     /// <summary>
     /// Manages the states of the Four Square game-mode 
@@ -76,8 +100,10 @@ public class TempleGameManager : MonoBehaviour
         switch (fourSquareState)
         {
             case FourSquareStates.GENERATE_PATTERNS:
+                GeneratePatterns();
                 break;
             case FourSquareStates.DISPLAY_PATTERN:
+                DisplayPattern();
                 break;
             case FourSquareStates.PLAY:
                 PlayState();
@@ -88,21 +114,57 @@ public class TempleGameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Generate patterns state
+    /// </summary>
+    void GeneratePatterns()
+    {
+        pattern = GeneratePattern();
+        currentTile = pattern[0];
+
+        fourSquareState = FourSquareStates.DISPLAY_PATTERN;
+    }
+
+
+    /// <summary>
     /// Creates an array of indexes that each represent one of the squares that the player must step to. 
     /// There cannot be the same two indexes in a row. 
     /// </summary>
     /// <returns></returns>
     int[] GeneratePattern()
     {
-        return null;
+        int[] pattern = new int[patternSize];
+        int previous = -1;
+
+        for (int i = 0; i < patternSize; i++)
+        {
+            int current;
+            do
+            {
+                // 0 to 4 each represents a square index 
+                current = UnityEngine.Random.Range(0, 5);
+
+            } while (current == previous);
+            
+            pattern[i] = current;
+            previous = current;
+
+        }
+
+        return pattern;
     }
 
     /// <summary>
     /// Shows the current square that the player must travel to. 
     /// </summary>
     void DisplayPattern() 
-    { 
-    
+    {
+        // Send pattern to console 
+        string patternStr = "";
+        for (int i = 0; i < patternSize;i++)
+        {
+            patternStr += pattern[i].ToString();
+        }
+        print("Current pattern: " + patternStr);
     }
 
     /// <summary>
@@ -204,4 +266,24 @@ public class TempleGameManager : MonoBehaviour
 
     #endregion
 
+
+    private void OnDrawGizmosSelected()
+    {
+        
+        for (int i = 0; i < tilesPos.Count; i++)
+        {
+            if(currentTile == i)
+            {
+                // Selected 
+                Gizmos.color = Color.white;
+            }
+            else
+            {
+                // Default color 
+                Gizmos.color = Color.red;
+            }
+
+            Gizmos.DrawWireCube(this.transform.position + tilesPos[i], tileSize);
+        }
+    }
 }
