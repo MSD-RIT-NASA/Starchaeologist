@@ -15,6 +15,8 @@ public class TempleGameManager : MonoBehaviour
     [SerializeField] int patternSize;
     [SerializeField] List<Vector3> tilesPos;
     [SerializeField] Vector3 tileSize;
+    [SerializeField] float pointsGainSuccess;
+    [SerializeField] float pointsLossCollision;
 
     //[Header("Pose Copy")]
     //[SerializeField]
@@ -93,6 +95,10 @@ public class TempleGameManager : MonoBehaviour
     // Selected tile 
     int currentTile;
 
+    float score = 0.0f;
+    int collisions = 0;
+
+
     /// <summary>
     /// Manages the states of the Four Square game-mode 
     /// </summary>
@@ -110,6 +116,7 @@ public class TempleGameManager : MonoBehaviour
                 PlayState();
                 break;
             case FourSquareStates.END_GAME:
+                FourSquareEndGame();
                 break;
         }
     }
@@ -175,7 +182,36 @@ public class TempleGameManager : MonoBehaviour
     /// </summary>
     void PlayState()
     {
-        print(PlayerInTarget());
+        if(PlayerInTarget())
+        {
+            score += pointsGainSuccess;
+            currentTile++;
+
+            // Change to end of round or next tile 
+            if (RoundComplete())
+            {
+                fourSquareState = FourSquareStates.END_GAME;
+            }
+            else
+            {
+                fourSquareState = FourSquareStates.DISPLAY_PATTERN;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Final state of this game which transitions from four square to display score 
+    /// </summary>
+    void FourSquareEndGame()
+    {
+        // TODO: Write data to text file 
+        print("Final Score: " + score);
+        print("Total collision: " + collisions);
+
+        score = 0.0f;
+        collisions = 0;
+
+        gameState = TempleGameStates.DISPLAY_SCORE;
     }
 
     /// <summary>
@@ -207,7 +243,15 @@ public class TempleGameManager : MonoBehaviour
     /// <returns></returns>
     bool RoundComplete()
     {
-        return false;
+        return currentTile >= patternSize;
+    }
+
+    /// <summary>
+    /// Call if the player has made collision with a barrier 
+    /// </summary>
+    public void TakeCollision()
+    {
+        score -= pointsLossCollision;
     }
 
     enum FourSquareStates
@@ -216,6 +260,43 @@ public class TempleGameManager : MonoBehaviour
         DISPLAY_PATTERN,    // Indicates the current square 
         PLAY,               // Grades player score and waits for their input 
         END_GAME            // Cleanup and send to display score 
+    }
+
+    [System.Serializable]
+    private class Tile
+    {
+        [SerializeField] public Vector3 tilePos;
+
+        private GameObject tileObj;
+
+        public void SetObj(GameObject obj)
+        {
+            tileObj = obj;
+        }
+
+        public GameObject GetObj()
+        {
+            return tileObj;
+        }
+
+
+        /// <summary>
+        /// Update the visual of this tile to represet whether it is 
+        /// the current target tile or not 
+        /// </summary>
+        /// <param name="selection"></param>
+        public void SetSelection(bool selection)
+        {
+            if (selection)
+            {
+                print("Now displaying selected");
+            }
+            else
+            {
+                print("Now displaying non-selected");
+            }
+        }
+
     }
 
     #endregion
