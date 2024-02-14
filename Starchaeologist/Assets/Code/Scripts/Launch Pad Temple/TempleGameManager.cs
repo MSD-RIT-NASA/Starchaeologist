@@ -7,6 +7,7 @@ public class TempleGameManager : MonoBehaviour
 {
     [Header("Overal Game Management")]
     [SerializeField] TempleGameStates gameState = TempleGameStates.CHOOSE_GAME_MODE;
+    [SerializeField] Transform playerHeadPos;
 
     [Header("Four Squares")]
     [SerializeField] FourSquareStates fourSquareState = FourSquareStates.GENERATE_PATTERNS;
@@ -165,6 +166,8 @@ public class TempleGameManager : MonoBehaviour
             patternStr += pattern[i].ToString();
         }
         print("Current pattern: " + patternStr);
+
+        fourSquareState = FourSquareStates.PLAY;
     }
 
     /// <summary>
@@ -172,7 +175,7 @@ public class TempleGameManager : MonoBehaviour
     /// </summary>
     void PlayState()
     {
-
+        print(PlayerInTarget());
     }
 
     /// <summary>
@@ -182,7 +185,20 @@ public class TempleGameManager : MonoBehaviour
     /// <returns></returns>
     bool PlayerInTarget()
     {
-        return false;
+        Vector3 tileCurr = this.transform.position + tilesPos[currentTile];
+        Vector3 halfSize = tileSize / 2.0f;
+        
+        bool aboveMin =
+                playerHeadPos.position.x >= tileCurr.x - halfSize.x &&
+                playerHeadPos.position.z >= tileCurr.z - halfSize.z;
+
+        bool belowMax =
+            playerHeadPos.position.x <= tileCurr.x + halfSize.x &&
+            playerHeadPos.position.z <= tileCurr.z + halfSize.z;
+        print("Above min: " + aboveMin);
+        print("Below max: " + belowMax);
+
+        return aboveMin && belowMax;
     }
 
     /// <summary>
@@ -272,7 +288,15 @@ public class TempleGameManager : MonoBehaviour
         
         for (int i = 0; i < tilesPos.Count; i++)
         {
-            if(currentTile == i)
+            if(PlayerInTarget())
+            {
+                Gizmos.color = Color.white;
+            }
+            else
+            {
+                Gizmos.color = Color.red;
+            }
+            /*if(currentTile == i)
             {
                 // Selected 
                 Gizmos.color = Color.white;
@@ -281,7 +305,7 @@ public class TempleGameManager : MonoBehaviour
             {
                 // Default color 
                 Gizmos.color = Color.red;
-            }
+            }*/
 
             Gizmos.DrawWireCube(this.transform.position + tilesPos[i], tileSize);
         }

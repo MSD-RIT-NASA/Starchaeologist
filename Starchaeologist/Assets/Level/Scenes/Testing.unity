@@ -516,6 +516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameState: 0
+  playerHeadPos: {fileID: 177478039}
   fourSquareState: 0
   patternSize: 5
   tilesPos:
@@ -523,7 +524,7 @@ MonoBehaviour:
   - {x: 0.5, y: 0, z: -0.5}
   - {x: -0.5, y: 0, z: 0.5}
   - {x: -0.5, y: 0, z: -0.5}
-  tileSize: {x: 1, y: 0.1, z: 1}
+  tileSize: {x: 0.8, y: 0.1, z: 0.8}
 --- !u!4 &595775225
 Transform:
   m_ObjectHideFlags: 0
