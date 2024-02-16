@@ -13,7 +13,8 @@ public class TempleGameManager : MonoBehaviour
     [SerializeField] FourSquareStates fourSquareState = FourSquareStates.GENERATE_PATTERNS;
     [Tooltip("How many squares will the player need to travel to before the round ends")]
     [SerializeField] int patternSize;
-    [SerializeField] List<Vector3> tilesPos;
+    //[SerializeField] List<Vector3> tilesPos;
+    [SerializeField] List<Tile> tiles;
     [SerializeField] Vector3 tileSize;
     [SerializeField] float pointsGainSuccess;
     [SerializeField] float pointsLossCollision;
@@ -92,6 +93,7 @@ public class TempleGameManager : MonoBehaviour
 
     // Arr of indexes each refer to differnt square 
     int[] pattern;
+    int indexInPattern; // Index in pattern arr
     // Selected tile 
     int currentTile;
 
@@ -127,7 +129,8 @@ public class TempleGameManager : MonoBehaviour
     void GeneratePatterns()
     {
         pattern = GeneratePattern();
-        currentTile = pattern[0];
+        indexInPattern = 0;
+        currentTile = pattern[indexInPattern];
 
         fourSquareState = FourSquareStates.DISPLAY_PATTERN;
     }
@@ -149,7 +152,7 @@ public class TempleGameManager : MonoBehaviour
             do
             {
                 // 0 to 4 each represents a square index 
-                current = UnityEngine.Random.Range(0, 5);
+                current = UnityEngine.Random.Range(0, 4);
 
             } while (current == previous);
             
@@ -168,11 +171,17 @@ public class TempleGameManager : MonoBehaviour
     {
         // Send pattern to console 
         string patternStr = "";
-        for (int i = 0; i < patternSize;i++)
+        for (int i = 0; i < patternSize; i++)
         {
             patternStr += pattern[i].ToString();
         }
         print("Current pattern: " + patternStr);
+
+        // Reset 
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            tiles[i].SetSelection(i == currentTile);
+        }
 
         fourSquareState = FourSquareStates.PLAY;
     }
@@ -182,21 +191,28 @@ public class TempleGameManager : MonoBehaviour
     /// </summary>
     void PlayState()
     {
-        if(PlayerInTarget())
+        if (RoundComplete())
+        {
+            fourSquareState = FourSquareStates.END_GAME;
+            return;
+        }
+
+        if (PlayerInTarget())
         {
             score += pointsGainSuccess;
-            currentTile++;
+            indexInPattern++;
 
-            // Change to end of round or next tile 
             if (RoundComplete())
             {
                 fourSquareState = FourSquareStates.END_GAME;
+                return;
             }
-            else
-            {
-                fourSquareState = FourSquareStates.DISPLAY_PATTERN;
-            }
+
+            currentTile = pattern[indexInPattern];
+
+            fourSquareState = FourSquareStates.DISPLAY_PATTERN;
         }
+
     }
 
     /// <summary>
@@ -210,6 +226,8 @@ public class TempleGameManager : MonoBehaviour
 
         score = 0.0f;
         collisions = 0;
+        currentTile = 0;
+        indexInPattern = 0;
 
         gameState = TempleGameStates.DISPLAY_SCORE;
     }
@@ -221,7 +239,10 @@ public class TempleGameManager : MonoBehaviour
     /// <returns></returns>
     bool PlayerInTarget()
     {
-        Vector3 tileCurr = this.transform.position + tilesPos[currentTile];
+
+        print("Compare: " + tiles.Count + ": " + indexInPattern);
+
+        Vector3 tileCurr = this.transform.position + tiles[pattern[indexInPattern]].tilePos;
         Vector3 halfSize = tileSize / 2.0f;
         
         bool aboveMin =
@@ -231,8 +252,8 @@ public class TempleGameManager : MonoBehaviour
         bool belowMax =
             playerHeadPos.position.x <= tileCurr.x + halfSize.x &&
             playerHeadPos.position.z <= tileCurr.z + halfSize.z;
-        print("Above min: " + aboveMin);
-        print("Below max: " + belowMax);
+        //print("Above min: " + aboveMin);
+        //print("Below max: " + belowMax);
 
         return aboveMin && belowMax;
     }
@@ -243,7 +264,7 @@ public class TempleGameManager : MonoBehaviour
     /// <returns></returns>
     bool RoundComplete()
     {
-        return currentTile >= patternSize;
+        return indexInPattern >= patternSize;
     }
 
     /// <summary>
@@ -266,18 +287,7 @@ public class TempleGameManager : MonoBehaviour
     private class Tile
     {
         [SerializeField] public Vector3 tilePos;
-
-        private GameObject tileObj;
-
-        public void SetObj(GameObject obj)
-        {
-            tileObj = obj;
-        }
-
-        public GameObject GetObj()
-        {
-            return tileObj;
-        }
+        [SerializeField] public FS_Square tileObj;
 
 
         /// <summary>
@@ -287,14 +297,7 @@ public class TempleGameManager : MonoBehaviour
         /// <param name="selection"></param>
         public void SetSelection(bool selection)
         {
-            if (selection)
-            {
-                print("Now displaying selected");
-            }
-            else
-            {
-                print("Now displaying non-selected");
-            }
+            tileObj.SetTargetVisual(selection);
         }
 
     }
@@ -367,9 +370,9 @@ public class TempleGameManager : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         
-        for (int i = 0; i < tilesPos.Count; i++)
+        for (int i = 0; i < tiles.Count; i++)
         {
-            if(PlayerInTarget())
+            if(/*PlayerInTarget() && */i == currentTile)
             {
                 Gizmos.color = Color.white;
             }
@@ -388,7 +391,7 @@ public class TempleGameManager : MonoBehaviour
                 Gizmos.color = Color.red;
             }*/
 
-            Gizmos.DrawWireCube(this.transform.position + tilesPos[i], tileSize);
+            Gizmos.DrawWireCube(this.transform.position + tiles[i].tilePos, tileSize);
         }
     }
 }
