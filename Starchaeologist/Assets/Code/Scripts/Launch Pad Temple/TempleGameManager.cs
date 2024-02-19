@@ -18,15 +18,29 @@ public class TempleGameManager : MonoBehaviour
     //[SerializeField] List<Vector3> tilesPos;
     [SerializeField] List<Tile> tiles;
     [SerializeField] Vector3 tileSize;
+    [Tooltip("Used to instantiate barriers")]
+    [SerializeField] GameObject barrierObj;
+    [SerializeField] List<Cube_Transform> barriers;
+    [SerializeField] float barrierThickness;
     [SerializeField] float pointsGainSuccess;
     [SerializeField] float pointsLossCollision;
+
+    [Space]
+    [SerializeField] int currentDifficulty; 
+    [SerializeField] List<DifficultySettings> FS_Difficulties;
 
     //[Header("Pose Copy")]
     //[SerializeField]
 
-    void Start()
+    private void Start()
     {
-
+        // Setup Foursquares 
+        barrierTransforms = new List<Transform>();
+        for (int i = 0; i < barriers.Count; i++)
+        {
+            barrierTransforms.Add(Instantiate(barrierObj, this.transform.position, Quaternion.identity).transform);
+        }
+        UpdateBarrierTransforms();
     }
 
     void Update()
@@ -94,14 +108,17 @@ public class TempleGameManager : MonoBehaviour
 
 
     // Arr of indexes each refer to differnt square 
-    int[] pattern;
-    int indexInPattern; // Index in pattern arr
+    private int[] pattern;
+    private int indexInPattern; // Index in pattern arr
     // Selected tile 
-    int currentTile;
+    private int currentTile;
 
-    float score = 0.0f;
-    int collisions = 0;
+    // Recorded data 
+    private float score = 0.0f;
+    private int collisions = 0;
 
+    // The generated transforms 
+    private List<Transform> barrierTransforms;
 
     /// <summary>
     /// Manages the states of the Four Square game-mode 
@@ -196,6 +213,7 @@ public class TempleGameManager : MonoBehaviour
         // TODO: Figure out why we need to check if the round is complete twice...
 
 
+        // Playstate Management 
         if (IsRoundComplete())
         {
             fourSquareState = FourSquareStates.END_GAME;
@@ -218,6 +236,21 @@ public class TempleGameManager : MonoBehaviour
             fourSquareState = FourSquareStates.DISPLAY_PATTERN;
         }
 
+
+        UpdateBarrierTransforms();
+
+    }
+
+    private void UpdateBarrierTransforms()
+    {
+        // Barrier Height 
+        DifficultySettings settings = FS_Difficulties[currentDifficulty];
+        for (int i = 0; i < barriers.Count; i++)
+        {
+            Cube_Transform transform = barriers[i];
+            barrierTransforms[i].position = this.transform.position + transform.position + Vector3.up * settings.heightMin / 2.0f;
+            barrierTransforms[i].localScale = new Vector3(transform.scale.x, settings.heightMin, transform.scale.y);
+        }
     }
 
     /// <summary>
@@ -320,6 +353,26 @@ public class TempleGameManager : MonoBehaviour
 
     }
 
+    [System.Serializable]
+    private class Cube_Transform
+    {
+        [SerializeField] public Vector3 position;
+        [Tooltip("Only can decide x and z axis as height is done by difficulty")]
+        [SerializeField] public Vector2 scale;
+    }
+
+    [System.Serializable] 
+    private class DifficultySettings
+    {
+        [SerializeField] public string Name;
+        [SerializeField] public float heightMax;
+        [SerializeField] public float heightMin;
+
+        [Tooltip("Each wall is random in height")]
+        [SerializeField] public bool variableHeights;
+    }
+
+
     #endregion
 
     #region POSE_COPY
@@ -387,10 +440,10 @@ public class TempleGameManager : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        
+        // Represent tiles areas 
         for (int i = 0; i < tiles.Count; i++)
         {
-            if(/*PlayerInTarget() && */i == currentTile)
+            if(i == currentTile)
             {
                 Gizmos.color = Color.black;
             }
@@ -398,18 +451,30 @@ public class TempleGameManager : MonoBehaviour
             {
                 Gizmos.color = Color.red;
             }
-            /*if(currentTile == i)
+
+            //Gizmos.DrawCube()
+            Gizmos.DrawWireCube(this.transform.position + tiles[i].tilePos, tileSize);
+        }
+
+        Gizmos.color = Color.magenta;
+        foreach (Cube_Transform transform in barriers)
+        {
+            DifficultySettings settings = FS_Difficulties[currentDifficulty];
+
+            if(Application.isPlaying)
             {
-                // Selected 
-                Gizmos.color = Color.white;
+                Gizmos.DrawWireCube(
+                this.transform.position + transform.position + Vector3.up * settings.heightMin / 2.0f,
+                new Vector3(transform.scale.x, settings.heightMin, transform.scale.y)
+                );
             }
             else
             {
-                // Default color 
-                Gizmos.color = Color.red;
-            }*/
-
-            Gizmos.DrawWireCube(this.transform.position + tiles[i].tilePos, tileSize);
+                Gizmos.DrawCube(
+                this.transform.position + transform.position + Vector3.up * settings.heightMin / 2.0f,
+                new Vector3(transform.scale.x, settings.heightMin, transform.scale.y)
+                );
+            }
         }
     }
 }
