@@ -180,7 +180,7 @@ public class TempleGameManager : MonoBehaviour
         // Reset 
         for (int i = 0; i < tiles.Count; i++)
         {
-            tiles[i].SetSelection(i == currentTile);
+            tiles[i].SetSelection(i == currentTile ? FS_Square.FSSquareStates.TARGET : FS_Square.FSSquareStates.NOT_TARGET);
         }
 
         fourSquareState = FourSquareStates.PLAY;
@@ -191,7 +191,10 @@ public class TempleGameManager : MonoBehaviour
     /// </summary>
     void PlayState()
     {
-        if (RoundComplete())
+        // TODO: Figure out why we need to check if the round is complete twice...
+
+
+        if (IsRoundComplete())
         {
             fourSquareState = FourSquareStates.END_GAME;
             return;
@@ -202,7 +205,7 @@ public class TempleGameManager : MonoBehaviour
             score += pointsGainSuccess;
             indexInPattern++;
 
-            if (RoundComplete())
+            if (IsRoundComplete())
             {
                 fourSquareState = FourSquareStates.END_GAME;
                 return;
@@ -224,6 +227,12 @@ public class TempleGameManager : MonoBehaviour
         print("Final Score: " + score);
         print("Total collision: " + collisions);
 
+        // Reset to default visual 
+        foreach(Tile tile in tiles)
+        {
+            tile.tileObj.SetTargetVisual(FS_Square.FSSquareStates.NOT_IN_PLAY);
+        }
+
         score = 0.0f;
         collisions = 0;
         currentTile = 0;
@@ -240,7 +249,7 @@ public class TempleGameManager : MonoBehaviour
     bool PlayerInTarget()
     {
 
-        print("Compare: " + tiles.Count + ": " + indexInPattern);
+        //print("Compare: " + tiles.Count + ": " + indexInPattern);
 
         Vector3 tileCurr = this.transform.position + tiles[pattern[indexInPattern]].tilePos;
         Vector3 halfSize = tileSize / 2.0f;
@@ -262,7 +271,7 @@ public class TempleGameManager : MonoBehaviour
     /// Returns true if the the entire pattern has been completed 
     /// </summary>
     /// <returns></returns>
-    bool RoundComplete()
+    bool IsRoundComplete()
     {
         return indexInPattern >= patternSize;
     }
@@ -295,9 +304,9 @@ public class TempleGameManager : MonoBehaviour
         /// the current target tile or not 
         /// </summary>
         /// <param name="selection"></param>
-        public void SetSelection(bool selection)
+        public void SetSelection(FS_Square.FSSquareStates state)
         {
-            tileObj.SetTargetVisual(selection);
+            tileObj.SetTargetVisual(state);
         }
 
     }
@@ -374,7 +383,7 @@ public class TempleGameManager : MonoBehaviour
         {
             if(/*PlayerInTarget() && */i == currentTile)
             {
-                Gizmos.color = Color.white;
+                Gizmos.color = Color.black;
             }
             else
             {
