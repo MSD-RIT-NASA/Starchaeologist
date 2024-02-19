@@ -7,7 +7,9 @@ public class TempleGameManager : MonoBehaviour
 {
     [Header("Overal Game Management")]
     [SerializeField] TempleGameStates gameState = TempleGameStates.CHOOSE_GAME_MODE;
-    [SerializeField] Transform playerHeadPos;
+    [SerializeField] Transform playerHead;
+    [SerializeField] Transform playerLeft;
+    [SerializeField] Transform playerRight;
 
     [Header("Four Squares")]
     [SerializeField] FourSquareStates fourSquareState = FourSquareStates.GENERATE_PATTERNS;
@@ -248,21 +250,27 @@ public class TempleGameManager : MonoBehaviour
     /// <returns></returns>
     bool PlayerInTarget()
     {
+        return InTargetTileTarget(playerHead) && InTargetTileTarget(playerLeft) && InTargetTileTarget(playerRight);
+    }
 
-        //print("Compare: " + tiles.Count + ": " + indexInPattern);
-
+    /// <summary>
+    /// Checks if a transform origin position is within the current 
+    /// tile target's range 
+    /// </summary>
+    /// <param name="transform"></param>
+    /// <returns></returns>
+    private bool InTargetTileTarget(Transform transform)
+    {
         Vector3 tileCurr = this.transform.position + tiles[pattern[indexInPattern]].tilePos;
         Vector3 halfSize = tileSize / 2.0f;
-        
+
         bool aboveMin =
-                playerHeadPos.position.x >= tileCurr.x - halfSize.x &&
-                playerHeadPos.position.z >= tileCurr.z - halfSize.z;
+                transform.position.x >= tileCurr.x - halfSize.x &&
+                transform.position.z >= tileCurr.z - halfSize.z;
 
         bool belowMax =
-            playerHeadPos.position.x <= tileCurr.x + halfSize.x &&
-            playerHeadPos.position.z <= tileCurr.z + halfSize.z;
-        //print("Above min: " + aboveMin);
-        //print("Below max: " + belowMax);
+            transform.position.x <= tileCurr.x + halfSize.x &&
+            transform.position.z <= tileCurr.z + halfSize.z;
 
         return aboveMin && belowMax;
     }
@@ -282,6 +290,7 @@ public class TempleGameManager : MonoBehaviour
     public void TakeCollision()
     {
         score -= pointsLossCollision;
+        collisions++;
     }
 
     enum FourSquareStates
