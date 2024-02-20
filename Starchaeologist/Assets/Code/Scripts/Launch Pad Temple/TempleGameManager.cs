@@ -145,7 +145,7 @@ public class TempleGameManager : MonoBehaviour
     /// <summary>
     /// Generate patterns state
     /// </summary>
-    void GeneratePatterns()
+    private void GeneratePatterns()
     {
         pattern = GeneratePattern();
         indexInPattern = 0;
@@ -160,7 +160,7 @@ public class TempleGameManager : MonoBehaviour
     /// There cannot be the same two indexes in a row. 
     /// </summary>
     /// <returns></returns>
-    int[] GeneratePattern()
+    private int[] GeneratePattern()
     {
         int[] pattern = new int[patternSize];
         int previous = -1;
@@ -186,7 +186,7 @@ public class TempleGameManager : MonoBehaviour
     /// <summary>
     /// Shows the current square that the player must travel to. 
     /// </summary>
-    void DisplayPattern() 
+    private void DisplayPattern() 
     {
         // Send pattern to console 
         string patternStr = "";
@@ -208,7 +208,7 @@ public class TempleGameManager : MonoBehaviour
     /// <summary>
     /// Dictates when the player has reached the desired square 
     /// </summary>
-    void PlayState()
+    private void PlayState()
     {
         // TODO: Figure out why we need to check if the round is complete twice...
 
@@ -256,7 +256,7 @@ public class TempleGameManager : MonoBehaviour
     /// <summary>
     /// Final state of this game which transitions from four square to display score 
     /// </summary>
-    void FourSquareEndGame()
+    private void FourSquareEndGame()
     {
         // TODO: Write data to text file 
         print("Final Score: " + score);
@@ -281,7 +281,7 @@ public class TempleGameManager : MonoBehaviour
     /// This is done by checking if the feet, hands, and head occupy the desired area.
     /// </summary>
     /// <returns></returns>
-    bool PlayerInTarget()
+    private bool PlayerInTarget()
     {
         return InTargetTileTarget(playerHead) && InTargetTileTarget(playerLeft) && InTargetTileTarget(playerRight);
     }
@@ -312,7 +312,7 @@ public class TempleGameManager : MonoBehaviour
     /// Returns true if the the entire pattern has been completed 
     /// </summary>
     /// <returns></returns>
-    bool IsRoundComplete()
+    private bool IsRoundComplete()
     {
         return indexInPattern >= patternSize;
     }
