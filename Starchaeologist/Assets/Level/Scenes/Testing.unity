@@ -1306,9 +1306,57 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 755411227}
     - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: currentDifficulty
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
       propertyPath: instructionCanvas
       value: 
       objectReference: {fileID: 8674809126244372913}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: tiles.Array.data[0].tilePos.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: barriers.Array.data[0].position.x
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: barriers.Array.data[0].position.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: barriers.Array.data[1].position.x
+      value: -0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: barriers.Array.data[1].position.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: barriers.Array.data[2].position.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: barriers.Array.data[2].position.z
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: barriers.Array.data[3].position.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: barriers.Array.data[3].position.z
+      value: -0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: FS_Difficulties.Array.data[3].heightMax
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: FS_Difficulties.Array.data[3].heightMin
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 5858420191687722203, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
       propertyPath: m_RootOrder
       value: 4

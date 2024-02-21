@@ -45,6 +45,7 @@ public class TempleGameManager : MonoBehaviour
         for (int i = 0; i < barriers.Count; i++)
         {
             barrierTransforms.Add(Instantiate(barrierObj, this.transform.position, Quaternion.identity).transform);
+            barrierObj.SetActive(false);
         }
         UpdateBarrierTransforms();
     }
@@ -68,7 +69,7 @@ public class TempleGameManager : MonoBehaviour
             case TempleGameStates.POSE_MATCH:
                 break;
             case TempleGameStates.FOUR_SQUARE:
-                fourSquareState = FourSquareStates.GENERATE_PATTERNS;
+                InitializeFourSquare();
                 break;
             case TempleGameStates.DISPLAY_SCORE:
                 break;
@@ -121,7 +122,6 @@ public class TempleGameManager : MonoBehaviour
     /// </summary>
     /// <param name="game"></param>
     void BeginDisplayScore(GameModes game) { } 
-
    
 
     enum GameModes
@@ -147,6 +147,20 @@ public class TempleGameManager : MonoBehaviour
 
     // The generated transforms 
     private List<Transform> barrierTransforms;
+
+    /// <summary>
+    /// Sets up this game 
+    /// </summary>
+    void InitializeFourSquare()
+    {
+        fourSquareState = FourSquareStates.GENERATE_PATTERNS;
+        UpdateBarrierTransforms();
+
+        foreach (Transform t in barrierTransforms)
+        {
+            t.gameObject.SetActive(true);
+        }
+    }
 
     /// <summary>
     /// Manages the states of the Four Square game-mode 
@@ -265,18 +279,22 @@ public class TempleGameManager : MonoBehaviour
         }
 
 
-        UpdateBarrierTransforms();
 
     }
 
+    /// <summary>
+    /// Changes how the game is visualized 
+    /// </summary>
     private void UpdateBarrierTransforms()
     {
         // Barrier Height 
         DifficultySettings settings = FS_Difficulties[currentDifficulty];
         for (int i = 0; i < barriers.Count; i++)
         {
+            float height = UnityEngine.Random.Range(settings.heightMin, settings.heightMax);
+
             Cube_Transform transform = barriers[i];
-            barrierTransforms[i].position = this.transform.position + transform.position + Vector3.up * settings.heightMin / 2.0f;
+            barrierTransforms[i].position = this.transform.position + transform.position + Vector3.up * height / 2.0f;
             barrierTransforms[i].localScale = new Vector3(transform.scale.x, settings.heightMin, transform.scale.y);
         }
     }
@@ -294,6 +312,12 @@ public class TempleGameManager : MonoBehaviour
         foreach(Tile tile in tiles)
         {
             tile.tileObj.SetTargetVisual(FS_Square.FSSquareStates.NOT_IN_PLAY);
+        }
+
+        // Turn off barriers 
+        foreach (Transform t in barrierTransforms)
+        {
+            t.gameObject.SetActive(false);
         }
 
         score = 0.0f;
