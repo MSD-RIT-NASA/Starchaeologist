@@ -4,11 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-/*
- * TODO
- *      - Reset barriers after each tile has been achieved 
- */
-
 public class TempleGameManager : MonoBehaviour
 {
     [Header("Overal Game Management")]
