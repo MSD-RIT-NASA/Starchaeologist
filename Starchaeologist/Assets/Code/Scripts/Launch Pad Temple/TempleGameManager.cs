@@ -210,13 +210,56 @@ public class TempleGameManager : MonoBehaviour
         for (int i = 0; i < patternSize; i++)
         {
             int current;
+            
+            // Make sure not tile that player is currently standing on 
+            if (i == 0)
+            {
+                int playerCurrentTile = -1;
+
+                // Find current tile player head is in 
+                for (int t = 0; t < tiles.Count; t++)
+                {
+                    print("in tiles search " + InTile(playerHead, t));
+                    if (InTile(playerHead, t))
+                    {
+                        playerCurrentTile = t;
+                        break;
+                    }
+                }
+
+
+                // Don't continue if not in any tile 
+                if(playerCurrentTile != -1)
+                {
+
+                    // Continue until current is not the tile 
+                    // the player is in 
+                    do
+                    {
+                        // 0 to 4 each represents a square index 
+                        current = UnityEngine.Random.Range(0, 4);
+
+                    } while (current == playerCurrentTile);
+
+                    // Set values 
+                    pattern[i] = current;
+                    previous = current;
+
+                    continue;
+                }
+                
+            }
+
+
+            // Make sure pattern does not repeat 
             do
             {
                 // 0 to 4 each represents a square index 
                 current = UnityEngine.Random.Range(0, 4);
 
             } while (current == previous);
-            
+
+            // Set values 
             pattern[i] = current;
             previous = current;
 
@@ -335,18 +378,19 @@ public class TempleGameManager : MonoBehaviour
     /// <returns></returns>
     private bool PlayerInTarget()
     {
-        return InTargetTileTarget(playerHead) && InTargetTileTarget(playerLeft) && InTargetTileTarget(playerRight);
+        int tile = pattern[indexInPattern];
+        return InTile(playerHead, tile) && InTile(playerLeft, tile) && InTile(playerRight, tile);
     }
 
     /// <summary>
-    /// Checks if a transform origin position is within the current 
-    /// tile target's range 
+    /// Used to check if a transform is within range of a given tile index 
     /// </summary>
     /// <param name="transform"></param>
+    /// <param name="tileIndex"></param>
     /// <returns></returns>
-    private bool InTargetTileTarget(Transform transform)
+    private bool InTile(Transform transform, int tileIndex)
     {
-        Vector3 tileCurr = this.transform.position + tiles[pattern[indexInPattern]].tilePos;
+        Vector3 tileCurr = this.transform.position + tiles[tileIndex].tilePos;
         Vector3 halfSize = tileSize / 2.0f;
 
         bool aboveMin =
