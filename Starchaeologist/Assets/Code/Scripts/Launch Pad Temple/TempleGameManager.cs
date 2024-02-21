@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/*
+ * TODO
+ *      - Reset barriers after each tile has been achieved 
+ */
+
 public class TempleGameManager : MonoBehaviour
 {
     [Header("Overal Game Management")]
@@ -10,18 +16,18 @@ public class TempleGameManager : MonoBehaviour
     [SerializeField] Transform playerHead;
     [SerializeField] Transform playerLeft;
     [SerializeField] Transform playerRight;
+    [Space]
+    [SerializeField] GameObject instructionCanvas;
 
     [Header("Four Squares")]
     [SerializeField] FourSquareStates fourSquareState = FourSquareStates.GENERATE_PATTERNS;
     [Tooltip("How many squares will the player need to travel to before the round ends")]
     [SerializeField] int patternSize;
-    //[SerializeField] List<Vector3> tilesPos;
     [SerializeField] List<Tile> tiles;
     [SerializeField] Vector3 tileSize;
     [Tooltip("Used to instantiate barriers")]
     [SerializeField] GameObject barrierObj;
     [SerializeField] List<Cube_Transform> barriers;
-    [SerializeField] float barrierThickness;
     [SerializeField] float pointsGainSuccess;
     [SerializeField] float pointsLossCollision;
 
@@ -50,6 +56,25 @@ public class TempleGameManager : MonoBehaviour
 
     #region GAME_MANAGER
 
+    public void SetGameMode(int gameMode)
+    {
+        gameState = (TempleGameStates)gameMode;
+
+        // Any intitialization 
+        switch (gameState)
+        {
+            case TempleGameStates.CHOOSE_GAME_MODE:
+                break;
+            case TempleGameStates.POSE_MATCH:
+                break;
+            case TempleGameStates.FOUR_SQUARE:
+                fourSquareState = FourSquareStates.GENERATE_PATTERNS;
+                break;
+            case TempleGameStates.DISPLAY_SCORE:
+                break;
+        }
+    }
+
     /// <summary>
     /// State machine that runs the temple game modes 
     /// </summary>
@@ -67,9 +92,11 @@ public class TempleGameManager : MonoBehaviour
                 FourSquareSM();
                 break;
             case TempleGameStates.DISPLAY_SCORE:
-
+                DisplayScore();
                 break;
         }
+
+        instructionCanvas.SetActive(gameState == TempleGameStates.CHOOSE_GAME_MODE);
     }
 
     /// <summary>
@@ -78,7 +105,14 @@ public class TempleGameManager : MonoBehaviour
     void ChooseGameMode()
     {
         // Temporary 
-        gameState = TempleGameStates.FOUR_SQUARE;
+        //gameState = TempleGameStates.FOUR_SQUARE;
+
+        // Game mode is decided by button press 
+    }
+
+    void DisplayScore()
+    {
+        gameState = TempleGameStates.CHOOSE_GAME_MODE;
     }
 
     /// <summary>
@@ -86,15 +120,9 @@ public class TempleGameManager : MonoBehaviour
     /// desired gamemode
     /// </summary>
     /// <param name="game"></param>
-    void DisplayScore(GameModes game) { } 
+    void BeginDisplayScore(GameModes game) { } 
 
-    enum TempleGameStates
-    { 
-        CHOOSE_GAME_MODE,
-        POSE_MATCH,
-        FOUR_SQUARE,
-        DISPLAY_SCORE
-    }
+   
 
     enum GameModes
     {
