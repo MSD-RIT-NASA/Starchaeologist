@@ -310,6 +310,12 @@ public class TempleGameManager : MonoBehaviour
             score += pointsGainSuccess;
             indexInPattern++;
 
+            // Reset all barriers to become dangerous again 
+            foreach (Transform t in barrierTransforms)
+            {
+                t.GetComponent<Barrier>().SetDanger(true);
+            }
+
             if (IsRoundComplete())
             {
                 fourSquareState = FourSquareStates.END_GAME;
