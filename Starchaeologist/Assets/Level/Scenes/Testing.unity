@@ -1221,14 +1221,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: S_RiverGame, Assembly-CSharp
-        m_MethodName: TimeToMove
-        m_Mode: 1
+      - m_Target: {fileID: 17619372}
+        m_TargetAssemblyTypeName: TempleGameManager, Assembly-CSharp
+        m_MethodName: SetGameMode
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1286,7 +1286,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1171726535
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1570,7 +1570,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1755565068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2259,6 +2259,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6116990464121638, guid: 57011646ad9b6844ea4b7c5129c8ad62, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6116990897814297, guid: 57011646ad9b6844ea4b7c5129c8ad62, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3645284304910462026, guid: 57011646ad9b6844ea4b7c5129c8ad62, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -2268,6 +2276,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4074418242285942929, guid: 57011646ad9b6844ea4b7c5129c8ad62, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6173541196948116404, guid: 57011646ad9b6844ea4b7c5129c8ad62, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6173541197584097989, guid: 57011646ad9b6844ea4b7c5129c8ad62, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
