@@ -72,6 +72,28 @@ public class FileIO : MonoBehaviour
         }
     }
 
+    [System.Serializable]
+    public class JSONFloatHelperObject
+    {
+        public string name;
+        public float value;
+    }
+
+    [System.Serializable]
+    public class JSONIntHelperObject
+    {
+        public string name;
+        public int value;
+    }
+
+    [System.Serializable]
+    public class JSONStringHelperObject
+    {
+        public string name;
+        public string value;
+    }
+
+
 
     [System.Serializable]
     private class TestObject

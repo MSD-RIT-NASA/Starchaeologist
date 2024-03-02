@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3446434768187400273
 Transform:
   m_ObjectHideFlags: 0
@@ -1346,7 +1346,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6173541196948116400}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6803edce0201f574f923fd9d10e5b30a, type: 3}
   m_Name: 
@@ -2091,7 +2091,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6173541197584098110}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6803edce0201f574f923fd9d10e5b30a, type: 3}
   m_Name: 
@@ -3797,7 +3797,7 @@ BoxCollider:
   m_GameObject: {fileID: 8099257700457269278}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.29, z: 0.02}
   m_Center: {x: 0, y: 0.16, z: 0}
@@ -3810,7 +3810,7 @@ BoxCollider:
   m_GameObject: {fileID: 8099257702298384443}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.29, z: 0.02}
   m_Center: {x: 0, y: 0.16, z: 0}
@@ -3830,7 +3830,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &810281352310337636
 Transform:
   m_ObjectHideFlags: 0
@@ -4085,6 +4085,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6177083109153100119, guid: 0b9aa12663a044546982eb434328db27, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b9aa12663a044546982eb434328db27, type: 3}
 --- !u!1 &6116990897814297 stripped
@@ -4151,6 +4155,10 @@ PrefabInstance:
     - target: {fileID: 6177083109153100119, guid: 0b9aa12663a044546982eb434328db27, type: 3}
       propertyPath: m_Name
       value: Teleporter Reticle Right
+      objectReference: {fileID: 0}
+    - target: {fileID: 6177083109153100119, guid: 0b9aa12663a044546982eb434328db27, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b9aa12663a044546982eb434328db27, type: 3}
