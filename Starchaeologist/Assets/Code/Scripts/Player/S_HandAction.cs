@@ -59,8 +59,8 @@ public class S_HandAction : MonoBehaviour
         {
             //controller.activateAction.action.performed += Action_Pause;
             menuInputReference.action.performed += Action_Pause;
-            transform.parent.GetChild(5).gameObject.SetActive(false);
-            transform.parent.GetChild(6).gameObject.SetActive(false);
+            //transform.parent.GetChild(5).gameObject.SetActive(false);
+            //transform.parent.GetChild(6).gameObject.SetActive(false);
         }
     }
 
