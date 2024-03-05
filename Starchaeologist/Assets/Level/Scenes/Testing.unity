@@ -1636,13 +1636,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3bcdf61c2d49d48b1e6f32aa331e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testingJSONObj:
-    name: Yuh
-    value: 15
-    value2: 25
-    inside:
-      title: This is inside
-      miniValue: 0.35612413
+  playerSample:
+    playerName: John Doe
+    levelDatas:
+    - LevelName: FQ
+      intValues:
+      - name: SequenceLength
+        value: 5
+      - name: Collisions
+        value: 2
+      floatValues:
+      - name: Score
+        value: 10
+      stringValues: []
 --- !u!4 &2018015924
 Transform:
   m_ObjectHideFlags: 0

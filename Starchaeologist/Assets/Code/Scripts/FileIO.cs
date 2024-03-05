@@ -3,111 +3,116 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using UnityEngine.Analytics;
 
+/// <summary>
+/// For generalized player level loading and storing. Not
+/// for any level or player in particuluar. Also holds 
+/// data structures to make the process more convient.
+/// 
+/// When storing data it expects it in the proper data
+/// structures beforehand. 
+/// </summary>
 public class FileIO : MonoBehaviour
 {
-    [SerializeField] TestObject testingJSONObj;
+    [SerializeField] PlayerData playerSample;
+    [SerializeField] PlayerData playerSample2;
 
     // Start is called before the first frame update
     void Start()
     {
-        WriteObjectDataToFile("MyTest.json", new JSONHelperObject("Name", "Level"));
+        //WriteObjectDataToFile("MyTest.json", new JSONHelperObject("Name", "Level"));
+        StoreData(playerSample);
+
+        playerSample2 = LoadData(playerSample.playerName);
+    }
+
+
+    /// <summary>
+    /// Load a player's data if possible 
+    /// </summary>
+    /// <param name="playerName"></param>
+    /// <returns></returns>
+    public PlayerData LoadData(string playerName)
+    {
+        string basePath = Directory.GetCurrentDirectory() + "\\scores\\";
+        string finalPath = basePath + playerName + ".json";
+
+        if (!File.Exists(finalPath))
+            return null;
+
+        string jsonString = File.ReadAllText(finalPath);
+        return JsonUtility.FromJson<PlayerData>(jsonString);  
+    }
+
+
+    /// <summary>
+    /// Store a players data using the data's player name
+    /// as a json directory
+    /// </summary>
+    /// <param name="data"></param>
+    public void StoreData(PlayerData data)
+    {
+        string basePath = Directory.GetCurrentDirectory() + "\\scores\\";
+        string finalPath = basePath + data.playerName + ".json";
+
+        if (!File.Exists(finalPath))
+            File.CreateText(finalPath);
+
+        File.WriteAllText(finalPath, JsonUtility.ToJson(data, true));
+    }
+
+
+
+    #region FileIOStructs
+
+    /// <summary>
+    /// Represents a whole json file connected to a single player 
+    /// </summary>
+    [System.Serializable]
+    public class PlayerData
+    {
+        public string playerName;
+        public LevelData[] levelDatas;
     }
 
     /// <summary>
-    /// Writes to a file within the scores folder. Do NOT include
-    /// \\ in the beginning for the file path and assume it is already 
-    /// included.
+    /// Holds the raw data tied to each particuluar level. Each 
+    /// array holds structs of a type and their particuluar 
+    /// name. 
     /// </summary>
-    /// <param name="path"></param>
-    /// <param name="obj"></param>
-    private void WriteObjectDataToFile(string path, JSONHelperObject obj)
+    [System.Serializable]
+    public class LevelData
     {
-        string basePath = Directory.GetCurrentDirectory() + "\\scores\\";
-        string finalPath = basePath + path;
-
-        File.WriteAllText(finalPath, JsonUtility.ToJson(obj, true));
+        public string levelName;
+        public JSONIntHelper[]  intValues;
+        public JSONFloatHelper[] floatValues;
+        public JSONStringHelper[] stringValues;
     }
 
-    /// <summary>
-    /// Appends to a file within the scores folder. Do NOT include
-    /// \\ in the beginning for the file path and assume it is already 
-    /// included.
-    /// </summary>
-    /// <param name="path"></param>
-    /// <param name="obj"></param>
-    private void AppendObjectDataToFile(string path, JSONHelperObject obj)
-    {
-        string basePath = Directory.GetCurrentDirectory() + "\\scores\\";
-        string finalPath = basePath + path;
-
-        using (StreamWriter sw = File.AppendText(finalPath))
-        {
-            sw.WriteLine(JsonUtility.ToJson(obj, true));
-        }
-    }
 
     [System.Serializable]
-    public class JSONHelperObject
-    {
-        public string name;
-        public string level;
-        public int floatCount;
-        public string[] floatNames;
-        public float[] floatValues;
-        public int intCount;
-        public int[] intNames;
-        public int[] intValues;
-        public int stringCount;
-        public int stringNames;
-        public int stringValues;
-
-        public JSONHelperObject(string name, string level)
-        {
-            this.name = name;
-            this.level = level;
-            //this.dataObj = dataObj;
-            floatNames = new string[] {"TestA", "TestB"};
-            floatValues = new float[] {0.5f, 1.0f};
-        }
-    }
-
-    [System.Serializable]
-    public class JSONFloatHelperObject
-    {
-        public string name;
-        public float value;
-    }
-
-    [System.Serializable]
-    public class JSONIntHelperObject
+    public class JSONIntHelper
     {
         public string name;
         public int value;
     }
 
     [System.Serializable]
-    public class JSONStringHelperObject
+    public class JSONFloatHelper
+    {
+        public string name;
+        public float value;
+    }
+    
+
+    [System.Serializable]
+    public class JSONStringHelper
     {
         public string name;
         public string value;
     }
 
+    #endregion
 
-
-    [System.Serializable]
-    private class TestObject
-    {
-        public string name = "Yuh";
-        public int value = 15;
-        public int value2 = 25;
-        public InternalObj inside;
-    }
-
-    [System.Serializable]
-    private class InternalObj
-    {
-        public string title = "This is inside";
-        public float miniValue = 0.356124125325f;
-    }
 }
