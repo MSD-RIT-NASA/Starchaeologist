@@ -21,7 +21,6 @@ public class FileIO : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //WriteObjectDataToFile("MyTest.json", new JSONHelperObject("Name", "Level"));
         StoreData(playerSample);
 
         playerSample2 = LoadData(playerSample.playerName);
