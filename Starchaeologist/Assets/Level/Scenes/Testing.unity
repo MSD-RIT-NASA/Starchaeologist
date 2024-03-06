@@ -1616,7 +1616,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2018015924}
-  - component: {fileID: 2018015923}
   - component: {fileID: 2018015925}
   m_Layer: 0
   m_Name: Test
@@ -1625,34 +1624,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2018015923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2018015922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a3bcdf61c2d49d48b1e6f32aa331e97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerSample:
-    playerName: John Doe
-    levelDatas:
-    - levelName: 
-      intValues:
-      - name: SequenceLength
-        value: 5
-      - name: Collisions
-        value: 2
-      floatValues:
-      - name: Score
-        value: 10
-      stringValues: []
-  playerSample2:
-    playerName: 
-    levelDatas: []
 --- !u!4 &2018015924
 Transform:
   m_ObjectHideFlags: 0

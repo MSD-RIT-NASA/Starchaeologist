@@ -15,19 +15,10 @@ using System.Linq;
 /// When storing data it expects it in the proper data
 /// structures beforehand. 
 /// </summary>
-public class FileIO : MonoBehaviour
+public class FileIO
 {
     [SerializeField] PlayerData playerSample;
     [SerializeField] PlayerData playerSample2;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        //StoreData(playerSample);
-
-        //playerSample2 = LoadData(playerSample.playerName);
-    }
-
 
     /// <summary>
     /// Load a player's data if possible 
