@@ -16,7 +16,9 @@ public class DataStoreLoad : MonoBehaviour
     private FileIO fileIO;
     private FileIO.PlayerData currentData;
 
+    // Gamemode names 
     const string FOURSQUARE_NAME = "FourSquare";
+    const string TESTER_NAME = "Test";
 
     private void Awake()
     {
@@ -25,7 +27,10 @@ public class DataStoreLoad : MonoBehaviour
         currentData = null;
 
         StoreFourSquare("The Watching Person", 150.0f, 5, 230.0f);
+        StoreTest("The Watching Person", "This is just antoher value");
     }
+
+    #region GAMEMODE_STORING
 
     /// <summary>
     /// Store the data recorded for the FourSquare gamemode 
@@ -70,10 +75,48 @@ public class DataStoreLoad : MonoBehaviour
 
         // Data is already associated with a player 
         data.SetlevelData(FOURSQUARE_NAME, levelData);
-        print(data.levelDatas.Length);
+        
         // Send data to FileIO 
         fileIO.StoreData(data);
     }
+
+    public void StoreTest(string playerName, string value)
+    {
+        // Create a new PlayerData to override previous data 
+        FileIO.PlayerData data = fileIO.LoadData(playerName);
+        if (data == null)
+            data = new FileIO.PlayerData();
+            
+        data.playerName = playerName;
+
+
+        // Value
+        FileIO.JSONStringHelper valueStore = new FileIO.JSONStringHelper();
+        valueStore.name = "value";
+        valueStore.value = value;
+
+
+
+        // Form LevelData data structures and store them into 
+        // our new level data 
+        FileIO.LevelData levelData = new FileIO.LevelData();
+        levelData.levelName = TESTER_NAME;
+
+        JSONIntHelper[] intHelpers = new JSONIntHelper[]          { };
+        JSONFloatHelper[] floatHelpers = new JSONFloatHelper[]    { };
+        JSONStringHelper[] stringHelpers = new JSONStringHelper[] { valueStore };
+        levelData.intValues = intHelpers;
+        levelData.floatValues = floatHelpers;
+        levelData.stringValues = stringHelpers;
+
+        // Data is already associated with a player 
+        data.SetlevelData(TESTER_NAME, levelData);
+
+        // Send data to FileIO 
+        fileIO.StoreData(data);
+    }
+
+    #endregion
 
     #region GETTERS
 
