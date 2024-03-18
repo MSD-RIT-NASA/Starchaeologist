@@ -8,6 +8,7 @@ public class rotateLine : MonoBehaviour
 {
     private ActionBasedController controller;
     private XRBaseInteractor interactor;
+    private bool entered = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,13 +28,22 @@ public class rotateLine : MonoBehaviour
          * on input adjust the rotation of the 
          * line
          */
-        if (Keyboard.current.rightArrowKey.isPressed)
+        if (Keyboard.current.rightArrowKey.isPressed && !entered)
         {
-            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -0.1f);
+            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -0.2f);
         }
-        if (Keyboard.current.leftArrowKey.isPressed)
+        if (Keyboard.current.leftArrowKey.isPressed && !entered)
         {
-            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, 0.1f);
+            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, 0.2f);
+        }
+        if(Keyboard.current.enterKey.wasPressedThisFrame)
+        {
+            if (entered == true)
+            {
+                float z = Random.Range(0, 360);
+                this.transform.rotation = Quaternion.Euler(0, 0, z);
+            }
+            entered = !entered;
         }
     }
 }
