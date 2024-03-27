@@ -852,7 +852,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dc5046166b4a74b43bfdd3f8aea92a9a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8879528566716807029, guid: dc5046166b4a74b43bfdd3f8aea92a9a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1499,6 +1499,36 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -7716129065955107070, guid: dc5046166b4a74b43bfdd3f8aea92a9a, type: 3}
   m_PrefabInstance: {fileID: 749480301}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1271702651
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1271702652}
+  m_Layer: 0
+  m_Name: PlayerDebugLeftHand
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1271702652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271702651}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.296, y: 3.407, z: 2.952}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1272463374 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7036213049465896255, guid: dc5046166b4a74b43bfdd3f8aea92a9a, type: 3}
@@ -2485,16 +2515,76 @@ PrefabInstance:
       objectReference: {fileID: 1489738038}
     - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
       propertyPath: DebugVisual
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
       propertyPath: playerRight
       value: 
       objectReference: {fileID: 755411227}
     - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: connectRange
+      value: 0.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: debugLeftHand
+      value: 
+      objectReference: {fileID: 1271702652}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: disConnectRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: characterHandLeft
+      value: 
+      objectReference: {fileID: 1407245200}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
       propertyPath: instructionCanvas
       value: 
       objectReference: {fileID: 8674809126244372913}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.ctime1
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.ctime2
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.key0.b
+      value: 0.06785202
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.key0.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.key0.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.key1.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.key1.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.key1.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.key2.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.key2.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.key2.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
       propertyPath: tiles.Array.data[0].tilePos.x
       value: 1.5
@@ -2530,6 +2620,46 @@ PrefabInstance:
     - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
       propertyPath: barriers.Array.data[3].position.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseColorCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseHandColorRange.m_NumColorKeys
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseColorCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseColorCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseColorCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseColorCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseColorCurve.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseColorCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseColorCurve.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: poseColorCurve.m_Curve.Array.data[1].tangentMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5858420191687722203, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
       propertyPath: m_RootOrder

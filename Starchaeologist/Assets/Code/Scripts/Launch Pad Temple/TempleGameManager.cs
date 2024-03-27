@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 
@@ -17,6 +18,8 @@ public class TempleGameManager : MonoBehaviour
     [Header("PoseCopy")]
     [SerializeField] Transform characterHandLeft;
     [SerializeField] Transform characterHandRight;
+    [SerializeField] float connectRange;
+    [SerializeField] float disConnectRange;
 
     [Header("Four Squares")]
     [SerializeField] FourSquareStates fourSquareState = FourSquareStates.GENERATE_PATTERNS;
@@ -36,6 +39,9 @@ public class TempleGameManager : MonoBehaviour
 
     [Header("Debug Gizmos")]
     [SerializeField] GameModes DebugVisual = GameModes.NONE;
+    [SerializeField] Transform debugLeftHand;
+    [SerializeField] AnimationCurve poseColorCurve;
+    [SerializeField] Gradient poseHandColorRange;
 
 
     private void Start()
@@ -545,6 +551,11 @@ public class TempleGameManager : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+       
+    }
+
+    private void OnDrawGizmos()
+    {
         switch (DebugVisual)
         {
             case GameModes.POSE_MATCH:
@@ -560,7 +571,28 @@ public class TempleGameManager : MonoBehaviour
 
     private void PoseDebugMatchVisual()
     {
+        DrawHand(characterHandLeft, debugLeftHand);
+    }
 
+    private void DrawHand(Transform characterHand, Transform playerHand)
+    {
+        // Draw z-axis line for character
+        Gizmos.DrawLine(characterHand.position + Vector3.forward * 10.0f, characterHand.position - Vector3.forward * 10.0f);
+
+        // Draw player hand on projected point along the line 
+        Vector3 projectedPoint = new Vector3(characterHand.position.x, characterHand.position.y, playerHand.position.z);
+        Gizmos.DrawSphere(projectedPoint, 0.1f);
+
+        // Draw line from player hand to projected point 
+        float lerp = Mathf.InverseLerp(connectRange, disConnectRange, Vector3.Magnitude(projectedPoint - playerHand.position));
+        Gizmos.color = poseHandColorRange.Evaluate(poseColorCurve.Evaluate(lerp));
+        Gizmos.DrawLine(projectedPoint, playerHand.position);
+
+        Vector3 dir = (playerHand.position - projectedPoint).normalized;
+        Gizmos.color = poseHandColorRange.Evaluate(0.0f);
+        Gizmos.DrawSphere(projectedPoint + dir * connectRange, 0.1f);
+        Gizmos.color = poseHandColorRange.Evaluate(1.0f);
+        Gizmos.DrawSphere(projectedPoint + dir * disConnectRange, 0.1f);
     }
 
     private void FourSquareDebugVisual()
