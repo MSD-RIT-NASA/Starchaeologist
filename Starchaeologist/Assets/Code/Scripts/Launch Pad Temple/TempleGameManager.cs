@@ -14,6 +14,10 @@ public class TempleGameManager : MonoBehaviour
     [Space]
     [SerializeField] GameObject instructionCanvas;
 
+    [Header("PoseCopy")]
+    [SerializeField] Transform characterHandLeft;
+    [SerializeField] Transform characterHandRight;
+
     [Header("Four Squares")]
     [SerializeField] FourSquareStates fourSquareState = FourSquareStates.GENERATE_PATTERNS;
     [Tooltip("How many squares will the player need to travel to before the round ends")]
@@ -30,8 +34,9 @@ public class TempleGameManager : MonoBehaviour
     [SerializeField] int currentDifficulty; 
     [SerializeField] List<DifficultySettings> FS_Difficulties;
 
-    //[Header("Pose Copy")]
-    //[SerializeField]
+    [Header("Debug Gizmos")]
+    [SerializeField] GameModes DebugVisual = GameModes.NONE;
+
 
     private void Start()
     {
@@ -122,7 +127,8 @@ public class TempleGameManager : MonoBehaviour
     enum GameModes
     {
         POSE_MATCH,
-        FOUR_SQUARE
+        FOUR_SQUARE,
+        NONE
     }
 
     #endregion
@@ -340,6 +346,8 @@ public class TempleGameManager : MonoBehaviour
             Cube_Transform transform = barriers[i];
             barrierTransforms[i].position = this.transform.position + transform.position + Vector3.up * height / 2.0f;
             barrierTransforms[i].localScale = new Vector3(transform.scale.x, settings.heightMin, transform.scale.y);
+
+            barrierTransforms[i].gameObject.SetActive(true);
         }
     }
 
@@ -537,10 +545,30 @@ public class TempleGameManager : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        switch (DebugVisual)
+        {
+            case GameModes.POSE_MATCH:
+                PoseDebugMatchVisual();
+                break;
+            case GameModes.FOUR_SQUARE:
+                FourSquareDebugVisual();
+                break;
+            case GameModes.NONE:
+                break;
+        }
+    }
+
+    private void PoseDebugMatchVisual()
+    {
+
+    }
+
+    private void FourSquareDebugVisual()
+    {
         // Represent tiles areas 
         for (int i = 0; i < tiles.Count; i++)
         {
-            if(i == currentTile)
+            if (i == currentTile)
             {
                 Gizmos.color = Color.black;
             }
@@ -558,7 +586,7 @@ public class TempleGameManager : MonoBehaviour
         {
             DifficultySettings settings = FS_Difficulties[currentDifficulty];
 
-            if(Application.isPlaying)
+            if (Application.isPlaying)
             {
                 Gizmos.DrawWireCube(
                 this.transform.position + transform.position + Vector3.up * settings.heightMin / 2.0f,
