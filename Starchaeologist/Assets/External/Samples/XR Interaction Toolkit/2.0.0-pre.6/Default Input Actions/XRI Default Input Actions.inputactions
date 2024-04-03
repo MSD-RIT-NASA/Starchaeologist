@@ -1248,6 +1248,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Rankle",
+            "id": "50bad8a1-8aa0-41c2-8e08-4d873fdfbc7c",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Value",
+                    "id": "e55fd999-2c0e-453d-abf5-b07160aaa619",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "8ae21b9e-f745-43d9-9a30-7889acd145d3",
+                    "path": "<ViveController>/devicePose/isTracked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

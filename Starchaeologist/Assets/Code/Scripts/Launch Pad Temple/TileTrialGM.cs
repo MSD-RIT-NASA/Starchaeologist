@@ -1,26 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
-
-public class TempleGameManager : MonoBehaviour
+public class TileTrialGM : VirtGameManager
 {
-    [Header("Overal Game Management")]
-    [SerializeField] TempleGameStates gameState = TempleGameStates.CHOOSE_GAME_MODE;
-    [SerializeField] Transform playerHead;
-    [SerializeField] Transform playerLeft;
-    [SerializeField] Transform playerRight;
-    [Space]
-    [SerializeField] GameObject instructionCanvas;
-
-    [Header("PoseCopy")]
-    [SerializeField] Transform characterHandLeft;
-    [SerializeField] Transform characterHandRight;
-    [SerializeField] float connectRange;
-    [SerializeField] float disConnectRange;
-
     [Header("Four Squares")]
     [SerializeField] FourSquareStates fourSquareState = FourSquareStates.GENERATE_PATTERNS;
     [Tooltip("How many squares will the player need to travel to before the round ends")]
@@ -34,106 +19,8 @@ public class TempleGameManager : MonoBehaviour
     [SerializeField] float pointsLossCollision;
 
     [Space]
-    [SerializeField] int currentDifficulty; 
+    [SerializeField] int currentDifficulty;
     [SerializeField] List<DifficultySettings> FS_Difficulties;
-
-    [Header("Debug Gizmos")]
-    [SerializeField] GameModes DebugVisual = GameModes.NONE;
-    [SerializeField] Transform debugLeftHand;
-    [SerializeField] AnimationCurve poseColorCurve;
-    [SerializeField] Gradient poseHandColorRange;
-
-
-    private void Start()
-    {
-        InitializeFourSquare();
-    }
-
-    void Update()
-    {
-        TempleSM();
-    }
-
-    #region GAME_MANAGER
-
-    public void SetGameMode(int gameMode)
-    {
-        gameState = (TempleGameStates)gameMode;
-
-        // Any intitialization 
-        switch (gameState)
-        {
-            case TempleGameStates.CHOOSE_GAME_MODE:
-                break;
-            case TempleGameStates.POSE_MATCH:
-                break;
-            case TempleGameStates.FOUR_SQUARE:
-                InitializeFourSquare();
-                break;
-            case TempleGameStates.DISPLAY_SCORE:
-                break;
-        }
-    }
-
-    /// <summary>
-    /// State machine that runs the temple game modes 
-    /// </summary>
-    void TempleSM() 
-    {
-        switch (gameState)
-        {
-            case TempleGameStates.CHOOSE_GAME_MODE:
-                ChooseGameMode();
-                break;
-            case TempleGameStates.POSE_MATCH:
-
-                break;
-            case TempleGameStates.FOUR_SQUARE:
-                FourSquareSM();
-                break;
-            case TempleGameStates.DISPLAY_SCORE:
-                DisplayScore();
-                break;
-        }
-
-        instructionCanvas.SetActive(gameState == TempleGameStates.CHOOSE_GAME_MODE);
-    }
-
-    /// <summary>
-    /// Lets the user choose what game to play 
-    /// </summary>
-    void ChooseGameMode()
-    {
-        // Temporary 
-        //gameState = TempleGameStates.FOUR_SQUARE;
-
-        // Game mode is decided by button press 
-    }
-
-    void DisplayScore()
-    {
-        gameState = TempleGameStates.CHOOSE_GAME_MODE;
-    }
-
-    /// <summary>
-    /// Changes the visuals around the player to show the score of the
-    /// desired gamemode
-    /// </summary>
-    /// <param name="game"></param>
-    void BeginDisplayScore(GameModes game) { } 
-   
-
-    enum GameModes
-    {
-        POSE_MATCH,
-        FOUR_SQUARE,
-        NONE
-    }
-
-    #endregion
-
-    #region FOUR_SQUARES
-
 
     // Arr of indexes each refer to differnt square 
     private int[] pattern;
@@ -148,25 +35,66 @@ public class TempleGameManager : MonoBehaviour
     // The generated transforms 
     private List<Transform> barrierTransforms;
 
+    public override void Init(Transform playerHead, Transform playerHandLeft, Transform playerHandRight, Transform playerAnkleLeft, Transform playerAnkleRight)
+    {
+        this.playerHead = playerHead; 
+        this.playerHandLeft = playerHandLeft;
+        this.playerHandRight = playerHandRight; 
+        this.playerAnkleLeft = playerAnkleLeft;
+        this.playerAnkleRight = playerAnkleRight;
+
+        InitializeFourSquare();
+    }
+
+    public override void StateMachine()
+    {
+        if (gameOver)
+            return;
+
+        FourSquareSM();
+    }
+
+    public override void GizmosVisuals()
+    {
+        FourSquareDebugVisual();
+    }
+
+    public override void WriteDataToFile(string name, DataStoreLoad dsl)
+    {
+        dsl.StoreFourSquare(name, score, collisions, 0.0f);
+    }
+
+    public override void End()
+    {
+        score = 0.0f;
+        collisions = 0;
+        currentTile = 0;
+        indexInPattern = 0;
+
+        gameOver = false; 
+    }
+
+    public override bool IsGameDone()
+    {
+        return gameOver; 
+    }
+
+
+
+
+    #region TileTrialFunctions 
+
     /// <summary>
-    /// Sets up this game 
+    /// Sets up this game by spawning in the 
+    /// required objects 
     /// </summary>
     void InitializeFourSquare()
     {
-        /*fourSquareState = FourSquareStates.GENERATE_PATTERNS;
-        UpdateBarrierTransforms();
-
-        foreach (Transform t in barrierTransforms)
-        {
-            t.gameObject.SetActive(true);
-        }*/
-
         // Setup Foursquares 
         barrierTransforms = new List<Transform>();
         for (int i = 0; i < barriers.Count; i++)
         {
             barrierTransforms.Add(Instantiate(barrierObj, this.transform.position, Quaternion.identity).transform);
-            barrierObj.SetActive(false);
         }
         UpdateBarrierTransforms();
     }
@@ -174,8 +102,8 @@ public class TempleGameManager : MonoBehaviour
     /// <summary>
     /// Manages the states of the Four Square game-mode 
     /// </summary>
-    void FourSquareSM() 
-    { 
+    void FourSquareSM()
+    {
         switch (fourSquareState)
         {
             case FourSquareStates.GENERATE_PATTERNS:
@@ -219,7 +147,7 @@ public class TempleGameManager : MonoBehaviour
         for (int i = 0; i < patternSize; i++)
         {
             int current;
-            
+
             // Make sure not tile that player is currently standing on 
             if (i == 0)
             {
@@ -238,7 +166,7 @@ public class TempleGameManager : MonoBehaviour
 
 
                 // Don't continue if not in any tile 
-                if(playerCurrentTile != -1)
+                if (playerCurrentTile != -1)
                 {
 
                     // Continue until current is not the tile 
@@ -256,7 +184,7 @@ public class TempleGameManager : MonoBehaviour
 
                     continue;
                 }
-                
+
             }
 
 
@@ -280,7 +208,7 @@ public class TempleGameManager : MonoBehaviour
     /// <summary>
     /// Shows the current square that the player must travel to. 
     /// </summary>
-    private void DisplayPattern() 
+    private void DisplayPattern()
     {
         // Send pattern to console 
         string patternStr = "";
@@ -369,7 +297,7 @@ public class TempleGameManager : MonoBehaviour
         print("Total collision: " + collisions);
 
         // Reset to default visual 
-        foreach(Tile tile in tiles)
+        foreach (Tile tile in tiles)
         {
             tile.tileObj.SetTargetVisual(FS_Square.FSSquareStates.NOT_IN_PLAY);
         }
@@ -380,12 +308,13 @@ public class TempleGameManager : MonoBehaviour
             t.gameObject.SetActive(false);
         }
 
-        score = 0.0f;
+        /*score = 0.0f;
         collisions = 0;
         currentTile = 0;
-        indexInPattern = 0;
+        indexInPattern = 0;*/
 
-        gameState = TempleGameStates.DISPLAY_SCORE;
+        //gameState = TempleGameStates.DISPLAY_SCORE;
+        gameOver = true; 
     }
 
     /// <summary>
@@ -396,7 +325,7 @@ public class TempleGameManager : MonoBehaviour
     private bool PlayerInTarget()
     {
         int tile = pattern[indexInPattern];
-        return InTile(playerHead, tile) && InTile(playerLeft, tile) && InTile(playerRight, tile);
+        return InTile(playerHead, tile) && InTile(playerHandLeft, tile) && InTile(playerHandRight, tile);
     }
 
     /// <summary>
@@ -439,6 +368,10 @@ public class TempleGameManager : MonoBehaviour
         collisions++;
     }
 
+    #endregion
+
+    #region DataStructures
+
     enum FourSquareStates
     {
         GENERATE_PATTERNS,  // Setup for the game round 
@@ -474,7 +407,7 @@ public class TempleGameManager : MonoBehaviour
         [SerializeField] public Vector2 scale;
     }
 
-    [System.Serializable] 
+    [System.Serializable]
     private class DifficultySettings
     {
         [SerializeField] public string Name;
@@ -485,118 +418,9 @@ public class TempleGameManager : MonoBehaviour
         [SerializeField] public bool variableHeights;
     }
 
-
     #endregion
 
-    #region POSE_COPY
-
-    /// <summary>
-    /// Randomly chooses a pose from a list of poses that is not the same as the previous pose.
-    /// </summary>
-    /// <returns></returns>
-    Pose SelectPose()
-    {
-        return null;
-    }
-
-    /// <summary>
-    /// Animated and visualizes the pose that was chosen. 
-    /// Indicates what the general pose the player should make.
-    /// </summary>
-    void PlaySelection()
-    {
-
-    }
-
-    /// <summary>
-    /// Visualizes how close the player is to matching the pose. 
-    /// Changes the hands and feet of intstructor by having a green check, yellow minus, or red cross. 
-    /// </summary>
-    void DisplayPoseCloseness()
-    {
-
-    }
-
-    /// <summary>
-    /// Resets the display so that there is no more pose. A cleanup function
-    /// </summary>
-    void ResetPoseGame()
-    {
-
-    }
-
-    [System.Serializable]
-    private class Pose
-    {
-        [SerializeField] private Vector3 hand_L, hand_R, foot_L, foot_R;
-
-        /// <summary>
-        /// Passes in the current player’s limb positions and returns an array of enums that represent how close they are to matching the pose. 
-        /// </summary>
-        /// <returns>Array returned is of size 4 and has ratings in order from {hand_L, hand_R, foot_L, foot_R}</returns>
-        MatchLevel[] GetPoseMatchLevels(Vector3 hand_L, Vector3 hand_R, Vector3 foot_L, Vector3 foot_R)
-        {
-            return null;
-        }
-    }
-
-    enum MatchLevel
-    { 
-        NOT_MATCHED,
-        CLOSE,
-        MATCHED
-    }
-
-
-    #endregion
-
-
-    private void OnDrawGizmosSelected()
-    {
-       
-    }
-
-    private void OnDrawGizmos()
-    {
-        switch (DebugVisual)
-        {
-            case GameModes.POSE_MATCH:
-                PoseDebugMatchVisual();
-                break;
-            case GameModes.FOUR_SQUARE:
-                FourSquareDebugVisual();
-                break;
-            case GameModes.NONE:
-                break;
-        }
-    }
-
-    private void PoseDebugMatchVisual()
-    {
-        DrawHand(characterHandLeft, debugLeftHand);
-    }
-
-    private void DrawHand(Transform characterHand, Transform playerHand)
-    {
-        // Draw z-axis line for character
-        Gizmos.DrawLine(characterHand.position + Vector3.forward * 10.0f, characterHand.position - Vector3.forward * 10.0f);
-
-        // Draw player hand on projected point along the line 
-        Vector3 projectedPoint = new Vector3(characterHand.position.x, characterHand.position.y, playerHand.position.z);
-        Gizmos.DrawSphere(projectedPoint, 0.1f);
-
-        // Draw line from player hand to projected point 
-        float lerp = Mathf.InverseLerp(connectRange, disConnectRange, Vector3.Magnitude(projectedPoint - playerHand.position));
-        Gizmos.color = poseHandColorRange.Evaluate(poseColorCurve.Evaluate(lerp));
-        Gizmos.DrawLine(projectedPoint, playerHand.position);
-
-        Vector3 dir = (playerHand.position - projectedPoint).normalized;
-        Gizmos.color = poseHandColorRange.Evaluate(0.0f);
-        Gizmos.DrawSphere(projectedPoint + dir * connectRange, 0.1f);
-        Gizmos.color = poseHandColorRange.Evaluate(1.0f);
-        Gizmos.DrawSphere(projectedPoint + dir * disConnectRange, 0.1f);
-    }
-
+    #region DebugGizmos
     private void FourSquareDebugVisual()
     {
         // Represent tiles areas 
@@ -636,4 +460,6 @@ public class TempleGameManager : MonoBehaviour
             }
         }
     }
+
+    #endregion
 }
