@@ -332,8 +332,9 @@ private void SegmentSetupTwo()
         transitionPiece.transform.position = spawnPosition;
         spawnPosition = transitionPiece.transform.GetChild(1).transform.position;
 
+            int segementArrayIndex = Random.Range(0, 3);
         //choose one of the available segment prefabs and place it at the end of the last placed piece
-        GameObject newSpawn = Instantiate(segmentArray[0][Random.Range(0, segmentArray[0].Count)]);
+        GameObject newSpawn = Instantiate(segmentArray[segementArrayIndex][Random.Range(0, segmentArray[segementArrayIndex].Count)]);
         newSpawn.transform.position = spawnPosition;
         if (i >= 5)
         {
