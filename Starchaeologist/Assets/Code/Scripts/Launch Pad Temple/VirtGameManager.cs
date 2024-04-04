@@ -48,7 +48,7 @@ public abstract class VirtGameManager : MonoBehaviour
     /// <summary>
     /// Reset game manager's variables for a new round 
     /// </summary>
-    public abstract void End();
+    public abstract void ResetGame();
 
     /// <summary>
     /// Returns whether or not this game is over 

@@ -128,8 +128,8 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
   m_PrefabInstance: {fileID: 5858420192199510562}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_GameObject: {fileID: 5858420192199510563}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3970b68fb74c06544b8dbe0d9c065e4c, type: 3}
   m_Name: 
@@ -3125,6 +3125,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858420191687722202, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
       propertyPath: playerHead
       value: 
       objectReference: {fileID: 7865517847631594207}
@@ -3298,6 +3302,54 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+--- !u!1 &5858420192199510563 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5858420191687722197, guid: ae1fb78cadaf1a348a2ac23edb08e82e, type: 3}
+  m_PrefabInstance: {fileID: 5858420192199510562}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5858420192199510564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5858420192199510563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33e703df21a5ca04280f80b22854f719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fourSquareState: 0
+  patternSize: 0
+  tiles: []
+  tileSize: {x: 0, y: 0, z: 0}
+  barrierObj: {fileID: 0}
+  barriers: []
+  pointsGainSuccess: 0
+  pointsLossCollision: 0
+  currentDifficulty: 0
+  FS_Difficulties: []
+--- !u!114 &5858420192199510565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5858420192199510563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6cc6d4244318704b9d697d37ccd44a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManagers:
+  - {fileID: 5858420192199510564}
+  currentGame: 0
+  instructionCanvas: {fileID: 8674809126244372913}
+  playerHead: {fileID: 0}
+  playerHandLeft: {fileID: 0}
+  playerHandRight: {fileID: 0}
+  playerAnkleLeft: {fileID: 0}
+  playerAnkleRight: {fileID: 0}
 --- !u!4 &7865517847631594207 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6173541197572416379, guid: 57011646ad9b6844ea4b7c5129c8ad62, type: 3}

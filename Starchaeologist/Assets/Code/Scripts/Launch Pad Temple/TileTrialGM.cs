@@ -35,6 +35,8 @@ public class TileTrialGM : VirtGameManager
     // The generated transforms 
     private List<Transform> barrierTransforms;
 
+    private bool assetsCreated = false;
+
     public override void Init(Transform playerHead, Transform playerHandLeft, Transform playerHandRight, Transform playerAnkleLeft, Transform playerAnkleRight)
     {
         this.playerHead = playerHead; 
@@ -64,7 +66,7 @@ public class TileTrialGM : VirtGameManager
         dsl.StoreFourSquare(name, score, collisions, 0.0f);
     }
 
-    public override void End()
+    public override void ResetGame()
     {
         score = 0.0f;
         collisions = 0;
@@ -90,12 +92,16 @@ public class TileTrialGM : VirtGameManager
     /// </summary>
     void InitializeFourSquare()
     {
-        // Setup Foursquares 
-        barrierTransforms = new List<Transform>();
-        for (int i = 0; i < barriers.Count; i++)
+        if(!assetsCreated)
         {
-            barrierTransforms.Add(Instantiate(barrierObj, this.transform.position, Quaternion.identity).transform);
+            // Setup Foursquares assets 
+            barrierTransforms = new List<Transform>();
+            for (int i = 0; i < barriers.Count; i++)
+            {
+                barrierTransforms.Add(Instantiate(barrierObj, this.transform.position, Quaternion.identity).transform);
+            }
         }
+        
         UpdateBarrierTransforms();
     }
 
