@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class GameManagerCoordinator : MonoBehaviour
 {
+    [SerializeField] CoordinatorState state;
+
     [Header("Games")]
     [SerializeField] List<VirtGameManager> gameManagers;
     [SerializeField] int currentGame;
+    [SerializeField] bool drawCurrentGizmos;
 
     [Header("UI")]
     [SerializeField] GameObject instructionCanvas;
@@ -18,7 +21,6 @@ public class GameManagerCoordinator : MonoBehaviour
     [SerializeField] Transform playerAnkleLeft;
     [SerializeField] Transform playerAnkleRight;
 
-    private CoordinatorState state;
     private VirtGameManager game;
 
     private void Update()
@@ -79,6 +81,8 @@ public class GameManagerCoordinator : MonoBehaviour
             playerHandRight, 
             playerAnkleLeft, 
             playerAnkleRight);
+
+        state = CoordinatorState.CURRENT_GAME_RUN;
     }
 
     /// <summary>
@@ -124,5 +128,15 @@ public class GameManagerCoordinator : MonoBehaviour
         CURRENT_GAME_RUN,       // Run game manager's statemachine 
         CURRENT_GAME_RESET,     // Reset the the game to be played again 
         CURRENT_GAME_CLEANUP   // Cleanup game assets and return to choice 
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (drawCurrentGizmos)
+        {
+            // Don't use game here because we use
+            // in the editor 
+            gameManagers[currentGame].GizmosVisuals();
+        }
     }
 }
