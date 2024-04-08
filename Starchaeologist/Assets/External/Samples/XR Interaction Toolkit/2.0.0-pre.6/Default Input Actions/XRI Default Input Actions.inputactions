@@ -214,6 +214,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RotateLine",
+                    "type": "Value",
+                    "id": "269c1707-7631-4ed5-a149-a83112649ac1",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -667,6 +676,17 @@
                     "action": "Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "673efeac-3ef4-4ba5-b98e-caf5c0060666",
+                    "path": "<XRController>{LeftHand}/trackpadClicked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateLine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -823,6 +843,15 @@
                     "type": "Value",
                     "id": "6f7cf253-7062-443b-b10f-2be48a33f027",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "RotateLine",
+                    "type": "Value",
+                    "id": "88613c48-0a3f-47de-9ac3-ece60b3a889e",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -1244,6 +1273,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "UI Press Value",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "79af49e6-9c11-48f8-b6dd-7ac209c36b7b",
+                    "path": "<XRController>{RightHand}/trackpadClicked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateLine",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

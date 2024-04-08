@@ -18,7 +18,9 @@ public class rotateLine : MonoBehaviour
     [SerializeField] Canvas canvas;
     [SerializeField] Image barGraph;
     private List<float> scores;
+    private float activationThreshold = 0.2f;
 
+    [SerializeField] private InputActionReference rotateLineInputReference;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +28,6 @@ public class rotateLine : MonoBehaviour
 
         controller = GetComponent<ActionBasedController>();
         float z = Random.Range(0, 360);
-        Debug.Log(z);
         this.transform.rotation = Quaternion.Euler(0, 0, z);
         scores = new List<float>();
         //Debug.Log(transform.rotation.z);
@@ -35,31 +36,59 @@ public class rotateLine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        inputs();
+      //  inputs();
+    }
+    private void Awake()
+    {
+        rotateLineInputReference.action.performed += inputs;
     }
 
-    private void inputs()
+    private void inputs(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         /* get the controller
         * on input adjust the rotation of the 
         * line
         */
-        if (Keyboard.current.rightArrowKey.isPressed && !entered)
+
+        //if (Keyboard.current.rightArrowKey.isPressed && !entered)
+        //{
+        //    this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -0.1f);
+        //}
+        //if (Keyboard.current.leftArrowKey.isPressed && !entered)
+        //{
+        //    this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, 0.1f);
+        //}
+        //if (Keyboard.current.enterKey.wasPressedThisFrame)
+        //{
+        //    if (entered == true && scores.Count < 3)
+        //    {
+        //        float z = Random.Range(0, 360);
+        //        this.transform.rotation = Quaternion.Euler(0, 0, z);
+        //    }
+        //    else{
+        //        score();
+        //    }
+        //    entered = !entered;
+        //}
+
+
+        if (rotateLineInputReference.action.ReadValue<float>() >0 && !entered)
         {
             this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -0.1f);
         }
-        if (Keyboard.current.leftArrowKey.isPressed && !entered)
+        if (rotateLineInputReference.action.ReadValue<float>() < 0 && !entered)
         {
             this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, 0.1f);
         }
-        if (Keyboard.current.enterKey.wasPressedThisFrame)
+        if (Keyboard.current.enterKey.wasPressedThisFrame || controller.selectActionValue.action.ReadValue<bool>())
         {
             if (entered == true && scores.Count < 3)
             {
                 float z = Random.Range(0, 360);
                 this.transform.rotation = Quaternion.Euler(0, 0, z);
             }
-            else{
+            else
+            {
                 score();
             }
             entered = !entered;
@@ -82,7 +111,6 @@ public class rotateLine : MonoBehaviour
         {
             displayGraph();
         }
-        Debug.Log(scoreFinal);
     }
 
     private void displayGraph()
@@ -92,20 +120,25 @@ public class rotateLine : MonoBehaviour
             float thisScore = scores[i];
             Image graph = Instantiate(barGraph, canvas.transform);
             graph.rectTransform.sizeDelta = new Vector2(Mathf.Abs(thisScore* 2.25f), 40);
+            float displayScore = 100 - (Mathf.Abs(thisScore) / 1.80f);
             if (thisScore >=0)
             {
                 graph.rectTransform.anchoredPosition = new Vector3(452 + (thisScore* 2.25f)/2, -1 * ((i + 1) * 45), 0);
                 Text text = Instantiate(scoreText, graph.transform);
                 text.rectTransform.anchoredPosition = new Vector3(((thisScore * 2.25f) / 2) + 90, 0, 0);
+                text.text = displayScore + "%";
             }
             else
             {
                 graph.rectTransform.anchoredPosition = new Vector3(451 + (thisScore * 2.25f)/2, -1 * ((i + 1) * 45), 0);
                 Text text = Instantiate(scoreText, graph.transform);
-                text.rectTransform.anchoredPosition = new Vector3(((thisScore * 2.25f) / 2) - 40, 0, 0);
+                text.rectTransform.anchoredPosition = new Vector3(((thisScore * 2.25f) / 2), 0, 0);
+                text.text = displayScore + "%";
             }
 
             Debug.Log(thisScore);
         }
     }
+
+
 }
