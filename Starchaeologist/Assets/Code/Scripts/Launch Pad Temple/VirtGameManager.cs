@@ -9,11 +9,11 @@ using UnityEngine;
 public abstract class VirtGameManager : MonoBehaviour
 {
     // Information all game managers should have 
-    protected Transform playerHead;
-    protected Transform playerHandLeft; 
-    protected Transform playerHandRight;  
-    protected Transform playerAnkleLeft;    
-    protected Transform playerAnkleRight;
+    [SerializeField] protected Transform playerHead;
+    [SerializeField] protected Transform playerHandLeft; 
+    [SerializeField] protected Transform playerHandRight;  
+    [SerializeField] protected Transform playerAnkleLeft;
+    [SerializeField] protected Transform playerAnkleRight;
 
     protected bool gameOver; 
 
@@ -49,6 +49,11 @@ public abstract class VirtGameManager : MonoBehaviour
     /// Reset game manager's variables for a new round 
     /// </summary>
     public abstract void ResetGame();
+
+    /// <summary>
+    /// Cleanup all the assets that were created within the world 
+    /// </summary>
+    public abstract void CleanupGame();
 
     /// <summary>
     /// Returns whether or not this game is over 

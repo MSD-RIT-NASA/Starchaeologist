@@ -2716,6 +2716,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33e703df21a5ca04280f80b22854f719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHead: {fileID: 0}
+  playerHandLeft: {fileID: 0}
+  playerHandRight: {fileID: 0}
+  playerAnkleLeft: {fileID: 0}
+  playerAnkleRight: {fileID: 0}
   fourSquareState: 0
   patternSize: 5
   tiles:
@@ -2727,7 +2732,7 @@ MonoBehaviour:
     tileObj: {fileID: 5858420192199510567}
   - tilePos: {x: -0.5, y: 0, z: -0.5}
     tileObj: {fileID: 5858420192199510566}
-  tileSize: {x: 0, y: 0, z: 0}
+  tileSize: {x: 0.8, y: 0, z: 0.8}
   barrierObj: {fileID: 6041913483951887423, guid: d2621023dba2181418fa9ef7e90c46b7, type: 3}
   barriers:
   - position: {x: 0.55, y: 0, z: 0}

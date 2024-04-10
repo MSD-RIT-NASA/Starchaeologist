@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using UnityEngine;
 
 
+[Obsolete("Temple game manager now split into seperate scipts", true)]
 public class TempleGameManager : MonoBehaviour
 {
     [Header("Overal Game Management")]

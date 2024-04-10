@@ -8,12 +8,12 @@ public class Barrier : MonoBehaviour
     [SerializeField] Color dangerColor;
     [SerializeField] Color nonDangerousColor;
 
-    private TempleGameManager gm;
+    private TileTrialGM gm;
     private bool isDangerous;
 
     private void Start()
     {
-        gm = GameObject.FindObjectOfType<TempleGameManager>();
+        gm = GameObject.FindObjectOfType<TileTrialGM>();
         SetDanger(true);
     }
 

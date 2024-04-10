@@ -10,11 +10,11 @@ public class TileTrialGM : VirtGameManager
     [SerializeField] FourSquareStates fourSquareState = FourSquareStates.GENERATE_PATTERNS;
     [Tooltip("How many squares will the player need to travel to before the round ends")]
     [SerializeField] int patternSize;
-    [SerializeField] List<Tile> tiles;
+    [SerializeField] List<Tile> tiles; 
     [SerializeField] Vector3 tileSize;
     [Tooltip("Used to instantiate barriers")]
     [SerializeField] GameObject barrierObj;
-    [SerializeField] List<Cube_Transform> barriers;
+    [SerializeField] List<Cube_Transform> barriers; // Spawned objects 
     [SerializeField] float pointsGainSuccess;
     [SerializeField] float pointsLossCollision;
 
@@ -76,6 +76,20 @@ public class TileTrialGM : VirtGameManager
         gameOver = false; 
     }
 
+    public override void CleanupGame()
+    {
+        // NOTE: We do not actually need to cleanup the tiles 
+        //       that are on the ground because they are 
+        //       apart of the actual environment 
+
+        foreach(Transform b in barrierTransforms)
+        {
+            Destroy(b.gameObject);
+        }
+
+        barrierTransforms = null;
+    }
+
     public override bool IsGameDone()
     {
         return gameOver; 
@@ -92,6 +106,7 @@ public class TileTrialGM : VirtGameManager
     /// </summary>
     void InitializeFourSquare()
     {
+        fourSquareState = FourSquareStates.GENERATE_PATTERNS;
         if(!assetsCreated)
         {
             // Setup Foursquares assets 
@@ -240,7 +255,6 @@ public class TileTrialGM : VirtGameManager
     {
         // TODO: Figure out why we need to check if the round is complete twice...
 
-
         // Playstate Management 
         if (IsRoundComplete())
         {
@@ -314,6 +328,7 @@ public class TileTrialGM : VirtGameManager
             t.gameObject.SetActive(false);
         }
 
+        // Resetting now happens in ResetGame() which is controlled by the game manager coordinator 
         /*score = 0.0f;
         collisions = 0;
         currentTile = 0;

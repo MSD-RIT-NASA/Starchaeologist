@@ -8,7 +8,7 @@ public class GameManagerCoordinator : MonoBehaviour
 
     [Header("Games")]
     [SerializeField] List<VirtGameManager> gameManagers;
-    [SerializeField] int currentGame;
+    [SerializeField] int currentGame = -1;
     [SerializeField] bool drawCurrentGizmos;
 
     [Header("UI")]
@@ -22,10 +22,11 @@ public class GameManagerCoordinator : MonoBehaviour
     [SerializeField] Transform playerAnkleRight;
 
     private VirtGameManager game;
+    private bool gameNeedsCleanup = false;
 
     private void Update()
     {
-        game = gameManagers[currentGame];
+        game = DoesGameExist() ? gameManagers[currentGame] : null;
 
 
         StateMachine();
@@ -33,6 +34,7 @@ public class GameManagerCoordinator : MonoBehaviour
 
     public void StateMachine()
     {
+
         switch (state)
         {
             case CoordinatorState.CHOOSE_GAME_MODE:
@@ -59,14 +61,10 @@ public class GameManagerCoordinator : MonoBehaviour
     /// </summary>
     void ChooseGameMode()
     {
-        // Is there already game assets active? 
-
-        // Determine if there is a game that needs 
-        // to be cleaned up. 
-
-        // If so then reset game 
-
-        // Otherwise just go to 
+        if(DoesGameExist())
+        {
+            state = CoordinatorState.CURRENT_GAME_INIT;
+        }
     }
 
     /// <summary>
@@ -107,7 +105,7 @@ public class GameManagerCoordinator : MonoBehaviour
     {
         gameManagers[currentGame].ResetGame();
 
-        state = CoordinatorState.CHOOSE_GAME_MODE;
+        state = CoordinatorState.CURRENT_GAME_CLEANUP;
     }
 
     /// <summary>
@@ -115,9 +113,23 @@ public class GameManagerCoordinator : MonoBehaviour
     /// </summary>
     void GameCleaup()
     {
+        // NOTE: We currently have this in a seperate function than
+        //       the reset function because we don't want to cleanup 
+        //       the world if the player wants to play the same game
+        //       again. 
+
         // Call game's cleanup function 
+        game.CleanupGame();
 
         state = CoordinatorState.CHOOSE_GAME_MODE;
+
+
+        currentGame = -1; // Reset to default 
+    }
+
+    bool DoesGameExist()
+    {
+        return currentGame >= 0 && currentGame < gameManagers.Count;
     }
 
 
@@ -134,6 +146,9 @@ public class GameManagerCoordinator : MonoBehaviour
     {
         if (drawCurrentGizmos)
         {
+            if (currentGame < 0 || currentGame >= gameManagers.Count)
+                return;
+
             // Don't use game here because we use
             // in the editor 
             gameManagers[currentGame].GizmosVisuals();
