@@ -17,7 +17,9 @@ public class rotateLine : MonoBehaviour
     [SerializeField] Text scoreText;
     [SerializeField] Canvas canvas;
     [SerializeField] Image barGraph;
+    [SerializeField] int trials;
     private List<float> scores;
+
     private float activationThreshold = 0.2f;
 
     [SerializeField] private InputActionReference rotateLineInputReference;
@@ -36,7 +38,7 @@ public class rotateLine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      //  inputs();
+        //inputs();
     }
     private void Awake()
     {
@@ -60,19 +62,21 @@ public class rotateLine : MonoBehaviour
         //}
         //if (Keyboard.current.enterKey.wasPressedThisFrame)
         //{
-        //    if (entered == true && scores.Count < 3)
+        //    Debug.Log(trials);
+        //    if (entered == true && scores.Count < trials)
         //    {
         //        float z = Random.Range(0, 360);
         //        this.transform.rotation = Quaternion.Euler(0, 0, z);
         //    }
-        //    else{
+        //    else
+        //    {
         //        score();
         //    }
         //    entered = !entered;
         //}
 
 
-        if (rotateLineInputReference.action.ReadValue<float>() >0 && !entered)
+        if (rotateLineInputReference.action.ReadValue<float>() > 0 && !entered)
         {
             this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -0.1f);
         }
@@ -82,8 +86,9 @@ public class rotateLine : MonoBehaviour
         }
         if (Keyboard.current.enterKey.wasPressedThisFrame || controller.selectActionValue.action.ReadValue<bool>())
         {
-            if (entered == true && scores.Count < 3)
+            if (entered == true && scores.Count < trials)
             {
+                Debug.Log("enter");
                 float z = Random.Range(0, 360);
                 this.transform.rotation = Quaternion.Euler(0, 0, z);
             }
@@ -107,7 +112,7 @@ public class rotateLine : MonoBehaviour
         }
 
         scores.Add(scoreFinal);
-        if (scores.Count >= 3)
+        if (scores.Count >= trials)
         {
             displayGraph();
         }
