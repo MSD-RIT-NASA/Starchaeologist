@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class GameManagerCoordinator : MonoBehaviour
 {
+    // NOTE: This coordinator has the ability to hold multiple game
+    //       modes and switch to them if necessary. This ability 
+    //       should only be used if there are multiple gamemodes
+    //       within a single scene. 
+    //
+    //      This was needed previously but now it might not be 
+    //      needed at all. I do recommend continuing to use it
+    //      though because it requries game managers to follow 
+    //      a stricter function setup. 
+
     [SerializeField] CoordinatorState state;
 
     [Header("Games")]
@@ -15,6 +25,7 @@ public class GameManagerCoordinator : MonoBehaviour
     [SerializeField] GameObject instructionCanvas;
 
     [Header("Player")]
+    [SerializeField] string playerName; // TODO: Have player input their name id 
     [SerializeField] Transform playerHead;
     [SerializeField] Transform playerHandLeft;
     [SerializeField] Transform playerHandRight;
@@ -22,17 +33,21 @@ public class GameManagerCoordinator : MonoBehaviour
     [SerializeField] Transform playerAnkleRight;
 
     private VirtGameManager game;
-    private bool gameNeedsCleanup = false;
+    private DataStoreLoad dsl;
+
+    private void Start()
+    {
+        instructionCanvas.SetActive(true);
+    }
 
     private void Update()
     {
         game = DoesGameExist() ? gameManagers[currentGame] : null;
 
-
         StateMachine();
     }
 
-    public void StateMachine()
+    private void StateMachine()
     {
 
         switch (state)
@@ -59,10 +74,13 @@ public class GameManagerCoordinator : MonoBehaviour
     /// Opens up UI that allows the player to select a game. This can be done 
     /// while game assets are still loaded in 
     /// </summary>
-    void ChooseGameMode()
+    private void ChooseGameMode()
     {
+        // Only continues once the current game index 
+        // has been set to a valid value 
         if(DoesGameExist())
         {
+            instructionCanvas.SetActive(false);
             state = CoordinatorState.CURRENT_GAME_INIT;
         }
     }
@@ -70,7 +88,7 @@ public class GameManagerCoordinator : MonoBehaviour
     /// <summary>
     /// Initialize a game from its start 
     /// </summary>
-    void GameInit()
+    private void GameInit()
     {
         // Game will manage if assets are already created 
         game.Init(
@@ -87,12 +105,13 @@ public class GameManagerCoordinator : MonoBehaviour
     /// Run the game's state machine and determine when it is
     /// finished 
     /// </summary>
-    void GameRun()
+    private void GameRun()
     {
         game.StateMachine();
 
         if(game.IsGameDone())
         {
+            game.WriteDataToFile(playerName, dsl);
             state = CoordinatorState.CURRENT_GAME_RESET;
         }
     }
@@ -101,7 +120,7 @@ public class GameManagerCoordinator : MonoBehaviour
     /// Reset the game's variables and states. Does NOT remove 
     /// assets from scene 
     /// </summary>
-    void GameReset()
+    private void GameReset()
     {
         gameManagers[currentGame].ResetGame();
 
@@ -111,7 +130,7 @@ public class GameManagerCoordinator : MonoBehaviour
     /// <summary>
     /// Cleans up the game's assets from the scene 
     /// </summary>
-    void GameCleaup()
+    private void GameCleaup()
     {
         // NOTE: We currently have this in a seperate function than
         //       the reset function because we don't want to cleanup 
@@ -127,11 +146,23 @@ public class GameManagerCoordinator : MonoBehaviour
         currentGame = -1; // Reset to default 
     }
 
-    bool DoesGameExist()
+    /// <summary>
+    /// Checks if the game index is within range 
+    /// </summary>
+    /// <returns></returns>
+    private bool DoesGameExist()
     {
         return currentGame >= 0 && currentGame < gameManagers.Count;
     }
 
+    /// <summary>
+    /// Used by the UI to let the player set a gamemode 
+    /// </summary>
+    /// <param name="gameMode"></param>
+    public void SetGameMode(int gameMode)
+    {
+        currentGame = gameMode;
+    }
 
     private enum CoordinatorState
     {
@@ -139,17 +170,14 @@ public class GameManagerCoordinator : MonoBehaviour
         CURRENT_GAME_INIT,      // Initialize choosen game 
         CURRENT_GAME_RUN,       // Run game manager's statemachine 
         CURRENT_GAME_RESET,     // Reset the the game to be played again 
-        CURRENT_GAME_CLEANUP   // Cleanup game assets and return to choice 
+        CURRENT_GAME_CLEANUP    // Cleanup game assets and return to choice 
     }
 
     private void OnDrawGizmos()
     {
-        if (drawCurrentGizmos)
+        if (drawCurrentGizmos && DoesGameExist())
         {
-            if (currentGame < 0 || currentGame >= gameManagers.Count)
-                return;
-
-            // Don't use game here because we use
+            // Don't use "game" here because we use
             // in the editor 
             gameManagers[currentGame].GizmosVisuals();
         }

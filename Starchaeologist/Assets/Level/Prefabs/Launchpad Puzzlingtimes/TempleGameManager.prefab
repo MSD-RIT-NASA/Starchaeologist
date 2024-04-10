@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5858420191687722203}
-  - component: {fileID: 5858420191687722202}
+  - component: {fileID: 5858420192199510564}
+  - component: {fileID: 5858420192199510565}
   m_Layer: 0
   m_Name: TempleGameManager
   m_TagString: Untagged
@@ -35,7 +36,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5858420191687722202
+--- !u!114 &5858420192199510564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,14 +45,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5858420191687722197}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3970b68fb74c06544b8dbe0d9c065e4c, type: 3}
+  m_Script: {fileID: 11500000, guid: 33e703df21a5ca04280f80b22854f719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: 0
   playerHead: {fileID: 0}
-  playerLeft: {fileID: 0}
-  playerRight: {fileID: 0}
-  instructionCanvas: {fileID: 0}
+  playerHandLeft: {fileID: 0}
+  playerHandRight: {fileID: 0}
+  playerAnkleLeft: {fileID: 0}
+  playerAnkleRight: {fileID: 0}
   fourSquareState: 0
   patternSize: 5
   tiles:
@@ -63,7 +64,7 @@ MonoBehaviour:
     tileObj: {fileID: 1014522331895470406}
   - tilePos: {x: -0.5, y: 0, z: -0.5}
     tileObj: {fileID: 1014522332806465280}
-  tileSize: {x: 0.8, y: 0.1, z: 0.8}
+  tileSize: {x: 0.8, y: 0, z: 0.8}
   barrierObj: {fileID: 6041913483951887423, guid: d2621023dba2181418fa9ef7e90c46b7, type: 3}
   barriers:
   - position: {x: 0.55, y: 0, z: 0}
@@ -94,6 +95,30 @@ MonoBehaviour:
     heightMax: 0.05
     heightMin: 0.2
     variableHeights: 1
+--- !u!114 &5858420192199510565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5858420191687722197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6cc6d4244318704b9d697d37ccd44a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  gameManagers:
+  - {fileID: 5858420192199510564}
+  currentGame: -1
+  drawCurrentGizmos: 1
+  instructionCanvas: {fileID: 0}
+  playerName: 
+  playerHead: {fileID: 0}
+  playerHandLeft: {fileID: 0}
+  playerHandRight: {fileID: 0}
+  playerAnkleLeft: {fileID: 0}
+  playerAnkleRight: {fileID: 0}
 --- !u!1001 &1014522333139372271
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -101,6 +126,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5858420191687722203}
     m_Modifications:
+    - target: {fileID: 6870527721911908830, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6870527722781205741, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
       propertyPath: m_Name
       value: Plate
@@ -111,7 +140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6870527722781205743, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6870527722781205743, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -247,6 +276,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5858420191687722203}
     m_Modifications:
+    - target: {fileID: 6870527721911908830, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6870527721911908830, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6870527722781205741, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
       propertyPath: m_Name
       value: Plate (3)
@@ -257,7 +294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6870527722781205743, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6870527722781205743, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -265,7 +302,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6870527722781205743, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6870527722781205743, guid: 5b513d0772cdbf049909f11457b04d7f, type: 3}
       propertyPath: m_LocalRotation.w

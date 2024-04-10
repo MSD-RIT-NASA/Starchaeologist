@@ -37,6 +37,8 @@ public class TileTrialGM : VirtGameManager
 
     private bool assetsCreated = false;
 
+    #region GameManagement
+
     public override void Init(Transform playerHead, Transform playerHandLeft, Transform playerHandRight, Transform playerAnkleLeft, Transform playerAnkleRight)
     {
         this.playerHead = playerHead; 
@@ -95,8 +97,7 @@ public class TileTrialGM : VirtGameManager
         return gameOver; 
     }
 
-
-
+    #endregion
 
     #region TileTrialFunctions 
 
