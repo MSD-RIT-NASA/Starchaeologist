@@ -49,7 +49,6 @@ public class GameManagerCoordinator : MonoBehaviour
 
     private void StateMachine()
     {
-
         switch (state)
         {
             case CoordinatorState.CHOOSE_GAME_MODE:
@@ -76,9 +75,10 @@ public class GameManagerCoordinator : MonoBehaviour
     /// </summary>
     private void ChooseGameMode()
     {
+        print(DoesGameExist());
         // Only continues once the current game index 
         // has been set to a valid value 
-        if(DoesGameExist())
+        if(currentGame == 0 /*DoesGameExist()*/)
         {
             instructionCanvas.SetActive(false);
             state = CoordinatorState.CURRENT_GAME_INIT;
