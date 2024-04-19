@@ -11,6 +11,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class rotateLine : MonoBehaviour
 {
+    [SerializeField] float speed;
+
     private ActionBasedController controller;
     private XRBaseInteractor interactor;
     private bool entered = false;
@@ -23,6 +25,7 @@ public class rotateLine : MonoBehaviour
     private float activationThreshold = 0.2f;
 
     [SerializeField] private InputActionReference rotateLineInputReference;
+    [SerializeField] private InputActionReference rotateLineInputReference2;
     // Start is called before the first frame update
     void Start()
     {
@@ -74,17 +77,17 @@ public class rotateLine : MonoBehaviour
         //    }
         //    entered = !entered;
         //}
-
+        print(rotateLineInputReference.action.ReadValue<float>());
 
         if (rotateLineInputReference.action.ReadValue<float>() > 0 && !entered)
         {
-            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -0.1f);
+            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -speed * Time.deltaTime);
         }
-        if (rotateLineInputReference.action.ReadValue<float>() < 0 && !entered)
+        if (rotateLineInputReference2.action.ReadValue<float>() < 0 && !entered)
         {
-            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, 0.1f);
+            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, speed * Time.deltaTime);
         }
-        if (Keyboard.current.enterKey.wasPressedThisFrame || controller.selectActionValue.action.ReadValue<bool>())
+       /* if (Keyboard.current.enterKey.wasPressedThisFrame || controller.selectActionValue.action.ReadValue<bool>())
         {
             if (entered == true && scores.Count < trials)
             {
@@ -97,7 +100,7 @@ public class rotateLine : MonoBehaviour
                 score();
             }
             entered = !entered;
-        }
+        }*/
     }
 
     private void score()

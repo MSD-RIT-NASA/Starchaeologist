@@ -223,6 +223,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "RotateLine1",
+                    "type": "Value",
+                    "id": "ad023b0d-41e3-42fc-87ed-66cbd2a2c5df",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -685,6 +694,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "RotateLine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "130c773f-5c34-4168-b048-77eb913b9c1b",
+                    "path": "<XRController>{RightHand}/trackpadClicked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateLine1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

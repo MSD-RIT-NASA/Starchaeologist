@@ -48,6 +48,7 @@ public class createSpheres : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.RotateAround(Vector3.zero, Vector3.forward, speedOfRotation * Time.deltaTime);
+        this.transform.localEulerAngles = new Vector3(0.0f, 0.0f, this.transform.localEulerAngles.z + speedOfRotation * Time.deltaTime);
+        //this.transform.RotateAround(Vector3.zero, Vector3.forward, speedOfRotation * Time.deltaTime);
     }
 }
