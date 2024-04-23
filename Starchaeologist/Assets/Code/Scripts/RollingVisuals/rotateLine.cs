@@ -36,6 +36,8 @@ public class rotateLine : MonoBehaviour
         this.transform.rotation = Quaternion.Euler(0, 0, z);
         scores = new List<float>();
         //Debug.Log(transform.rotation.z);
+
+        score();
     }
 
     // Update is called once per frame
@@ -45,13 +47,15 @@ public class rotateLine : MonoBehaviour
 
         // TODO: Test following input code 
         int i = 0;
-        while (i < 4)
+        /*while (i < 4)
         {
             if (Mathf.Abs(Input.GetAxis("Joy" + i + "X")) > 0.2F || Mathf.Abs(Input.GetAxis("Joy" + i + "Y")) > 0.2F)
                 Debug.Log(Input.GetJoystickNames()[i] + " is moved");
 
             i++;
-        }
+        }*/
+
+        displayGraph();
     }
     private void Awake()
     {
