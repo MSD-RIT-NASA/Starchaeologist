@@ -24,8 +24,23 @@ public class rotateLine : MonoBehaviour
 
     private float activationThreshold = 0.2f;
 
-    [SerializeField] private InputActionReference rotateLineInputReference;
-    [SerializeField] private InputActionReference rotateLineInputReference2;
+    [SerializeField] private InputActionReference rotateLineInputReferenceLeftTrigger;
+    [SerializeField] private InputActionReference rotateLineInputReferenceRightTrigger;
+
+    [SerializeField] private InputActionReference rotateLineInputReferenceLeftTrackPad;
+    [SerializeField] private InputActionReference rotateLineInputReferenceRightTrackPad;
+
+    void Awake()
+    {
+        rotateLineInputReferenceLeftTrigger.action.performed += RotLeftTrigger;
+        rotateLineInputReferenceRightTrigger.action.performed += RotRightTrigger;
+
+        rotateLineInputReferenceLeftTrackPad.action.performed += RotLeftTrack;
+        rotateLineInputReferenceRightTrackPad.action.performed += RotRightTrack;
+
+        //rotateLineInputReferenceLeftTrackPad +=
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,80 +55,37 @@ public class rotateLine : MonoBehaviour
         score();
     }
 
-    // Update is called once per frame
-    void Update()
+   
+    private void RotRightTrigger(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //inputs();
-
-        // TODO: Test following input code 
-        int i = 0;
-        /*while (i < 4)
-        {
-            if (Mathf.Abs(Input.GetAxis("Joy" + i + "X")) > 0.2F || Mathf.Abs(Input.GetAxis("Joy" + i + "Y")) > 0.2F)
-                Debug.Log(Input.GetJoystickNames()[i] + " is moved");
-
-            i++;
-        }*/
-
-    }
-    private void Awake()
-    {
-        rotateLineInputReference.action.performed += inputs;
-    }
-
-    private void inputs(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        /* get the controller
-        * on input adjust the rotation of the 
-        * line
-        */
-
-        //if (Keyboard.current.rightArrowKey.isPressed && !entered)
-        //{
-        //    this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -0.1f);
-        //}
-        //if (Keyboard.current.leftArrowKey.isPressed && !entered)
-        //{
-        //    this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, 0.1f);
-        //}
-        //if (Keyboard.current.enterKey.wasPressedThisFrame)
-        //{
-        //    Debug.Log(trials);
-        //    if (entered == true && scores.Count < trials)
-        //    {
-        //        float z = Random.Range(0, 360);
-        //        this.transform.rotation = Quaternion.Euler(0, 0, z);
-        //    }
-        //    else
-        //    {
-        //        score();
-        //    }
-        //    entered = !entered;
-        //}
-        print(rotateLineInputReference.action.ReadValue<float>());
-
-        if (rotateLineInputReference.action.ReadValue<float>() > 0 && !entered)
-        {
-            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -speed * Time.deltaTime);
-        }
-        if (rotateLineInputReference2.action.ReadValue<float>() < 0 && !entered)
+        if (obj.action.ReadValue<float>() != 0 && !entered)
         {
             this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, speed * Time.deltaTime);
         }
-       /* if (Keyboard.current.enterKey.wasPressedThisFrame || controller.selectActionValue.action.ReadValue<bool>())
+    }
+
+    private void RotLeftTrigger(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        if (obj.action.ReadValue<float>() != 0 && !entered)
         {
-            if (entered == true && scores.Count < trials)
-            {
-                Debug.Log("enter");
-                float z = Random.Range(0, 360);
-                this.transform.rotation = Quaternion.Euler(0, 0, z);
-            }
-            else
-            {
-                score();
-            }
-            entered = !entered;
-        }*/
+            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -speed * Time.deltaTime);
+        }
+    }
+
+    private void RotRightTrack(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        if (obj.action.ReadValue<float>() != 0 && !entered)
+        {
+            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, speed * Time.deltaTime);
+        }
+    }
+
+    private void RotLeftTrack(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        if (obj.action.ReadValue<float>() != 0 && !entered)
+        {
+            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -speed * Time.deltaTime);
+        }
     }
 
     private void score()

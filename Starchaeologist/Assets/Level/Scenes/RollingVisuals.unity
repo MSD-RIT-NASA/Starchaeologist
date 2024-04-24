@@ -159,7 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sphereNum: 6
   spherePrimitive: {fileID: 341986544145859783, guid: eed82b8295fb7844eaebd6278306b4c4, type: 3}
-  speedOfRotation: 60
+  speedOfRotation: 30
 --- !u!4 &95164975
 Transform:
   m_ObjectHideFlags: 0
@@ -969,8 +969,10 @@ MonoBehaviour:
   canvas: {fileID: 363278929}
   barGraph: {fileID: 7714913579405029241, guid: 24202c7d1579e59428df0f3513e71180, type: 3}
   trials: 2
-  rotateLineInputReference: {fileID: 996943497529284674, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rotateLineInputReference2: {fileID: -7481631460482290050, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  rotateLineInputReferenceLeftTrigger: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  rotateLineInputReferenceRightTrigger: {fileID: -1758520528963094988, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  rotateLineInputReferenceLeftTrackPad: {fileID: -6395602842196007441, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  rotateLineInputReferenceRightTrackPad: {fileID: -5908353012961274365, guid: c348712bda248c246b8c49b3db54643f, type: 3}
 --- !u!1 &603867856
 GameObject:
   m_ObjectHideFlags: 0
