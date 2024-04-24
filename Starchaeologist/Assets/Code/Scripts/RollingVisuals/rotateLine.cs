@@ -55,7 +55,6 @@ public class rotateLine : MonoBehaviour
             i++;
         }*/
 
-        displayGraph();
     }
     private void Awake()
     {
