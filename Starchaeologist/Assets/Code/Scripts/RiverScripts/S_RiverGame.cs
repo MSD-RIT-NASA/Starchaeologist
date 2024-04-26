@@ -76,6 +76,7 @@ public class S_RiverGame : S_RiverBuilder
     [SerializeField]
     [Tooltip("Called whenever the game ends, so that other events can easily hook into it")]
     private UnityEvent onGameEnd;
+    internal List<GameObject> riverReferences;
 
 
 

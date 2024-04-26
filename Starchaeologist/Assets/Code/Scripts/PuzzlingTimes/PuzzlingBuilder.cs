@@ -57,7 +57,7 @@ public class PuzzlingBuilder : MonoBehaviour
     public GameObject perimeterPrefab;
     List<GameObject> perimeterList = new List<GameObject>();
 
-    public int roomLength = 4;
+    public int roomLength = 1;
 
     // Start is called before the first frame update
     void DataSetup()
@@ -90,7 +90,7 @@ public class PuzzlingBuilder : MonoBehaviour
         GetComponent<UdpSocket>().CalibrateRig = true;
         Debug.Log("Callibrate rig should send");
 
-        int lengthValue = (roomLength * 3);
+        int lengthValue = (roomLength);
 
         //start and end adjacent tiles (includes themselves)
         List<Vector2> startAdjacent = new List<Vector2>();
