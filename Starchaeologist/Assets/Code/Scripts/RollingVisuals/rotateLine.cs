@@ -19,6 +19,7 @@ public class rotateLine : MonoBehaviour
     [SerializeField] private InputActionReference rotateLineInputReferenceRightTrigger;
     [SerializeField] private InputActionReference instructorContinueTrigger; // Continue to the next round 
     [SerializeField] private InputActionReference instructorResetTrigger;    // Completely reset the game 
+    [SerializeField] private MiniSceneLoader miniSceneLoader;
 
     private ActionBasedController controller;
     private XRBaseInteractor interactor;
@@ -26,18 +27,46 @@ public class rotateLine : MonoBehaviour
     private List<float> scores;
 
     private float activationThreshold = 0.2f;
-    
+
+    private bool reloadKeyHold = false;
 
     void Awake()
     {
         // Initialize controllers  
         rotateLineInputReferenceLeftTrigger.action.performed += RotLeftTrigger;
         rotateLineInputReferenceRightTrigger.action.performed += RotRightTrigger;
+
     }
 
     void Start()
     {
-        Score();
+        CompletelyResetTest();
+    }
+
+    private void Update()
+    {
+        InstructorCommands();
+    }
+    
+    /// <summary>
+    /// Allows the instructor to continue rounds and reset
+    /// the test using keyboard keys 
+    /// </summary>
+    private void InstructorCommands()
+    {
+        Keyboard keyboard = Keyboard.current;
+
+        if (keyboard.enterKey.isPressed ) // Reload scene 
+        {
+            miniSceneLoader.ReloadScene();
+            
+        }
+        else if (keyboard.spaceKey.isPressed && reloadKeyHold == false) // Continue to next round 
+        {
+            SetNextRound();
+        }
+
+        reloadKeyHold = keyboard.spaceKey.isPressed;
     }
 
 
@@ -74,6 +103,7 @@ public class rotateLine : MonoBehaviour
         if(scores.Count >= trials)
         {
             // Create bar graph and indicate it is the end of round 
+            canvas.gameObject.SetActive(true);
             barGraph.GenerateGraph(scores);
         }
         else

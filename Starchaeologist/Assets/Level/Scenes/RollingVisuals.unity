@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 4bcdec3b84ff98243b3d6fe8dfeb61ec, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -965,14 +965,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 100
-  scoreText: {fileID: 6306949767515672621, guid: 2df5d222d74e9cc429d4b0536646bbb4, type: 3}
+  trials: 15
   canvas: {fileID: 363278929}
-  barGraph: {fileID: 7714913579405029241, guid: 24202c7d1579e59428df0f3513e71180, type: 3}
-  trials: 2
+  barGraph: {fileID: 2130682818}
   rotateLineInputReferenceLeftTrigger: {fileID: -6131295136447488360, guid: d4df559fcbd75224a8d0060cc0756161, type: 3}
   rotateLineInputReferenceRightTrigger: {fileID: 187161793506945269, guid: d4df559fcbd75224a8d0060cc0756161, type: 3}
-  rotateLineInputReferenceLeftTrackPad: {fileID: -6395602842196007441, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rotateLineInputReferenceRightTrackPad: {fileID: -5908353012961274365, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  instructorContinueTrigger: {fileID: 11317830290357162, guid: b28237ebbc45a6141bc05267b9e3c5ba, type: 3}
+  instructorResetTrigger: {fileID: 1283073594819298633, guid: b28237ebbc45a6141bc05267b9e3c5ba, type: 3}
+  miniSceneLoader: {fileID: 665345402}
 --- !u!1 &603867856
 GameObject:
   m_ObjectHideFlags: 0
@@ -1276,6 +1276,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 227d8fc57e26eab4ea97d7468157f849, type: 3}
+--- !u!114 &665345402 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8491806965273793224, guid: 227d8fc57e26eab4ea97d7468157f849, type: 3}
+  m_PrefabInstance: {fileID: 665345401}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 243a654a168e774409dfb786dbd9aff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &760350439 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4874788803148257815, guid: bd776e6c04fc97644bbc4a20b639a9f4, type: 3}
@@ -1628,7 +1639,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &1831623494
 Light:
   m_ObjectHideFlags: 0
@@ -1761,15 +1772,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   barObj: {fileID: 7597448140010605750, guid: 8cea21c571cbf8745a23208aeff4a037, type: 3}
   barValueObj: {fileID: 3853466185210104233, guid: 4e8e7c634e3961644a6c186e3b979c65, type: 3}
-  trialCount: 3
   maxValue: 180
   maxBarSize: 4
-  vertSpacing: 110
-  minValueOffset: 30
-  testValues:
-  - -70
-  - -10
-  - 180
+  vertSpacing: 25
+  startVert: 60
+  minValueOffsetFromMidline: 0
 --- !u!1 &2136799942 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6177083109153100119, guid: 0b9aa12663a044546982eb434328db27, type: 3}

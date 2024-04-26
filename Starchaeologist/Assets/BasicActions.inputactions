@@ -773,16 +773,25 @@
             ]
         },
         {
-            "name": "Restart",
+            "name": "DebugController",
             "id": "3a2821c5-28f1-490a-b9b2-683e1ed29659",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Restart",
                     "type": "Button",
                     "id": "280095f4-535b-4bd2-9234-a7f3df2b0a65",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Tap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Continue",
+                    "type": "Button",
+                    "id": "c4c5d3b6-2961-4954-afc3-c692615e936e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
                     "initialStateCheck": false
                 }
             ],
@@ -794,7 +803,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "New action",
+                    "action": "Restart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "17b2e762-5655-41af-9cbc-da6eb1604b36",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Continue",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
