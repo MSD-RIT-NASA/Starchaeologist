@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 
@@ -12,50 +11,36 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class rotateLine : MonoBehaviour
 {
     [SerializeField] float speed;
+    [SerializeField] int trials;
+    [SerializeField] Canvas canvas;
+    [SerializeField] BarGraph barGraph;
+
+    [SerializeField] private InputActionReference rotateLineInputReferenceLeftTrigger;
+    [SerializeField] private InputActionReference rotateLineInputReferenceRightTrigger;
+    [SerializeField] private InputActionReference instructorContinueTrigger; // Continue to the next round 
+    [SerializeField] private InputActionReference instructorResetTrigger;    // Completely reset the game 
 
     private ActionBasedController controller;
     private XRBaseInteractor interactor;
     private bool entered = false;
-    [SerializeField] Text scoreText;
-    [SerializeField] Canvas canvas;
-    [SerializeField] Image barGraph;
-    [SerializeField] int trials;
     private List<float> scores;
 
     private float activationThreshold = 0.2f;
-
-    [SerializeField] private InputActionReference rotateLineInputReferenceLeftTrigger;
-    [SerializeField] private InputActionReference rotateLineInputReferenceRightTrigger;
-
-    [SerializeField] private InputActionReference rotateLineInputReferenceLeftTrackPad;
-    [SerializeField] private InputActionReference rotateLineInputReferenceRightTrackPad;
+    
 
     void Awake()
     {
+        // Initialize controllers  
         rotateLineInputReferenceLeftTrigger.action.performed += RotLeftTrigger;
         rotateLineInputReferenceRightTrigger.action.performed += RotRightTrigger;
-
-        rotateLineInputReferenceLeftTrackPad.action.performed += RotLeftTrack;
-        rotateLineInputReferenceRightTrackPad.action.performed += RotRightTrack;
-
-        //rotateLineInputReferenceLeftTrackPad +=
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        //Vector2 joystickInput = interactor.GetComponent<XRController>().controllerNode == UnityEngine.XR.XRNode.LeftHand;
-
-        controller = GetComponent<ActionBasedController>();
-        float z = Random.Range(0, 360);
-        this.transform.rotation = Quaternion.Euler(0, 0, z);
-        scores = new List<float>();
-        //Debug.Log(transform.rotation.z);
-
-        score();
+        Score();
     }
 
-   
+
     private void RotRightTrigger(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         if (obj.action.ReadValue<float>() != 0 && !entered)
@@ -72,23 +57,42 @@ public class rotateLine : MonoBehaviour
         }
     }
 
-    private void RotRightTrack(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    /// <summary>
+    /// Continues to next round if possible. If not creates a graph that
+    /// represents the previous rounds of data 
+    /// </summary>
+    private void SetNextRound()
     {
-        if (obj.action.ReadValue<float>() != 0 && !entered)
+        // Store current difference of rotation 
+        float roundSCore = this.transform.eulerAngles.z;
+        if (roundSCore >= 90)
         {
-            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, speed * Time.deltaTime);
+            roundSCore = 180 - roundSCore;
+        }
+        scores.Add(roundSCore);
+
+        if(scores.Count >= trials)
+        {
+            // Create bar graph and indicate it is the end of round 
+            barGraph.GenerateGraph(scores);
+        }
+        else
+        {
+            // Reset this line to a random rotation 
+            float z = Random.Range(0, 360);
+            this.transform.rotation = Quaternion.Euler(0, 0, z);
         }
     }
 
-    private void RotLeftTrack(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void CompletelyResetTest()
     {
-        if (obj.action.ReadValue<float>() != 0 && !entered)
-        {
-            this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, -speed * Time.deltaTime);
-        }
+        // Set this line to a random rotation 
+        float z = Random.Range(0, 360);
+        this.transform.rotation = Quaternion.Euler(0, 0, z);
+        scores = new List<float>();
     }
 
-    private void score()
+    private void Score()
     {
 
         //find the distance from quaternion.zero
@@ -102,11 +106,11 @@ public class rotateLine : MonoBehaviour
         scores.Add(scoreFinal);
         if (scores.Count >= trials)
         {
-            displayGraph();
+            //displayGraph();
         }
     }
 
-    private void displayGraph()
+    /*private void displayGraph()
     {
         canvas.gameObject.SetActive(true);
         for (int i = 0; i < scores.Count; i++) {
@@ -131,7 +135,7 @@ public class rotateLine : MonoBehaviour
 
             Debug.Log(thisScore);
         }
-    }
+    }*/
 
 
 }
