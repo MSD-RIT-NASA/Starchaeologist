@@ -72,6 +72,7 @@ public class rotateLine : MonoBehaviour
 
     private void RotRightTrigger(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
+        print("Hello");
         if (obj.action.ReadValue<float>() != 0 && !entered)
         {
             this.transform.rotation = this.transform.rotation * Quaternion.Euler(0, 0, speed * Time.deltaTime);
@@ -110,7 +111,7 @@ public class rotateLine : MonoBehaviour
         {
             // Reset this line to a random rotation 
             float z = Random.Range(0, 360);
-            this.transform.rotation = Quaternion.Euler(0, 0, z);
+            this.transform.localEulerAngles = new Vector3(0, 0, z);
         }
     }
 
@@ -118,7 +119,7 @@ public class rotateLine : MonoBehaviour
     {
         // Set this line to a random rotation 
         float z = Random.Range(0, 360);
-        this.transform.rotation = Quaternion.Euler(0, 0, z);
+        this.transform.localEulerAngles = new Vector3(0, 0, z);
         scores = new List<float>();
     }
 
