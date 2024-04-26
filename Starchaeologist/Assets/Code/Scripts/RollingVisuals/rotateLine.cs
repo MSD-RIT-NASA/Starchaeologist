@@ -139,33 +139,4 @@ public class rotateLine : MonoBehaviour
             //displayGraph();
         }
     }
-
-    /*private void displayGraph()
-    {
-        canvas.gameObject.SetActive(true);
-        for (int i = 0; i < scores.Count; i++) {
-            float thisScore = scores[i];
-            Image graph = Instantiate(barGraph, canvas.transform);
-            graph.rectTransform.sizeDelta = new Vector2(Mathf.Abs(thisScore* 2.25f), 40);
-            float displayScore = 100 - (Mathf.Abs(thisScore) / 1.80f);
-            if (thisScore >=0)
-            {
-                graph.rectTransform.anchoredPosition = new Vector3(452 + (thisScore* 2.25f)/2, -1 * ((i + 1) * 45), 0);
-                Text text = Instantiate(scoreText, graph.transform);
-                text.rectTransform.anchoredPosition = new Vector3(((thisScore * 2.25f) / 2) + 90, 0, 0);
-                text.text = displayScore + "%";
-            }
-            else
-            {
-                graph.rectTransform.anchoredPosition = new Vector3(451 + (thisScore * 2.25f)/2, -1 * ((i + 1) * 45), 0);
-                Text text = Instantiate(scoreText, graph.transform);
-                text.rectTransform.anchoredPosition = new Vector3(((thisScore * 2.25f) / 2), 0, 0);
-                text.text = displayScore + "%";
-            }
-
-            Debug.Log(thisScore);
-        }
-    }*/
-
-
 }
