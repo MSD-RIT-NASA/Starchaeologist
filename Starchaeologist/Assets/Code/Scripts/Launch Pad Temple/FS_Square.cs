@@ -21,13 +21,13 @@ public class FS_Square : MonoBehaviour
         switch (state)
         {
             case FSSquareStates.TARGET:
-                rend.material.SetColor("_TintColor", targetColor);
+                rend.material.SetColor("_Color", targetColor);
                 break;
             case FSSquareStates.NOT_TARGET:
-                rend.material.SetColor("_TintColor", nonTargetColor);
+                rend.material.SetColor("_Color", nonTargetColor);
                 break;
             case FSSquareStates.NOT_IN_PLAY:
-                rend.material.SetColor("_TintColor", defaultColor);
+                rend.material.SetColor("_Color", defaultColor);
                 break;
         }
 

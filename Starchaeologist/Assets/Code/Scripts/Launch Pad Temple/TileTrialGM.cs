@@ -13,7 +13,7 @@ public class TileTrialGM : VirtGameManager
     [SerializeField] List<Tile> tiles; 
     [SerializeField] Vector3 tileSize;
     [Tooltip("Used to instantiate barriers")]
-    [SerializeField] GameObject barrierObj;
+    //[SerializeField] GameObject barrierObj;
     [SerializeField] List<Cube_Transform> barriers; // Spawned objects 
     [SerializeField] float pointsGainSuccess;
     [SerializeField] float pointsLossCollision;
@@ -33,7 +33,7 @@ public class TileTrialGM : VirtGameManager
     private int collisions = 0;
 
     // The generated transforms 
-    private List<Transform> barrierTransforms;
+    [SerializeField] List<Transform> barrierTransforms;
 
     private bool assetsCreated = false;
 
@@ -111,11 +111,11 @@ public class TileTrialGM : VirtGameManager
         if(!assetsCreated)
         {
             // Setup Foursquares assets 
-            barrierTransforms = new List<Transform>();
+            /*barrierTransforms = new List<Transform>();
             for (int i = 0; i < barriers.Count; i++)
             {
                 barrierTransforms.Add(Instantiate(barrierObj, this.transform.position, Quaternion.identity).transform);
-            }
+            }*/
         }
         
         UpdateBarrierTransforms();
@@ -262,7 +262,7 @@ public class TileTrialGM : VirtGameManager
             fourSquareState = FourSquareStates.END_GAME;
             return;
         }
-
+        print(PlayerInTarget());
         if (PlayerInTarget())
         {
             score += pointsGainSuccess;
@@ -301,8 +301,8 @@ public class TileTrialGM : VirtGameManager
             float height = UnityEngine.Random.Range(settings.heightMin, settings.heightMax);
 
             Cube_Transform transform = barriers[i];
-            barrierTransforms[i].position = this.transform.position + transform.position + Vector3.up * height / 2.0f;
-            barrierTransforms[i].localScale = new Vector3(transform.scale.x, settings.heightMin, transform.scale.y);
+            barrierTransforms[i].position = this.transform.position + transform.position + Vector3.up * height;
+            //barrierTransforms[i].localScale = new Vector3(transform.scale.x, settings.heightMin, transform.scale.y);
 
             barrierTransforms[i].gameObject.SetActive(true);
         }

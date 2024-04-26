@@ -19,7 +19,7 @@ public class DataStoreLoad
     // Gamemode names 
     const string FOURSQUARE_NAME = "FourSquare";
 
-    DataStoreLoad()
+    public DataStoreLoad()
     {
         // Initialize 
         fileIO = new FileIO();

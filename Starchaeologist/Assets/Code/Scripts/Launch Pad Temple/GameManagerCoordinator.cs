@@ -38,6 +38,7 @@ public class GameManagerCoordinator : MonoBehaviour
     private void Start()
     {
         instructionCanvas.SetActive(true);
+        dsl = new DataStoreLoad();
     }
 
     private void Update()
@@ -75,7 +76,6 @@ public class GameManagerCoordinator : MonoBehaviour
     /// </summary>
     private void ChooseGameMode()
     {
-        print(DoesGameExist());
         // Only continues once the current game index 
         // has been set to a valid value 
         if(currentGame == 0 /*DoesGameExist()*/)
@@ -141,7 +141,7 @@ public class GameManagerCoordinator : MonoBehaviour
         game.CleanupGame();
 
         state = CoordinatorState.CHOOSE_GAME_MODE;
-
+        instructionCanvas.SetActive(true);
 
         currentGame = -1; // Reset to default 
     }

@@ -376,10 +376,10 @@ public class TempleGameManager : MonoBehaviour
         }
 
         // Turn off barriers 
-        foreach (Transform t in barrierTransforms)
+        /*foreach (Transform t in barrierTransforms)
         {
             t.gameObject.SetActive(false);
-        }
+        }*/
 
         score = 0.0f;
         collisions = 0;
