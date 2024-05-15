@@ -21,6 +21,9 @@ public class rotateLine : MonoBehaviour
     [SerializeField] private InputActionReference instructorResetTrigger;    // Completely reset the game 
     [SerializeField] private MiniSceneLoader miniSceneLoader;
 
+    [Space]
+    [SerializeField] int currentRound = 0;
+
     private ActionBasedController controller;
     private XRBaseInteractor interactor;
     private bool entered = false;
@@ -46,6 +49,8 @@ public class rotateLine : MonoBehaviour
     private void Update()
     {
         InstructorCommands();
+
+        currentRound = scores.Count;
     }
     
     /// <summary>
