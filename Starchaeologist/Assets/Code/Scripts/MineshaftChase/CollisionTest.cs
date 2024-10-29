@@ -19,20 +19,20 @@ public class CollisionTest : MonoBehaviour
     void Start()
     {
         Score = 0;
-        txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
-        txt.text = "Score: " + Score;
+        //txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
+        //txt.text = "Score: " + Score;
         //txt.enabled = false;
-        txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
-        txtBlip.enabled = false;
+        //txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
+        //txtBlip.enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (txtBlip.enabled && (Time.time >= hideTime))
+        /*if (txtBlip.enabled && (Time.time >= hideTime))
         {
             txtBlip.enabled = false;
-        }
+        }*/
     }
 
     private void OnTriggerEnter(Collider other)

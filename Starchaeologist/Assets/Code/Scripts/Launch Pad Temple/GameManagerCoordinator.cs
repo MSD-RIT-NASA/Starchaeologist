@@ -75,7 +75,6 @@ public class GameManagerCoordinator : MonoBehaviour
     /// </summary>
     private void ChooseGameMode()
     {
-        print(DoesGameExist());
         // Only continues once the current game index 
         // has been set to a valid value 
         if(currentGame == 0 /*DoesGameExist()*/)

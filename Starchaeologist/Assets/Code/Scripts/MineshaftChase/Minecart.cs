@@ -69,10 +69,10 @@ public class Minecart : MonoBehaviour
         safeMax = 3f;
         safeMin = -3f;
         boardRot = 0f;
-        txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
-        txt.text = "Score: " + Score;
-        txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
-        txtBlip.enabled = false;
+        //txt = GameObject.Find("Score").transform.GetChild(0).gameObject.GetComponent<Text>();
+        //txt.text = "Score: " + Score;
+        //txtBlip = GameObject.Find("Score").transform.GetChild(1).GetComponent<Text>();
+        //txtBlip.enabled = false;
     }
 
     // Update is called once per frame
@@ -97,7 +97,7 @@ public class Minecart : MonoBehaviour
             if (boardRot < safeMax && boardRot > safeMin && isMoving)
             {
                 int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
-                txt.text = "Score: " + (currentScore + 1);
+                //txt.text = "Score: " + (currentScore + 1);
             }
             else
             {
@@ -147,7 +147,7 @@ public class Minecart : MonoBehaviour
         {
              tiltAngle += .4f;
             int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
-            txt.text = "Score: " + (currentScore + 1);
+            //txt.text = "Score: " + (currentScore + 1);
         }
         else{
              
@@ -176,7 +176,7 @@ public class Minecart : MonoBehaviour
         {
            tiltAngle -= .4f;
             int currentScore = int.Parse(txt.text.Split(' ')[1], CultureInfo.InvariantCulture.NumberFormat);
-            txt.text = "Score: " + (currentScore + 1);
+            //txt.text = "Score: " + (currentScore + 1);
         }
         else
         {
