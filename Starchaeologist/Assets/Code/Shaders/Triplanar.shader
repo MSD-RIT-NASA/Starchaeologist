@@ -113,9 +113,7 @@ Shader "Custom/Triplanar"
         
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            o.Albedo = half3(IN.uv_MainTex, 0);
-            return;
-
+            clip (frac((IN.worldPos.y+IN.worldPos.z*0.1) * 5) - 0.5);
             float3 normal = o.Normal;
             
             //return TriplanarTexture(
@@ -127,7 +125,7 @@ Shader "Custom/Triplanar"
             //        topTexture
             //    );
 
-
+            
             float2 target;
             TilingAndOffset(
                 IN.uv_MainTex,
@@ -155,6 +153,7 @@ Shader "Custom/Triplanar"
             o.Metallic = _Metallic;
             o.Smoothness = _Glossiness;
             o.Alpha = c.a;
+            o.Albedo = IN.worldPos;
             
         }
         ENDCG
