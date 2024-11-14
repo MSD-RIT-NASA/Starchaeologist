@@ -9,6 +9,7 @@ Shader "Custom/Triplanar"
 
         _Sharpness ("Sharpness", float) = 0.5
          
+        // How do I actually get the uvs and offsets fromt this???
         _FrontTexture   ("Front", 2D) = "white" {}
         _SideTexture    ("Side",  2D) = "white" {}
         _TopTexture     ("Top",   2D) = "white" {}
@@ -38,6 +39,13 @@ Shader "Custom/Triplanar"
         sampler2D _SideTexture;
         sampler2D _TopTexture;
 
+        float2 _FrontTiling;
+        float2 _FrontOffset;
+        float2 _SideTiling;
+        float2 _SideOffset;
+        float2 _TopTiling;
+        float2 _TopOffset;
+
         struct Input
         {
             float2 uv_MainTex;
@@ -50,8 +58,6 @@ Shader "Custom/Triplanar"
         fixed4 _Color;
         float _Sharpness;
 
-        float2 _FrontTiling;
-        float2 _FrontOffset;
 
         void TilingAndOffset(float2 uv, float2 tiling, float2 offset, out float2 Out)
         {
@@ -76,18 +82,14 @@ Shader "Custom/Triplanar"
         float3 worldNormal,
         float sharpness,
         sampler2D frontTexture,
+
         sampler2D sideTexture,
         sampler2D topTexture)
     {
-        // Get unique triplanar UVs based on normals
-        //float2 frontUV  = TilingAndOffset(worldPos.xy,    frontTiling,   frontOffset);
-        //float2 sideUV   = TilingAndOffset(worldPos.zy,    sideTiling,    sideOffset);
-        //float2 topUV    = TilingAndOffset(worldPos.xz,    topTiling,     topOffset);
-        
         // Sample from given textures  
-        float3 front    = tex2D(frontTexture,   worldPos.xy);
-        float3 side     = tex2D(sideTexture,    worldPos.zy);
-        float3 top      = tex2D(topTexture,     worldPos.xz);
+        float3 front    = tex2D(frontTexture,   TilingAndOffset(worldPos.xy, _FrontTiling, _FrontOffset));
+        float3 side     = tex2D(sideTexture,    TilingAndOffset(worldPos.zy, _SideTiling, _SideOffset));
+        float3 top      = tex2D(topTexture,     TilingAndOffset(worldPos.xz, _TopTiling, _TopOffset));
         
         // Normals used to determine weight of each texture
         // to interpolate from  
@@ -113,18 +115,18 @@ Shader "Custom/Triplanar"
         
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            clip (frac((IN.worldPos.y+IN.worldPos.z*0.1) * 5) - 0.5);
+            //clip (frac((IN.worldPos.y+IN.worldPos.z*0.1) * 5) - 0.5);
             float3 normal = o.Normal;
             
-            //return TriplanarTexture(
-            //        IN.WorldPos,
-            //        o.Normal,
-            //        10.0f,
-            //        frontTexture,
-            //        sideTexture,
-            //        topTexture
-            //    );
-
+            o.Albedo = TriplanarTexture(
+                    IN.worldPos,
+                    o.Normal,
+                    10.0f,
+                    _FrontTexture,
+                    _SideTexture,
+                    _TopTexture
+                );
+            return;
             
             float2 target;
             TilingAndOffset(
@@ -153,7 +155,7 @@ Shader "Custom/Triplanar"
             o.Metallic = _Metallic;
             o.Smoothness = _Glossiness;
             o.Alpha = c.a;
-            o.Albedo = IN.worldPos;
+            //o.Albedo = IN.worldPos;
             
         }
         ENDCG
